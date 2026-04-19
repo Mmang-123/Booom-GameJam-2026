@@ -1,0 +1,13 @@
+﻿
+.st-item-selected {
+    color : rgb(255, 216, 76);
+    -unity-font-style: bold;
+}
+
+.st-row-selected {
+    background-color: rgba(77, 167, 77, 0.5);
+}
+
+.st-row-selected:hover {
+    background-color: rgba(94, 198, 188, 0.5);
+}

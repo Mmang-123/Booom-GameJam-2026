@@ -1,0 +1,70 @@
+
+.root {
+    flex-direction: row;
+}
+
+.left_container {
+    width: 30%;
+    max-width: 240px;
+    min-width: 160px;
+    flex-shrink: 0;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.left_title_box {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.left_title_box > .unity-label {
+    padding-left: 6px;
+    font-size: 18px;
+}
+
+.right_container {
+    flex-grow: 1;
+}
+
+.right_title_box {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.right_title_box > .unity-label {
+    padding-left: 6px;
+    font-size: 18px;
+}
+
+
+.selection_button {
+    background-color: rgb(80, 80, 80);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+
+    margin-left: 0px;
+    margin-right: 0px;
+
+    padding-left : 8px;
+}
+
+.selection_button.selected {
+    background-color: rgba(75, 118, 131, 0.83);
+}
+
+.selection_button:hover {
+    background-color: rgba(105, 225, 255, 0.8);
+}
+
+.selection_button:active {
+    background-color: rgba(255, 240, 105, 0.8);
+}
+
+.selection_button > .unity-label {
+    -unity-text-align: middle-left;
+    font-size: 14px;
+}

@@ -1,0 +1,20 @@
+{
+    "name": "MGame.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:94896138fa4cf644a91f060b45534189",
+        "GUID:4a6e8e34d3c460e43ba9bfa73cab9fd7",
+        "GUID:15fc0a57446b3144c949da3e2b9737a9",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:f06555f75b070af458a003d92f9efb00"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

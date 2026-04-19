@@ -1,0 +1,16 @@
+{
+    "name": "MEditor.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4a6e8e34d3c460e43ba9bfa73cab9fd7"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

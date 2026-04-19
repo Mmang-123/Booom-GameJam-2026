@@ -1,0 +1,106 @@
+﻿
+.m_toolbar {
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(34, 34, 34);
+    background-color: rgb(60, 60, 60);
+    height: 21px;
+
+    flex-direction: row;
+}
+
+.m_toolbar_dropdown {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    border-left-width: 0px;
+    border-right-width: 1px;
+
+    border-left-color: rgb(34, 34, 34);
+    border-right-color: rgb(34, 34, 34);
+}
+
+.m_toolbar_dropdown > .unity-popup-field__input {
+    padding-left: 6px;
+    padding-right: 2px;
+    padding-bottom: 0px;
+
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+
+    background-color: rgb(60, 60, 60);
+}
+
+.m_toolbar_dropdown:hover > .unity-popup-field__input {
+    background-color: rgb(80, 80, 80);
+}
+
+.m_toolbar_dropdown > .unity-popup-field__input > .unity-base-popup-field__text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.m_toolbar_button {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+
+    border-left-width: 1px;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-left-color: rgb(34, 34, 34);
+
+    background-color: rgb(60, 60, 60);
+}
+
+.m_toolbar_button:hover {
+    background-color: rgb(80, 80, 80);
+}
+
+.m_toolbar_button_active {
+    background-color: rgb(117, 115, 105);
+}
+
+.m_toolbar_button_active:hover {
+    background-color: rgb(136, 133, 121);
+}
+
+.m_toolbar_button_plus {
+    margin-top: 1px;
+    height: 16px;
+    width: 16px;
+    background-image: url("project://database/Assets/Plugins/Mmang/MEditor/Editor/ImageResources/Plus.png");
+    -unity-background-image-tint-color: rgb(196, 196, 196);
+}
+
+.m_toolbar_button_sub {
+    margin-top: 1px;
+    height: 16px;
+    width: 16px;
+    background-image: url("project://database/Assets/Plugins/Mmang/MEditor/Editor/ImageResources/Sub.png");
+    -unity-background-image-tint-color: rgb(196, 196, 196);
+}
+
+.m_toolbar_button_settings {
+    margin-top: 1px;
+    height: 16px;
+    width: 16px;
+    background-image: url("project://database/Assets/Plugins/Mmang/MEditor/Editor/ImageResources/Settings.png");
+    -unity-background-image-tint-color: rgb(196, 196, 196);
+}

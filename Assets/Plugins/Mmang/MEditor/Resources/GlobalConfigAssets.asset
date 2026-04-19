@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9149357591198023373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b70686df0d7ba8e4dbd5c45beeef9562, type: 3}
+  m_Name: Global Properties
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.Game.GlobalPropertiesConfig
+  m_PropertyElements: []
+  references:
+    version: 2
+    RefIds: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f81e8f0e9fcb0ca488e86d63276642bf, type: 3}
+  m_Name: GlobalConfigAssets
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.GlobalConfigAssets
+  m_Configs:
+  - Name: Global Properties
+    SO: {fileID: -9149357591198023373}
+  - Name: Gameplay Tags
+    SO: {fileID: 5634330168002120619}
+  - Name: Entity Config
+    SO: {fileID: 6752554598863162}
+--- !u!114 &6752554598863162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 679032deaa0e0dd418980a54029c29a8, type: 3}
+  m_Name: Entity Config
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.Game.EntityConfigCollection
+  m_Data:
+  - {fileID: 11400000, guid: 59469ce27a2ef274f927ef7999f4e877, type: 2}
+  - {fileID: 11400000, guid: 3eb6e3c1c9145c848b6066dcd9800d09, type: 2}
+  - {fileID: 11400000, guid: 2ed3f827dbbf40c4895a2b9d03dd9d0c, type: 2}
+--- !u!114 &5634330168002120619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 757e53fc438a3b140b8389c42ba028c0, type: 3}
+  m_Name: Gameplay Tags
+  m_EditorClassIdentifier: MGame.Runtime::Mmang.Game.GameplayTagsSettings
+  m_Nodes:
+  - m_Guid: c4c158fc-bde5-400e-8dc3-6790cf65094a
+    NodeName: Entity
+    m_Children:
+    - rid: 1344522747699527780
+    - rid: 1344522747699527781
+  references:
+    version: 2
+    RefIds:
+    - rid: 1344522747699527780
+      type: {class: SerializableGameplayTagNode, ns: Mmang.Game, asm: MGame.Runtime}
+      data:
+        m_Guid: f2a82814-3c0a-47c6-a505-4b198b51c312
+        NodeName: Player
+        m_Children: []
+    - rid: 1344522747699527781
+      type: {class: SerializableGameplayTagNode, ns: Mmang.Game, asm: MGame.Runtime}
+      data:
+        m_Guid: 059e8f95-0bb3-4a1e-9f2f-1fcc460e4007
+        NodeName: Enemy
+        m_Children: []

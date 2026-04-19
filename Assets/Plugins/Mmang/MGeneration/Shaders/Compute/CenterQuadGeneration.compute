@@ -1,0 +1,67 @@
+﻿// 一个控制点生成六个顶点 两个三角面
+// 逐控制点生成
+
+// 该四边形原点在中心
+
+#include "ComputeBase.hlsl"
+#include "ComputeStructures.hlsl"
+
+#pragma kernel InitPoints
+#pragma kernel Generation
+
+StructuredBuffer<QuadControlPoint> _ControlPoints;
+RWStructuredBuffer<VarietyGenerationPoint> _GenerationPoints;
+
+int _DisableRotate;
+
+float3 GetRotateDirection(float angle)
+{
+    float s = sin(angle);
+    float c = cos(angle);
+    return float3(c, s, 0);
+}
+
+[numthreads(8, 1, 1)]
+void InitPoints(uint3 id : SV_DispatchThreadID)
+{
+
+}
+
+[numthreads(8, 1, 1)]
+void Generation(uint3 id : SV_DispatchThreadID)
+{
+    int index = id.x;
+    if (index > _GenerationPointCount)
+        return;
+
+    QuadControlPoint controlPoint = _ControlPoints[index];
+    float angle = controlPoint.rotateAngle;
+
+    float3 up = _DisableRotate == 1 ? float3(0, 1, 0) : GetRotateDirection(1.570796326 + angle);
+    float3 right = _DisableRotate == 1 ? float3(1, 0, 0) : GetRotateDirection(angle);
+    float3 root = controlPoint.positionWS;
+    float3 rightOffset = right * controlPoint.quadSize * 0.5;
+    float3 upOffset = up * controlPoint.quadSize * 0.5;
+
+    VarietyGenerationPoint v1, v2, v3, v4;
+
+    v1.normalWS = v2.normalWS = v3.normalWS = v4.normalWS = controlPoint.normalWS;
+    v1.originPositionWS = v2.originPositionWS = v3.originPositionWS = v4.originPositionWS = root;
+    v1.uv = float2(0.0, 0.0);
+    v2.uv = float2(1.0, 0.0);
+    v3.uv = float2(0.0, 1.0);
+    v4.uv = float2(1.0, 1.0);
+    v1.positionOS = - rightOffset - upOffset;
+    v2.positionOS = + rightOffset - upOffset;
+    v3.positionOS = - rightOffset + upOffset;
+    v4.positionOS = + rightOffset + upOffset;
+    v1.type = v2.type = v3.type = v4.type = controlPoint.type;
+
+    //
+    _GenerationPoints[index * 6 + 0] = v1;
+    _GenerationPoints[index * 6 + 1] = v2;
+    _GenerationPoints[index * 6 + 2] = v3;
+    _GenerationPoints[index * 6 + 3] = v4;
+    _GenerationPoints[index * 6 + 4] = v3;
+    _GenerationPoints[index * 6 + 5] = v2;
+}

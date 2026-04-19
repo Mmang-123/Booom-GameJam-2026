@@ -1,0 +1,14 @@
+﻿
+.foldout-popup-toggle > .unity-toggle__checkmark {
+    margin-right: 1px;
+}
+
+.unity-popup-field {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.unity-popup-field__label {
+    margin-left: 0px;
+    padding-top: 3px;
+}

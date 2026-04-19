@@ -1,0 +1,20 @@
+{
+    "name": "MEditor.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:94896138fa4cf644a91f060b45534189",
+        "GUID:4a6e8e34d3c460e43ba9bfa73cab9fd7",
+        "GUID:2f7dd2c29d6c74b47baf4c0368d75422"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

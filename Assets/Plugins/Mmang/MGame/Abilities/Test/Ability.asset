@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cded9d033388ca44b90dd089baf7215, type: 3}
+  m_Name: Ability
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.Game.GameplayAbility
+  m_AbilityTags:
+    m_Tags:
+    - m_Guid: f2ff7138-a5b7-4e8f-a9a6-3d7da3d3a643
+  m_ActivationOwnedTags:
+    m_Tags: []
+  m_ActivationRequiredTags:
+    m_Tags: []
+  m_ActivationBlockTags:
+    m_Tags: []
+  m_CancelTags:
+    m_Tags: []
+  m_BlockTags:
+    m_Tags: []
