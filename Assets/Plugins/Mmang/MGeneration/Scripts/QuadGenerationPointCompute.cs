@@ -51,6 +51,7 @@ namespace Mmang.Generations
         }
     }
 
+    [System.Serializable]
     public class QuadGenerationPointAdditionalSetting : GenerationPointAdditionalSetting
     {
         public Vector2 QuadSizeRange;

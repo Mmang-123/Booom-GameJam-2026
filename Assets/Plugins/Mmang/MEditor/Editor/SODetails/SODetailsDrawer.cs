@@ -82,7 +82,7 @@ namespace Mmang.Editors
             contentContainer.style.marginTop = 2;
             root.Add(contentContainer);
 
-            int rootId = property.serializedObject.targetObject.GetInstanceID();
+            //int rootId = property.serializedObject.targetObject.GetEntityId();
 
             void Rebuild()
             {

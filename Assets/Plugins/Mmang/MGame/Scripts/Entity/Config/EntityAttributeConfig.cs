@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Mmang.Game
 {
-    [SOComponent("Attribute")]
+    [SOComponent("Attribute"), System.Serializable]
     public class EntityAttributeConfig : EntityConfigComponent, IEntityInitConfig
     {
         public int InitOrder => ECCInitOrder.Attribute;

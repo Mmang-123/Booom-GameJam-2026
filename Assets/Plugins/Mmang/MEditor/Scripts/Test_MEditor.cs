@@ -32,10 +32,6 @@ namespace Mmang.Test
         public float A;
     }
 
-    public abstract class TestVariable<T> : TestVariable { }
-
-    public class TestVariableD : TestVariable<int> { }
-
     #endregion
 
 

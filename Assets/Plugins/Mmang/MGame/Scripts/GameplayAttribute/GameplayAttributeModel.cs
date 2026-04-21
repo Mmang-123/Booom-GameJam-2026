@@ -12,6 +12,7 @@ namespace Mmang.Game
         public abstract GameplayAttribute CreateAttribute();
     }
 
+    [System.Serializable]
     public abstract class GameplayAttributeModel<T> : GameplayAttributeModel where T : GameplayAttribute, new()
     {
         public abstract float ComputeValue(T attribute, GameplayAttributeCollection collection);
@@ -34,6 +35,7 @@ namespace Mmang.Game
         public virtual void InitAttribute(T instance) { }
     }
 
+    [System.Serializable]
     public class GameplayValueAttributeModel : GameplayAttributeModel<GameplayValueAttribute>
     {
         public float RawValue;
