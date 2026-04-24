@@ -4,6 +4,7 @@
   <Project Path="MGame.Runtime.csproj" />
   <Project Path="Assembly-CSharp-firstpass.csproj" />
   <Project Path="MGame.Editor.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Assembly-CSharp-Editor-firstpass.csproj" />
   <Project Path="MEditor.Editor.csproj" />
   <Project Path="MUtils.Editor.csproj" />

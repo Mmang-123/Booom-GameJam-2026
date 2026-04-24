@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9074686452627950976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0f778111be574b802deb27851d7c6, type: 3}
+  m_Name: RF_PixelartRender
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.RF_PixelartRender
+  m_Active: 1
+  m_PixelartShader: {fileID: 4800000, guid: a4b6c79d7104ecc41a1b77b551c211e7, type: 3}
+  m_OpaqueLayerMash:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_DebugOutput: 0
+  m_DebugOutputBuffer: 1
+  m_DebugLUT: {fileID: 2800000, guid: 5621ce822426e5340a66586942c57ae8, type: 3}
+--- !u!114 &-8265611008998510951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0ef8a2d4a672f44cad91ce83721126c, type: 3}
+  m_Name: RF_Halo
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.RF_Halo
+  m_Active: 0
+  m_Shader: {fileID: 4800000, guid: 107baf488b0ec284cb57e79e595a92ed, type: 3}
+--- !u!114 &-3701242947120417362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45bfbdb4838c3e54fb7c88e601caf548, type: 3}
+  m_Name: RF_GodRay
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.RF_GodRay
+  m_Active: 0
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: 795bb97c3068b7d43bc0497847dea38b, type: 3}
+  m_RenderPassEvent: 400
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
+  m_Name: PixelartPipeline_Cast
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalRendererData
+  debugShaders:
+    debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7, type: 3}
+    hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
+    probeVolumeSamplingDebugComputeShader: {fileID: 7200000, guid: 53626a513ea68ce47b59dc1299fe3959, type: 3}
+  probeVolumeResources:
+    probeVolumeDebugShader: {fileID: 0}
+    probeVolumeFragmentationDebugShader: {fileID: 0}
+    probeVolumeOffsetDebugShader: {fileID: 0}
+    probeVolumeSamplingDebugShader: {fileID: 0}
+    probeSamplingDebugMesh: {fileID: 0}
+    probeSamplingDebugTexture: {fileID: 0}
+    probeVolumeBlendStatesCS: {fileID: 0}
+  m_RendererFeatures:
+  - {fileID: -9074686452627950976}
+  - {fileID: 5392433442531744511}
+  - {fileID: -3701242947120417362}
+  - {fileID: -8265611008998510951}
+  m_RendererFeatureMap: 80b20f47c03c1082ff9a0a49a5c5d54aaeb5774d268ba2cc99ee159594a64a8d
+  m_UseNativeRenderPass: 0
+  xrSystemData: {fileID: 0}
+  postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
+  m_AssetVersion: 3
+  m_PrepassLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_OpaqueLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_TransparentLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_DefaultStencilState:
+    overrideStencilState: 0
+    stencilReference: 0
+    stencilCompareFunction: 8
+    passOperation: 2
+    failOperation: 0
+    zFailOperation: 0
+  m_ShadowTransparentReceive: 1
+  m_RenderingMode: 0
+  m_DepthPrimingMode: 0
+  m_CopyDepthMode: 1
+  m_DepthAttachmentFormat: 0
+  m_DepthTextureFormat: 0
+  m_AccurateGbufferNormals: 0
+  m_IntermediateTextureMode: 1
+--- !u!114 &5392433442531744511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4607ff8799a87ba43908cc18e97112a4, type: 3}
+  m_Name: RF_Cloud
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.RF_Cloud
+  m_Active: 0
+  m_CloudMaterial: {fileID: 2100000, guid: 041125058fa518440b43bc643d0c7587, type: 2}
+  m_CloudSize: 80
+  m_Resolution: {x: 628, y: 628}
