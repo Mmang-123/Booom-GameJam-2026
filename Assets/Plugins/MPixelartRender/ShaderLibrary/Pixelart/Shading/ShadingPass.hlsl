@@ -18,6 +18,12 @@ void ShadingFragment(Varyings input, out half4 outColor : COLOR0, out float3 out
     GET_PROPERTIES(screenUV, lutIndex, outlineProperty, shadowTypeProperty);
     GET_POSITION(screenUV, depth, positionWS, positionCS);
 
+    // 先直接输出albedo
+    // Color Output
+    outColor = half4(albedo, 1);
+    outSpecular = 0;
+
+    /*
     float3 outputColor = 0;
     float3 outputSpecular = 0;
     float3 viewDir = GetWorldSpaceNormalizeViewDir(positionWS);
@@ -61,4 +67,5 @@ void ShadingFragment(Varyings input, out half4 outColor : COLOR0, out float3 out
     // Color Output
     outColor = half4(outputColor, 1);
     outSpecular = outputSpecular;
+    */
 }
