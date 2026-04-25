@@ -26,7 +26,8 @@ MonoBehaviour:
     probeVolumeBlendStatesCS: {fileID: 0}
   m_RendererFeatures:
   - {fileID: 4931594896178174925}
-  m_RendererFeatureMap: cd5bd4ea6d8b7044
+  - {fileID: 3475793187851912450}
+  m_RendererFeatureMap: cd5bd4ea6d8b704402c5a2227d7f3c30
   m_UseNativeRenderPass: 0
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -55,6 +56,23 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+--- !u!114 &3475793187851912450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62bb5d1f591a2fa4b859921e5c11c586, type: 3}
+  m_Name: RF_MForward
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.RF_MForward
+  m_Active: 1
+  m_RenderPassEvent: 550
+  m_LayerMash:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &4931594896178174925
 MonoBehaviour:
   m_ObjectHideFlags: 0

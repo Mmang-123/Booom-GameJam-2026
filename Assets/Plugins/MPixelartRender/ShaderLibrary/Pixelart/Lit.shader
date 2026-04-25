@@ -69,6 +69,11 @@
         {
             Name "Preview"
 
+            Tags
+            {
+                "LightMode" = "Preview"
+            }
+
             // -------------------------------------
             // Render State Commands
             AlphaToMask[_AlphaToMask]

@@ -1,4 +1,4 @@
-﻿Shader "Mmang/Pixelart/Sprite/Default"
+﻿Shader "Mmang/Pixelart/Sprite/Pixelart"
 {
     Properties
     {
@@ -15,22 +15,31 @@
 
     SubShader
     {
-        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
+        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline"}
 
         Blend SrcAlpha OneMinusSrcAlpha
         Cull Off
         ZWrite Off
 
+        HLSLINCLUDE
+        #pragma multi_compile _ _PIXELART
+        ENDHLSL
+
         Pass
         {
-            Tags { "LightMode" = "MForward" }
+            Name "PixelartRender"
+
+            Tags
+            {
+                "LightMode" = "Pixelart"
+            }
 
             HLSLPROGRAM
 
             // -------------------------------------
             // Shader Stages
-            #pragma vertex UnlitVert
-            #pragma fragment UnlitFrag
+            #pragma vertex PixelartVert
+            #pragma fragment PixelartFrag
 
             //--------------------------------------
             // GPU Instancing
@@ -39,8 +48,8 @@
 
             // -------------------------------------
             // Includes
-            #include "DefaultInput.hlsl"
-            #include "DefaultPass.hlsl"
+            #include "PixelartInput.hlsl"
+            #include "PixelartPass.hlsl"
             ENDHLSL
         }
 

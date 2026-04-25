@@ -42,10 +42,25 @@ namespace Game
 
         private void RotateToTarget()
         {
+            float offsetAngle = 0f;
+            switch (Fish.EDirection)
+            {
+                case EDirection.Up:
+                    offsetAngle = -90f;
+                    break;
+                case EDirection.Down:
+                    offsetAngle = 90f;
+                    break;
+                case EDirection.Left:
+                    offsetAngle = 180f;
+                    break;
+            }
+
+
             Vector2 direction = TargetPoint - (Vector2)transform.position;
-            float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+            float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + offsetAngle;
             Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * m_RotateSpeed);
+            Fish.SetRotation(Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * m_RotateSpeed));
         }
 
         private void TraceUpdate()
@@ -63,7 +78,7 @@ namespace Game
             float moveDistance = CurrentSpeed * Time.deltaTime;
             moveDistance = Mathf.Min(moveDistance, distance - 0.05f);
 
-            Vector2 motion = moveDistance * transform.up;
+            Vector2 motion = moveDistance * Fish.ForwardDirection;
             transform.position += (Vector3)motion;
         }
 
@@ -74,7 +89,7 @@ namespace Game
                 CurrentSpeed = Mathf.Max(0f, CurrentSpeed - Time.deltaTime * m_Acceleration * 2f);
                 float moveDistance = CurrentSpeed * Time.deltaTime;
 
-                Vector2 motion = moveDistance * transform.up;
+                Vector2 motion = moveDistance * Fish.ForwardDirection;
                 transform.position += (Vector3)motion;
             }
         }

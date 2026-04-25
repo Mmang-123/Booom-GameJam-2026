@@ -127,7 +127,7 @@ namespace Mmang.PixelartRender
         private void InitResultCamera()
         {
             Camera = GetComponent<Camera>();
-            Camera.cullingMask = 0;
+            //Camera.cullingMask = 0;
             AdditionalCameraData = GetComponent<UniversalAdditionalCameraData>();
             AdditionalCameraData.SetRenderer(PixelartRendererType.ResultCamera);
         }

@@ -48,5 +48,8 @@ half4 PreviewFrag(Varyings input) : SV_TARGET
     //output.normal = normalize(input.normalWS) * 0.5 + 0.5;
     //output.lutIndex = _LUTIndex * 1.0 / 1024.0;
 
-    return half4(outputColor, 1);
+    // 直接返回颜色
+    return half4(albedoColor, 1);
+
+    //return half4(outputColor, 1);
 }
