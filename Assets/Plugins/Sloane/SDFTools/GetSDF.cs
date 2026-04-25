@@ -8,8 +8,11 @@ namespace Sloane.Editor
     {
         private static ComputeShader sdfComputeShader;
         private static readonly int PropertySourceTexture = Shader.PropertyToID("_SourceTexture");
+        private static readonly int PropertySingleChannelSourceTexture = Shader.PropertyToID("_SingleChannelSourceTexture");
         private static readonly int PropertyPreviousBuffer = Shader.PropertyToID("_PreviousBuffer");
+        private static readonly int PropertyPreviousBufferSingle = Shader.PropertyToID("_PreviousBufferSingle");
         private static readonly int PropertyCurrentBuffer = Shader.PropertyToID("_CurrentBuffer");
+        private static readonly int PropertyCurrentBufferSingle = Shader.PropertyToID("_CurrentBufferSingle");
         private static readonly int PropertyMinMaxBuffer = Shader.PropertyToID("_MinMaxBuffer");
         private static readonly int PropertyWidth = Shader.PropertyToID("_Width");
         private static readonly int PropertyHeight = Shader.PropertyToID("_Height");
@@ -25,7 +28,10 @@ namespace Sloane.Editor
         private static int kernelJumpFlooding;
         private static int kernelGetNearest;
         private static int kernelCalculateDistance;
+        private static int kernelCalculateDistanceSingleChannel;
         private static int kernelNormalizeDistance;
+        private static int kernelNormalizeDistanceSingleChannel;
+        private static int kernelNormalizeDistanceToSingleChannel;
         private static int kernelFindMinMaxDistance;
         private static bool initialized = false;
 
@@ -45,7 +51,10 @@ namespace Sloane.Editor
             kernelJumpFlooding = sdfComputeShader.FindKernel("JumpFlooding");
             kernelGetNearest = sdfComputeShader.FindKernel("GetNearest");
             kernelCalculateDistance = sdfComputeShader.FindKernel("CalculateDistance");
+            kernelCalculateDistanceSingleChannel = sdfComputeShader.FindKernel("CalculateDistanceSingleChannel");
             kernelNormalizeDistance = sdfComputeShader.FindKernel("NormalizeDistance");
+            kernelNormalizeDistanceSingleChannel = sdfComputeShader.FindKernel("NormalizeDistanceSingleChannel");
+            kernelNormalizeDistanceToSingleChannel = sdfComputeShader.FindKernel("NormalizeDistanceToSingleChannel");
             kernelFindMinMaxDistance = sdfComputeShader.FindKernel("FindMinMaxDistance");
             initialized = true;
         }
@@ -155,7 +164,7 @@ namespace Sloane.Editor
             if (useSingleChannel)
             {
                 // 如果输入是单通道纹理，使用专门的内核
-                sdfComputeShader.SetTexture(kernelInitializeSeedSingleChannel, "_SingleChannelSourceTexture", source);
+                sdfComputeShader.SetTexture(kernelInitializeSeedSingleChannel, PropertySingleChannelSourceTexture, source);
                 sdfComputeShader.Dispatch(kernelInitializeSeedSingleChannel, threadGroupsX, threadGroupsY, 1);
             }
             else
@@ -173,15 +182,82 @@ namespace Sloane.Editor
             return rt;
         }
 
+        private static RenderTexture CreateRenderTexture(int width, int height, RenderTextureFormat format)
+        {
+            RenderTexture rt = RenderTexture.GetTemporary(width, height, 0, format);
+            rt.enableRandomWrite = true;
+            return rt;
+        }
+
+        private static bool IsSingleChannelFormat(RenderTextureFormat format)
+        {
+            return format == RenderTextureFormat.RFloat
+                || format == RenderTextureFormat.RHalf
+                || format == RenderTextureFormat.R8
+                || format == RenderTextureFormat.R16
+                || format == RenderTextureFormat.RInt;
+        }
+
+        private static void DispatchDistanceKernel(RenderTexture sourceRT, RenderTexture targetRT, int width, int height, bool useSingleChannel)
+        {
+            int threadGroupsX = Mathf.CeilToInt(width / 8.0f);
+            int threadGroupsY = Mathf.CeilToInt(height / 8.0f);
+
+            if (useSingleChannel)
+            {
+                sdfComputeShader.SetTexture(kernelCalculateDistanceSingleChannel, PropertyPreviousBuffer, sourceRT);
+                sdfComputeShader.SetTexture(kernelCalculateDistanceSingleChannel, PropertyCurrentBufferSingle, targetRT);
+                sdfComputeShader.SetInt(PropertyWidth, width);
+                sdfComputeShader.SetInt(PropertyHeight, height);
+                sdfComputeShader.Dispatch(kernelCalculateDistanceSingleChannel, threadGroupsX, threadGroupsY, 1);
+            }
+            else
+            {
+                sdfComputeShader.SetTexture(kernelCalculateDistance, PropertyPreviousBuffer, sourceRT);
+                sdfComputeShader.SetTexture(kernelCalculateDistance, PropertyCurrentBuffer, targetRT);
+                sdfComputeShader.SetInt(PropertyWidth, width);
+                sdfComputeShader.SetInt(PropertyHeight, height);
+                sdfComputeShader.Dispatch(kernelCalculateDistance, threadGroupsX, threadGroupsY, 1);
+            }
+        }
+
+        private static void DispatchNormalizeKernel(RenderTexture sourceRT, RenderTexture targetRT, int width, int height, float maxDistance, bool useSingleChannel)
+        {
+            int threadGroupsX = Mathf.CeilToInt(width / 8.0f);
+            int threadGroupsY = Mathf.CeilToInt(height / 8.0f);
+
+            if (useSingleChannel)
+            {
+                bool sourceIsSingleChannel = IsSingleChannelFormat(sourceRT.format);
+                int normalizeKernel = sourceIsSingleChannel ? kernelNormalizeDistanceSingleChannel : kernelNormalizeDistanceToSingleChannel;
+                int sourceProperty = sourceIsSingleChannel ? PropertyPreviousBufferSingle : PropertyPreviousBuffer;
+
+                sdfComputeShader.SetTexture(normalizeKernel, sourceProperty, sourceRT);
+                sdfComputeShader.SetTexture(normalizeKernel, PropertyCurrentBufferSingle, targetRT);
+                sdfComputeShader.SetFloat(PropertyMaxDistance, maxDistance);
+                sdfComputeShader.Dispatch(normalizeKernel, threadGroupsX, threadGroupsY, 1);
+            }
+            else
+            {
+                sdfComputeShader.SetTexture(kernelNormalizeDistance, PropertyPreviousBuffer, sourceRT);
+                sdfComputeShader.SetTexture(kernelNormalizeDistance, PropertyCurrentBuffer, targetRT);
+                sdfComputeShader.SetFloat(PropertyMaxDistance, maxDistance);
+                sdfComputeShader.Dispatch(kernelNormalizeDistance, threadGroupsX, threadGroupsY, 1);
+            }
+        }
+
         /// <summary>
         /// 将 SDF RenderTexture 转换为可读的 Texture2D
         /// </summary>
-        public static Texture2D ConvertToTexture2D(RenderTexture sdfRT)
+        /// <param name="sdfRT">输入的 SDF RenderTexture</param>
+        /// <param name="useSingleChannelOutput">是否输出为单通道纹理（RFloat）</param>
+        public static Texture2D ConvertToTexture2D(RenderTexture sdfRT, bool useSingleChannelOutput = false)
         {
             RenderTexture previous = RenderTexture.active;
             RenderTexture.active = sdfRT;
 
-            Texture2D tex = new Texture2D(sdfRT.width, sdfRT.height, TextureFormat.RGBAFloat, false);
+            TextureFormat outputFormat = useSingleChannelOutput ? TextureFormat.RFloat : TextureFormat.RGBAFloat;
+            Texture2D tex = new Texture2D(sdfRT.width, sdfRT.height, outputFormat, false);
             tex.ReadPixels(new Rect(0, 0, sdfRT.width, sdfRT.height), 0, 0);
             tex.Apply();
 
@@ -196,40 +272,28 @@ namespace Sloane.Editor
         /// <param name="resultRT">用于存储距离场的 RenderTexture</param>
         /// <param name="normalize">是否归一化到 [0,1] 范围</param>
         /// <returns>距离场纹理</returns>
-        public static RenderTexture CalculateDistanceField(RenderTexture sourceRT, RenderTexture resultRT, bool normalize = true)
+        public static RenderTexture CalculateDistanceField(RenderTexture sourceRT, RenderTexture resultRT, bool normalize = true, bool useSingleChannelOutput = false)
         {
             Initialize();
             if (!initialized) return null;
 
             int width = sourceRT.width;
             int height = sourceRT.height;
+            bool singleChannelOutput = useSingleChannelOutput || IsSingleChannelFormat(resultRT.format);
 
             // 计算原始距离
-            sdfComputeShader.SetTexture(kernelCalculateDistance, PropertyPreviousBuffer, sourceRT);
-            sdfComputeShader.SetTexture(kernelCalculateDistance, PropertyCurrentBuffer, resultRT);
-            sdfComputeShader.SetInt(PropertyWidth, width);
-            sdfComputeShader.SetInt(PropertyHeight, height);
-
-            int threadGroupsX = Mathf.CeilToInt(width / 8.0f);
-            int threadGroupsY = Mathf.CeilToInt(height / 8.0f);
-            sdfComputeShader.Dispatch(kernelCalculateDistance, threadGroupsX, threadGroupsY, 1);
-
-            // 如果需要归一化
-            if (normalize)
+            if (!normalize)
             {
-                // 计算最大距离（对角线长度）
-                float maxDistance = Mathf.Sqrt(width * width + height * height);
-
-                RenderTexture normalizedRT = CreateRenderTexture(width, height);
-                sdfComputeShader.SetTexture(kernelNormalizeDistance, PropertyPreviousBuffer, resultRT);
-                sdfComputeShader.SetTexture(kernelNormalizeDistance, PropertyCurrentBuffer, normalizedRT);
-                sdfComputeShader.SetFloat(PropertyMaxDistance, maxDistance);
-                sdfComputeShader.Dispatch(kernelNormalizeDistance, threadGroupsX, threadGroupsY, 1);
-
-                RenderTexture.ReleaseTemporary(resultRT);
-                return normalizedRT;
+                DispatchDistanceKernel(sourceRT, resultRT, width, height, singleChannelOutput);
+                return resultRT;
             }
 
+            // 如果需要归一化
+            float maxDistance = Mathf.Sqrt(width * width + height * height);
+            RenderTexture rawDistanceRT = CreateRenderTexture(width, height, singleChannelOutput ? RenderTextureFormat.RFloat : RenderTextureFormat.ARGBFloat);
+            DispatchDistanceKernel(sourceRT, rawDistanceRT, width, height, singleChannelOutput);
+            DispatchNormalizeKernel(rawDistanceRT, resultRT, width, height, maxDistance, singleChannelOutput);
+            RenderTexture.ReleaseTemporary(rawDistanceRT);
             return resultRT;
         }
 
@@ -239,10 +303,11 @@ namespace Sloane.Editor
         /// <param name="sdfData">SDF 数据</param>
         /// <param name="normalize">是否归一化到 [0,1] 范围</param>
         /// <returns>距离场纹理</returns>
-        public static RenderTexture CalculateDistanceField(RenderTexture sdfData, bool normalize = true)
+        public static RenderTexture CalculateDistanceField(RenderTexture sdfData, bool normalize = true, bool useSingleChannelOutput = false)
         {
-            RenderTexture distanceRT = CreateRenderTexture(sdfData.width, sdfData.height);
-            return CalculateDistanceField(sdfData, distanceRT, normalize);
+            RenderTextureFormat outputFormat = useSingleChannelOutput ? RenderTextureFormat.RFloat : RenderTextureFormat.ARGBFloat;
+            RenderTexture distanceRT = CreateRenderTexture(sdfData.width, sdfData.height, outputFormat);
+            return CalculateDistanceField(sdfData, distanceRT, normalize, useSingleChannelOutput);
         }
 
         /// <summary>
@@ -251,22 +316,17 @@ namespace Sloane.Editor
         /// <param name="rawDistanceRT">未归一化的原始距离场</param>
         /// <param name="maxDistance">用于归一化的最大距离值</param>
         /// <returns>归一化后的距离场</returns>
-        public static RenderTexture NormalizeDistanceField(RenderTexture rawDistanceRT, float maxDistance)
+        public static RenderTexture NormalizeDistanceField(RenderTexture rawDistanceRT, float maxDistance, bool useSingleChannelOutput = false)
         {
             Initialize();
             if (!initialized) return null;
 
             int width = rawDistanceRT.width;
             int height = rawDistanceRT.height;
+            bool singleChannelOutput = useSingleChannelOutput || IsSingleChannelFormat(rawDistanceRT.format);
 
-            RenderTexture normalizedRT = CreateRenderTexture(width, height);
-            sdfComputeShader.SetTexture(kernelNormalizeDistance, PropertyPreviousBuffer, rawDistanceRT);
-            sdfComputeShader.SetTexture(kernelNormalizeDistance, PropertyCurrentBuffer, normalizedRT);
-            sdfComputeShader.SetFloat(PropertyMaxDistance, maxDistance);
-
-            int threadGroupsX = Mathf.CeilToInt(width / 8.0f);
-            int threadGroupsY = Mathf.CeilToInt(height / 8.0f);
-            sdfComputeShader.Dispatch(kernelNormalizeDistance, threadGroupsX, threadGroupsY, 1);
+            RenderTexture normalizedRT = CreateRenderTexture(width, height, singleChannelOutput ? RenderTextureFormat.RFloat : RenderTextureFormat.ARGBFloat);
+            DispatchNormalizeKernel(rawDistanceRT, normalizedRT, width, height, maxDistance, singleChannelOutput);
 
             return normalizedRT;
         }
@@ -274,10 +334,13 @@ namespace Sloane.Editor
         /// <summary>
         /// 从 SDF 数据计算实际距离场并转换为 Texture2D
         /// </summary>
-        public static Texture2D CalculateDistanceFieldTexture(RenderTexture sourceRT, bool normalize = true)
+        /// <param name="sourceRT">SDF 数据</param>
+        /// <param name="normalize">是否归一化到 [0,1] 范围</param>
+        /// <param name="useSingleChannelOutput">是否输出为单通道纹理（RFloat）</param>
+        public static Texture2D CalculateDistanceFieldTexture(RenderTexture sourceRT, bool normalize = true, bool useSingleChannelOutput = false)
         {
-            RenderTexture distanceRT = CalculateDistanceField(sourceRT, normalize);
-            Texture2D result = ConvertToTexture2D(distanceRT);
+            RenderTexture distanceRT = CalculateDistanceField(sourceRT, normalize, useSingleChannelOutput);
+            Texture2D result = ConvertToTexture2D(distanceRT, useSingleChannelOutput);
             RenderTexture.ReleaseTemporary(distanceRT);
             return result;
         }
@@ -299,16 +362,18 @@ namespace Sloane.Editor
             // 计算最近点
             RenderTexture nearestPointRT = ComputeNearestPoint(sourceTexture, alphaThreshold, invertSelection, nearestPointSearchRange, useSingleChannel);
 
-            // 计算距离场
-            CalculateDistanceField(nearestPointRT, resultRT, normalize);
+            // 计算距离场，输出格式跟随 resultRT
+            bool useSingleChannelOutput = IsSingleChannelFormat(resultRT.format);
+            CalculateDistanceField(nearestPointRT, resultRT, normalize, useSingleChannelOutput);
 
             // 释放中间结果
             RenderTexture.ReleaseTemporary(nearestPointRT);
         }
 
-        public static RenderTexture GenerateSDF(Texture sourceTexture, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, bool useSingleChannel = false)
+        public static RenderTexture GenerateSDF(Texture sourceTexture, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, bool useSingleChannel = false, bool useSingleChannelOutput = false)
         {
-            RenderTexture resultRT = CreateRenderTexture(sourceTexture.width, sourceTexture.height);
+            RenderTextureFormat outputFormat = useSingleChannelOutput ? RenderTextureFormat.RFloat : RenderTextureFormat.ARGBFloat;
+            RenderTexture resultRT = CreateRenderTexture(sourceTexture.width, sourceTexture.height, outputFormat);
             GenerateSDF(sourceTexture, resultRT, alphaThreshold, normalize, invertSelection, nearestPointSearchRange, useSingleChannel);
             return resultRT;
         }
@@ -316,10 +381,16 @@ namespace Sloane.Editor
         /// <summary>
         /// 从纹理生成完整的 SDF 并转换为 Texture2D
         /// </summary>
-        public static Texture2D GenerateSDFTexture(Texture2D sourceTexture, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0)
+        /// <param name="sourceTexture">输入纹理</param>
+        /// <param name="alphaThreshold">alpha阈值</param>
+        /// <param name="normalize">是否归一化到 [0,1] 范围</param>
+        /// <param name="invertSelection">是否反向选择</param>
+        /// <param name="nearestPointSearchRange">最近点精查范围</param>
+        /// <param name="useSingleChannelOutput">是否输出为单通道纹理（RFloat）</param>
+        public static Texture2D GenerateSDFTexture(Texture2D sourceTexture, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, bool useSingleChannelOutput = false)
         {
-            RenderTexture sdfRT = GenerateSDF(sourceTexture, alphaThreshold, normalize, invertSelection, nearestPointSearchRange);
-            Texture2D result = ConvertToTexture2D(sdfRT);
+            RenderTexture sdfRT = GenerateSDF(sourceTexture, alphaThreshold, normalize, invertSelection, nearestPointSearchRange, useSingleChannel: false, useSingleChannelOutput: useSingleChannelOutput);
+            Texture2D result = ConvertToTexture2D(sdfRT, useSingleChannelOutput);
             RenderTexture.ReleaseTemporary(sdfRT);
             return result;
         }
