@@ -49,44 +49,16 @@ namespace Mmang.PixelartRender
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
             UniversalLightData lightData = frameData.Get<UniversalLightData>();
 
-            /*
-            var camera = cameraData.camera;
-            var pixelartCamera = PixelartManager.Instance.GetPixelartCamera(camera, EPixelartCameraType.Cast);
-            if (pixelartCamera == null) return;
-            */
-
             using (var builder = renderGraph.AddRasterRenderPass<PassData>(s_PassTag, out var passData))
             {
-                //UniversalRenderer renderer = (UniversalRenderer)cameraData.renderer;
 
                 builder.AllowPassCulling(false);
                 builder.AllowGlobalStateModification(true);
 
-                /*
-                for (EPixelartBuffer bufferType = PRenderStage.RawDataStart; bufferType <= PRenderStage.RawDataEnd; bufferType++)
-                {
-                    TextureHandle bufferHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, PBuffer.GetBufferDescriptor(pixelartCamera.CameraData, bufferType), PBuffer.GetBufferName(bufferType), false);
-                    builder.SetRenderAttachment(bufferHandle, (int)bufferType, AccessFlags.Write);
-                    builder.SetGlobalTextureAfterPass(bufferHandle, PBuffer.GetBufferShaderProperty(bufferType));
-                    pixelartBufferData.AddBuffer(bufferType, bufferHandle);
-                }
-                */
-
-                
-                //TextureHandle depthHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, PBuffer.GetBufferDescriptor(pixelartCamera.CameraData, EPixelartBuffer.Depth), PBuffer.GetBufferName(EPixelartBuffer.Depth), false);
-                //builder.SetRenderAttachmentDepth(depthHandle, AccessFlags.Write);
-                //builder.SetGlobalTextureAfterPass(depthHandle, PBuffer.GetBufferShaderProperty(EPixelartBuffer.Depth));
-                //pixelartBufferData.AddBuffer(EPixelartBuffer.Depth, depthHandle);
 
                 builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
                 builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, 0);
 
-                /*
-                TextureHandle depthHandle = resourceData.activeDepthTexture;
-                builder.SetRenderAttachmentDepth(depthHandle, AccessFlags.Write);
-                builder.SetGlobalTextureAfterPass(depthHandle, PBuffer.GetBufferShaderProperty(EPixelartBuffer.Depth));
-                pixelartBufferData.AddBuffer(EPixelartBuffer.Depth, depthHandle);
-                */
 
                 SortingCriteria sortingCriteria = cameraData.defaultOpaqueSortFlags;
                 DrawingSettings drawingSettings = RenderingUtils.CreateDrawingSettings(TargetShaderTag, renderingData, cameraData, lightData, sortingCriteria);

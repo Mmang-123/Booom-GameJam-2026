@@ -79,7 +79,8 @@ MonoBehaviour:
   - {fileID: 5392433442531744511}
   - {fileID: -3701242947120417362}
   - {fileID: -8265611008998510951}
-  m_RendererFeatureMap: 80b20f47c03c1082ff9a0a49a5c5d54aaeb5774d268ba2cc99ee159594a64a8d
+  - {fileID: 4241226087177511498}
+  m_RendererFeatureMap: 80b20f47c03c1082ff9a0a49a5c5d54aaeb5774d268ba2cc99ee159594a64a8d4ae255c2a7dcdb3a
   m_UseNativeRenderPass: 0
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -108,6 +109,20 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+--- !u!114 &4241226087177511498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1eb952f7d35e8e409b3a67337cc069b, type: 3}
+  m_Name: RF_Lighting
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.RF_Lighting
+  m_Active: 1
+  m_LightingShader: {fileID: 4800000, guid: 08f5c930b23d7f04b9601d81693c506c, type: 3}
 --- !u!114 &5392433442531744511
 MonoBehaviour:
   m_ObjectHideFlags: 0

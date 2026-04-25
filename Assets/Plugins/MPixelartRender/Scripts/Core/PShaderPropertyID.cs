@@ -30,5 +30,8 @@ namespace Mmang.PixelartRender
         // Cloud
         public static readonly int CloudTexture = Shader.PropertyToID("_CloudTexture");
         public static readonly int CloudSize = Shader.PropertyToID("_CloudSize");
+
+        // Lighting
+        public static readonly int LightingTexture = Shader.PropertyToID("_LightingTexture");
     }
 }
