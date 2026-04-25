@@ -106,6 +106,11 @@ inline int PB_GetShadowType(float2 screenUV)
     return g.shadowType;
 }
 
+inline half PB_GetObstacleMask(float2 screenUV)
+{
+    return PB_GetProperties(screenUV).z;
+}
+
 
 #define GET_DEPTH(screenUV, outDepth) \
 float outDepth = PB_GetDepth(screenUV); \
@@ -145,6 +150,10 @@ int outOutline = PB_GetOutline(screenUV); \
 
 #define GET_SHADOW_TYPE(screenUV, outShadowType) \
 int outShadowType = PB_GetShadowType(screenUV); \
+
+#define GET_OBSTACLE_MASK(screenUV, outMask) \
+half outMask = PB_GetObstacleMask(screenUV); \
+
 
 #define GET_POSITION(screenUV, rawDepth, outPositionWS, outPositionCS) \
 float3 outPositionWS = GetWorldPositionWithRawDepth(screenUV, rawDepth); \

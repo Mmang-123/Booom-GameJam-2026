@@ -31,7 +31,6 @@ Varyings PixelartVert(Attributes v)
     o.color = v.color * _Color * _RendererColor;
 
 
-
     return o;
 }
 
@@ -45,8 +44,10 @@ BufferOutput PixelartFrag(Varyings input) : SV_Target
     float4 outputColor = input.color;
 #endif
 
-    OUTPUT_ALBEDO4(outputColor);
+    clip(outputColor.a - 0.5);
 
+    OUTPUT_ALBEDO4(outputColor);
+    OUTPUT_OBSTACLE_MASK(_ObstacleMask);
 
     RETURN_BUFFER_VALUE();
 }

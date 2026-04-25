@@ -7,4 +7,5 @@ sampler2D _MainTex;
 half4 _MainTex_ST;
 float4 _Color;
 half4 _RendererColor;
+half _ObstacleMask;
 CBUFFER_END

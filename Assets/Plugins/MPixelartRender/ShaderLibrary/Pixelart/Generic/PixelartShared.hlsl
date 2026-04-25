@@ -10,7 +10,7 @@ struct BufferOutput
     float2 smoothnessMetallic : COLOR2;
     float3 normal : COLOR3;
     float2 originUV : COLOR4;
-    float2 pixelartProperties : COLOR5;
+    float4 pixelartProperties : COLOR5;
 };
 
 // Properties
@@ -65,7 +65,11 @@ inline PixelartPropertiesG DecodePropertiesG(float rawG)
 
 // --End Properties
 
-#define BUFFER_OUTPUT_INIT() BufferOutput __buffer_output = (BufferOutput)0
+#define BUFFER_OUTPUT_INIT() \
+BufferOutput __buffer_output = (BufferOutput)0; \
+__buffer_output.pixelartProperties.w = 1;
+
+
 #define RETURN_BUFFER_VALUE() return __buffer_output
 
 #define OUTPUT_DEPTHNORMAL(inDepth, inNormalWS) __buffer_output.depthNormal = EncodeDepthNormal(inDepth, inNormalWS)
@@ -84,6 +88,9 @@ inline PixelartPropertiesG DecodePropertiesG(float rawG)
 __buffer_output.pixelartProperties.x = EncodeLUTIndex(inLutIndex); \
 __buffer_output.pixelartProperties.y = EncodePropertiesG(inOutLine, inShadowType);
 
+#define OUTPUT_OBSTACLE_MASK(inMask) \
+__buffer_output.pixelartProperties.z = inMask; \
+__buffer_output.pixelartProperties.w = 1; // 我擦，不知道为什么一定要写这个
 
 // --End BufferOutput
 

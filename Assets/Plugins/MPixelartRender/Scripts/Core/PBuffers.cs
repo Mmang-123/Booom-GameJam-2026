@@ -14,7 +14,7 @@ namespace Mmang.PixelartRender
         SmoothnessMetallic = 3,
         Normal = 4,
         OriginUV = 5, // 原点的屏幕空间UV
-        Properties = 6, // R: LUT索引  G: 描边+阴影采样模式
+        Properties = 6, // R: LUT索引  G: 描边+阴影采样模式  B: 2D障碍遮罩
         SpecularOutput = 7,
 
         [MEnum(hide = true)] End,
@@ -131,7 +131,7 @@ namespace Mmang.PixelartRender
                     {
                         depthBufferBits = 0,
                         enableRandomWrite = true,
-                        graphicsFormat = GraphicsFormat.R16G16_UNorm,
+                        graphicsFormat = GraphicsFormat.R16G16B16A16_UNorm,
                         volumeDepth = 1,
                         msaaSamples = 1,
                         sRGB = true,

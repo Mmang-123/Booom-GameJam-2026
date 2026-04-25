@@ -4,6 +4,7 @@
 #include "../Generic/PixelartBuffer.hlsl"
 #include "../Generic/PixelartShading.hlsl"
 #include "../Generic/Outline.hlsl"
+#include "../../Lighting/Lighting.hlsl"
 
 void ShadingFragment(Varyings input, out half4 outColor : COLOR0, out float3 outSpecular : COLOR1)
 {
@@ -17,11 +18,19 @@ void ShadingFragment(Varyings input, out half4 outColor : COLOR0, out float3 out
     GET_ORIGIN_UV(screenUV, originUV);
     GET_PROPERTIES(screenUV, lutIndex, outlineProperty, shadowTypeProperty);
     GET_POSITION(screenUV, depth, positionWS, positionCS);
+    GET_OBSTACLE_MASK(screenUV, obstacleMask);
 
-    // 先直接输出albedo
+    //
+    float3 light = SampleLight(screenUV);
+
+
     // Color Output
-    outColor = half4(albedo, 1);
+    outColor = half4(albedo, 1) ;
     outSpecular = 0;
+
+    //outColor = half4(obstacleMask.xxx, 1);
+
+
 
     /*
     float3 outputColor = 0;
