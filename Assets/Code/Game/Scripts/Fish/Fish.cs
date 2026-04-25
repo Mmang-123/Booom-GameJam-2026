@@ -10,6 +10,9 @@ namespace Game
         private List<FishBehaviour> m_Behaviours;
         private Dictionary<System.Type, FishBehaviour> m_BehaviourMap = new();
 
+        public Vector2 ForwardDirection => transform.up;
+        public Vector2 Position => transform.position;
+
         private void Start()
         {
             Init();
