@@ -62,6 +62,8 @@ namespace Mmang.PixelartRender
     public class RF_OutputResult : ScriptableRendererFeature
     {
         [SerializeField] private Shader m_BlitShader;
+        [SerializeField] private RenderPassEvent m_RenderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
+
         private RenderPass_OutputResult m_OutputResultPass;
 
         public override void Create()
@@ -70,7 +72,7 @@ namespace Mmang.PixelartRender
                 return;
             m_OutputResultPass = new(m_BlitShader)
             {
-                renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing
+                renderPassEvent = m_RenderPassEvent
             };
         }
 

@@ -69,3 +69,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.RF_OutputResult
   m_Active: 1
   m_BlitShader: {fileID: 4800000, guid: af9c836bed5f80f46a8a78f91cf643f9, type: 3}
+  m_RenderPassEvent: 250
