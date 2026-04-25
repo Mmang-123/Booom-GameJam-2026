@@ -1,0 +1,289 @@
+#pragma kernel InitializeSeedSingleChannel
+#pragma kernel InitializeSeed
+#pragma kernel JumpFlooding
+#pragma kernel GetNearest
+#pragma kernel CalculateDistance
+#pragma kernel NormalizeDistance
+#pragma kernel FindMinMaxDistance
+
+Texture2D<float> _SingleChannelSourceTexture;  // 用于单通道输入的纹理
+Texture2D<float4> _SourceTexture;
+Texture2D<float4> _PreviousBuffer;
+RWTexture2D<float4> _CurrentBuffer;
+RWStructuredBuffer<int> _MinMaxBuffer;  // [0]=max absolute distance
+
+uint _Width;
+uint _Height;
+float _AlphaThreshold;
+float _MaxDistance;  // 用于归一化的最大距离
+bool _InvertSelection;  // 是否反向选择（用于内部SDF）
+bool _IsNormalized;  // 输入是否已经归一化
+int _NearestPointSearchRange;
+
+uint _IterationTime;
+uint _Iteration;
+
+[numthreads(8,8,1)]
+void InitializeSeedSingleChannel(uint3 id : SV_DispatchThreadID)
+{
+    uint2 coord = id.xy;
+    float color = _SingleChannelSourceTexture[coord];
+    
+    float width = float(_Width);
+    float height = float(_Height);
+    
+    // 判断是否为种子点（支持反向选择）
+    bool isSeed = _InvertSelection ? (color <= _AlphaThreshold) : (color > _AlphaThreshold);
+    
+    if (isSeed)
+    {
+        // RG: 归一化坐标, B: 1.0 表示是种子点, A: 保留原始 alpha
+        _CurrentBuffer[coord] = float4(float(coord.x) / width, float(coord.y) / height, 1.0, 1.0);
+    }
+    else
+    {
+        // 非种子像素：RG 设为无效坐标, B: 0.0 表示非种子点
+        _CurrentBuffer[coord] = float4(float(coord.x) / width, float(coord.y) / height, 0.0, 1.0);
+    }
+}
+
+[numthreads(8,8,1)]
+void InitializeSeed(uint3 id : SV_DispatchThreadID)
+{
+    uint2 coord = id.xy;
+    float4 color = _SourceTexture[coord];
+    
+    float width = float(_Width);
+    float height = float(_Height);
+    
+    // 判断是否为种子点（支持反向选择）
+    bool isSeed = _InvertSelection ? (color.a <= _AlphaThreshold) : (color.a > _AlphaThreshold);
+    
+    if (isSeed)
+    {
+        // RG: 归一化坐标, B: 1.0 表示是种子点, A: 保留原始 alpha
+        _CurrentBuffer[coord] = float4(float(coord.x) / width, float(coord.y) / height, 1.0, 1.0);
+    }
+    else
+    {
+        // 非种子像素：RG 设为无效坐标, B: 0.0 表示非种子点
+        _CurrentBuffer[coord] = float4(float(coord.x) / width, float(coord.y) / height, 0.0, 1.0);
+    }
+}
+
+int DistanceSquared(uint2 a, uint2 b)
+{
+    int dx = int(a.x) - int(b.x);
+    int dy = int(a.y) - int(b.y);
+    return dx * dx + dy * dy;
+}
+
+[numthreads(8,8,1)]
+void JumpFlooding (uint3 id : SV_DispatchThreadID)
+{
+    uint step = pow(2, _IterationTime - _Iteration - 1);
+    uint2 currentCoord = id.xy;
+    float width = float(_Width);
+    float height = float(_Height);
+    uint2 currentSeed = uint2(uint(round(_CurrentBuffer[currentCoord].x * width)), uint(round(_CurrentBuffer[currentCoord].y * height)));
+    
+    if(_CurrentBuffer[currentCoord].z > 0.5)
+    {
+        for(int i = -1; i <= 1; i++)
+        {
+            for(int j = -1; j <= 1; j++)
+            {
+                int2 neighborCoordSigned = int2(currentCoord) + int2(i, j) * step;
+                if(neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
+                if(i == 0 && j == 0) continue;
+            
+                uint2 neighborCoord = uint2(neighborCoordSigned);
+                uint2 neighborSeed = uint2(uint(_CurrentBuffer[neighborCoord].x * width), uint(_CurrentBuffer[neighborCoord].y * height));
+
+                if(neighborSeed.x == currentSeed.x && neighborSeed.y == currentSeed.y) continue;
+
+                bool fillData = false;
+                if(_CurrentBuffer[neighborCoord].z < 0.5) fillData = true;
+                else if(DistanceSquared(neighborCoord, neighborSeed) > DistanceSquared(neighborCoord, currentSeed)) fillData = true;
+
+                if(fillData)
+                {
+                    _CurrentBuffer[neighborCoord] = float4(float(currentSeed.x) / width, float(currentSeed.y) / height, 1.0, _CurrentBuffer[neighborCoord].a);
+                }
+            }
+        }
+    }
+}
+
+[numthreads(8,8,1)]
+void GetNearest(uint3 id : SV_DispatchThreadID)
+{
+    uint2 currentCoord = id.xy;
+
+    if (_PreviousBuffer[currentCoord].z > 0.5)
+    {
+        _CurrentBuffer[currentCoord] = _PreviousBuffer[currentCoord];
+        return;
+    }
+
+    bool found = false;
+    int minDistance = int(_Width * _Width + _Height * _Height); // 初始化为最大可能距离
+    float width = float(_Width);
+    float height = float(_Height);
+    uint2 currentSeed = uint2(uint(_PreviousBuffer[currentCoord].x * width), uint(_PreviousBuffer[currentCoord].y * height));
+    
+    currentCoord = currentSeed;
+
+    // 按回字形向外遍历
+    int maxRadius = min(max(max(int(_Width - currentSeed.x - 1), int(currentSeed.x)), max(int(_Height - currentSeed.y - 1), int(currentSeed.y))), _NearestPointSearchRange);
+    for (int radius = 1; radius <= maxRadius; radius++)
+    {
+        if (minDistance < radius * radius) break;
+        // 遍历上边界
+        for (int i = -radius; i <= radius; i++)
+        {
+            int2 neighborCoordSigned = int2(currentCoord) + int2(i, -radius);
+            if (neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
+
+            uint2 neighborCoord = uint2(neighborCoordSigned);
+            if (_PreviousBuffer[neighborCoord].z < 0.5) continue;
+
+            int distance = DistanceSquared(neighborCoord, currentCoord);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                currentSeed = neighborCoord;
+                found = true;
+            }
+        }
+
+        // 遍历下边界
+        for (int i = -radius; i <= radius; i++)
+        {
+            int2 neighborCoordSigned = int2(currentCoord) + int2(i, radius);
+            if (neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
+
+            uint2 neighborCoord = uint2(neighborCoordSigned);
+            if (_PreviousBuffer[neighborCoord].z < 0.5) continue;
+
+            int distance = DistanceSquared(neighborCoord, currentCoord);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                currentSeed = neighborCoord;
+                found = true;
+            }
+        }
+
+        // 遍历左边界
+        for (int j = -radius + 1; j <= radius - 1; j++)
+        {
+            int2 neighborCoordSigned = int2(currentCoord) + int2(-radius, j);
+            if (neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
+
+            uint2 neighborCoord = uint2(neighborCoordSigned);
+            if (_PreviousBuffer[neighborCoord].z < 0.5) continue;
+
+            int distance = DistanceSquared(neighborCoord, currentCoord);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                currentSeed = neighborCoord;
+                found = true;
+            }
+        }
+
+        // 遍历右边界
+        for (int j = -radius + 1; j <= radius - 1; j++)
+        {
+            int2 neighborCoordSigned = int2(currentCoord) + int2(radius, j);
+            if (neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
+
+            uint2 neighborCoord = uint2(neighborCoordSigned);
+            if (_PreviousBuffer[neighborCoord].z < 0.5) continue;
+
+            int distance = DistanceSquared(neighborCoord, currentCoord);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                currentSeed = neighborCoord;
+                found = true;
+            }
+        }
+    }
+
+    if (!found)
+    {
+        currentSeed = uint2(uint(2.0 * width), uint(round(2.0 * height)));
+    }
+
+    _CurrentBuffer[currentCoord] = float4(float(currentSeed.x) / _Width, float(currentSeed.y) / _Height, 1.0, 1.0);
+}
+
+[numthreads(8,8,1)]
+void CalculateDistance(uint3 id : SV_DispatchThreadID)
+{
+    uint2 currentCoord = id.xy;
+    float4 sdfData = _PreviousBuffer[currentCoord];
+    
+    float width = float(_Width);
+    float height = float(_Height);
+    
+    // RG 通道存储最近点的归一化坐标
+    float nearestX = sdfData.r * width;
+    float nearestY = sdfData.g * height;
+    
+    // 计算距离
+    float dx = float(currentCoord.x) - nearestX;
+    float dy = float(currentCoord.y) - nearestY;
+    float distance = sqrt(dx * dx + dy * dy);
+    
+    // 如果当前像素本身是种子点 (B通道 > 0.5)，距离为负（内部）
+    /* if (sdfData.b > 0.5)
+    {
+        distance = -distance;
+    } */
+    
+    // 输出：R 通道存储原始距离值（未归一化）
+    _CurrentBuffer[currentCoord] = float4(distance, distance, distance, 1.0);
+}
+
+[numthreads(8,8,1)]
+void NormalizeDistance(uint3 id : SV_DispatchThreadID)
+{
+    uint2 currentCoord = id.xy;
+    float distance = _PreviousBuffer[currentCoord].r;
+    
+    // 归一化到 [0, 1] 范围，只考虑绝对值
+    // distance 绝对值范围是 [0, maxDist]
+    // 映射到 [0, 1]: abs(distance) / maxDist
+    float normalizedDist = abs(distance) / _MaxDistance;
+    normalizedDist = saturate(normalizedDist);  // 确保在 [0, 1] 范围内
+    
+    _CurrentBuffer[currentCoord] = float4(normalizedDist, normalizedDist, normalizedDist, 1.0);
+}
+
+[numthreads(8,8,1)]
+void FindMinMaxDistance(uint3 id : SV_DispatchThreadID)
+{
+    uint2 coord = id.xy;
+    
+    // 检查边界
+    if (coord.x >= _Width || coord.y >= _Height)
+        return;
+    
+    float distance = _PreviousBuffer[coord].r * 1000.0;  // 放大以保留小数部分
+    
+    // 如果是归一化的值，先反归一化回原始距离
+    if (_IsNormalized)
+    {
+        // 反归一化：distance = (normalized * 2 - 1) * maxDist
+        distance = distance * _MaxDistance;
+    }
+    
+    // 取绝对值并转换为int
+    int absDistance = int(ceil(distance));
+    
+    // 使用原子操作更新最大绝对值
+    InterlockedMax(_MinMaxBuffer[0], absDistance);
+}
