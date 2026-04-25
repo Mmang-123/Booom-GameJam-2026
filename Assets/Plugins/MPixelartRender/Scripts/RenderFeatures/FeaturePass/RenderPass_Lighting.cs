@@ -1,4 +1,5 @@
-﻿using Mmang.PixelartRender.VolumeComponents;
+﻿using System.Collections.Generic;
+using Mmang.PixelartRender.VolumeComponents;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
@@ -13,6 +14,8 @@ namespace Mmang.PixelartRender
         private class PassData
         {
             public Material Material;
+            public ComputeBuffer DataBuffer;
+            public int LightCount;
         }
 
         private Shader m_Shader;
@@ -62,13 +65,15 @@ namespace Mmang.PixelartRender
                 {
                     // PassData
                     passData.Material = m_LightingMaterial;
+                    passData.DataBuffer = LightingManager.Instance.DataBuffer;
+                    passData.LightCount = LightingManager.Instance.LightCount;
 
                     // 绘制
                     var descriptor = cameraData.cameraTargetDescriptor;
                     descriptor.depthBufferBits = 0;
                     TextureHandle lightingTextureHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, descriptor, LightingTextureName, false);
                     builder.SetRenderAttachment(lightingTextureHandle, 0, AccessFlags.Write);
-                    builder.SetGlobalTextureAfterPass(lightingTextureHandle, PShaderPropertyID.LightingTexture);
+                    builder.SetGlobalTextureAfterPass(lightingTextureHandle, PShaderPropertyID.MLightingTexture);
 
                     builder.SetRenderFunc((PassData data, RasterGraphContext rgContext) =>
                     {
@@ -80,6 +85,8 @@ namespace Mmang.PixelartRender
 
         private static void ExecutePass(RasterCommandBuffer cmd, PassData passData)
         {
+            cmd.SetGlobalBuffer(PShaderPropertyID.MLightDataBuffer, passData.DataBuffer);
+            cmd.SetGlobalInt(PShaderPropertyID.MLightCount, passData.LightCount);
             Blitter.BlitTexture(cmd, new Vector4(1, 1, 0, 0), passData.Material, 0);
         }
     }
