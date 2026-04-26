@@ -1,3 +1,4 @@
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 #include "Packages/com.sloane.shader.generic/Includes/SDF/Packing.hlsl"
 
 #pragma kernel InitializeSeedSingleChannel
