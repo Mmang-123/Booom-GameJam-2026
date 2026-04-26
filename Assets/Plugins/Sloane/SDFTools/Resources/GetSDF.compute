@@ -249,7 +249,8 @@ float BoundaryDist(uint2 coord)
 void CalculateDistance(uint3 id : SV_DispatchThreadID)
 {
     uint2 currentCoord = id.xy;
-    float4 sdfData = _PreviousBuffer[currentCoord + uint2(_ExtendPixels, _ExtendPixels)];
+    uint2 extendedCoord = currentCoord + uint2(_ExtendPixels, _ExtendPixels);
+    float4 sdfData = _PreviousBuffer[extendedCoord];
     
     float width = float(_Width);
     float height = float(_Height);
@@ -264,17 +265,17 @@ void CalculateDistance(uint3 id : SV_DispatchThreadID)
     if (sdfData.b < 0.5)
     {
         // 没有被泛洪填充过的像素，距离为正
-        distance = sqrt(width * width + height * height); // 初始化为最大可能距离
+        distance = _MaxDistance; // 初始化为最大可能距离
     }
     else
     {
-        float dx = float(currentCoord.x) - nearestX;
-        float dy = float(currentCoord.y) - nearestY;
+        float dx = float(extendedCoord.x) - nearestX;
+        float dy = float(extendedCoord.y) - nearestY;
         float distance = sqrt(dx * dx + dy * dy);
     }
 
     if (_BoundaryDistance)
-        distance = min(distance, BoundaryDist(currentCoord));
+        distance = min(distance, BoundaryDist(extendedCoord));
 
     float out_val = _Normalize ? saturate(distance / _MaxDistance) : distance;
     // 输出通道
@@ -285,7 +286,8 @@ void CalculateDistance(uint3 id : SV_DispatchThreadID)
 void CalculateDistanceSingleChannel(uint3 id : SV_DispatchThreadID)
 {
     uint2 currentCoord = id.xy;
-    float4 sdfData = _PreviousBuffer[currentCoord + uint2(_ExtendPixels, _ExtendPixels)];
+    uint2 extendedCoord = currentCoord + uint2(_ExtendPixels, _ExtendPixels);
+    float4 sdfData = _PreviousBuffer[extendedCoord];
 
     float width = float(_Width);
     float height = float(_Height);
@@ -293,12 +295,12 @@ void CalculateDistanceSingleChannel(uint3 id : SV_DispatchThreadID)
     float nearestX = sdfData.r * width;
     float nearestY = sdfData.g * height;
 
-    float dx = float(currentCoord.x) - nearestX;
-    float dy = float(currentCoord.y) - nearestY;
+    float dx = float(extendedCoord.x) - nearestX;
+    float dy = float(extendedCoord.y) - nearestY;
     float distance = sqrt(dx * dx + dy * dy);
 
     if (_BoundaryDistance)
-        distance = min(distance, BoundaryDist(currentCoord));
+        distance = min(distance, BoundaryDist(extendedCoord));
 
     float out_val = _Normalize ? saturate(distance / _MaxDistance) : distance;
     _CurrentBufferSingle[currentCoord] = out_val;

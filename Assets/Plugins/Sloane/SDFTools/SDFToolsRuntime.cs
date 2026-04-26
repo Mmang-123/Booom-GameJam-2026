@@ -209,16 +209,16 @@ namespace Sloane
             {
                 cmd.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistanceSingleChannel, PropertyPreviousBuffer, nearestId);
                 cmd.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistanceSingleChannel, PropertyCurrentBufferSingle, resultRT);
-                cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
-                cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, iterationWidth);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, iterationHeight);
                 cmd.DispatchCompute(sdfComputeShader, kernelCalculateDistanceSingleChannel, threadGroupsX, threadGroupsY, 1);
             }
             else
             {
                 cmd.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistance, PropertyPreviousBuffer, nearestId);
                 cmd.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistance, PropertyCurrentBuffer, resultRT);
-                cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
-                cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, iterationWidth);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, iterationHeight);
                 cmd.DispatchCompute(sdfComputeShader, kernelCalculateDistance, threadGroupsX, threadGroupsY, 1);
             }
 
