@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Sloane.Editor
+namespace Sloane
 {
     public static class SDFTools
     {
@@ -177,16 +177,16 @@ namespace Sloane.Editor
 
         private static RenderTexture CreateRenderTexture(int width, int height)
         {
-            RenderTexture rt = RenderTexture.GetTemporary(width, height, 0, RenderTextureFormat.ARGBFloat);
-            rt.enableRandomWrite = true;
-            return rt;
+            var desc = new RenderTextureDescriptor(width, height, RenderTextureFormat.ARGBFloat, 0);
+            desc.enableRandomWrite = true;
+            return RenderTexture.GetTemporary(desc);
         }
 
         private static RenderTexture CreateRenderTexture(int width, int height, RenderTextureFormat format)
         {
-            RenderTexture rt = RenderTexture.GetTemporary(width, height, 0, format);
-            rt.enableRandomWrite = true;
-            return rt;
+            var desc = new RenderTextureDescriptor(width, height, format, 0);
+            desc.enableRandomWrite = true;
+            return RenderTexture.GetTemporary(desc);
         }
 
         private static bool IsSingleChannelFormat(RenderTextureFormat format)
