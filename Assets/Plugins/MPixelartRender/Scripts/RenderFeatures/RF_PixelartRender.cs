@@ -6,12 +6,20 @@ using UnityEngine.Rendering.Universal;
 namespace Mmang.PixelartRender
 {
 
+    public enum EObstacleDebug
+    {
+        Off, Mask, SDF
+    }
+
     public class RF_PixelartRender : ScriptableRendererFeature
     {
         [SerializeField] private Shader m_PixelartShader;
         [SerializeField] private LayerMask m_OpaqueLayerMash = ~0;
 
         #region Debug
+        [Header("Obstacle Debug")]
+        [SerializeField] private EObstacleDebug m_ObstacleDebug = EObstacleDebug.Off;
+
         [Header("Debug")]
         [SerializeField] private bool m_DebugOutput = false;
         [SerializeField] private EPixelartBuffer m_DebugOutputBuffer;
@@ -26,6 +34,11 @@ namespace Mmang.PixelartRender
 
         private RenderPass_BufferOutput m_BufferOutputPass;
         #endregion
+
+#if UNITY_EDITOR
+        private RenderPass_Blit m_DebugBlitPass;
+
+#endif
         
         public override void Create()
         {
@@ -49,13 +62,22 @@ namespace Mmang.PixelartRender
                 renderPassEvent = RenderPassEvent.AfterRendering
             };
 
-            if (m_DebugOutput)
+            if (m_ObstacleDebug == EObstacleDebug.Off && m_DebugOutput)
             {
                 m_BufferOutputPass = new()
                 {
                     renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing
                 };
                 m_BufferOutputPass.SetOutputBufferType(m_DebugOutputBuffer);
+            }
+
+            if (m_ObstacleDebug != EObstacleDebug.Off)
+            {
+                Shader obstacleDebugShader = Shader.Find("Hidden/Mmang/Pixelart/Blit/ObstacleDebug");
+                m_DebugBlitPass = new(obstacleDebugShader)
+                {
+                    renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing
+                };
             }
         }
 
@@ -81,10 +103,20 @@ namespace Mmang.PixelartRender
 
             renderer.EnqueuePass(m_PixelartShadingPass);
 
-            if (m_DebugOutput)
+#if UNITY_EDITOR
+            if (m_ObstacleDebug == EObstacleDebug.Off && m_DebugOutput)
             {
                 renderer.EnqueuePass(m_BufferOutputPass);
             }
+
+            if (m_ObstacleDebug != EObstacleDebug.Off)
+            {
+                if (m_DebugBlitPass.Material != null)
+                    m_DebugBlitPass.Material.SetInt("_DebugType", m_ObstacleDebug == EObstacleDebug.Mask ? 0 : 1);
+                renderer.EnqueuePass(m_DebugBlitPass);
+            }
+
+#endif
 
             renderer.EnqueuePass(m_PixelartCleanupPass);
         }
