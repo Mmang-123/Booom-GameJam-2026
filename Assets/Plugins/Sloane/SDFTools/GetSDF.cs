@@ -152,7 +152,6 @@ namespace Sloane
         /// </summary>
         private static void InitializeSeedBuffer(Texture source, RenderTexture target, float threshold, int width, int height, bool invertSelection, bool useSingleChannel = false)
         {
-            sdfComputeShader.SetTexture(kernelInitializeSeed, PropertyCurrentBuffer, target);
             sdfComputeShader.SetInt(PropertyWidth, width);
             sdfComputeShader.SetInt(PropertyHeight, height);
             sdfComputeShader.SetFloat(PropertyAlphaThreshold, threshold);
@@ -164,12 +163,14 @@ namespace Sloane
             if (useSingleChannel)
             {
                 // 如果输入是单通道纹理，使用专门的内核
+                sdfComputeShader.SetTexture(kernelInitializeSeedSingleChannel, PropertyCurrentBuffer, target);
                 sdfComputeShader.SetTexture(kernelInitializeSeedSingleChannel, PropertySingleChannelSourceTexture, source);
                 sdfComputeShader.Dispatch(kernelInitializeSeedSingleChannel, threadGroupsX, threadGroupsY, 1);
             }
             else
             {
                 // 默认使用RGBA输入
+                sdfComputeShader.SetTexture(kernelInitializeSeed, PropertyCurrentBuffer, target);
                 sdfComputeShader.SetTexture(kernelInitializeSeed, PropertySourceTexture, source);
                 sdfComputeShader.Dispatch(kernelInitializeSeed, threadGroupsX, threadGroupsY, 1);
             }
