@@ -44,7 +44,7 @@ uint _Iteration;
 void InitializeSeedSingleChannel(uint3 id : SV_DispatchThreadID)
 {
     uint2 coord = id.xy;
-    float color = _SingleChannelSourceTexture[coord + uint2(_OffsetX, _OffsetY) - uint2(_ExtendPixels, _ExtendPixels)];
+    float color = _SingleChannelSourceTexture[coord + uint2(_OffsetX, _OffsetY)];
     
     float width = float(_Width);
     float height = float(_Height);
@@ -68,7 +68,7 @@ void InitializeSeedSingleChannel(uint3 id : SV_DispatchThreadID)
 void InitializeSeed(uint3 id : SV_DispatchThreadID)
 {
     uint2 coord = id.xy;
-    float4 color = _SourceTexture[coord + uint2(_OffsetX, _OffsetY) - uint2(_ExtendPixels, _ExtendPixels)];
+    float4 color = _SourceTexture[coord + uint2(_OffsetX, _OffsetY)];
     
     float width = float(_Width);
     float height = float(_Height);
