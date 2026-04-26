@@ -18,7 +18,6 @@ RWTexture2D<float4> _CurrentBuffer;
 Texture2D<float> _PreviousBufferSingle;
 RWTexture2D<float> _CurrentBufferSingle;
 RWStructuredBuffer<int> _MinMaxBuffer;  // [0]=max absolute distance
-RWStructuredBuffer<int> _HasSeedBuffer; // [0]=1 if any seed pixel exists
 
 uint _Width;
 uint _Height;
@@ -27,6 +26,7 @@ float _MaxDistance;  // 用于归一化的最大距离
 bool _InvertSelection;  // 是否反向选择（用于内部SDF）
 bool _IsNormalized;  // 输入是否已经归一化
 bool _BoundaryDistance;
+bool _Normalize;
 int _NearestPointSearchRange;
 
 uint _IterationTime;
@@ -48,7 +48,6 @@ void InitializeSeedSingleChannel(uint3 id : SV_DispatchThreadID)
     {
         // RG: 归一化坐标, B: 1.0 表示是种子点, A: 保留原始 alpha
         _CurrentBuffer[coord] = float4(float(coord.x) / width, float(coord.y) / height, 1.0, 1.0);
-        _HasSeedBuffer[0] = 1;
     }
     else
     {
@@ -73,7 +72,6 @@ void InitializeSeed(uint3 id : SV_DispatchThreadID)
     {
         // RG: 归一化坐标, B: 1.0 表示是种子点, A: 保留原始 alpha
         _CurrentBuffer[coord] = float4(float(coord.x) / width, float(coord.y) / height, 1.0, 1.0);
-        _HasSeedBuffer[0] = 1;
     }
     else
     {
@@ -254,15 +252,26 @@ void CalculateDistance(uint3 id : SV_DispatchThreadID)
     float nearestY = sdfData.g * height;
     
     // 计算距离
-    float dx = float(currentCoord.x) - nearestX;
-    float dy = float(currentCoord.y) - nearestY;
-    float distance = sqrt(dx * dx + dy * dy);
+    float distance = 0.0;
+
+    if (sdfData.b < 0.5)
+    {
+        // 没有被泛洪填充过的像素，距离为正
+        distance = sqrt(width * width + height * height); // 初始化为最大可能距离
+    }
+    else
+    {
+        float dx = float(currentCoord.x) - nearestX;
+        float dy = float(currentCoord.y) - nearestY;
+        float distance = sqrt(dx * dx + dy * dy);
+    }
 
     if (_BoundaryDistance)
         distance = min(distance, BoundaryDist(currentCoord));
-    
-    // 输出：R 通道存储原始距离值（未归一化）
-    _CurrentBuffer[currentCoord] = float4(distance, distance, distance, 1.0);
+
+    float out_val = _Normalize ? saturate(distance / _MaxDistance) : distance;
+    // 输出通道
+    _CurrentBuffer[currentCoord] = float4(out_val, out_val, out_val, 1.0);
 }
 
 [numthreads(8,8,1)]
@@ -284,7 +293,8 @@ void CalculateDistanceSingleChannel(uint3 id : SV_DispatchThreadID)
     if (_BoundaryDistance)
         distance = min(distance, BoundaryDist(currentCoord));
 
-    _CurrentBufferSingle[currentCoord] = distance;
+    float out_val = _Normalize ? saturate(distance / _MaxDistance) : distance;
+    _CurrentBufferSingle[currentCoord] = out_val;
 }
 
 [numthreads(8,8,1)]
@@ -350,6 +360,7 @@ void FindMinMaxDistance(uint3 id : SV_DispatchThreadID)
     // 使用原子操作更新最大绝对值
     InterlockedMax(_MinMaxBuffer[0], absDistance);
 }
+
 // 全空时直接写入到纹理边界的距离（RGBA输出）
 [numthreads(8,8,1)]
 void FillBoundingDistance(uint3 id : SV_DispatchThreadID)
@@ -358,7 +369,8 @@ void FillBoundingDistance(uint3 id : SV_DispatchThreadID)
     if (coord.x >= _Width || coord.y >= _Height) return;
 
     float distance = BoundaryDist(coord);
-    _CurrentBuffer[coord] = float4(distance, distance, distance, 1.0);
+    float out_val = _Normalize ? saturate(distance / _MaxDistance) : distance;
+    _CurrentBuffer[coord] = float4(out_val, out_val, out_val, 1.0);
 }
 
 // 全空时直接写入到纹理边界的距离（单通道输出）
@@ -369,5 +381,6 @@ void FillBoundingDistanceSingleChannel(uint3 id : SV_DispatchThreadID)
     if (coord.x >= _Width || coord.y >= _Height) return;
 
     float distance = BoundaryDist(coord);
-    _CurrentBufferSingle[coord] = distance;
+    float out_val = _Normalize ? saturate(distance / _MaxDistance) : distance;
+    _CurrentBufferSingle[coord] = out_val;
 }

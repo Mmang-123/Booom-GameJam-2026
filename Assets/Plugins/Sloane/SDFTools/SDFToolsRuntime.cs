@@ -42,6 +42,7 @@ namespace Sloane
         private static readonly int TempID_RawDist = Shader.PropertyToID("_SDF_RT_RawDist");
         private static readonly int PropertyHasSeedBuffer = Shader.PropertyToID("_HasSeedBuffer");
         private static readonly int PropertyBoundaryDistance = Shader.PropertyToID("_BoundaryDistance");
+        private static readonly int PropertyNormalize = Shader.PropertyToID("_Normalize");
 
         private static void Initialize()
         {
@@ -115,111 +116,25 @@ namespace Sloane
             RenderTexture currentBuffer = RenderTexture.GetTemporary(descARGB);
             currentBuffer.Create();
 
-            var hasSeedBuffer = new ComputeBuffer(1, sizeof(int));
-            hasSeedBuffer.SetData(new int[] { 0 });
-
-            var cmdInit = new CommandBuffer { name = "SDFTools: GenerateSDF [1/2] InitSeed" };
-            cmdInit.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
-            cmdInit.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
-            cmdInit.SetComputeFloatParam(sdfComputeShader, PropertyAlphaThreshold, alphaThreshold);
-            cmdInit.SetComputeIntParam(sdfComputeShader, PropertyInvertSelection, invertSelection ? 1 : 0);
+            var cmd = new CommandBuffer { name = "GenerateSDF" };
+            cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
+            cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
+            cmd.SetComputeFloatParam(sdfComputeShader, PropertyAlphaThreshold, alphaThreshold);
+            cmd.SetComputeIntParam(sdfComputeShader, PropertyInvertSelection, invertSelection ? 1 : 0);
             if (useSingleChannel)
             {
-                cmdInit.SetComputeBufferParam(sdfComputeShader, kernelInitializeSeedSingleChannel, PropertyHasSeedBuffer, hasSeedBuffer);
-                cmdInit.SetComputeTextureParam(sdfComputeShader, kernelInitializeSeedSingleChannel, PropertyCurrentBuffer, currentBuffer);
-                cmdInit.SetComputeTextureParam(sdfComputeShader, kernelInitializeSeedSingleChannel, PropertySingleChannelSourceTexture, sourceTexture);
-                cmdInit.DispatchCompute(sdfComputeShader, kernelInitializeSeedSingleChannel, threadGroupsX, threadGroupsY, 1);
+                cmd.SetComputeTextureParam(sdfComputeShader, kernelInitializeSeedSingleChannel, PropertyCurrentBuffer, currentBuffer);
+                cmd.SetComputeTextureParam(sdfComputeShader, kernelInitializeSeedSingleChannel, PropertySingleChannelSourceTexture, sourceTexture);
+                cmd.DispatchCompute(sdfComputeShader, kernelInitializeSeedSingleChannel, threadGroupsX, threadGroupsY, 1);
             }
             else
             {
-                cmdInit.SetComputeBufferParam(sdfComputeShader, kernelInitializeSeed, PropertyHasSeedBuffer, hasSeedBuffer);
-                cmdInit.SetComputeTextureParam(sdfComputeShader, kernelInitializeSeed, PropertyCurrentBuffer, currentBuffer);
-                cmdInit.SetComputeTextureParam(sdfComputeShader, kernelInitializeSeed, PropertySourceTexture, sourceTexture);
-                cmdInit.DispatchCompute(sdfComputeShader, kernelInitializeSeed, threadGroupsX, threadGroupsY, 1);
+                cmd.SetComputeTextureParam(sdfComputeShader, kernelInitializeSeed, PropertyCurrentBuffer, currentBuffer);
+                cmd.SetComputeTextureParam(sdfComputeShader, kernelInitializeSeed, PropertySourceTexture, sourceTexture);
+                cmd.DispatchCompute(sdfComputeShader, kernelInitializeSeed, threadGroupsX, threadGroupsY, 1);
             }
-            Graphics.ExecuteCommandBuffer(cmdInit);
-            cmdInit.Release();
-
-            // CPU 回读 flag
-            var flagData = new int[1];
-            hasSeedBuffer.GetData(flagData);
-            hasSeedBuffer.Release();
-
-            if (flagData[0] == 0)
-            {
-                if (!boundaryDistance)
-                {
-                    // 全空且不需边界距离：填充最大距离并返回
-                    float fillValue = normalize ? 1.0f : Mathf.Sqrt(width * width + height * height);
-                    var cmdClear = new CommandBuffer { name = "SDFTools: GenerateSDF - NoContent" };
-                    cmdClear.SetRenderTarget(resultRT);
-                    cmdClear.ClearRenderTarget(false, true, new Color(fillValue, fillValue, fillValue, fillValue));
-                    Graphics.ExecuteCommandBuffer(cmdClear);
-                    cmdClear.Release();
-                    RenderTexture.ReleaseTemporary(currentBuffer);
-                    return;
-                }
-                else
-                {
-                    // 全空但需边界距离：直接用专用 kernel 写入每像素到边界的距离
-                    var cmdFill = new CommandBuffer { name = "SDFTools: GenerateSDF - BoundaryOnly" };
-                    cmdFill.SetComputeIntParam(sdfComputeShader, PropertyWidth,  width);
-                    cmdFill.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
-
-                    if (normalize)
-                    {
-                        float maxDist = Mathf.Sqrt(width * width + height * height);
-                        var rawFormat = useSingleChannelOutput ? RenderTextureFormat.RFloat : RenderTextureFormat.ARGBFloat;
-                        var descRaw = new RenderTextureDescriptor(width, height, rawFormat, 0) { enableRandomWrite = true };
-                        cmdFill.GetTemporaryRT(TempID_RawDist, descRaw);
-
-                        if (useSingleChannelOutput)
-                        {
-                            cmdFill.SetComputeTextureParam(sdfComputeShader, kernelFillBoundingDistanceSingleChannel, PropertyCurrentBufferSingle, new RenderTargetIdentifier(TempID_RawDist));
-                            cmdFill.DispatchCompute(sdfComputeShader, kernelFillBoundingDistanceSingleChannel, threadGroupsX, threadGroupsY, 1);
-                            cmdFill.SetComputeTextureParam(sdfComputeShader, kernelNormalizeDistanceSingleChannel, PropertyPreviousBufferSingle, new RenderTargetIdentifier(TempID_RawDist));
-                            cmdFill.SetComputeTextureParam(sdfComputeShader, kernelNormalizeDistanceSingleChannel, PropertyCurrentBufferSingle, resultRT);
-                            cmdFill.SetComputeFloatParam(sdfComputeShader, PropertyMaxDistance, maxDist);
-                            cmdFill.DispatchCompute(sdfComputeShader, kernelNormalizeDistanceSingleChannel, threadGroupsX, threadGroupsY, 1);
-                        }
-                        else
-                        {
-                            cmdFill.SetComputeTextureParam(sdfComputeShader, kernelFillBoundingDistance, PropertyCurrentBuffer, new RenderTargetIdentifier(TempID_RawDist));
-                            cmdFill.DispatchCompute(sdfComputeShader, kernelFillBoundingDistance, threadGroupsX, threadGroupsY, 1);
-                            cmdFill.SetComputeTextureParam(sdfComputeShader, kernelNormalizeDistance, PropertyPreviousBuffer, new RenderTargetIdentifier(TempID_RawDist));
-                            cmdFill.SetComputeTextureParam(sdfComputeShader, kernelNormalizeDistance, PropertyCurrentBuffer, resultRT);
-                            cmdFill.SetComputeFloatParam(sdfComputeShader, PropertyMaxDistance, maxDist);
-                            cmdFill.DispatchCompute(sdfComputeShader, kernelNormalizeDistance, threadGroupsX, threadGroupsY, 1);
-                        }
-
-                        cmdFill.ReleaseTemporaryRT(TempID_RawDist);
-                    }
-                    else
-                    {
-                        if (useSingleChannelOutput)
-                        {
-                            cmdFill.SetComputeTextureParam(sdfComputeShader, kernelFillBoundingDistanceSingleChannel, PropertyCurrentBufferSingle, resultRT);
-                            cmdFill.DispatchCompute(sdfComputeShader, kernelFillBoundingDistanceSingleChannel, threadGroupsX, threadGroupsY, 1);
-                        }
-                        else
-                        {
-                            cmdFill.SetComputeTextureParam(sdfComputeShader, kernelFillBoundingDistance, PropertyCurrentBuffer, resultRT);
-                            cmdFill.DispatchCompute(sdfComputeShader, kernelFillBoundingDistance, threadGroupsX, threadGroupsY, 1);
-                        }
-                    }
-
-                    Graphics.ExecuteCommandBuffer(cmdFill);
-                    cmdFill.Release();
-                    RenderTexture.ReleaseTemporary(currentBuffer);
-                    return;
-                }
-            }
-
-            // ----------------------------------------------------------------
-            // 阶段二：JFA + GetNearest + Distance + Normalize
-            // ----------------------------------------------------------------
-            var cmdCompute = new CommandBuffer { name = "SDFTools: GenerateSDF [2/2] Compute" };
-            cmdCompute.GetTemporaryRT(TempID_Previous, descARGB);
+            
+            cmd.GetTemporaryRT(TempID_Previous, descARGB);
 
             // JFA 迭代
             int maxDimension = Mathf.Max(width, height);
@@ -227,27 +142,27 @@ namespace Sloane
             for (int i = 0; i < iterationCount; i++)
             {
                 // cmdCompute.Blit(currentBuffer, new RenderTargetIdentifier(TempID_Previous));
-                cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelJumpFlooding, PropertyPreviousBuffer, new RenderTargetIdentifier(TempID_Previous));
-                cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelJumpFlooding, PropertyCurrentBuffer, currentBuffer);
-                cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
-                cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
-                cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyIterationTime, iterationCount);
-                cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyIteration, i);
-                cmdCompute.DispatchCompute(sdfComputeShader, kernelJumpFlooding, threadGroupsX, threadGroupsY, 1);
+                cmd.SetComputeTextureParam(sdfComputeShader, kernelJumpFlooding, PropertyPreviousBuffer, new RenderTargetIdentifier(TempID_Previous));
+                cmd.SetComputeTextureParam(sdfComputeShader, kernelJumpFlooding, PropertyCurrentBuffer, currentBuffer);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyIterationTime, iterationCount);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyIteration, i);
+                cmd.DispatchCompute(sdfComputeShader, kernelJumpFlooding, threadGroupsX, threadGroupsY, 1);
             }
-            cmdCompute.ReleaseTemporaryRT(TempID_Previous);
+            cmd.ReleaseTemporaryRT(TempID_Previous);
 
             // GetNearest（可选精查）
             RenderTexture nearestBuffer;
             if (nearestPointSearchRange > 0)
             {
-                cmdCompute.GetTemporaryRT(TempID_Nearest, descARGB);
-                cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelGetNearest, PropertyPreviousBuffer, currentBuffer);
-                cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelGetNearest, PropertyCurrentBuffer, new RenderTargetIdentifier(TempID_Nearest));
-                cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
-                cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
-                cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyNearestPointSearchRange, nearestPointSearchRange);
-                cmdCompute.DispatchCompute(sdfComputeShader, kernelGetNearest, threadGroupsX, threadGroupsY, 1);
+                cmd.GetTemporaryRT(TempID_Nearest, descARGB);
+                cmd.SetComputeTextureParam(sdfComputeShader, kernelGetNearest, PropertyPreviousBuffer, currentBuffer);
+                cmd.SetComputeTextureParam(sdfComputeShader, kernelGetNearest, PropertyCurrentBuffer, new RenderTargetIdentifier(TempID_Nearest));
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyNearestPointSearchRange, nearestPointSearchRange);
+                cmd.DispatchCompute(sdfComputeShader, kernelGetNearest, threadGroupsX, threadGroupsY, 1);
                 // currentBuffer 在下面不再使用，延迟到 Execute 后释放
                 nearestBuffer = null; // 占位，实际使用 TempID_Nearest
             }
@@ -262,70 +177,34 @@ namespace Sloane
                 ? new RenderTargetIdentifier(TempID_Nearest)
                 : new RenderTargetIdentifier(nearestBuffer);
 
-            // 传入 _BoundaryDistance flag
-            cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyBoundaryDistance, boundaryDistance ? 1 : 0);
+            // 传入 flag 并直接计算距离（可选内联归一化）
+            float maxDist = Mathf.Sqrt(width * width + height * height);
+            cmd.SetComputeIntParam(sdfComputeShader, PropertyBoundaryDistance, boundaryDistance ? 1 : 0);
+            cmd.SetComputeIntParam(sdfComputeShader, PropertyNormalize, normalize ? 1 : 0);
+            cmd.SetComputeFloatParam(sdfComputeShader, PropertyMaxDistance, maxDist);
 
-            if (!normalize)
+            if (useSingleChannelOutput)
             {
-                if (useSingleChannelOutput)
-                {
-                    cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistanceSingleChannel, PropertyPreviousBuffer, nearestId);
-                    cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistanceSingleChannel, PropertyCurrentBufferSingle, resultRT);
-                    cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
-                    cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
-                    cmdCompute.DispatchCompute(sdfComputeShader, kernelCalculateDistanceSingleChannel, threadGroupsX, threadGroupsY, 1);
-                }
-                else
-                {
-                    cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistance, PropertyPreviousBuffer, nearestId);
-                    cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistance, PropertyCurrentBuffer, resultRT);
-                    cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
-                    cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
-                    cmdCompute.DispatchCompute(sdfComputeShader, kernelCalculateDistance, threadGroupsX, threadGroupsY, 1);
-                }
+                cmd.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistanceSingleChannel, PropertyPreviousBuffer, nearestId);
+                cmd.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistanceSingleChannel, PropertyCurrentBufferSingle, resultRT);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
+                cmd.DispatchCompute(sdfComputeShader, kernelCalculateDistanceSingleChannel, threadGroupsX, threadGroupsY, 1);
             }
             else
             {
-                float maxDist = Mathf.Sqrt(width * width + height * height);
-                var rawFormat = useSingleChannelOutput ? RenderTextureFormat.RFloat : RenderTextureFormat.ARGBFloat;
-                var descRaw = new RenderTextureDescriptor(width, height, rawFormat, 0) { enableRandomWrite = true };
-                cmdCompute.GetTemporaryRT(TempID_RawDist, descRaw);
-
-                if (useSingleChannelOutput)
-                {
-                    cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistanceSingleChannel, PropertyPreviousBuffer, nearestId);
-                    cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistanceSingleChannel, PropertyCurrentBufferSingle, new RenderTargetIdentifier(TempID_RawDist));
-                    cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
-                    cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
-                    cmdCompute.DispatchCompute(sdfComputeShader, kernelCalculateDistanceSingleChannel, threadGroupsX, threadGroupsY, 1);
-
-                    cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelNormalizeDistanceSingleChannel, PropertyPreviousBufferSingle, new RenderTargetIdentifier(TempID_RawDist));
-                    cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelNormalizeDistanceSingleChannel, PropertyCurrentBufferSingle, resultRT);
-                    cmdCompute.SetComputeFloatParam(sdfComputeShader, PropertyMaxDistance, maxDist);
-                    cmdCompute.DispatchCompute(sdfComputeShader, kernelNormalizeDistanceSingleChannel, threadGroupsX, threadGroupsY, 1);
-                }
-                else
-                {
-                    cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistance, PropertyPreviousBuffer, nearestId);
-                    cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistance, PropertyCurrentBuffer, new RenderTargetIdentifier(TempID_RawDist));
-                    cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
-                    cmdCompute.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
-                    cmdCompute.DispatchCompute(sdfComputeShader, kernelCalculateDistance, threadGroupsX, threadGroupsY, 1);
-
-                    cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelNormalizeDistance, PropertyPreviousBuffer, new RenderTargetIdentifier(TempID_RawDist));
-                    cmdCompute.SetComputeTextureParam(sdfComputeShader, kernelNormalizeDistance, PropertyCurrentBuffer, resultRT);
-                    cmdCompute.SetComputeFloatParam(sdfComputeShader, PropertyMaxDistance, maxDist);
-                    cmdCompute.DispatchCompute(sdfComputeShader, kernelNormalizeDistance, threadGroupsX, threadGroupsY, 1);
-                }
-
-                cmdCompute.ReleaseTemporaryRT(TempID_RawDist);
+                cmd.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistance, PropertyPreviousBuffer, nearestId);
+                cmd.SetComputeTextureParam(sdfComputeShader, kernelCalculateDistance, PropertyCurrentBuffer, resultRT);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
+                cmd.DispatchCompute(sdfComputeShader, kernelCalculateDistance, threadGroupsX, threadGroupsY, 1);
             }
 
             if (useNearestTemp)
-                cmdCompute.ReleaseTemporaryRT(TempID_Nearest);
+                cmd.ReleaseTemporaryRT(TempID_Nearest);
 
-            Graphics.ExecuteCommandBuffer(cmdCompute);
-            cmdCompute.Release();
+            Graphics.ExecuteCommandBuffer(cmd);
+            cmd.Release();
 
             RenderTexture.ReleaseTemporary(currentBuffer);
         }
