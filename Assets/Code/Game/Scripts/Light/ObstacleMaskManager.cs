@@ -82,7 +82,7 @@ namespace Mmang.PixelartRender
 
         private void CreateTextures()
         {
-            var maskDescriptor = new RenderTextureDescriptor(Mathf.FloorToInt(Resolution * 3.5f), Mathf.FloorToInt(Resolution * 3.5f))
+            var maskDescriptor = new RenderTextureDescriptor(Resolution * 4, Resolution * 4)
             {
                 depthBufferBits = 32,
                 enableRandomWrite = true,
@@ -208,7 +208,7 @@ namespace Mmang.PixelartRender
             cameraGO.hideFlags = HideFlags.HideAndDontSave;
 
             camera.orthographic = true;
-            camera.orthographicSize = TileSize * 3.5f / 2f;
+            camera.orthographicSize = TileSize * 4f / 2f;
 
             camera.clearFlags = CameraClearFlags.Color;
             camera.backgroundColor = Color.clear;
