@@ -163,9 +163,9 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
         }
 
         // 遍历下边界
-        for (int i = -radius; i <= radius; i++)
+        for (int j = -radius; j <= radius; j++)
         {
-            int2 neighborCoordSigned = int2(currentCoord) + int2(i, radius);
+            int2 neighborCoordSigned = int2(currentCoord) + int2(j, radius);
             if (neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
 
             uint2 neighborCoord = uint2(neighborCoordSigned);
@@ -181,9 +181,9 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
         }
 
         // 遍历左边界
-        for (int j = -radius + 1; j <= radius - 1; j++)
+        for (int k = -radius + 1; k <= radius - 1; k++)
         {
-            int2 neighborCoordSigned = int2(currentCoord) + int2(-radius, j);
+            int2 neighborCoordSigned = int2(currentCoord) + int2(-radius, k);
             if (neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
 
             uint2 neighborCoord = uint2(neighborCoordSigned);
@@ -199,9 +199,9 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
         }
 
         // 遍历右边界
-        for (int j = -radius + 1; j <= radius - 1; j++)
+        for (int l = -radius + 1; l <= radius - 1; l++)
         {
-            int2 neighborCoordSigned = int2(currentCoord) + int2(radius, j);
+            int2 neighborCoordSigned = int2(currentCoord) + int2(radius, l);
             if (neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
 
             uint2 neighborCoord = uint2(neighborCoordSigned);
