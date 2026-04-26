@@ -166,7 +166,7 @@ namespace Mmang.PixelartRender
         {
             for (int i = 0; i < 9; i++)
             {
-                SDFTools.GenerateSDF(m_ObstacleRTs[i], m_SDFHandles[i], useSingleChannel: true);
+                SDFToolsRuntime.GenerateSDF(m_ObstacleRTs[i], m_SDFHandles[i]);
                 Shader.SetGlobalTexture(Shader.PropertyToID($"_ObstacleSDF_{i}"), m_SDFHandles[i]);
             }
         }
