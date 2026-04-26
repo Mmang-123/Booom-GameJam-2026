@@ -18,8 +18,12 @@ namespace Mmang.PixelartRender
         }
 
         // 存储 9 张障碍物贴图
+        /*
         private RenderTexture[] m_ObstacleRTs = new RenderTexture[9];
         private RTHandle[] m_MaskHandles = new RTHandle[9];
+        */
+        private RenderTexture m_Mask;
+        private RTHandle m_MaskHandle;
 
         private RenderTexture[] m_SDFs = new RenderTexture[9];
         private RTHandle[] m_SDFHandles = new RTHandle[9];
@@ -53,9 +57,15 @@ namespace Mmang.PixelartRender
                 m_Camera = null;
             }
 
+            /*
             foreach (var rt in m_MaskHandles)
             {
                 if (rt != null) rt.Release();
+            }
+            */
+            if (m_MaskHandle != null)
+            {
+                m_MaskHandle.Release();
             }
 
             foreach (var rt in m_SDFHandles)
@@ -72,11 +82,32 @@ namespace Mmang.PixelartRender
 
         private void CreateTextures()
         {
+            var maskDescriptor = new RenderTextureDescriptor(Resolution * 3, Resolution * 3)
+            {
+                depthBufferBits = 32,
+                enableRandomWrite = true,
+                graphicsFormat = GraphicsFormat.R16_UNorm,
+                volumeDepth = 1,
+                msaaSamples = 1,
+                sRGB = true,
+                dimension = TextureDimension.Tex2D,
+            };
+
+            m_Mask = new(maskDescriptor)
+            {
+                name = $"_ObstacleMask",
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp
+            };
+            m_Mask.Create();
+            m_MaskHandle = RTHandles.Alloc(m_Mask);
+
             for (int i = 0; i < 9; i++)
             {
+                /*
                 if (m_MaskHandles[i] != null)
                     m_MaskHandles[i].Release();
-
+                
                 //
                 var descriptor = new RenderTextureDescriptor(Resolution, Resolution)
                 {
@@ -98,8 +129,20 @@ namespace Mmang.PixelartRender
                 };
                 m_ObstacleRTs[i].Create();
                 m_MaskHandles[i] = RTHandles.Alloc(m_ObstacleRTs[i]);
+                */
 
-                descriptor.depthBufferBits = 0;
+
+                var descriptor = new RenderTextureDescriptor(Resolution * 3, Resolution * 3)
+                {
+                    depthBufferBits = 0,
+                    enableRandomWrite = true,
+                    graphicsFormat = GraphicsFormat.R16_UNorm,
+                    volumeDepth = 1,
+                    msaaSamples = 1,
+                    sRGB = true,
+                    dimension = TextureDimension.Tex2D,
+                };
+
                 m_SDFs[i] = new(descriptor)
                 {
                     name = $"_ObstacleSDF_{i}",
@@ -144,6 +187,11 @@ namespace Mmang.PixelartRender
             return new Vector3(chunkData.PositionIndex.x * TileSize + HalfTileSize, chunkData.PositionIndex.y * TileSize + HalfTileSize, -10);
         }
 
+        public Vector3 GetCenterPosition()
+        {
+            return new Vector3(m_CenterIndex.x * TileSize + HalfTileSize, m_CenterIndex.y * TileSize + HalfTileSize, -10);
+        }
+
         #region 相机绘制
 
         private void InitCamera()
@@ -160,7 +208,7 @@ namespace Mmang.PixelartRender
             cameraGO.hideFlags = HideFlags.HideAndDontSave;
 
             camera.orthographic = true;
-            camera.orthographicSize = TileSize / 2f;
+            camera.orthographicSize = TileSize * 3f / 2f;
 
             camera.clearFlags = CameraClearFlags.Color;
             camera.backgroundColor = Color.clear;
@@ -173,6 +221,22 @@ namespace Mmang.PixelartRender
 
         private void RenderMask()
         {
+            RenderPipeline.StandardRequest request = new();
+
+            m_Camera.transform.position = GetCenterPosition();
+            m_Camera.transform.rotation = quaternion.identity;
+
+            if (RenderPipeline.SupportsRenderRequest(m_Camera, request))
+            {
+                // 纹理绑定
+                request.destination = m_MaskHandle;
+
+                RenderPipeline.SubmitRenderRequest(m_Camera, request);
+            }
+
+            Shader.SetGlobalTexture(Shader.PropertyToID("_ObstacleMask"), m_MaskHandle);
+
+            /*
             for (int i = 0; i < 9; i++)
             {
                 RenderPipeline.StandardRequest request = new();
@@ -188,13 +252,14 @@ namespace Mmang.PixelartRender
                     RenderPipeline.SubmitRenderRequest(m_Camera, request);
                 }
             }
+            */
         }
 
         private void GenerateSDF()
         {
             for (int i = 0; i < 9; i++)
             {
-                SDFToolsRuntime.GenerateSDF(m_ObstacleRTs[i], m_SDFHandles[i], boundaryDistance: true);
+                //SDFToolsRuntime.GenerateSDF(m_ObstacleRTs[i], m_SDFHandles[i], boundaryDistance: true);
                 Shader.SetGlobalTexture(Shader.PropertyToID($"_ObstacleSDF_{i}"), m_SDFHandles[i]);
             }
         }

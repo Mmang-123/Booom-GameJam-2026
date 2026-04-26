@@ -11,6 +11,8 @@ TEXTURE2D(_ObstacleSDF_6); SAMPLER(sampler_ObstacleSDF_6);
 TEXTURE2D(_ObstacleSDF_7); SAMPLER(sampler_ObstacleSDF_7);
 TEXTURE2D(_ObstacleSDF_8); SAMPLER(sampler_ObstacleSDF_8);
 
+TEXTURE2D(_ObstacleMask); SAMPLER(sampler_ObstacleMask);
+
 float4 _ObstacleParams;
 
 float2 WorldToUV(float2 posWS)
@@ -72,22 +74,19 @@ float GetObstacleSDF(float2 screenUV)
     float2 sampleUV = (offset - offsetIndex * chunkSize) / chunkSize;
 
     offsetIndex += int2(1, 1);
-    return SampleObstacleSDF(GetChunkIndex(offsetIndex), sampleUV).xxx;
-
-
-    /*
-    half value = GetChunkIndex(offsetIndex);
-    value = value / 9.0;
-
-    value = offsetIndex.y;
-    value /= 3.0;
-
-    return half3(value.xx, 0);
-    */
-
-
-    //return SAMPLE_TEXTURE2D(_ObstacleSDF_0, sampler_ObstacleSDF_0, screenUV).r;
+    return SampleObstacleSDF(GetChunkIndex(offsetIndex), sampleUV);
 }
 
+float GetObstacleMask(float2 screenUV)
+{
+    float2 centerUV = GetChunkCenterScreenUV();
+    float2 totalChunkSize = GetChunkScreenUVSize() * 3;
+
+    float2 offset = screenUV - centerUV;
+    offset += totalChunkSize / 3;
+
+    float2 sampleUV = offset / totalChunkSize;
+    return SAMPLE_TEXTURE2D(_ObstacleMask, sampler_ObstacleMask, sampleUV).r;
+}
 
 #endif
