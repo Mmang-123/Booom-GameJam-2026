@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace Sloane.Editor
 {
-    public class SDFGeneratorWindow : EditorWindow
+    /* public class SDFGeneratorWindow : EditorWindow
     {
         private Texture2D sourceTexture;
         private float alphaThreshold = 0.5f;
@@ -116,5 +116,5 @@ namespace Sloane.Editor
 
             Debug.Log($"Texture saved to: {path}");
         }
-    }
+    } */
 }
