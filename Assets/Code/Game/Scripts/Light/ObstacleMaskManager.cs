@@ -17,11 +17,6 @@ namespace Mmang.PixelartRender
             public Vector2Int PositionIndex;
         }
 
-        // 存储 9 张障碍物贴图
-        /*
-        private RenderTexture[] m_ObstacleRTs = new RenderTexture[9];
-        private RTHandle[] m_MaskHandles = new RTHandle[9];
-        */
         private RenderTexture m_Mask;
         private RTHandle m_MaskHandle;
 

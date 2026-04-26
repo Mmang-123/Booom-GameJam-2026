@@ -86,10 +86,11 @@ float2 UnpackSDF(float rawSDF)
 float GetObstacleMask(float2 screenUV)
 {
     float2 centerUV = GetChunkCenterScreenUV();
-    float2 totalChunkSize = GetChunkScreenUVSize() * 3;
+    float2 chunkSize = GetChunkScreenUVSize();
+    float2 totalChunkSize = chunkSize * 4;
 
     float2 offset = screenUV - centerUV;
-    offset += totalChunkSize / 3;
+    offset += chunkSize * 1.5;
 
     float2 sampleUV = offset / totalChunkSize;
     return SAMPLE_TEXTURE2D(_ObstacleMask, sampler_ObstacleMask, sampleUV).r;
