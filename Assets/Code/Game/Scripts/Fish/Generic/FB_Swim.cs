@@ -90,7 +90,8 @@ namespace Game
                 float moveDistance = CurrentSpeed * Time.deltaTime;
 
                 Vector2 motion = moveDistance * Fish.ForwardDirection;
-                transform.position += (Vector3)motion;
+                //transform.position += (Vector3)motion;
+                Fish.Move(motion);
             }
         }
 

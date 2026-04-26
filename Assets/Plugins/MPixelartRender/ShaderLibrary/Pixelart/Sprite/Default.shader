@@ -3,6 +3,7 @@
     Properties
     {
         _MainTex ("Sprite Texture", 2D) = "white" {}
+        _ObstacleMask ("Is Obstacle", Float) = 0
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
         [HideInInspector] _Color ("Tint", Color) = (1,1,1,1)
@@ -41,6 +42,34 @@
             // Includes
             #include "DefaultInput.hlsl"
             #include "DefaultPass.hlsl"
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "Obstacle Mask"
+
+            Tags
+            {
+                "LightMode" = "ObstacleMask"
+            }
+
+            HLSLPROGRAM
+
+            // -------------------------------------
+            // Shader Stages
+            #pragma vertex ObstacleVert
+            #pragma fragment ObstacleFrag
+
+            //--------------------------------------
+            // GPU Instancing
+            #pragma multi_compile_instancing
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+
+            // -------------------------------------
+            // Includes
+            #include "PixelartInput.hlsl"
+            #include "ObstaclePass.hlsl"
             ENDHLSL
         }
 

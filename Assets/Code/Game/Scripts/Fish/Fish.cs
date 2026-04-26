@@ -28,6 +28,8 @@ namespace Game
 
 
         // Runtime
+        private Rigidbody2D m_Rigidbody;
+
         private List<FishBehaviour> m_Behaviours;
         private Dictionary<System.Type, FishBehaviour> m_BehaviourMap = new();
         private bool m_FacingLeft = false; // 这里是相机角度的左右
@@ -44,6 +46,8 @@ namespace Game
 
         private void Init()
         {
+            m_Rigidbody = GetComponent<Rigidbody2D>();
+
             //
             m_Behaviours = GetComponents<FishBehaviour>().ToList();
 
@@ -96,6 +100,11 @@ namespace Game
                     }
                 }
             }
+        }
+
+        public void Move(Vector2 motion)
+        {
+            m_Rigidbody.AddForce(motion, ForceMode2D.Impulse);
         }
     }
 }

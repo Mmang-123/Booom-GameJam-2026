@@ -82,7 +82,7 @@ namespace Mmang.PixelartRender
 
         private void CreateTextures()
         {
-            var maskDescriptor = new RenderTextureDescriptor(Resolution * 3, Resolution * 3)
+            var maskDescriptor = new RenderTextureDescriptor(Mathf.FloorToInt(Resolution * 3.5f), Mathf.FloorToInt(Resolution * 3.5f))
             {
                 depthBufferBits = 32,
                 enableRandomWrite = true,
@@ -208,7 +208,7 @@ namespace Mmang.PixelartRender
             cameraGO.hideFlags = HideFlags.HideAndDontSave;
 
             camera.orthographic = true;
-            camera.orthographicSize = TileSize * 3f / 2f;
+            camera.orthographicSize = TileSize * 3.5f / 2f;
 
             camera.clearFlags = CameraClearFlags.Color;
             camera.backgroundColor = Color.clear;
@@ -260,7 +260,7 @@ namespace Mmang.PixelartRender
             for (int i = 0; i < 9; i++)
             {
                 Vector2Int offset = new(i % 3 * Resolution, i / 3 * Resolution);
-                SDFTools.GenerateDF(m_MaskHandle, m_SDFHandles[i], offset, nearestPointSearchRange: 8, boundaryDistance: true);
+                SDFTools.GenerateDF(m_MaskHandle, m_SDFHandles[i], offset, extendPixels: 128, nearestPointSearchRange: 8, boundaryDistance: false);
                 Shader.SetGlobalTexture(Shader.PropertyToID($"_ObstacleSDF_{i}"), m_SDFHandles[i]);
             }
         }

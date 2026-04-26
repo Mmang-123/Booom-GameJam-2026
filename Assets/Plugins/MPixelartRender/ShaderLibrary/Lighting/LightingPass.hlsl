@@ -126,8 +126,15 @@ half4 LightingFrag(Varyings input) : SV_Target
 
         // 阴影
         float2 lightUV = WorldToUV(lightPos);
-        //float shadow = GetShadow(uv, lightUV, 32);
-        float shadow = GetShadow(uv, lightUV);
+        float shadow = 1.0;
+        if (GetObstacleMask(lightUV) > 0.5)
+        {
+            shadow = 0.0;
+        }
+        else
+        {
+            shadow = GetShadow(uv, lightUV);
+        }
 
         // 累加当前光源的贡献
         //totalLight += lightColor * intensity * atten * shadow;
@@ -137,8 +144,8 @@ half4 LightingFrag(Varyings input) : SV_Target
     //float obstacle = GetObstacleMask(uv);
     //return float4(obstacle.xxx, 1);
 
-    //float sdf = GetObstacleSDF(uv);
-    //return float4(sdf, 0, 0, 1);
+    float sdf = GetObstacleSDF(uv);
+    return float4(sdf, 0, 0, 1);
 
     return float4(totalLight, 1);
 }
