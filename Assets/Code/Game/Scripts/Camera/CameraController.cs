@@ -42,7 +42,7 @@ namespace Game
             ComputeTargetPoint();
             FollowTargetPoint();
 
-            //ObstacleMaskManager.Instance.UpdatePosition(transform.position);
+            ObstacleMaskManager.Instance.UpdatePosition(transform.position);
         }
 
         #region 追踪计算

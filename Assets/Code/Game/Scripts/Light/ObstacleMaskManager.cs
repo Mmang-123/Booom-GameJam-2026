@@ -158,7 +158,7 @@ namespace Mmang.PixelartRender
         public void UpdatePosition(Vector2 position)
         {
             Vector2 pos = position;
-            Vector2Int index = new(Mathf.FloorToInt(pos.x / HalfTileSize), Mathf.FloorToInt(pos.y / HalfTileSize));
+            Vector2Int index = new(Mathf.FloorToInt(pos.x / TileSize), Mathf.FloorToInt(pos.y / TileSize));
             if (index != m_CenterIndex)
             {
                 m_CenterIndex = index;
