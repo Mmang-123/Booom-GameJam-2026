@@ -111,8 +111,8 @@ namespace Sloane
             Initialize();
             if (!initialized) return;
 
-            int width = sourceTexture.width;
-            int height = sourceTexture.height;
+            int width = resultRT.width;
+            int height = resultRT.height;
             bool useSingleChannel = IsInputSingleChannel(sourceTexture);
             bool useSingleChannelOutput = IsSingleChannelFormat(resultRT.format);
             int threadGroupsX = Mathf.CeilToInt(width / 8.0f);
