@@ -77,6 +77,12 @@ float GetObstacleSDF(float2 screenUV)
     return SampleObstacleSDF(GetChunkIndex(offsetIndex), sampleUV);
 }
 
+float2 UnpackSDF(float rawSDF)
+{
+    // 按256x256单元 ~ 480x270屏幕大小计算
+    return rawSDF * float2(0.75424, 1.34088); 
+}
+
 float GetObstacleMask(float2 screenUV)
 {
     float2 centerUV = GetChunkCenterScreenUV();

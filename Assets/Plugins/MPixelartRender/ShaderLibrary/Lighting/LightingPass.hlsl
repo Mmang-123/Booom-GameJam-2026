@@ -13,32 +13,6 @@ struct LightData2D
 StructuredBuffer<LightData2D> _MLightDataBuffer;
 int _MLightCount;
 
-
-half GetShadow(float2 screenUV, float2 lightUV, int steps)
-{
-    half shadowMask = 1.0;
-    float2 rayVectorUV = lightUV - screenUV;
-    float2 stepDelta = rayVectorUV / steps;
-    
-    float noise = frac(sin(dot(screenUV, float2(12.9898, 78.233))) * 43758.5453);
-
-    [loop]
-    for(int j = 0; j < steps; j++)
-    {
-        float2 sampleUV = screenUV + stepDelta * j;
-
-        half obstacle = PB_GetObstacleMask(sampleUV);
-        
-        if(obstacle > 0.1) 
-        {
-            shadowMask = 0.0;
-            break;
-        }
-    }
-    
-    return shadowMask;
-}
-
 half GetShadowDDA(float2 screenUV, float2 lightUV)
 {
     float2 startPixel = screenUV * _ScreenParams.xy;
@@ -79,6 +53,50 @@ half GetShadowDDA(float2 screenUV, float2 lightUV)
     return shadowMask;
 }
 
+float2 NormalizeUV(float2 uv)
+{
+    uv.y *= _ScreenParams.x / _ScreenParams.y;
+    return uv;
+}
+
+half GetShadow(float2 screenUV, float2 lightUV)
+{
+    screenUV.y *= _ScreenParams.y / _ScreenParams.x;
+    lightUV.y *= _ScreenParams.y / _ScreenParams.x;
+    float2 direction = normalize(lightUV - screenUV);
+
+    const int MAX_STEPS = 64;
+    
+    float2 current = screenUV;
+    float unitSize = 1 / _ScreenParams.x;
+    half shadowMask = 1.0;
+
+    for (int i = 0; i <= MAX_STEPS; i++)
+    {
+        half obstacleMask = GetObstacleMask(NormalizeUV(current));
+        if (obstacleMask > 0.1)
+        {
+            shadowMask = 0.0;
+            break;
+        }
+
+        float dist = distance(current, lightUV);
+        float sdf = GetObstacleSDF(NormalizeUV(current));
+        float nextStep = UnpackSDF(sdf).x;
+        nextStep = max(unitSize, nextStep);
+
+        if (dist < 0.01 || dist <= nextStep)
+        {
+            shadowMask = 1.0;
+            break;
+        }
+
+        current += direction * nextStep;
+    }
+
+    return shadowMask;
+}
+
 half4 LightingFrag(Varyings input) : SV_Target
 {
     GET_BLIT_UV();
@@ -87,7 +105,6 @@ half4 LightingFrag(Varyings input) : SV_Target
 
     half3 totalLight = half3(0.0, 0.0, 0.0);
 
-    /*
     [loop]
     for(int i = 0; i < _MLightCount; i++)
     {
@@ -110,18 +127,18 @@ half4 LightingFrag(Varyings input) : SV_Target
         // 阴影
         float2 lightUV = WorldToUV(lightPos);
         //float shadow = GetShadow(uv, lightUV, 32);
-        float shadow = GetShadowDDA(uv, lightUV);
+        float shadow = GetShadow(uv, lightUV);
 
         // 累加当前光源的贡献
-        totalLight += lightColor * intensity * atten * shadow;
+        //totalLight += lightColor * intensity * atten * shadow;
+        totalLight += shadow;
     }
-    */
 
-    float obstacle = GetObstacleMask(uv);
+    //float obstacle = GetObstacleMask(uv);
     //return float4(obstacle.xxx, 1);
 
-    float sdf = GetObstacleSDF(uv);
-    return float4(sdf, 0, 0, 1);
+    //float sdf = GetObstacleSDF(uv);
+    //return float4(sdf, 0, 0, 1);
 
     return float4(totalLight, 1);
 }
