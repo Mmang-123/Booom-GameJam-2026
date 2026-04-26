@@ -1,0 +1,17 @@
+{
+  "name": "com.sloane.shader.generic",
+  "displayName": "Sloane Shader Generic",
+  "description": "Among us",
+  "version": "1.0.0",
+  "unity": "2022.4",
+  "unityRelease": "3f1",
+  "dependencies": {
+  },
+  "relatedPackages": {
+  },
+  "_upm": {
+  },
+  "upmCi": {
+  },
+  "documentationUrl": ""
+}

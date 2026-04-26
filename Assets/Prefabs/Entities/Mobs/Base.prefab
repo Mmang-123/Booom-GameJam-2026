@@ -223,6 +223,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Swim
   m_RotateSpeed: 5
-  m_MoveSpeed: 4
-  m_Acceleration: 4
+  m_MoveSpeed: 10
+  m_Acceleration: 5
   m_StopDistance: 0.8

@@ -259,7 +259,7 @@ namespace Mmang.PixelartRender
         {
             for (int i = 0; i < 9; i++)
             {
-                //SDFToolsRuntime.GenerateSDF(m_ObstacleRTs[i], m_SDFHandles[i], boundaryDistance: true);
+                // SDFTools.GenerateDF(m_ObstacleRTs[i], m_SDFHandles[i], nearestPointSearchRange: 8, boundaryDistance: true);
                 Shader.SetGlobalTexture(Shader.PropertyToID($"_ObstacleSDF_{i}"), m_SDFHandles[i]);
             }
         }

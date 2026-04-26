@@ -1,3 +1,5 @@
+#include "Packages/com.sloane.shader.generic/Includes/SDF/Packing.hlsl"
+
 #pragma kernel InitializeSeedSingleChannel
 #pragma kernel InitializeSeed
 #pragma kernel JumpFlooding
@@ -10,6 +12,8 @@
 #pragma kernel FindMinMaxDistance
 #pragma kernel FillBoundingDistance
 #pragma kernel FillBoundingDistanceSingleChannel
+#pragma kernel CombineInnerOuterSingle
+#pragma kernel PackSDFToRGB
 
 Texture2D<float> _SingleChannelSourceTexture;  // 用于单通道输入的纹理
 Texture2D<float4> _SourceTexture;
@@ -28,6 +32,8 @@ bool _IsNormalized;  // 输入是否已经归一化
 bool _BoundaryDistance;
 bool _Normalize;
 int _NearestPointSearchRange;
+uint _OffsetX;
+uint _OffsetY;
 
 uint _IterationTime;
 uint _Iteration;
@@ -36,7 +42,7 @@ uint _Iteration;
 void InitializeSeedSingleChannel(uint3 id : SV_DispatchThreadID)
 {
     uint2 coord = id.xy;
-    float color = _SingleChannelSourceTexture[coord];
+    float color = _SingleChannelSourceTexture[coord + uint2(_OffsetX, _OffsetY)];
     
     float width = float(_Width);
     float height = float(_Height);
@@ -383,4 +389,28 @@ void FillBoundingDistanceSingleChannel(uint3 id : SV_DispatchThreadID)
     float distance = BoundaryDist(coord);
     float out_val = _Normalize ? saturate(distance / _MaxDistance) : distance;
     _CurrentBufferSingle[coord] = out_val;
+}
+
+[numthreads(8,8,1)]
+void CombineInnerOuterSingle(uint3 id : SV_DispatchThreadID)
+{
+    uint2 coord = id.xy;
+    if (coord.x >= _Width || coord.y >= _Height) return;
+
+    float innerDist = _SingleChannelSourceTexture[coord].r;
+    float outerDist = _PreviousBufferSingle[coord].r;
+
+    float combinedDist = outerDist - innerDist;
+    _CurrentBufferSingle[coord] = combinedDist;
+}
+
+[numthreads(8,8,1)]
+void PackSDFToRGB(uint3 id : SV_DispatchThreadID)
+{
+    uint2 coord = id.xy;
+    if (coord.x >= _Width || coord.y >= _Height) return;
+
+    float distance = _PreviousBufferSingle[coord].r;
+    float3 packedSDF = PackSDF(distance, _MaxDistance);
+    _CurrentBuffer[coord] = float4(packedSDF, 1.0);
 }
