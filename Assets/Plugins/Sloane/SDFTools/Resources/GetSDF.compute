@@ -16,6 +16,7 @@ RWTexture2D<float4> _CurrentBuffer;
 Texture2D<float> _PreviousBufferSingle;
 RWTexture2D<float> _CurrentBufferSingle;
 RWStructuredBuffer<int> _MinMaxBuffer;  // [0]=max absolute distance
+RWStructuredBuffer<int> _HasSeedBuffer; // [0]=1 if any seed pixel exists
 
 uint _Width;
 uint _Height;
@@ -44,6 +45,7 @@ void InitializeSeedSingleChannel(uint3 id : SV_DispatchThreadID)
     {
         // RG: 归一化坐标, B: 1.0 表示是种子点, A: 保留原始 alpha
         _CurrentBuffer[coord] = float4(float(coord.x) / width, float(coord.y) / height, 1.0, 1.0);
+        _HasSeedBuffer[0] = 1;
     }
     else
     {
@@ -68,6 +70,7 @@ void InitializeSeed(uint3 id : SV_DispatchThreadID)
     {
         // RG: 归一化坐标, B: 1.0 表示是种子点, A: 保留原始 alpha
         _CurrentBuffer[coord] = float4(float(coord.x) / width, float(coord.y) / height, 1.0, 1.0);
+        _HasSeedBuffer[0] = 1;
     }
     else
     {
