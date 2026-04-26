@@ -24,6 +24,7 @@ namespace Sloane
         private static readonly int PropertyAlphaThreshold = Shader.PropertyToID("_AlphaThreshold");
         private static readonly int PropertyInvertSelection = Shader.PropertyToID("_InvertSelection");
         private static readonly int PropertyMaxDistance = Shader.PropertyToID("_MaxDistance");
+        private static readonly int PropertyExtendPixels = Shader.PropertyToID("_ExtendPixels");
         private static int kernelInitializeSeedSingleChannel;
         private static int kernelInitializeSeed;
         private static int kernelJumpFlooding;
@@ -42,7 +43,6 @@ namespace Sloane
         private static readonly int TempID_Previous = Shader.PropertyToID("_SDF_RT_Previous");
         private static readonly int TempID_Nearest = Shader.PropertyToID("_SDF_RT_Nearest");
         private static readonly int TempID_RawDist = Shader.PropertyToID("_SDF_RT_RawDist");
-        private static readonly int PropertyHasSeedBuffer = Shader.PropertyToID("_HasSeedBuffer");
         private static readonly int PropertyBoundaryDistance = Shader.PropertyToID("_BoundaryDistance");
         private static readonly int PropertyNormalize = Shader.PropertyToID("_Normalize");
         private static readonly int PropertyOffsetX = Shader.PropertyToID("_OffsetX");
@@ -95,9 +95,9 @@ namespace Sloane
             return false;
         }
 
-        public static void GenerateDF(Texture sourceTexture, RenderTexture resultRT, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, bool boundaryDistance = false)
+        public static void GenerateDF(Texture sourceTexture, RenderTexture resultRT, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, int extendPixels = 0, bool boundaryDistance = false)
         {
-            GenerateDF(sourceTexture, resultRT, Vector2Int.zero, alphaThreshold, normalize, invertSelection, nearestPointSearchRange, boundaryDistance);
+            GenerateDF(sourceTexture, resultRT, Vector2Int.zero, alphaThreshold, normalize, invertSelection, nearestPointSearchRange, extendPixels, boundaryDistance);
         }
 
         /// <summary>
@@ -106,18 +106,21 @@ namespace Sloane
         /// 若无种子，直接将 resultRT 填充为最大距离并返回。
         /// 全程分两个 CommandBuffer 执行，各自在 Frame Debugger 中显示为独立分组。
         /// </summary>
-        public static void GenerateDF(Texture sourceTexture, RenderTexture resultRT, Vector2Int offset, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, bool boundaryDistance = false)
+        public static void GenerateDF(Texture sourceTexture, RenderTexture resultRT, Vector2Int offset, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, int extendPixels = 0, bool boundaryDistance = false)
         {
             Initialize();
             if (!initialized) return;
+
+            int iterationWidth = resultRT.width + extendPixels * 2;
+            int iterationHeight = resultRT.height + extendPixels * 2;
 
             int width = resultRT.width;
             int height = resultRT.height;
             bool useSingleChannel = IsInputSingleChannel(sourceTexture);
             bool useSingleChannelOutput = IsSingleChannelFormat(resultRT.format);
-            int threadGroupsX = Mathf.CeilToInt(width / 8.0f);
-            int threadGroupsY = Mathf.CeilToInt(height / 8.0f);
-            var descARGB = new RenderTextureDescriptor(width, height, RenderTextureFormat.ARGBFloat, 0) { enableRandomWrite = true };
+            int threadGroupsX = Mathf.CeilToInt(iterationWidth / 8.0f);
+            int threadGroupsY = Mathf.CeilToInt(iterationHeight / 8.0f);
+            var descARGB = new RenderTextureDescriptor(iterationWidth, iterationHeight, RenderTextureFormat.ARGBFloat, 0) { enableRandomWrite = true };
 
             // ----------------------------------------------------------------
             // 阶段一：InitializeSeed + 回读是否有种子点
@@ -127,12 +130,13 @@ namespace Sloane
             currentBuffer.Create();
 
             var cmd = new CommandBuffer { name = "GenerateSDF" };
-            cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
-            cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
+            cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, iterationWidth);
+            cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, iterationHeight);
             cmd.SetComputeFloatParam(sdfComputeShader, PropertyAlphaThreshold, alphaThreshold);
             cmd.SetComputeIntParam(sdfComputeShader, PropertyInvertSelection, invertSelection ? 1 : 0);
             cmd.SetComputeIntParam(sdfComputeShader, PropertyOffsetX, offset.x);
             cmd.SetComputeIntParam(sdfComputeShader, PropertyOffsetY, offset.y);
+            cmd.SetComputeIntParam(sdfComputeShader, PropertyExtendPixels, extendPixels);
             if (useSingleChannel)
             {
                 cmd.SetComputeTextureParam(sdfComputeShader, kernelInitializeSeedSingleChannel, PropertyCurrentBuffer, currentBuffer);
@@ -149,26 +153,31 @@ namespace Sloane
             cmd.GetTemporaryRT(TempID_Previous, descARGB);
 
             // JFA 迭代
-            int maxDimension = Mathf.Max(width, height);
+            int maxDimension = Mathf.Max(iterationWidth, iterationHeight);
             int iterationCount = Mathf.CeilToInt(Mathf.Log(maxDimension, 2)) + 1;
             for (int i = 0; i < iterationCount; i++)
             {
                 // cmdCompute.Blit(currentBuffer, new RenderTargetIdentifier(TempID_Previous));
                 cmd.SetComputeTextureParam(sdfComputeShader, kernelJumpFlooding, PropertyPreviousBuffer, new RenderTargetIdentifier(TempID_Previous));
                 cmd.SetComputeTextureParam(sdfComputeShader, kernelJumpFlooding, PropertyCurrentBuffer, currentBuffer);
-                cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
-                cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, iterationWidth);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, iterationHeight);
                 cmd.SetComputeIntParam(sdfComputeShader, PropertyIterationTime, iterationCount);
                 cmd.SetComputeIntParam(sdfComputeShader, PropertyIteration, i);
                 cmd.DispatchCompute(sdfComputeShader, kernelJumpFlooding, threadGroupsX, threadGroupsY, 1);
             }
             cmd.ReleaseTemporaryRT(TempID_Previous);
 
+            // 从这儿开始 threadGroup数量就以width和height为准，不再是 iterationWidth 和 iterationHeight
+            threadGroupsX = Mathf.CeilToInt(width / 8.0f);
+            threadGroupsY = Mathf.CeilToInt(height / 8.0f);
+
             // GetNearest（可选精查）
             RenderTexture nearestBuffer;
             if (nearestPointSearchRange > 0)
             {
                 cmd.GetTemporaryRT(TempID_Nearest, descARGB);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyExtendPixels, extendPixels);
                 cmd.SetComputeTextureParam(sdfComputeShader, kernelGetNearest, PropertyPreviousBuffer, currentBuffer);
                 cmd.SetComputeTextureParam(sdfComputeShader, kernelGetNearest, PropertyCurrentBuffer, new RenderTargetIdentifier(TempID_Nearest));
                 cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
@@ -194,6 +203,7 @@ namespace Sloane
             cmd.SetComputeIntParam(sdfComputeShader, PropertyBoundaryDistance, boundaryDistance ? 1 : 0);
             cmd.SetComputeIntParam(sdfComputeShader, PropertyNormalize, normalize ? 1 : 0);
             cmd.SetComputeFloatParam(sdfComputeShader, PropertyMaxDistance, maxDist);
+            cmd.SetComputeIntParam(sdfComputeShader, PropertyExtendPixels, extendPixels);
 
             if (useSingleChannelOutput)
             {
@@ -226,15 +236,15 @@ namespace Sloane
             GenerateSDF(sourceTexture, Vector2Int.zero, resultRT, alphaThreshold, nearestPointSearchRange);
         }
 
-        public static void GenerateSDF(Texture sourceTexture, Vector2Int offset, RenderTexture resultRT, float alphaThreshold = 0.5f, int nearestPointSearchRange = 0)
+        public static void GenerateSDF(Texture sourceTexture, Vector2Int offset, RenderTexture resultRT, float alphaThreshold = 0.5f, int nearestPointSearchRange = 0, int extendPixels = 0)
         {
             RenderTexture innerRT = RenderTexture.GetTemporary(resultRT.descriptor);
             innerRT.Create();
-            GenerateDF(sourceTexture, innerRT, offset, alphaThreshold, false, true, nearestPointSearchRange, false);
+            GenerateDF(sourceTexture, innerRT, offset, alphaThreshold, false, true, nearestPointSearchRange, extendPixels, false);
 
             RenderTexture outerRT = RenderTexture.GetTemporary(resultRT.descriptor);
             outerRT.Create();
-            GenerateDF(sourceTexture, outerRT, offset, alphaThreshold, false, false, nearestPointSearchRange, false);
+            GenerateDF(sourceTexture, outerRT, offset, alphaThreshold, false, false, nearestPointSearchRange, extendPixels, false);
 
             CommandBuffer cmd = new CommandBuffer { name = "CombineInnerOuter" };
             cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, sourceTexture.width);
@@ -288,12 +298,12 @@ namespace Sloane
         /// 从纹理生成完整的 SDF，返回新申请的临时 RenderTexture（调用方负责 ReleaseTemporary）。
         /// 输入是否单通道由源纹理格式自动判断；输出格式由 useSingleChannelOutput 控制。
         /// </summary>
-        public static RenderTexture GenerateDF(Texture sourceTexture, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, bool useSingleChannelOutput = false, bool boundaryDistance = false)
+        public static RenderTexture GenerateDF(Texture sourceTexture, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, bool useSingleChannelOutput = false, int extendPixels = 0, bool boundaryDistance = false)
         {
             var outputFormat = useSingleChannelOutput ? RenderTextureFormat.RFloat : RenderTextureFormat.ARGBFloat;
             var desc = new RenderTextureDescriptor(sourceTexture.width, sourceTexture.height, outputFormat, 0) { enableRandomWrite = true };
             RenderTexture resultRT = RenderTexture.GetTemporary(desc);
-            GenerateDF(sourceTexture, resultRT, alphaThreshold, normalize, invertSelection, nearestPointSearchRange, boundaryDistance);
+            GenerateDF(sourceTexture, resultRT, alphaThreshold, normalize, invertSelection, nearestPointSearchRange, extendPixels, boundaryDistance);
             return resultRT;
         }
     }

@@ -35,6 +35,7 @@ bool _Normalize;
 int _NearestPointSearchRange;
 uint _OffsetX;
 uint _OffsetY;
+uint _ExtendPixels;
 
 uint _IterationTime;
 uint _Iteration;
@@ -43,7 +44,7 @@ uint _Iteration;
 void InitializeSeedSingleChannel(uint3 id : SV_DispatchThreadID)
 {
     uint2 coord = id.xy;
-    float color = _SingleChannelSourceTexture[coord + uint2(_OffsetX, _OffsetY)];
+    float color = _SingleChannelSourceTexture[coord + uint2(_OffsetX, _OffsetY) - uint2(_ExtendPixels, _ExtendPixels)];
     
     float width = float(_Width);
     float height = float(_Height);
@@ -67,7 +68,7 @@ void InitializeSeedSingleChannel(uint3 id : SV_DispatchThreadID)
 void InitializeSeed(uint3 id : SV_DispatchThreadID)
 {
     uint2 coord = id.xy;
-    float4 color = _SourceTexture[coord];
+    float4 color = _SourceTexture[coord + uint2(_OffsetX, _OffsetY) - uint2(_ExtendPixels, _ExtendPixels)];
     
     float width = float(_Width);
     float height = float(_Height);
@@ -134,27 +135,31 @@ void JumpFlooding (uint3 id : SV_DispatchThreadID)
 [numthreads(8,8,1)]
 void GetNearest(uint3 id : SV_DispatchThreadID)
 {
-    uint2 currentCoord = id.xy;
+    uint2 currentCoord = id.xy + uint2(_ExtendPixels, _ExtendPixels);
 
     if (_PreviousBuffer[currentCoord].z > 0.5)
     {
+        // 已经是种子点了，直接复制坐标
         _CurrentBuffer[currentCoord] = _PreviousBuffer[currentCoord];
         return;
     }
 
     bool found = false;
-    int minDistance = int(_Width * _Width + _Height * _Height); // 初始化为最大可能距离
     float width = float(_Width);
     float height = float(_Height);
     uint2 currentSeed = uint2(uint(_PreviousBuffer[currentCoord].x * width), uint(_PreviousBuffer[currentCoord].y * height));
-    
+    int minDistance = DistanceSquared(currentCoord, currentSeed);
+    int originalDistance = minDistance;
+    uint2 originalSeed = currentSeed;
+
+    uint2 originalCoord = currentCoord;
     currentCoord = currentSeed;
 
     // 按回字形向外遍历
     int maxRadius = min(max(max(int(_Width - currentSeed.x - 1), int(currentSeed.x)), max(int(_Height - currentSeed.y - 1), int(currentSeed.y))), _NearestPointSearchRange);
     for (int radius = 1; radius <= maxRadius; radius++)
     {
-        if (minDistance < radius * radius) break;
+        if (originalDistance < radius * radius) break;
         // 遍历上边界
         for (int i = -radius; i <= radius; i++)
         {
@@ -164,7 +169,7 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
             uint2 neighborCoord = uint2(neighborCoordSigned);
             if (_PreviousBuffer[neighborCoord].z < 0.5) continue;
 
-            int distance = DistanceSquared(neighborCoord, currentCoord);
+            int distance = DistanceSquared(neighborCoord, originalCoord);
             if (distance < minDistance)
             {
                 minDistance = distance;
@@ -182,7 +187,7 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
             uint2 neighborCoord = uint2(neighborCoordSigned);
             if (_PreviousBuffer[neighborCoord].z < 0.5) continue;
 
-            int distance = DistanceSquared(neighborCoord, currentCoord);
+            int distance = DistanceSquared(neighborCoord, originalCoord);
             if (distance < minDistance)
             {
                 minDistance = distance;
@@ -200,7 +205,7 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
             uint2 neighborCoord = uint2(neighborCoordSigned);
             if (_PreviousBuffer[neighborCoord].z < 0.5) continue;
 
-            int distance = DistanceSquared(neighborCoord, currentCoord);
+            int distance = DistanceSquared(neighborCoord, originalCoord);
             if (distance < minDistance)
             {
                 minDistance = distance;
@@ -218,7 +223,7 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
             uint2 neighborCoord = uint2(neighborCoordSigned);
             if (_PreviousBuffer[neighborCoord].z < 0.5) continue;
 
-            int distance = DistanceSquared(neighborCoord, currentCoord);
+            int distance = DistanceSquared(neighborCoord, originalCoord);
             if (distance < minDistance)
             {
                 minDistance = distance;
@@ -227,13 +232,8 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
             }
         }
     }
-
-    if (!found)
-    {
-        currentSeed = uint2(uint(2.0 * width), uint(round(2.0 * height)));
-    }
-
-    _CurrentBuffer[currentCoord] = float4(float(currentSeed.x) / _Width, float(currentSeed.y) / _Height, 1.0, 1.0);
+    
+    _CurrentBuffer[originalCoord] = float4(float(currentSeed.x) / _Width, float(currentSeed.y) / _Height, 1.0, 1.0);
 }
 
 // 像素 coord 到最近纹理边界的距离（像素单位）
@@ -249,7 +249,7 @@ float BoundaryDist(uint2 coord)
 void CalculateDistance(uint3 id : SV_DispatchThreadID)
 {
     uint2 currentCoord = id.xy;
-    float4 sdfData = _PreviousBuffer[currentCoord];
+    float4 sdfData = _PreviousBuffer[currentCoord + uint2(_ExtendPixels, _ExtendPixels)];
     
     float width = float(_Width);
     float height = float(_Height);
@@ -285,7 +285,7 @@ void CalculateDistance(uint3 id : SV_DispatchThreadID)
 void CalculateDistanceSingleChannel(uint3 id : SV_DispatchThreadID)
 {
     uint2 currentCoord = id.xy;
-    float4 sdfData = _PreviousBuffer[currentCoord];
+    float4 sdfData = _PreviousBuffer[currentCoord + uint2(_ExtendPixels, _ExtendPixels)];
 
     float width = float(_Width);
     float height = float(_Height);
