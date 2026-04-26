@@ -18,7 +18,7 @@ namespace Mmang.PixelartRender
         private class PassData
         {
             internal RendererListHandle RendererList;
-            internal float UnitSize;
+            internal Vector4 Params;
 
         }
 
@@ -42,26 +42,22 @@ namespace Mmang.PixelartRender
                 builder.AllowPassCulling(false);
                 builder.AllowGlobalStateModification(true);
 
-                //
-                /*
-                for (int i = 0; i < 9; i++)
-                {
-                    var handle = ObstacleMaskManager.Instance.GetSDFHandle(i);
-                    var sdfHandle = renderGraph.ImportTexture(handle);
-                    //builder.UseTexture(sdfHandle);
-                    builder.SetGlobalTextureAfterPass(sdfHandle, Shader.PropertyToID($"_ObstacleSDF_{i}"));
-                }
-                */
-
                 builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
                 builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, 0);
 
+                var manager = ObstacleMaskManager.Instance;
 
                 SortingCriteria sortingCriteria = cameraData.defaultOpaqueSortFlags;
                 DrawingSettings drawingSettings = RenderingUtils.CreateDrawingSettings(TargetShaderTag, renderingData, cameraData, lightData, sortingCriteria);
                 var param = new RendererListParams(renderingData.cullResults, drawingSettings, m_FilteringSettings);
                 passData.RendererList = renderGraph.CreateRendererList(param);
-                passData.UnitSize = ObstacleMaskManager.Instance.UnitSize;
+                passData.Params = new Vector4
+                (
+                    manager.UnitSize,
+                    manager.CenterIndex.x,
+                    manager.CenterIndex.y,
+                    0.5f
+                );
 
                 builder.UseRendererList(passData.RendererList);
 
@@ -77,7 +73,8 @@ namespace Mmang.PixelartRender
         {
             using (new ProfilingScope(cmd, new ProfilingSampler(s_PassTag)))
             {
-                cmd.SetGlobalFloat(PShaderPropertyID.UnitSize, passData.UnitSize);
+                cmd.SetGlobalVector(Shader.PropertyToID("_ObstacleParams"), passData.Params);
+                cmd.SetGlobalFloat(PShaderPropertyID.UnitSize, passData.Params.x);
                 cmd.ClearRenderTarget(true, true, Color.clear);
                 cmd.DrawRendererList(passData.RendererList);
             }

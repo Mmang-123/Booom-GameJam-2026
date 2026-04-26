@@ -78,7 +78,7 @@
             // -------------------------------------
             // Includes
             #include "PixelartInput.hlsl"
-            #include "PixelartPass.hlsl"
+            #include "ObstaclePass.hlsl"
             ENDHLSL
         }
 

@@ -8,7 +8,7 @@ namespace Mmang.PixelartRender
         [SerializeField] private RenderPassEvent m_RenderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
         [SerializeField] private LayerMask m_LayerMash = ~0;
 
-        private RenderPass_MForward m_ForwardPass;
+        private RenderPass_ObstacleMask m_ForwardPass;
         
 
         public override void Create()

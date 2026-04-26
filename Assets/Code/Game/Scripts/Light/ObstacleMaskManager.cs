@@ -1,10 +1,10 @@
-﻿using Mmang.Util;
+﻿using System.Collections.Generic;
+using Mmang.Util;
 using Sloane;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
 
 namespace Mmang.PixelartRender
@@ -12,6 +12,11 @@ namespace Mmang.PixelartRender
     [ExecuteAlways]
     public class ObstacleMaskManager : SingletonMono<ObstacleMaskManager>
     {
+        public struct ChunkData
+        {
+            public Vector2Int PositionIndex;
+        }
+
         // 存储 9 张障碍物贴图
         private RenderTexture[] m_ObstacleRTs = new RenderTexture[9];
         private RTHandle[] m_MaskHandles = new RTHandle[9];
@@ -21,14 +26,23 @@ namespace Mmang.PixelartRender
 
         public int Resolution => 256;
         public float TileSize => 16f;
+        public float HalfTileSize => TileSize / 2f;
         public float UnitSize => TileSize / Resolution;
 
+        //
+        private Vector2Int m_CenterIndex;
+        private ChunkData[] m_ChunkDataArray = new ChunkData[9];
         private Camera m_Camera;
+
+        public Vector2Int CenterIndex => m_CenterIndex;
 
         private void OnEnable()
         {
             InitCamera();
             CreateTextures();
+
+            m_CenterIndex = Vector2Int.zero;
+            UpdateChunk();
         }
 
         private void OnDisable()
@@ -85,6 +99,7 @@ namespace Mmang.PixelartRender
                 m_ObstacleRTs[i].Create();
                 m_MaskHandles[i] = RTHandles.Alloc(m_ObstacleRTs[i]);
 
+                descriptor.depthBufferBits = 0;
                 m_SDFs[i] = new(descriptor)
                 {
                     name = $"_ObstacleSDF_{i}",
@@ -96,23 +111,38 @@ namespace Mmang.PixelartRender
             }
         }
 
+
+        public void UpdatePosition(Vector2 position)
+        {
+            Vector2 pos = position;
+            Vector2Int index = new(Mathf.FloorToInt(pos.x / HalfTileSize), Mathf.FloorToInt(pos.y / HalfTileSize));
+            if (index != m_CenterIndex)
+            {
+                m_CenterIndex = index;
+                UpdateChunk();
+            }
+        }
+
+        private void UpdateChunk()
+        {
+            Vector2Int leftBot = m_CenterIndex - Vector2Int.one;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    m_ChunkDataArray[i + j * 3] = new()
+                    {
+                        PositionIndex = leftBot + new Vector2Int(i, j)
+                    };
+                }
+            }
+        }
+
         public Vector3 GetPositionByIndex(int index)
         {
-            int x = index % 3;
-            int y = index / 3;
-            return new Vector3(x * TileSize, y * TileSize, -10);
+            var chunkData = m_ChunkDataArray[index];
+            return new Vector3(chunkData.PositionIndex.x * TileSize + HalfTileSize, chunkData.PositionIndex.y * TileSize + HalfTileSize, -10);
         }
-
-        public RTHandle GetMaskHandel(int index)
-        {
-            return m_MaskHandles[index];
-        }
-
-        public RTHandle GetSDFHandle(int index)
-        {
-            return m_SDFHandles[index];
-        }
-
 
         #region 相机绘制
 
@@ -126,8 +156,6 @@ namespace Mmang.PixelartRender
             cameraData.requiresDepthOption = CameraOverrideOption.Off;
             cameraData.renderShadows = false;
 
-            var t = transform;
-            //camera.transform.SetPositionAndRotation(transform.position, t.rotation);
             camera.enabled = false;
             cameraGO.hideFlags = HideFlags.HideAndDontSave;
 
