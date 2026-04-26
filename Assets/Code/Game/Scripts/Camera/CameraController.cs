@@ -69,6 +69,11 @@ namespace Game
 
         private void FollowTargetPoint()
         {
+            float dt = Time.deltaTime;
+            if (dt <= 0f)
+            {
+                return;
+            }
             m_FollowDamper.UpdateAttribute(m_FollowSetting);
             Vector2 finalPos = m_FollowDamper.Update(Time.deltaTime, TargetPoint);
             transform.position = new(finalPos.x, finalPos.y, transform.position.z);

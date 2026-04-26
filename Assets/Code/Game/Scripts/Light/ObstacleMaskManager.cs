@@ -129,7 +129,7 @@ namespace Mmang.PixelartRender
             var t = transform;
             //camera.transform.SetPositionAndRotation(transform.position, t.rotation);
             camera.enabled = false;
-            //cameraGO.hideFlags = HideFlags.HideAndDontSave;
+            cameraGO.hideFlags = HideFlags.HideAndDontSave;
 
             camera.orthographic = true;
             camera.orthographicSize = TileSize / 2f;
