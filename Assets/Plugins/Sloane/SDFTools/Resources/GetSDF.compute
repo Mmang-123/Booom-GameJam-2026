@@ -264,14 +264,13 @@ void CalculateDistance(uint3 id : SV_DispatchThreadID)
 
     if (sdfData.b < 0.5)
     {
-        // 没有被泛洪填充过的像素，距离为正
-        distance = _MaxDistance; // 初始化为最大可能距离
+        distance = min(width, height);
     }
     else
     {
         float dx = float(extendedCoord.x) - nearestX;
         float dy = float(extendedCoord.y) - nearestY;
-        float distance = sqrt(dx * dx + dy * dy);
+        distance = sqrt(dx * dx + dy * dy);
     }
 
     if (_BoundaryDistance)
@@ -295,9 +294,19 @@ void CalculateDistanceSingleChannel(uint3 id : SV_DispatchThreadID)
     float nearestX = sdfData.r * width;
     float nearestY = sdfData.g * height;
 
-    float dx = float(extendedCoord.x) - nearestX;
-    float dy = float(extendedCoord.y) - nearestY;
-    float distance = sqrt(dx * dx + dy * dy);
+    // 计算距离
+    float distance = 0.0;
+
+    if (sdfData.b < 0.5)
+    {
+        distance = min(width, height);
+    }
+    else
+    {
+        float dx = float(extendedCoord.x) - nearestX;
+        float dy = float(extendedCoord.y) - nearestY;
+        distance = sqrt(dx * dx + dy * dy);
+    }
 
     if (_BoundaryDistance)
         distance = min(distance, BoundaryDist(extendedCoord));
