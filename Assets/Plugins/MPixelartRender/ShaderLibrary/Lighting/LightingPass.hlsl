@@ -82,8 +82,19 @@ half GetShadow(float2 screenUV, float2 lightUV)
 
         float dist = distance(current, lightUV);
         float sdf = GetObstacleSDF(NormalizeUV(current));
-        float nextStep = UnpackSDF(sdf).x;
-        nextStep = max(unitSize, nextStep);
+        float nextStep = UnpackSDF(sdf).x * 0.9;
+        if (nextStep <= unitSize * 5)
+        {
+            nextStep = max(unitSize, nextStep);
+            // 采样两个分量
+            half obstacleMaskX = GetObstacleMask(NormalizeUV(current + sign(direction.x) * unitSize));
+            half obstacleMaskY = GetObstacleMask(NormalizeUV(current + sign(direction.y) * unitSize));
+            if (obstacleMaskX + obstacleMaskY > 0.1)
+            {
+                //shadowMask = 0.0;
+                //break;
+            }
+        }
 
         if (dist < 0.01 || dist <= nextStep)
         {
@@ -140,12 +151,6 @@ half4 LightingFrag(Varyings input) : SV_Target
         //totalLight += lightColor * intensity * atten * shadow;
         totalLight += shadow;
     }
-
-    //float obstacle = GetObstacleMask(uv);
-    //return float4(obstacle.xxx, 1);
-
-    float sdf = GetObstacleSDF(uv);
-    return float4(sdf, 0, 0, 1);
 
     return float4(totalLight, 1);
 }

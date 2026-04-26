@@ -25,7 +25,7 @@ void ShadingFragment(Varyings input, out half4 outColor : COLOR0, out float3 out
 
 
     // Color Output
-    outColor = half4(albedo, 1) ;
+    outColor = half4(albedo * light, 1);
     outSpecular = 0;
 
     /*

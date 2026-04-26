@@ -52,12 +52,6 @@ namespace Mmang.PixelartRender
                 m_Camera = null;
             }
 
-            /*
-            foreach (var rt in m_MaskHandles)
-            {
-                if (rt != null) rt.Release();
-            }
-            */
             if (m_MaskHandle != null)
             {
                 m_MaskHandle.Release();
@@ -99,34 +93,6 @@ namespace Mmang.PixelartRender
 
             for (int i = 0; i < 9; i++)
             {
-                /*
-                if (m_MaskHandles[i] != null)
-                    m_MaskHandles[i].Release();
-                
-                //
-                var descriptor = new RenderTextureDescriptor(Resolution, Resolution)
-                {
-                    depthBufferBits = 32,
-                    enableRandomWrite = true,
-                    graphicsFormat = GraphicsFormat.R16_UNorm,
-                    volumeDepth = 1,
-                    msaaSamples = 1,
-                    sRGB = true,
-                    dimension = TextureDimension.Tex2D,
-                };
-
-                //
-                m_ObstacleRTs[i] = new(descriptor)
-                {
-                    name = $"_ObstacleMask_{i}",
-                    filterMode = FilterMode.Point,
-                    wrapMode = TextureWrapMode.Clamp
-                };
-                m_ObstacleRTs[i].Create();
-                m_MaskHandles[i] = RTHandles.Alloc(m_ObstacleRTs[i]);
-                */
-
-
                 var descriptor = new RenderTextureDescriptor(Resolution, Resolution)
                 {
                     depthBufferBits = 0,
