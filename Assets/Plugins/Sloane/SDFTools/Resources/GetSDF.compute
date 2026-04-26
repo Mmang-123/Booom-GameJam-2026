@@ -264,7 +264,7 @@ void CalculateDistance(uint3 id : SV_DispatchThreadID)
 
     if (sdfData.b < 0.5)
     {
-        distance = min(width, height);
+        distance = _ExtendPixels == 0 ? min(width, height) : _ExtendPixels;
     }
     else
     {
@@ -299,12 +299,30 @@ void CalculateDistanceSingleChannel(uint3 id : SV_DispatchThreadID)
 
     if (sdfData.b < 0.5)
     {
-        distance = min(width, height);
+        distance = _ExtendPixels == 0 ? min(width, height) : _ExtendPixels;
     }
     else
     {
         float dx = float(extendedCoord.x) - nearestX;
         float dy = float(extendedCoord.y) - nearestY;
+
+        float absDx = abs(dx);
+        float absDy = abs(dy);
+
+        if(absDx > absDy)
+        {
+            dx = dx - sign(dx) * 0.5;
+        }
+        else if(absDy > absDx)
+        {
+            dy = dy - sign(dy) * 0.5;
+        }
+        else if(absDx == absDy && absDx > 0) // 对于完全对角线的情况，两个方向都减去0.5
+        {
+            dx = dx - sign(dx) * 0.5;
+            dy = dy - sign(dy) * 0.5;
+        }
+
         distance = sqrt(dx * dx + dy * dy);
     }
 

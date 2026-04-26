@@ -83,16 +83,17 @@ half GetShadow(float2 screenUV, float2 lightUV)
         float dist = distance(current, lightUV);
         float sdf = GetObstacleSDF(NormalizeUV(current));
         float nextStep = UnpackSDF(sdf).x * 0.9;
-        if (nextStep <= unitSize * 5)
+        if (nextStep <= 4.0 * unitSize)
         {
-            nextStep = max(unitSize, nextStep);
+            nextStep = min(unitSize, nextStep);
+
             // 采样两个分量
-            half obstacleMaskX = GetObstacleMask(NormalizeUV(current + sign(direction.x) * unitSize));
-            half obstacleMaskY = GetObstacleMask(NormalizeUV(current + sign(direction.y) * unitSize));
+            half obstacleMaskX = GetObstacleMask(NormalizeUV(current + float2(sign(direction.x) * unitSize, 0.0)));
+            half obstacleMaskY = GetObstacleMask(NormalizeUV(current + float2(0.0, sign(direction.y) * unitSize)));
             if (obstacleMaskX + obstacleMaskY > 0.1)
             {
-                //shadowMask = 0.0;
-                //break;
+                shadowMask = 0.0;
+                break;
             }
         }
 

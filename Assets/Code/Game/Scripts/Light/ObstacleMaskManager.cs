@@ -221,7 +221,7 @@ namespace Mmang.PixelartRender
             for (int i = 0; i < 9; i++)
             {
                 Vector2Int offset = new(i % 3 * Resolution, i / 3 * Resolution);
-                SDFTools.GenerateDF(m_MaskHandle, m_SDFHandles[i], offset, extendPixels: 128, nearestPointSearchRange: 8, boundaryDistance: false);
+                SDFTools.GenerateDF(m_MaskHandle, m_SDFHandles[i], offset, extendPixels: 128, nearestPointSearchRange: 16, boundaryDistance: false);
                 Shader.SetGlobalTexture(Shader.PropertyToID($"_ObstacleSDF_{i}"), m_SDFHandles[i]);
             }
         }
