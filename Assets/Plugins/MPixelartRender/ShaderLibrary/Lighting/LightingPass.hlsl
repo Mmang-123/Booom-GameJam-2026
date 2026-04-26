@@ -141,8 +141,8 @@ half4 LightingFrag(Varyings input) : SV_Target
         totalLight += shadow;
     }
 
-    //float obstacle = GetObstacleMask(uv);
-    //return float4(obstacle.xxx, 1);
+    float obstacle = GetObstacleMask(uv);
+    return float4(obstacle.xxx, 1);
 
     float sdf = GetObstacleSDF(uv);
     return float4(sdf, 0, 0, 1);
