@@ -3,7 +3,13 @@
 #include "../Pixelart/Generic/PixelartShared.hlsl"
 #include "../Pixelart/Generic/PixelartBuffer.hlsl"
 
-struct LightData2D {
+TEXTURE2D(_ObstacleSDF_0);
+TEXTURE2D(_ObstacleSDF_1);
+SAMPLER(sampler_ObstacleSDF_0);
+SAMPLER(sampler_ObstacleSDF_1);
+
+struct LightData2D
+{
     float4 position; 
     float4 color;
 };
@@ -16,6 +22,11 @@ float2 WorldToUV(float2 posWS)
     float4 posCS = TransformWorldToHClip(float3(posWS, 0.0));
     float4 scrPos = ComputeScreenPos(posCS);
     return scrPos.xy / scrPos.w;
+}
+
+half GetObstacleSDF(float2 screenUV)
+{
+    return SAMPLE_TEXTURE2D(_ObstacleSDF_0, sampler_ObstacleSDF_0, screenUV).r;
 }
 
 half GetShadow(float2 screenUV, float2 lightUV, int steps)
@@ -83,7 +94,6 @@ half GetShadowDDA(float2 screenUV, float2 lightUV)
     return shadowMask;
 }
 
-
 half4 LightingFrag(Varyings input) : SV_Target
 {
     GET_BLIT_UV();
@@ -92,6 +102,7 @@ half4 LightingFrag(Varyings input) : SV_Target
 
     half3 totalLight = half3(0.0, 0.0, 0.0);
 
+    /*
     [loop]
     for(int i = 0; i < _MLightCount; i++)
     {
@@ -119,6 +130,10 @@ half4 LightingFrag(Varyings input) : SV_Target
         // 累加当前光源的贡献
         totalLight += lightColor * intensity * atten * shadow;
     }
+    */
+
+    float sdf = GetObstacleSDF(uv);
+    return float4(sdf.x, 0, 0, 1);
 
     return float4(totalLight, 1);
 }

@@ -56,6 +56,34 @@
 
         Pass
         {
+            Name "Obstacle Mask"
+
+            Tags
+            {
+                "LightMode" = "ObstacleMask"
+            }
+
+            HLSLPROGRAM
+
+            // -------------------------------------
+            // Shader Stages
+            #pragma vertex ObstacleVert
+            #pragma fragment ObstacleFrag
+
+            //--------------------------------------
+            // GPU Instancing
+            #pragma multi_compile_instancing
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+
+            // -------------------------------------
+            // Includes
+            #include "PixelartInput.hlsl"
+            #include "PixelartPass.hlsl"
+            ENDHLSL
+        }
+
+        Pass
+        {
             Tags
             {
                 "LightMode" = "Preview"

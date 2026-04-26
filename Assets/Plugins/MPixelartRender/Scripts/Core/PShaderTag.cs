@@ -8,5 +8,6 @@ namespace Mmang.PixelartRender
         public static ShaderTagId Pixelart => new("Pixelart");
         public static ShaderTagId MForward => new("MForward");
         public static ShaderTagId Preview => new("Preview");
+        public static ShaderTagId ObstacleMask => new("ObstacleMask");
     }
 }

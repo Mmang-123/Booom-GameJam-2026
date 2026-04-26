@@ -85,7 +85,7 @@ namespace Mmang.PixelartRender
             cmd.SetGlobalFloat(PShaderPropertyID.CameraScale, cameraScale);
 
             // Lighting
-            cmd.SetGlobalInt(PShaderPropertyID.AdditionalLightCount, data.AdditionalLightsCount);
+            //cmd.SetGlobalInt(PShaderPropertyID.AdditionalLightCount, data.AdditionalLightsCount);
 
             //
             cmd.SetGlobalVector(PShaderPropertyID.CenterFocusPosition, data.FocusPosition);
