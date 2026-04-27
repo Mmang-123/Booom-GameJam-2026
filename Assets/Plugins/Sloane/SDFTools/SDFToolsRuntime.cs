@@ -157,7 +157,7 @@ namespace Sloane
             int iterationCount = Mathf.CeilToInt(Mathf.Log(maxDimension, 2)) + 1;
             for (int i = 0; i < iterationCount; i++)
             {
-                // cmdCompute.Blit(currentBuffer, new RenderTargetIdentifier(TempID_Previous));
+                cmd.Blit(currentBuffer, new RenderTargetIdentifier(TempID_Previous));
                 cmd.SetComputeTextureParam(sdfComputeShader, kernelJumpFlooding, PropertyPreviousBuffer, new RenderTargetIdentifier(TempID_Previous));
                 cmd.SetComputeTextureParam(sdfComputeShader, kernelJumpFlooding, PropertyCurrentBuffer, currentBuffer);
                 cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, iterationWidth);

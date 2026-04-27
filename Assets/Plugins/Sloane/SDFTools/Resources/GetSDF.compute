@@ -98,38 +98,42 @@ int DistanceSquared(uint2 a, uint2 b)
 [numthreads(8,8,1)]
 void JumpFlooding (uint3 id : SV_DispatchThreadID)
 {
-    uint step = pow(2, _IterationTime - _Iteration - 1);
     uint2 currentCoord = id.xy;
+    uint step = (uint)pow(2.0, float(_IterationTime - _Iteration - 1));
     float width = float(_Width);
     float height = float(_Height);
-    uint2 currentSeed = uint2(uint(round(_CurrentBuffer[currentCoord].x * width)), uint(round(_CurrentBuffer[currentCoord].y * height)));
-    
-    if(_CurrentBuffer[currentCoord].z > 0.5)
+
+    // Gather：从上一轮快照（_PreviousBuffer）读取，只写自己的像素，消除并发写冲突
+    float4 selfData = _PreviousBuffer[currentCoord];
+    uint2 bestSeed = uint2(uint(round(selfData.x * width)), uint(round(selfData.y * height)));
+    int minDist = selfData.z > 0.5 ? DistanceSquared(currentCoord, bestSeed) : 2147483647;
+
+    for (int i = -1; i <= 1; i++)
     {
-        for(int i = -1; i <= 1; i++)
+        for (int j = -1; j <= 1; j++)
         {
-            for(int j = -1; j <= 1; j++)
+            if (i == 0 && j == 0) continue;
+            int2 neighborCoordSigned = int2(currentCoord) + int2(i, j) * int(step);
+            if (neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
+
+            uint2 neighborCoord = uint2(neighborCoordSigned);
+            float4 neighborData = _PreviousBuffer[neighborCoord];
+            if (neighborData.z < 0.5) continue;
+
+            uint2 neighborSeed = uint2(uint(round(neighborData.x * width)), uint(round(neighborData.y * height)));
+            int dist = DistanceSquared(currentCoord, neighborSeed);
+            if (dist < minDist)
             {
-                int2 neighborCoordSigned = int2(currentCoord) + int2(i, j) * step;
-                if(neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
-                if(i == 0 && j == 0) continue;
-            
-                uint2 neighborCoord = uint2(neighborCoordSigned);
-                uint2 neighborSeed = uint2(uint(_CurrentBuffer[neighborCoord].x * width), uint(_CurrentBuffer[neighborCoord].y * height));
-
-                if(neighborSeed.x == currentSeed.x && neighborSeed.y == currentSeed.y) continue;
-
-                bool fillData = false;
-                if(_CurrentBuffer[neighborCoord].z < 0.5) fillData = true;
-                else if(DistanceSquared(neighborCoord, neighborSeed) > DistanceSquared(neighborCoord, currentSeed)) fillData = true;
-
-                if(fillData)
-                {
-                    _CurrentBuffer[neighborCoord] = float4(float(currentSeed.x) / width, float(currentSeed.y) / height, 1.0, _CurrentBuffer[neighborCoord].a);
-                }
+                minDist = dist;
+                bestSeed = neighborSeed;
             }
         }
     }
+
+    if (minDist < 2147483647)
+        _CurrentBuffer[currentCoord] = float4(float(bestSeed.x) / width, float(bestSeed.y) / height, 1.0, selfData.a);
+    else
+        _CurrentBuffer[currentCoord] = float4(selfData.xy, 0.0, selfData.a);
 }
 
 [numthreads(8,8,1)]
