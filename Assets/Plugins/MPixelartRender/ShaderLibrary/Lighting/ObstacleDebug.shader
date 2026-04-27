@@ -42,6 +42,7 @@
                 else
                 {
                     float sdf = GetObstacleSDF(uv);
+                    sdf = frac(sdf * 50);
                     return float4(sdf, 0, 0, 1);
                 }
             }

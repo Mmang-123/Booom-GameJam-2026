@@ -48,10 +48,14 @@ float3 ComputeOriginVSOffset()
     return originVSOffset;
 }
 
-float3 SnapWorldPosition(float3 positionWS, float3 originVSOffset)
+float3 SnapWorldPosition(float3 positionWS)
 {
-    float3 positionVS = mul(PIXELART_CAMERA_MATRIX_V, float4(positionWS, 1.0)).xyz + originVSOffset;
-    return TransformViewToWorld(float4(positionVS, 1.0));
+    /*
+    float3 positionVS = mul(PIXELART_CAMERA_MATRIX_V, float4(positionWS, 1.0)).xyz;
+    float3 positionVSSnapped = float3(UNITSNAP(positionVS.x, _UnitSize), UNITSNAP(positionVS.y, _UnitSize), positionVS.z);
+    return TransformViewToWorld(float4(positionVSSnapped, 1.0));
+    */
+    return float3(UNITSNAP(positionWS.x, _UnitSize), UNITSNAP(positionWS.y, _UnitSize), positionWS.z);
 }
 
 #endif // PGENERIC_TRANSFORM_INCLUDED
