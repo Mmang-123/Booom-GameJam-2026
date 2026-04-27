@@ -104,7 +104,7 @@ namespace Game
 
         public void Move(Vector2 motion)
         {
-            m_Rigidbody.AddForce(motion, ForceMode2D.Impulse);
+            m_Rigidbody.AddForce(motion * 10000, ForceMode2D.Impulse);
         }
     }
 }

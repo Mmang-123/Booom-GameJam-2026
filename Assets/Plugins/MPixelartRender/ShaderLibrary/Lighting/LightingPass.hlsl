@@ -65,12 +65,13 @@ half GetShadow(float2 screenUV, float2 lightUV)
     lightUV.y *= _ScreenParams.y / _ScreenParams.x;
     float2 direction = normalize(lightUV - screenUV);
 
-    const int MAX_STEPS = 64;
+    const int MAX_STEPS = 128;
     
     float2 current = screenUV;
     float unitSize = 1 / _ScreenParams.x;
     half shadowMask = 1.0;
 
+    [loop]
     for (int i = 0; i <= MAX_STEPS; i++)
     {
         half obstacleMask = GetObstacleMask(NormalizeUV(current));
@@ -144,7 +145,8 @@ half4 LightingFrag(Varyings input) : SV_Target
 
         //return float4(_UnitSize.xxx, 1);
         //return float4(uv - lightUV, 0, 1);
-        return float4(frac((uv - lightUV) * 100), 0, 1);
+        //return float4(frac((lightUV - uv).xy * 10), 0, 1);
+        //return float4(frac((lightPos - positionWS).xy * 100), 0, 1);
         float shadow = 1.0;
         if (GetObstacleMask(lightUV) > 0.5)
         {
