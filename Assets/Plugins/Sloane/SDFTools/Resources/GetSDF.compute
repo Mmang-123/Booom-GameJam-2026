@@ -29,9 +29,9 @@ uint _Height;
 float _AlphaThreshold;
 float _MaxDistance;  // 用于归一化的最大距离
 bool _InvertSelection;  // 是否反向选择（用于内部SDF）
-bool _IsNormalized;  // 输入是否已经归一化
 bool _BoundaryDistance;
 bool _Normalize;
+bool _AccurateDistance;  // 是否使用更精确的距离计算（考虑像素中心）
 int _NearestPointSearchRange;
 uint _OffsetX;
 uint _OffsetY;
@@ -274,6 +274,27 @@ void CalculateDistance(uint3 id : SV_DispatchThreadID)
     {
         float dx = float(extendedCoord.x) - nearestX;
         float dy = float(extendedCoord.y) - nearestY;
+
+        if (_AccurateDistance)
+        {
+            float absDx = abs(dx);
+            float absDy = abs(dy);
+
+            if(absDx > absDy)
+            {
+                dx = dx - sign(dx) * 0.5;
+            }
+            else if(absDy > absDx)
+            {
+                dy = dy - sign(dy) * 0.5;
+            }
+            else if(absDx == absDy && absDx > 0) // 对于完全对角线的情况，两个方向都减去0.5
+            {
+                dx = dx - sign(dx) * 0.5;
+                dy = dy - sign(dy) * 0.5;
+            }
+        }
+
         distance = sqrt(dx * dx + dy * dy);
     }
 
@@ -310,21 +331,24 @@ void CalculateDistanceSingleChannel(uint3 id : SV_DispatchThreadID)
         float dx = float(extendedCoord.x) - nearestX;
         float dy = float(extendedCoord.y) - nearestY;
 
-        float absDx = abs(dx);
-        float absDy = abs(dy);
+        if (_AccurateDistance)
+        {
+            float absDx = abs(dx);
+            float absDy = abs(dy);
 
-        if(absDx > absDy)
-        {
-            dx = dx - sign(dx) * 0.5;
-        }
-        else if(absDy > absDx)
-        {
-            dy = dy - sign(dy) * 0.5;
-        }
-        else if(absDx == absDy && absDx > 0) // 对于完全对角线的情况，两个方向都减去0.5
-        {
-            dx = dx - sign(dx) * 0.5;
-            dy = dy - sign(dy) * 0.5;
+            if(absDx > absDy)
+            {
+                dx = dx - sign(dx) * 0.5;
+            }
+            else if(absDy > absDx)
+            {
+                dy = dy - sign(dy) * 0.5;
+            }
+            else if(absDx == absDy && absDx > 0) // 对于完全对角线的情况，两个方向都减去0.5
+            {
+                dx = dx - sign(dx) * 0.5;
+                dy = dy - sign(dy) * 0.5;
+            }
         }
 
         distance = sqrt(dx * dx + dy * dy);
@@ -388,7 +412,7 @@ void FindMinMaxDistance(uint3 id : SV_DispatchThreadID)
     float distance = _PreviousBuffer[coord].r * 1000.0;  // 放大以保留小数部分
     
     // 如果是归一化的值，先反归一化回原始距离
-    if (_IsNormalized)
+    if (_Normalize)
     {
         // 反归一化：distance = (normalized * 2 - 1) * maxDist
         distance = distance * _MaxDistance;

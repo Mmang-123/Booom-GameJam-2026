@@ -25,6 +25,7 @@ namespace Sloane
         private static readonly int PropertyInvertSelection = Shader.PropertyToID("_InvertSelection");
         private static readonly int PropertyMaxDistance = Shader.PropertyToID("_MaxDistance");
         private static readonly int PropertyExtendPixels = Shader.PropertyToID("_ExtendPixels");
+        private static readonly int PropertyAccurateDistance = Shader.PropertyToID("_AccurateDistance");
         private static int kernelInitializeSeedSingleChannel;
         private static int kernelInitializeSeed;
         private static int kernelJumpFlooding;
@@ -95,9 +96,9 @@ namespace Sloane
             return false;
         }
 
-        public static void GenerateDF(Texture sourceTexture, RenderTexture resultRT, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, int extendPixels = 0, bool boundaryDistance = false)
+        public static void GenerateDF(Texture sourceTexture, RenderTexture resultRT, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, int extendPixels = 0, bool boundaryDistance = false, bool accurateDistance = true)
         {
-            GenerateDF(sourceTexture, resultRT, Vector2Int.zero, alphaThreshold, normalize, invertSelection, nearestPointSearchRange, extendPixels, boundaryDistance);
+            GenerateDF(sourceTexture, resultRT, Vector2Int.zero, alphaThreshold, normalize, invertSelection, nearestPointSearchRange, extendPixels, boundaryDistance, accurateDistance);
         }
 
         /// <summary>
@@ -106,7 +107,7 @@ namespace Sloane
         /// 若无种子，直接将 resultRT 填充为最大距离并返回。
         /// 全程分两个 CommandBuffer 执行，各自在 Frame Debugger 中显示为独立分组。
         /// </summary>
-        public static void GenerateDF(Texture sourceTexture, RenderTexture resultRT, Vector2Int offset, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, int extendPixels = 0, bool boundaryDistance = false)
+        public static void GenerateDF(Texture sourceTexture, RenderTexture resultRT, Vector2Int offset, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, int extendPixels = 0, bool boundaryDistance = false, bool accurateDistance = true)
         {
             Initialize();
             if (!initialized) return;
@@ -204,6 +205,7 @@ namespace Sloane
             cmd.SetComputeIntParam(sdfComputeShader, PropertyNormalize, normalize ? 1 : 0);
             cmd.SetComputeFloatParam(sdfComputeShader, PropertyMaxDistance, maxDist);
             cmd.SetComputeIntParam(sdfComputeShader, PropertyExtendPixels, extendPixels);
+            cmd.SetComputeIntParam(sdfComputeShader, PropertyAccurateDistance, accurateDistance ? 1 : 0);
 
             if (useSingleChannelOutput)
             {
