@@ -16,6 +16,7 @@ namespace Mmang.PixelartRender
             public ComputeBuffer DataBuffer;
             public int LightCount;
             public int PointLightCount;
+            public int ChunkSize;
         }
 
         private Shader m_Shader;
@@ -69,13 +70,17 @@ namespace Mmang.PixelartRender
                     passData.DataBuffer = manager.DataBuffer;
                     passData.LightCount = manager.LightCount;
                     passData.PointLightCount = manager.PointLightCount;
+                    passData.ChunkSize = ObstacleMaskManager.Instance.Resolution;
 
                     // 绘制
                     var descriptor = cameraData.cameraTargetDescriptor;
                     descriptor.depthBufferBits = 0;
-                    TextureHandle lightingTextureHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, descriptor, LightingTextureName, false);
+
+                    var lightTexture = ObstacleMaskManager.Instance.LightingHandle;
+                    TextureHandle lightingTextureHandle = renderGraph.ImportTexture(lightTexture);
+                    //TextureHandle lightingTextureHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, descriptor, LightingTextureName, false);
                     builder.SetRenderAttachment(lightingTextureHandle, 0, AccessFlags.Write);
-                    builder.SetGlobalTextureAfterPass(lightingTextureHandle, PShaderPropertyID.MLightingTexture);
+                    //builder.SetGlobalTextureAfterPass(lightingTextureHandle, PShaderPropertyID.MLightingTexture);
 
                     builder.SetRenderFunc((PassData data, RasterGraphContext rgContext) =>
                     {
@@ -87,6 +92,7 @@ namespace Mmang.PixelartRender
 
         private static void ExecutePass(RasterCommandBuffer cmd, PassData passData)
         {
+            cmd.SetGlobalVector(PShaderPropertyID.ObstacleChunkParams, new(passData.ChunkSize, passData.ChunkSize, passData.ChunkSize * 4, passData.ChunkSize * 4));
             cmd.SetGlobalBuffer(PShaderPropertyID.MLightDataBuffer, passData.DataBuffer);
             //cmd.SetGlobalInt(PShaderPropertyID.MLightCount, passData.LightCount);
             cmd.SetGlobalVector(PShaderPropertyID.MLightParams, new(passData.LightCount, passData.PointLightCount, 0, 0));

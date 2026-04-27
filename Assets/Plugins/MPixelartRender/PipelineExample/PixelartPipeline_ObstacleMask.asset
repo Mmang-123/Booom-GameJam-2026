@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RF_ObstacleMask
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.RF_ObstacleMask
   m_Active: 1
-  m_RenderPassEvent: 550
+  m_RenderPassEvent: 300
   m_LayerMash:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -43,7 +43,8 @@ MonoBehaviour:
     probeVolumeBlendStatesCS: {fileID: 0}
   m_RendererFeatures:
   - {fileID: -943934538421656648}
-  m_RendererFeatureMap: b8a327da8978e6f2
+  - {fileID: 2307372201783847482}
+  m_RendererFeatureMap: b8a327da8978e6f23aeaefe3ca6e0520
   m_UseNativeRenderPass: 0
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 0}
@@ -72,3 +73,17 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+--- !u!114 &2307372201783847482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1eb952f7d35e8e409b3a67337cc069b, type: 3}
+  m_Name: RF_Lighting
+  m_EditorClassIdentifier: Assembly-CSharp::Mmang.PixelartRender.RF_Lighting
+  m_Active: 1
+  m_LightingShader: {fileID: 4800000, guid: 08f5c930b23d7f04b9601d81693c506c, type: 3}

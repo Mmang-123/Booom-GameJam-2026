@@ -36,5 +36,6 @@ namespace Mmang.PixelartRender
         public static readonly int MLightCount = Shader.PropertyToID("_MLightCount");
         public static readonly int MLightParams = Shader.PropertyToID("_MLightParams");
         public static readonly int MLightDataBuffer = Shader.PropertyToID("_MLightDataBuffer");
+        public static readonly int ObstacleChunkParams = Shader.PropertyToID("_ObstacleChunkParams");
     }
 }

@@ -19,6 +19,9 @@ namespace Mmang.PixelartRender
 
         private RenderTexture m_Mask;
         private RTHandle m_MaskHandle;
+        private RenderTexture m_Lighting;
+        private RTHandle m_LightingHandle;
+        public RTHandle LightingHandle => m_LightingHandle;
 
         private RenderTexture[] m_SDFs = new RenderTexture[9];
         private RTHandle[] m_SDFHandles = new RTHandle[9];
@@ -57,6 +60,11 @@ namespace Mmang.PixelartRender
                 m_MaskHandle.Release();
             }
 
+            if (m_LightingHandle != null)
+            {
+                m_LightingHandle.Release();
+            }
+
             foreach (var rt in m_SDFHandles)
             {
                 if (rt != null) rt.Release();
@@ -67,6 +75,7 @@ namespace Mmang.PixelartRender
         {
             RenderMask();
             GenerateSDF();
+            Shader.SetGlobalTexture(PShaderPropertyID.MLightingTexture, m_LightingHandle);
         }
 
         private void CreateTextures()
@@ -82,6 +91,17 @@ namespace Mmang.PixelartRender
                 dimension = TextureDimension.Tex2D,
             };
 
+            var lightingDescriptor = new RenderTextureDescriptor(Resolution * 3, Resolution * 3)
+            {
+                depthBufferBits = 0,
+                enableRandomWrite = true,
+                graphicsFormat = GraphicsFormat.R16G16B16A16_UNorm,
+                volumeDepth = 1,
+                msaaSamples = 1,
+                sRGB = true,
+                dimension = TextureDimension.Tex2D,
+            };
+
             m_Mask = new(maskDescriptor)
             {
                 name = $"_ObstacleMask",
@@ -90,6 +110,15 @@ namespace Mmang.PixelartRender
             };
             m_Mask.Create();
             m_MaskHandle = RTHandles.Alloc(m_Mask);
+
+            m_Lighting = new(lightingDescriptor)
+            {
+                name = $"_LightingTexture",
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp
+            };
+            m_Lighting.Create();
+            m_LightingHandle = RTHandles.Alloc(m_Lighting);
 
             for (int i = 0; i < 9; i++)
             {
@@ -196,24 +225,6 @@ namespace Mmang.PixelartRender
             }
 
             Shader.SetGlobalTexture(Shader.PropertyToID("_ObstacleMask"), m_MaskHandle);
-
-            /*
-            for (int i = 0; i < 9; i++)
-            {
-                RenderPipeline.StandardRequest request = new();
-
-                m_Camera.transform.position = GetPositionByIndex(i);
-                m_Camera.transform.rotation = quaternion.identity;
-
-                if (RenderPipeline.SupportsRenderRequest(m_Camera, request))
-                {
-                    // 纹理绑定
-                    request.destination = m_ObstacleRTs[i];
-
-                    RenderPipeline.SubmitRenderRequest(m_Camera, request);
-                }
-            }
-            */
         }
 
         private void GenerateSDF()

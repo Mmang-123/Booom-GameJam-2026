@@ -1,6 +1,8 @@
 ﻿#ifndef OBSTACLE_SHARED_INCLUDED
 #define OBSTACLE_SHARED_INCLUDED
 
+#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
 TEXTURE2D(_ObstacleSDF_0); SAMPLER(sampler_ObstacleSDF_0);
 TEXTURE2D(_ObstacleSDF_1); SAMPLER(sampler_ObstacleSDF_1);
 TEXTURE2D(_ObstacleSDF_2); SAMPLER(sampler_ObstacleSDF_2);
@@ -24,6 +26,15 @@ float2 WorldToUV(float2 posWS)
     //uv.y = floor(uv.y * _ScreenParams.y) / _ScreenParams.y;
 
     return uv;
+}
+
+float2 UVToWorld(float2 uv)
+{
+    float2 ndc = uv * 2.0 - 1.0;
+    
+    float2 worldPosXY = _WorldSpaceCameraPos.xy + (ndc * unity_OrthoParams.xy);
+
+    return worldPosXY;
 }
 
 inline int GetChunkIndex(int2 positionIndex)
@@ -81,10 +92,30 @@ float GetObstacleSDF(float2 screenUV)
     return SampleObstacleSDF(GetChunkIndex(offsetIndex), sampleUV);
 }
 
-float2 UnpackSDF(float rawSDF)
+float GetObstacleSDF_RawCamera(float2 uv)
+{
+    /*
+    uv = clamp(uv - float2(0.125, 0.125), 0.0, 0.75) * 4.0 / 3.0;
+    int2 offsetIndex = int2(floor(uv.x * 3), floor(uv.y * 3));
+    float2 sampleUV = (uv - offsetIndex * float2(0.333333, 0.333333)) / float2(0.333333, 0.333333);
+    */
+    int2 offsetIndex = int2(floor(uv.x * 3), floor(uv.y * 3));
+    float2 sampleUV = (uv - offsetIndex * float2(0.333333, 0.333333)) / float2(0.333333, 0.333333);
+
+    //offsetIndex += int2(1, 1);
+    return SampleObstacleSDF(GetChunkIndex(offsetIndex), sampleUV);
+}
+
+float2 UnpackSDFToScreen(float rawSDF)
 {
     // 按256x256单元 ~ 480x270屏幕大小计算
     return rawSDF * float2(0.75424, 1.34088); 
+}
+
+float UnpackSDFToRaw(float rawSDF)
+{
+    // TODO 按256单元 ~ 256 * 3换算
+    return rawSDF * 0.35355;
 }
 
 float GetObstacleMask(float2 screenUV)
@@ -99,5 +130,12 @@ float GetObstacleMask(float2 screenUV)
     float2 sampleUV = offset / totalChunkSize;
     return SAMPLE_TEXTURE2D(_ObstacleMask, sampler_ObstacleMask, sampleUV).r;
 }
+
+float GetObstacleMask_RawCamera(float2 uv)
+{
+    uv = uv * 3 / 4 + 0.125;
+    return SAMPLE_TEXTURE2D(_ObstacleMask, sampler_ObstacleMask, uv).r;
+}
+
 
 #endif

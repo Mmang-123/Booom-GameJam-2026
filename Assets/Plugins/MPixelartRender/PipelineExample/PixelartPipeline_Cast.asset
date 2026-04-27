@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1eb952f7d35e8e409b3a67337cc069b, type: 3}
   m_Name: RF_Lighting
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.RF_Lighting
-  m_Active: 1
+  m_Active: 0
   m_LightingShader: {fileID: 4800000, guid: 08f5c930b23d7f04b9601d81693c506c, type: 3}
 --- !u!114 &5392433442531744511
 MonoBehaviour:

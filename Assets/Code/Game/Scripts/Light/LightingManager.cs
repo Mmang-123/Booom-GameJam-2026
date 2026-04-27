@@ -2,9 +2,11 @@
 using Mmang.Util;
 using UnityEngine;
 
+
 using Light = Mmang.PixelartRender.MLight;
 using PointLight = Mmang.PixelartRender.MPointLight;
 using SpotLight = Mmang.PixelartRender.MSpotPointLight;
+using AreaLight = Mmang.PixelartRender.MAreaLight;
 
 namespace Mmang.PixelartRender
 {
@@ -20,11 +22,13 @@ namespace Mmang.PixelartRender
         public int LightCount { get; private set; }
         public int PointLightCount { get; private set; }
         public int SpotLightCount { get; private set; }
+        public int AreaLightCount { get; private set; }
 
         public ComputeBuffer DataBuffer { get; private set; }
 
         private List<PointLight> m_PointLightsCache = new();
         private List<SpotLight> m_SpotLightsCache = new();
+        private List<AreaLight> m_AreaLightsCache = new();
 
         private void OnEnable()
         {
@@ -58,16 +62,6 @@ namespace Mmang.PixelartRender
                 }
                 if (light is PointLight pointLight)
                 {
-                    /*
-                    LightData2D data = new()
-                    {
-                        color = new Vector4(pointLight.Color.r, pointLight.Color.g, pointLight.Color.b, pointLight.Intensity),
-                        position = new Vector4(pointLight.Position.x, pointLight.Position.y, pointLight.Position.z, pointLight.Radius)
-                    };
-
-                    m_DataArray[LightCount] = data;
-                    */
-
                     m_PointLightsCache.Add(pointLight);
 
                     PointLightCount++;
@@ -80,10 +74,19 @@ namespace Mmang.PixelartRender
                     SpotLightCount++;
                     LightCount++;
                 }
+                else if (light is AreaLight areaLight)
+                {
+                    m_AreaLightsCache.Add(areaLight);
+
+                    AreaLightCount++;
+                    LightCount++;
+                }
             }
             
             // PointLight
-            for (int i = 0; i < PointLightCount; i++)
+            int start = 0;
+            int end = PointLightCount;
+            for (int i = start; i < end; i++)
             {
                 var pointLight = m_PointLightsCache[i];
                 LightData2D data = new()
@@ -96,9 +99,11 @@ namespace Mmang.PixelartRender
             }
 
             // SpotLight
-            for (int i = PointLightCount; i < LightCount; i++)
+            start += PointLightCount;
+            end += SpotLightCount;
+            for (int i = start; i < end; i++)
             {
-                var spotLight = m_SpotLightsCache[i - PointLightCount];
+                var spotLight = m_SpotLightsCache[i - start];
                 Vector2 direction = spotLight.GetDirection();
                 Vector2 scaleOffset = spotLight.GetScaleOffset();
                 LightData2D data = new()
@@ -109,6 +114,14 @@ namespace Mmang.PixelartRender
                 };
 
                 m_DataArray[i] = data;
+            }
+
+            // AreaLight
+            start += SpotLightCount;
+            end += AreaLightCount;
+            for (int i = start; i < end; i++)
+            {
+                var areaLight = m_AreaLightsCache[i - start];
             }
 
             DataBuffer.SetData(m_DataArray);

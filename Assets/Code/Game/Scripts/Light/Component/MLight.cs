@@ -2,6 +2,11 @@
 
 namespace Mmang.PixelartRender
 {
+    public enum ELightType
+    {
+        Point, Spot, Area
+    }
+
     [ExecuteAlways]
     public abstract class MLight : MonoBehaviour
     {
