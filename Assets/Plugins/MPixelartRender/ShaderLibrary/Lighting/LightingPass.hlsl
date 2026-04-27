@@ -8,10 +8,11 @@ struct LightData2D
 {
     float4 position; 
     float4 color;
+    float4 spotLightParams;
 };
 
 StructuredBuffer<LightData2D> _MLightDataBuffer;
-int _MLightCount;
+int2 _MLightParams;
 
 half GetShadowDDA(float2 screenUV, float2 lightUV)
 {
@@ -110,6 +111,86 @@ half GetShadow(float2 screenUV, float2 lightUV)
     return shadowMask;
 }
 
+half3 ComputePointLight(int lightIndex, float3 positionWS, float2 uv)
+{
+    LightData2D light = _MLightDataBuffer[lightIndex];
+        
+    float2 lightPos = SnapWorldPosition(float3(light.position.xy, 0));
+    float radius = light.position.w;
+    
+    half3 lightColor = light.color.rgb;
+    half intensity = light.color.w;
+
+    // 
+    float dist = distance(positionWS.xy, lightPos);
+    if (dist > radius)
+        return 0;
+
+    // 衰减
+    float atten = saturate(1.0 - (dist * dist) / (radius * radius));
+
+    // 阴影
+    float2 lightUV = WorldToUV(lightPos);
+
+    float shadow = 1.0;
+    if (GetObstacleMask(lightUV) > 0.5)
+    {
+        shadow = 0.0;
+    }
+    else
+    {
+        shadow = GetShadow(uv, lightUV);
+    }
+
+    // 累加当前光源的贡献
+    //totalLight += lightColor * intensity * atten * shadow;
+    return shadow;
+}
+
+half3 ComputeSpotLight(int lightIndex, float3 positionWS, float2 uv)
+{
+    LightData2D light = _MLightDataBuffer[lightIndex];
+        
+    float2 lightPos = SnapWorldPosition(float3(light.position.xy, 0));
+    float radius = light.position.w;
+    
+    half3 lightColor = light.color.rgb;
+    half intensity = light.color.w;
+
+    float2 lightDir = light.spotLightParams.xy;
+    float2 scaleOffset = light.spotLightParams.zw;
+
+    // 
+    float dist = distance(positionWS.xy, lightPos);
+    if (dist > radius)
+        return 0;
+
+    // 距离衰减
+    float distanceAttenuation = saturate(1.0 - (dist / radius));
+    distanceAttenuation *= distanceAttenuation * (3.0 - 2.0 * distanceAttenuation);
+
+    // 角度衰减
+    float2 lightUV = WorldToUV(lightPos);
+    float2 direction = normalize(uv - lightUV);
+    float SdotL = dot(lightDir, direction); 
+    float angleAttenuation = saturate(SdotL * scaleOffset.x + scaleOffset.y);
+    angleAttenuation *= angleAttenuation; // 边缘平滑
+
+    // 阴影
+    float shadow = 1.0;
+    if (GetObstacleMask(lightUV) > 0.5)
+    {
+        shadow = 0.0;
+    }
+    else
+    {
+        shadow = GetShadow(uv, lightUV);
+    }
+
+    //return half3(lightDir, 0);
+    return distanceAttenuation * angleAttenuation * shadow * intensity * lightColor;
+}
+
 half4 LightingFrag(Varyings input) : SV_Target
 {
     GET_BLIT_UV();
@@ -121,47 +202,21 @@ half4 LightingFrag(Varyings input) : SV_Target
 
     half3 totalLight = half3(0.0, 0.0, 0.0);
 
-    [loop]
-    for(int i = 0; i < _MLightCount; i++)
+    int lightCount = _MLightParams.x;
+    int pointLightCount = _MLightParams.y;
+
+    // Point Light
+    for(int i = 0; i < pointLightCount; i++)
     {
-        LightData2D light = _MLightDataBuffer[i];
-        
-        float2 lightPos = SnapWorldPosition(float3(light.position.xy, 0));
-        float radius = light.position.w;
-        
-        half3 lightColor = light.color.rgb;
-        half intensity = light.color.w;
-
-        // 
-        float dist = distance(positionWS.xy, lightPos);
-        if (dist > radius)
-            continue;
-
-        // 衰减
-        float atten = saturate(1.0 - (dist * dist) / (radius * radius));
-
-        // 阴影
-        float2 lightUV = WorldToUV(lightPos);
-
-        //return float4(_UnitSize.xxx, 1);
-        //return float4(uv - lightUV, 0, 1);
-        //return float4(frac((lightUV - uv).xy * 10), 0, 1);
-        //return float4(frac((lightPos - positionWS).xy * 100), 0, 1);
-        float shadow = 1.0;
-        if (GetObstacleMask(lightUV) > 0.5)
-        {
-            shadow = 0.0;
-        }
-        else
-        {
-            shadow = GetShadow(uv, lightUV);
-        }
-
-        // 累加当前光源的贡献
-        //totalLight += lightColor * intensity * atten * shadow;
-        totalLight += shadow;
-        //totalLight += 1;
+        totalLight += ComputePointLight(i, positionWS, uv);
     }
+
+    // Spot Light
+    for (int i = pointLightCount; i < lightCount; i++)
+    {
+        totalLight += ComputeSpotLight(i, positionWS, uv);
+    }
+
 
     return float4(totalLight, 1);
 }

@@ -34,6 +34,7 @@ namespace Mmang.PixelartRender
         // Lighting
         public static readonly int MLightingTexture = Shader.PropertyToID("_MLightingTexture");
         public static readonly int MLightCount = Shader.PropertyToID("_MLightCount");
+        public static readonly int MLightParams = Shader.PropertyToID("_MLightParams");
         public static readonly int MLightDataBuffer = Shader.PropertyToID("_MLightDataBuffer");
     }
 }

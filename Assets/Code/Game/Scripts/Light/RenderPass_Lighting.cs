@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Mmang.PixelartRender.VolumeComponents;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
@@ -16,6 +15,7 @@ namespace Mmang.PixelartRender
             public Material Material;
             public ComputeBuffer DataBuffer;
             public int LightCount;
+            public int PointLightCount;
         }
 
         private Shader m_Shader;
@@ -63,10 +63,12 @@ namespace Mmang.PixelartRender
                 }
                 else
                 {
+                    var manager = LightingManager.Instance;
                     // PassData
                     passData.Material = m_LightingMaterial;
-                    passData.DataBuffer = LightingManager.Instance.DataBuffer;
-                    passData.LightCount = LightingManager.Instance.LightCount;
+                    passData.DataBuffer = manager.DataBuffer;
+                    passData.LightCount = manager.LightCount;
+                    passData.PointLightCount = manager.PointLightCount;
 
                     // 绘制
                     var descriptor = cameraData.cameraTargetDescriptor;
@@ -86,7 +88,8 @@ namespace Mmang.PixelartRender
         private static void ExecutePass(RasterCommandBuffer cmd, PassData passData)
         {
             cmd.SetGlobalBuffer(PShaderPropertyID.MLightDataBuffer, passData.DataBuffer);
-            cmd.SetGlobalInt(PShaderPropertyID.MLightCount, passData.LightCount);
+            //cmd.SetGlobalInt(PShaderPropertyID.MLightCount, passData.LightCount);
+            cmd.SetGlobalVector(PShaderPropertyID.MLightParams, new(passData.LightCount, passData.PointLightCount, 0, 0));
             Blitter.BlitTexture(cmd, new Vector4(1, 1, 0, 0), passData.Material, 0);
         }
     }
