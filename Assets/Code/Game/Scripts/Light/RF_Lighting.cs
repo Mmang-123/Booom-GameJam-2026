@@ -13,7 +13,7 @@ namespace Mmang.PixelartRender
         {
             m_LightingPass = new(m_LightingShader)
             {
-                renderPassEvent = RenderPassEvent.AfterRenderingOpaques - 1
+                renderPassEvent = RenderPassEvent.AfterRenderingOpaques
             };
         }
 
