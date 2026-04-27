@@ -1,7 +1,30 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using Mmang.Util;
+using UnityEngine;
+using UnityEngine.Pool;
 
 namespace Game
 {
+    public class AdditionalVelocity : IReference
+    {
+        public Vector2 Value;
+        public float Damping;
+
+        public static AdditionalVelocity Create(Vector2 value, float damping = 5f)
+        {
+            var instance = ReferencePool.Acquire<AdditionalVelocity>();
+            instance.Value = value;
+            instance.Damping = damping;
+            return instance;
+        }
+
+        public void Clear()
+        {
+            Value = Vector2.zero;
+            Damping = 0f;
+        }
+    }
+
     public class FB_Swim : FishBehaviour
     {
         public enum State { Normal, Trace }
@@ -15,25 +38,16 @@ namespace Game
         public State CurrentState { get; private set; }
         public bool Tracing { get; set; }
         public Vector2 TargetPoint { get; set; }
-        public float CurrentSpeed { get; private set; }
+        public float CurrentSpeed { get; set; }
+        public float MaxSpeed => m_MoveSpeed;
+
+        private List<AdditionalVelocity> m_AddtionalVelocities = new();
 
         private void Update()
         {
             UpdateState();
 
             RotateToTarget();
-
-            /*
-            switch (CurrentState)
-            {
-                case State.Normal:
-                    NormalUpdate();
-                    break;
-                case State.Trace:
-                    TraceUpdate();
-                    break;
-            }
-            */
         }
 
         public override void BeforeFishFixedUpdate()
@@ -47,6 +61,9 @@ namespace Game
                     TraceUpdate(Time.fixedDeltaTime);
                     break;
             }
+
+            //
+            HandleAdditionalVelocity(Time.fixedDeltaTime);
         }
 
         private void UpdateState()
@@ -109,6 +126,48 @@ namespace Game
                 //transform.position += (Vector3)motion;
                 Fish.Move(motion);
             }
+        }
+
+        private void HandleAdditionalVelocity(float dt)
+        {
+            var toRemove = ListPool<AdditionalVelocity>.Get();            
+            foreach (var velocity in m_AddtionalVelocities)
+            {
+                //
+                Fish.Move(dt * velocity.Value);       
+
+                //
+                Vector2 direction = velocity.Value.normalized;
+                float length = velocity.Value.magnitude;
+                length -= dt * velocity.Damping;
+                if (length <= 0f)
+                {
+                    toRemove.Add(velocity);
+                    ReferencePool.Release(velocity);
+                }
+                else
+                {
+                    velocity.Value = length * direction;
+                }
+            }
+
+            m_AddtionalVelocities.RemoveAll(i => toRemove.Contains(i));
+            
+            ListPool<AdditionalVelocity>.Release(toRemove);
+        }
+
+        public void AddAdditionalVelocity(AdditionalVelocity velocity)
+        {
+            m_AddtionalVelocities.Add(velocity);
+        }
+
+        public void ClearAdditionalVelocity()
+        {
+            foreach (var velocity in m_AddtionalVelocities)
+            {
+                ReferencePool.Release(velocity);
+            }
+            m_AddtionalVelocities.Clear();
         }
 
     }
