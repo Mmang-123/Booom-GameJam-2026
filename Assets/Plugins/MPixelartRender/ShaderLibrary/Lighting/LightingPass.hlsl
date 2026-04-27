@@ -112,8 +112,9 @@ half GetShadow(float2 screenUV, float2 lightUV)
 half4 LightingFrag(Varyings input) : SV_Target
 {
     GET_BLIT_UV();
+    float3 originVSOffset = ComputeOriginVSOffset();
 
-    float3 positionWS = GetWorldPositionWithRawDepth(uv, 0);
+    float3 positionWS = SnapWorldPosition(GetWorldPositionWithRawDepth(uv, 0).xyz, originVSOffset);
 
     half3 totalLight = half3(0.0, 0.0, 0.0);
 
@@ -122,7 +123,7 @@ half4 LightingFrag(Varyings input) : SV_Target
     {
         LightData2D light = _MLightDataBuffer[i];
         
-        float2 lightPos = light.position.xy;
+        float2 lightPos = SnapWorldPosition(float3(light.position.xy, 0), originVSOffset);
         float radius = light.position.w;
         
         half3 lightColor = light.color.rgb;
@@ -151,6 +152,7 @@ half4 LightingFrag(Varyings input) : SV_Target
         // 累加当前光源的贡献
         //totalLight += lightColor * intensity * atten * shadow;
         totalLight += shadow;
+        //totalLight += 1;
     }
 
     return float4(totalLight, 1);

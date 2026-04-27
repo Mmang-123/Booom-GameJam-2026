@@ -39,4 +39,19 @@ float3 GetWorldPositionWithRawDepth(float2 uv, float sceneRawDepth)
     return worldPos;
 }
 
+float3 ComputeOriginVSOffset()
+{
+    float3 originWS = TransformObjectToWorld(float3(0.0, 0.0, 0.0));
+    float3 originVS = mul(PIXELART_CAMERA_MATRIX_V, float4(originWS, 1.0)).xyz;
+    float3 originVSSnapped = float3(UNITSNAP(originVS.x, _UnitSize), UNITSNAP(originVS.y, _UnitSize), originVS.z);
+    float3 originVSOffset = originVSSnapped - originVS;
+    return originVSOffset;
+}
+
+float3 SnapWorldPosition(float3 positionWS, float3 originVSOffset)
+{
+    float3 positionVS = mul(PIXELART_CAMERA_MATRIX_V, float4(positionWS, 1.0)).xyz + originVSOffset;
+    return TransformViewToWorld(float4(positionVS, 1.0));
+}
+
 #endif // PGENERIC_TRANSFORM_INCLUDED
