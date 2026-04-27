@@ -38,6 +38,7 @@ namespace Game
         public Vector2 ForwardDirection => transform.rotation * s_DirectionMap[m_EDirection];
         public Vector2 Position => transform.position;
 
+        private Vector2 m_TotalMotion;
 
         private void Start()
         {
@@ -56,6 +57,24 @@ namespace Game
                 m_BehaviourMap.Add(behaviour.GetType(), behaviour);
                 behaviour.Init(this);
             }
+        }
+
+        private void Update()
+        {
+            foreach (var behaviour in m_Behaviours)
+            {
+                behaviour.BeforeFishUpdate();
+            }
+        }
+
+        private void FixedUpdate()
+        {
+            foreach (var behaviour in m_Behaviours)
+            {
+                behaviour.BeforeFishFixedUpdate();
+            }
+            m_Rigidbody.MovePosition(m_TotalMotion + (Vector2)transform.position);
+            m_TotalMotion = Vector2.zero;
         }
 
         public T GetBehaviour<T>() where T : FishBehaviour
@@ -104,7 +123,12 @@ namespace Game
 
         public void Move(Vector2 motion)
         {
-            m_Rigidbody.AddForce(motion * 10000, ForceMode2D.Impulse);
+            m_TotalMotion += motion;
+        }
+
+        public void SetVelocity(Vector2 velocity)
+        {
+            
         }
     }
 }

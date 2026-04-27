@@ -23,6 +23,7 @@ namespace Game
 
             RotateToTarget();
 
+            /*
             switch (CurrentState)
             {
                 case State.Normal:
@@ -30,6 +31,20 @@ namespace Game
                     break;
                 case State.Trace:
                     TraceUpdate();
+                    break;
+            }
+            */
+        }
+
+        public override void BeforeFishFixedUpdate()
+        {
+            switch (CurrentState)
+            {
+                case State.Normal:
+                    NormalUpdate(Time.fixedDeltaTime);
+                    break;
+                case State.Trace:
+                    TraceUpdate(Time.fixedDeltaTime);
                     break;
             }
         }
@@ -63,36 +78,36 @@ namespace Game
             Fish.SetRotation(Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * m_RotateSpeed));
         }
 
-        private void TraceUpdate()
+        private void TraceUpdate(float dt)
         {
             float distance = Vector2.Distance(transform.position, TargetPoint);
             if (distance > m_StopDistance)
             {
-                CurrentSpeed = Mathf.Min(m_MoveSpeed, CurrentSpeed + Time.deltaTime * m_Acceleration);
+                CurrentSpeed = Mathf.Min(m_MoveSpeed, CurrentSpeed + dt * m_Acceleration);
             }
             else
             {
-                CurrentSpeed = Mathf.Max(0f, CurrentSpeed - Time.deltaTime * m_Acceleration * 2f);
+                CurrentSpeed = Mathf.Max(0f, CurrentSpeed - dt * m_Acceleration * 2f);
             }
 
-            float moveDistance = CurrentSpeed * Time.deltaTime;
+            float moveDistance = CurrentSpeed * dt;
             moveDistance = Mathf.Min(moveDistance, distance - 0.05f);
 
             Vector2 motion = moveDistance * Fish.ForwardDirection;
-            transform.position += (Vector3)motion;
-            //Fish.Move(motion);
+            //transform.position += (Vector3)motion;
+            Fish.Move(motion);
         }
 
-        private void NormalUpdate()
+        private void NormalUpdate(float dt)
         {
             if (CurrentSpeed > 0f)
             {
-                CurrentSpeed = Mathf.Max(0f, CurrentSpeed - Time.deltaTime * m_Acceleration * 2f);
-                float moveDistance = CurrentSpeed * Time.deltaTime;
+                CurrentSpeed = Mathf.Max(0f, CurrentSpeed - dt * m_Acceleration * 2f);
+                float moveDistance = CurrentSpeed * dt;
 
                 Vector2 motion = moveDistance * Fish.ForwardDirection;
-                transform.position += (Vector3)motion;
-                //Fish.Move(motion);
+                //transform.position += (Vector3)motion;
+                Fish.Move(motion);
             }
         }
 

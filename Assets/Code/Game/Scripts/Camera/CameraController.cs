@@ -39,8 +39,13 @@ namespace Game
 
         private void Update()
         {
+            
+        }
+
+        private void FixedUpdate()
+        {
             ComputeTargetPoint();
-            FollowTargetPoint();
+            FollowTargetPoint(Time.fixedDeltaTime);
 
             ObstacleMaskManager.Instance.UpdatePosition(transform.position);
         }
@@ -70,15 +75,14 @@ namespace Game
             TargetPoint = targetPoint;
         }
 
-        private void FollowTargetPoint()
+        private void FollowTargetPoint(float dt)
         {
-            float dt = Time.deltaTime;
             if (dt <= 0f)
             {
                 return;
             }
             m_FollowDamper.UpdateAttribute(m_FollowSetting);
-            Vector2 finalPos = m_FollowDamper.Update(Time.deltaTime, TargetPoint);
+            Vector2 finalPos = m_FollowDamper.Update(dt, TargetPoint);
             transform.position = new(finalPos.x, finalPos.y, transform.position.z);
         }
 

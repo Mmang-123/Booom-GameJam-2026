@@ -11,5 +11,8 @@ namespace Game
             Fish = fish;
         }
 
+        public virtual void BeforeFishUpdate() { }
+        public virtual void BeforeFishFixedUpdate() { }
+
     }
 }

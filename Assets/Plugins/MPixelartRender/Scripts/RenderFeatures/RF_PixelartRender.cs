@@ -8,7 +8,7 @@ namespace Mmang.PixelartRender
 
     public enum EObstacleDebug
     {
-        Off, Mask, SDF
+        Off = -1, Mask = 0, SDF = 1, FracSDF = 2
     }
 
     public class RF_PixelartRender : ScriptableRendererFeature
@@ -112,7 +112,7 @@ namespace Mmang.PixelartRender
             if (m_ObstacleDebug != EObstacleDebug.Off)
             {
                 if (m_DebugBlitPass.Material != null)
-                    m_DebugBlitPass.Material.SetInt("_DebugType", m_ObstacleDebug == EObstacleDebug.Mask ? 0 : 1);
+                    m_DebugBlitPass.Material.SetInt("_DebugType", (int)m_ObstacleDebug);
                 renderer.EnqueuePass(m_DebugBlitPass);
             }
 

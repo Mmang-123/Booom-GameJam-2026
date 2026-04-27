@@ -39,6 +39,11 @@
                     float mask = GetObstacleMask(uv);
                     return float4(mask.xxx, 1);
                 }
+                else if (_DebugType == 1)
+                {
+                    float sdf = GetObstacleSDF(uv);
+                    return float4(sdf, 0, 0, 1);
+                }
                 else
                 {
                     float sdf = GetObstacleSDF(uv);
