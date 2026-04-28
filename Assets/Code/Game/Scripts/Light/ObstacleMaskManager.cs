@@ -79,7 +79,7 @@ namespace Mmang.PixelartRender
                 Vector2Int offset = new(i % 3 * Resolution, i / 3 * Resolution);
                 m_SDFThreadIDs[i] = m_DFFeature.Pending(
                     m_Mask, m_SDFs[i], offset,
-                    extendPixels: 128, nearestPointSearchRange: 16, boundaryDistance: false);
+                    extendPixels: 128, nearestPointSearchRange: 16, boundaryDistance: false, shaderPropertyID: Shader.PropertyToID($"_ObstacleSDF_{i}"));
             }
         }
 
@@ -159,7 +159,7 @@ namespace Mmang.PixelartRender
                 };
                 m_SDFs[i].Create();
                 m_SDFHandles[i] = RTHandles.Alloc(m_SDFs[i]);
-                Shader.SetGlobalTexture(Shader.PropertyToID($"_ObstacleSDF_{i}"), m_SDFs[i]);
+                // Shader.SetGlobalTexture(Shader.PropertyToID($"_ObstacleSDF_{i}"), m_SDFs[i]);
             }
         }
 
