@@ -14,6 +14,7 @@ namespace Mmang.PixelartRender
         {
             public Material Material;
             public ComputeBuffer DataBuffer;
+            public TextureHandle Mask;
             public int LightCount;
             public int PointLightCount;
             public int SpotLightCount;
@@ -73,6 +74,7 @@ namespace Mmang.PixelartRender
                     passData.PointLightCount = manager.PointLightCount;
                     passData.SpotLightCount = manager.SpotLightCount;
                     passData.ChunkSize = ObstacleMaskManager.Instance.Resolution;
+                    passData.Mask = resourceData.activeColorTexture;
 
                     // 绘制
                     var descriptor = cameraData.cameraTargetDescriptor;
@@ -94,6 +96,7 @@ namespace Mmang.PixelartRender
 
         private static void ExecutePass(RasterCommandBuffer cmd, PassData passData)
         {
+            passData.Material.SetTexture(Shader.PropertyToID("_ObstacleMask"), passData.Mask);
             cmd.SetGlobalVector(PShaderPropertyID.ObstacleChunkParams, new(passData.ChunkSize, passData.ChunkSize, passData.ChunkSize * 4, passData.ChunkSize * 4));
             cmd.SetGlobalBuffer(PShaderPropertyID.MLightDataBuffer, passData.DataBuffer);
             cmd.SetGlobalVector(PShaderPropertyID.MLightParams, new(passData.LightCount, passData.PointLightCount, passData.SpotLightCount, 0));
