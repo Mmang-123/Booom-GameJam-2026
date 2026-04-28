@@ -9,7 +9,7 @@ struct LightData2D
     float4 position; 
     float4 color;
     float4 lightParams1;
-    float2 lightParams2;
+    float3 lightParams2;
 };
 
 StructuredBuffer<LightData2D> _MLightDataBuffer;
@@ -182,6 +182,7 @@ half3 ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv)
     float2 lightDir = light.lightParams1.xy;
     float2 point1 = light.lightParams1.zw;
     float2 point2 = light.lightParams2.xy;
+    float innerScale = min(0.99, light.lightParams2.z);
 
     // 
     float dist = distance(positionWS.xy, lightPos);
@@ -217,8 +218,12 @@ half3 ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv)
     float distanceAttenuation = saturate(1.0 - (dist / radius));
     distanceAttenuation *= distanceAttenuation * (3.0 - 2.0 * distanceAttenuation);
 
+    // 边缘衰减
+    float edgeDis = (abs(t - 0.5) * 2.0);
+    float edgeT = saturate(edgeDis - innerScale) / (1 - innerScale);
+    float edgeAttenuation = (1.0 - edgeT);
 
-    return distanceAttenuation * intensity * lightColor * shadow;
+    return distanceAttenuation * edgeAttenuation * intensity * lightColor * shadow;
 }
 
 half4 LightingFrag(Varyings input) : SV_Target

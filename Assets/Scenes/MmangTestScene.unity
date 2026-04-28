@@ -1980,7 +1980,7 @@ MonoBehaviour:
   Radius: 20
   Intensity: 1
   Width: 5
-  InnerWidth: 0.5
+  InnerWidth: 2
 --- !u!4 &1169749707
 Transform:
   m_ObjectHideFlags: 0

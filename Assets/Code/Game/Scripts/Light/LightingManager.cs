@@ -129,12 +129,13 @@ namespace Mmang.PixelartRender
                 var areaLight = m_AreaLightsCache[i - start];
                 Vector2 direction = areaLight.GetDirection();
                 Vector4 points = areaLight.GetPoints();
+                float innerScale = areaLight.GetInnerScale();
                 LightData2D data = new()
                 {
                     color = new Vector4(areaLight.Color.r, areaLight.Color.g, areaLight.Color.b, areaLight.Intensity),
                     position = new Vector4(areaLight.Position.x, areaLight.Position.y, areaLight.Position.z, areaLight.Radius),
                     lightParams1 = new(direction.x, direction.y, points.x, points.y),
-                    lightParams2 = new(points.z, points.w),
+                    lightParams2 = new(points.z, points.w, innerScale),
                 };
 
                 m_DataArray[i] = data;
