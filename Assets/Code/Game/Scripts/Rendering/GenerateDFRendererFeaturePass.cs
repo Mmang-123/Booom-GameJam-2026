@@ -56,9 +56,10 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
     static readonly int ID_OffsetY          = Shader.PropertyToID("_OffsetY");
 
     // Temp RT IDs – reused sequentially per thread (safe because each thread's block is fully flushed before the next)
-    static readonly int TempID_Current  = Shader.PropertyToID("_GDFP_RT_Current");
-    static readonly int TempID_Previous = Shader.PropertyToID("_GDFP_RT_Previous");
-    static readonly int TempID_Nearest  = Shader.PropertyToID("_GDFP_RT_Nearest");
+    static readonly int TempID_Current      = Shader.PropertyToID("_GDFP_RT_Current");
+    static readonly int TempID_Previous     = Shader.PropertyToID("_GDFP_RT_Previous");
+    static readonly int TempID_Nearest      = Shader.PropertyToID("_GDFP_RT_Nearest");
+    static readonly int TempID_CameraColor  = Shader.PropertyToID("_GDFP_RT_CameraColor");
 
     static void EnsureInitialized()
     {
@@ -173,6 +174,7 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
     class PassData
     {
         public List<DFProcessingThread> threads = new List<DFProcessingThread>();
+        public TextureHandle cameraColorHandle;
     }
 
     public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -184,21 +186,35 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
         using (var builder = renderGraph.AddUnsafePass<PassData>("Generate Distance Fields", out var passData))
         {
             passData.threads.Clear();
+            bool needsCameraColor = false;
             foreach (var kvp in m_ProcessingThreads)
+            {
                 passData.threads.Add(kvp.Value);
+                if (kvp.Value.sourceTexture == null) needsCameraColor = true;
+            }
+
+            if (needsCameraColor)
+            {
+                var resourceData = frameData.Get<UniversalResourceData>();
+                passData.cameraColorHandle = resourceData.activeColorTexture;
+                builder.UseTexture(passData.cameraColorHandle, AccessFlags.Read);
+            }
 
             builder.AllowPassCulling(false);
             builder.SetRenderFunc(static (PassData data, UnsafeGraphContext ctx) =>
             {
                 CommandBuffer cmd = CommandBufferHelpers.GetNativeCommandBuffer(ctx.cmd);
+                RTHandle cameraColorRT = data.cameraColorHandle.IsValid()
+                    ? data.cameraColorHandle
+                    : null;
                 foreach (var thread in data.threads)
-                    RecordGenerateDF(cmd, thread);
+                    RecordGenerateDF(cmd, thread, cameraColorRT);
             });
         }
     }
 
     // ---------- per-thread DF generation (records into cmd) ----------
-    static void RecordGenerateDF(CommandBuffer cmd, in DFProcessingThread t)
+    static void RecordGenerateDF(CommandBuffer cmd, in DFProcessingThread t, RTHandle cameraColorRT)
     {
         RenderTexture resultRT = t.targetTexture;
         int ext   = t.extendPixels;
@@ -207,7 +223,9 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
         int w     = resultRT.width;
         int h     = resultRT.height;
 
-        bool singleIn  = IsInputSingleChannel(t.sourceTexture);
+        bool singleIn  = t.sourceTexture != null
+                            ? IsInputSingleChannel(t.sourceTexture)
+                            : (cameraColorRT?.rt != null && IsSingleChannelFormat(cameraColorRT.rt.format));
         bool singleOut = IsSingleChannelFormat(resultRT.format);
 
         int tgX = Mathf.CeilToInt(iterW / 8.0f);
@@ -228,17 +246,35 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
         cmd.SetComputeIntParam  (s_SdfCS, ID_OffsetY,         t.offset.y);
         cmd.SetComputeIntParam  (s_SdfCS, ID_ExtendPixels,    ext);
 
-        if (singleIn)
+        if (singleIn && t.sourceTexture != null)
         {
             cmd.SetComputeTextureParam(s_SdfCS, s_KernelInitSeedSC, ID_CurBuf,          curId);
             cmd.SetComputeTextureParam(s_SdfCS, s_KernelInitSeedSC, ID_SingleChannelSrc, t.sourceTexture);
             cmd.DispatchCompute(s_SdfCS, s_KernelInitSeedSC, tgX, tgY, 1);
         }
-        else
+        else if (t.sourceTexture != null)
         {
             cmd.SetComputeTextureParam(s_SdfCS, s_KernelInitSeed, ID_CurBuf,    curId);
             cmd.SetComputeTextureParam(s_SdfCS, s_KernelInitSeed, ID_SourceTex, t.sourceTexture);
             cmd.DispatchCompute(s_SdfCS, s_KernelInitSeed, tgX, tgY, 1);
+        }
+        else
+        {
+            // sourceTexture == null：使用相机颜色缓冲，根据格式选 kernel
+            if (cameraColorRT?.rt == null) { cmd.ReleaseTemporaryRT(TempID_Current); return; }
+            if (singleIn)
+            {
+                cmd.SetComputeTextureParam(s_SdfCS, s_KernelInitSeedSC, ID_CurBuf,           curId);
+                cmd.SetComputeTextureParam(s_SdfCS, s_KernelInitSeedSC, ID_SingleChannelSrc, cameraColorRT);
+                cmd.DispatchCompute(s_SdfCS, s_KernelInitSeedSC, tgX, tgY, 1);
+            }
+            else
+            {
+                cmd.SetComputeTextureParam(s_SdfCS, s_KernelInitSeed, ID_CurBuf,    curId);
+                cmd.SetComputeTextureParam(s_SdfCS, s_KernelInitSeed, ID_SourceTex, cameraColorRT);
+                cmd.DispatchCompute(s_SdfCS, s_KernelInitSeed, tgX, tgY, 1);
+            }
+            cmd.ReleaseTemporaryRT(TempID_CameraColor);
         }
 
         // ── Jump Flooding ───────────────────────────────────────────────
