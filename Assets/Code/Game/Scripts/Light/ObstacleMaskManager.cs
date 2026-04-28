@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Mmang.Util;
-using Sloane;
+﻿using Mmang.Util;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
@@ -17,6 +15,8 @@ namespace Mmang.PixelartRender
             public Vector2Int PositionIndex;
         }
 
+        [SerializeField] GenerateDFRendererFeature m_DFFeature;
+
         private RenderTexture m_Mask;
         private RTHandle m_MaskHandle;
         private RenderTexture m_Lighting;
@@ -25,13 +25,13 @@ namespace Mmang.PixelartRender
 
         private RenderTexture[] m_SDFs = new RenderTexture[9];
         private RTHandle[] m_SDFHandles = new RTHandle[9];
+        private int[] m_SDFThreadIDs = new int[9];
 
         public int Resolution => 256;
         public float TileSize => 16f;
         public float HalfTileSize => TileSize / 2f;
         public float UnitSize => TileSize / Resolution;
 
-        //
         private Vector2Int m_CenterIndex;
         private ChunkData[] m_ChunkDataArray = new ChunkData[9];
         private Camera m_Camera;
@@ -42,6 +42,7 @@ namespace Mmang.PixelartRender
         {
             InitCamera();
             CreateTextures();
+            RegisterSDFThreads();
 
             m_CenterIndex = Vector2Int.zero;
             UpdateChunk();
@@ -49,33 +50,50 @@ namespace Mmang.PixelartRender
 
         private void OnDisable()
         {
+            ReleaseSDFThreads();
+
             if (m_Camera != null)
             {
                 DestroyImmediate(m_Camera.gameObject);
                 m_Camera = null;
             }
 
-            if (m_MaskHandle != null)
-            {
-                m_MaskHandle.Release();
-            }
-
-            if (m_LightingHandle != null)
-            {
-                m_LightingHandle.Release();
-            }
+            if (m_MaskHandle != null) m_MaskHandle.Release();
+            if (m_LightingHandle != null) m_LightingHandle.Release();
 
             foreach (var rt in m_SDFHandles)
-            {
                 if (rt != null) rt.Release();
-            }
         }
 
         private void Update()
         {
             RenderMask();
-            GenerateSDF();
             Shader.SetGlobalTexture(PShaderPropertyID.MLightingTexture, m_LightingHandle);
+        }
+
+        private void RegisterSDFThreads()
+        {
+            if (m_DFFeature == null) return;
+            for (int i = 0; i < 9; i++)
+            {
+                Vector2Int offset = new(i % 3 * Resolution, i / 3 * Resolution);
+                m_SDFThreadIDs[i] = m_DFFeature.Pending(
+                    m_Mask, m_SDFs[i], offset,
+                    extendPixels: 128, nearestPointSearchRange: 16, boundaryDistance: false);
+            }
+        }
+
+        private void ReleaseSDFThreads()
+        {
+            if (m_DFFeature == null) return;
+            for (int i = 0; i < 9; i++)
+            {
+                if (m_SDFThreadIDs[i] > 0)
+                {
+                    m_DFFeature.Release(m_SDFThreadIDs[i]);
+                    m_SDFThreadIDs[i] = 0;
+                }
+            }
         }
 
         private void CreateTextures()
@@ -141,6 +159,7 @@ namespace Mmang.PixelartRender
                 };
                 m_SDFs[i].Create();
                 m_SDFHandles[i] = RTHandles.Alloc(m_SDFs[i]);
+                Shader.SetGlobalTexture(Shader.PropertyToID($"_ObstacleSDF_{i}"), m_SDFs[i]);
             }
         }
 
@@ -225,16 +244,6 @@ namespace Mmang.PixelartRender
             }
 
             Shader.SetGlobalTexture(Shader.PropertyToID("_ObstacleMask"), m_MaskHandle);
-        }
-
-        private void GenerateSDF()
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                Vector2Int offset = new(i % 3 * Resolution, i / 3 * Resolution);
-                SDFTools.GenerateDF(m_MaskHandle, m_SDFHandles[i], offset, extendPixels: 128, nearestPointSearchRange: 16, boundaryDistance: false);
-                Shader.SetGlobalTexture(Shader.PropertyToID($"_ObstacleSDF_{i}"), m_SDFHandles[i]);
-            }
         }
 
         #endregion

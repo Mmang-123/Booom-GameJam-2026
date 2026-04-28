@@ -43,8 +43,9 @@ MonoBehaviour:
     probeVolumeBlendStatesCS: {fileID: 0}
   m_RendererFeatures:
   - {fileID: -943934538421656648}
+  - {fileID: 6044077792858546253}
   - {fileID: 2307372201783847482}
-  m_RendererFeatureMap: b8a327da8978e6f23aeaefe3ca6e0520
+  m_RendererFeatureMap: b8a327da8978e6f24d2029cebae0e0533aeaefe3ca6e0520
   m_UseNativeRenderPass: 0
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 0}
@@ -87,3 +88,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Mmang.PixelartRender.RF_Lighting
   m_Active: 1
   m_LightingShader: {fileID: 4800000, guid: 08f5c930b23d7f04b9601d81693c506c, type: 3}
+--- !u!114 &6044077792858546253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aa710535c3f0ec448bd7b86bb2cb47d, type: 3}
+  m_Name: GenerateDFRendererFeature
+  m_EditorClassIdentifier: Assembly-CSharp::GenerateDFRendererFeature
+  m_Active: 1
+  settings:
+    passEvent: 300

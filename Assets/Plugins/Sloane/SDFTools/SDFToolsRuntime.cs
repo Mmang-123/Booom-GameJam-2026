@@ -96,18 +96,13 @@ namespace Sloane
             return false;
         }
 
-        public static void GenerateDF(Texture sourceTexture, RenderTexture resultRT, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, int extendPixels = 0, bool boundaryDistance = false, bool accurateDistance = true)
-        {
-            GenerateDF(sourceTexture, resultRT, Vector2Int.zero, alphaThreshold, normalize, invertSelection, nearestPointSearchRange, extendPixels, boundaryDistance, accurateDistance);
-        }
-
         /// <summary>
         /// 从纹理生成完整的 DF，写入已有的 resultRT。
         /// 先运行 InitializeSeed 并回读 CPU 判断是否有种子点；
         /// 若无种子，直接将 resultRT 填充为最大距离并返回。
         /// 全程分两个 CommandBuffer 执行，各自在 Frame Debugger 中显示为独立分组。
         /// </summary>
-        public static void GenerateDF(Texture sourceTexture, RenderTexture resultRT, Vector2Int offset, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, int extendPixels = 0, bool boundaryDistance = false, bool accurateDistance = true)
+        public static void GenerateDF(Texture sourceTexture, RenderTexture resultRT, Vector2Int offset = default, float alphaThreshold = 0.5f, bool normalize = true, bool invertSelection = false, int nearestPointSearchRange = 0, int extendPixels = 0, bool boundaryDistance = false, bool accurateDistance = true)
         {
             Initialize();
             if (!initialized) return;
@@ -305,7 +300,7 @@ namespace Sloane
             var outputFormat = useSingleChannelOutput ? RenderTextureFormat.RFloat : RenderTextureFormat.ARGBFloat;
             var desc = new RenderTextureDescriptor(sourceTexture.width, sourceTexture.height, outputFormat, 0) { enableRandomWrite = true };
             RenderTexture resultRT = RenderTexture.GetTemporary(desc);
-            GenerateDF(sourceTexture, resultRT, alphaThreshold, normalize, invertSelection, nearestPointSearchRange, extendPixels, boundaryDistance);
+            GenerateDF(sourceTexture, resultRT, Vector2Int.zero, alphaThreshold, normalize, invertSelection, nearestPointSearchRange, extendPixels, boundaryDistance);
             return resultRT;
         }
     }
