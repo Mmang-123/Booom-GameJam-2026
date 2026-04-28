@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DefaultSprite
+  m_Name: DefaultObstacle
   m_Shader: {fileID: 4800000, guid: 63e19dddcafc5684eb58e80b3348448a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -108,7 +108,7 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _ObstacleMask: 0
-    - _ObstacleMaskValue: 0
+    - _ObstacleMaskValue: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0

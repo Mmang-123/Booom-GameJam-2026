@@ -81,8 +81,10 @@ half GetShadow(float2 screenUV, float2 lightUV)
     return shadowMask;
 }
 
-half3 ComputePointLight(int lightIndex, float2 positionWS, float2 uv)
+void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, out half3 outColor, out half outShadowMask)
 {
+    outColor = 0.0;
+    outShadowMask = 1.0;
     LightData2D light = _MLightDataBuffer[lightIndex];
         
     //float2 lightPos = SnapWorldPosition(float3(light.position.xy, 0));
@@ -95,7 +97,7 @@ half3 ComputePointLight(int lightIndex, float2 positionWS, float2 uv)
     // 
     float dist = distance(positionWS.xy, lightPos);
     if (dist > radius)
-        return 0;
+        return;
 
     // 衰减
     float distanceAttenuation = saturate(1.0 - (dist / radius));
@@ -114,13 +116,14 @@ half3 ComputePointLight(int lightIndex, float2 positionWS, float2 uv)
         shadow = GetShadow(uv, lightUV);
     }
 
-    // 累加当前光源的贡献
-    return lightColor * intensity * distanceAttenuation * shadow;
-    //return shadow;
+    outShadowMask = shadow;
+    outColor = lightColor * intensity * distanceAttenuation * shadow;
 }
 
-half3 ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv)
+void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 outColor, out half outShadowMask)
 {
+    outColor = 0.0;
+    outShadowMask = 1.0;
     LightData2D light = _MLightDataBuffer[lightIndex];
         
     //float2 lightPos = SnapWorldPosition(float3(light.position.xy, 0));
@@ -136,7 +139,7 @@ half3 ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv)
     // 
     float dist = distance(positionWS.xy, lightPos);
     if (dist > radius)
-        return 0;
+        return;
 
     // 距离衰减
     float distanceAttenuation = saturate(1.0 - (dist / radius));
@@ -151,7 +154,7 @@ half3 ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv)
 
     if (angleAttenuation <= 0)
     {
-        return 0.0;
+        return;
     }
 
     // 阴影
@@ -165,12 +168,14 @@ half3 ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv)
         shadow = GetShadow(uv, lightUV);
     }
 
-    //return half3(lightDir, 0);
-    return distanceAttenuation * angleAttenuation * shadow * intensity * lightColor;
+    outShadowMask = shadow;
+    outColor = distanceAttenuation * angleAttenuation * shadow * intensity * lightColor;
 }
 
-half3 ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv)
+void ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv, out half3 outColor, out half outShadowMask)
 {
+    outColor = 0.0;
+    outShadowMask = 1.0;
     LightData2D light = _MLightDataBuffer[lightIndex];
         
     float2 lightPos = float3(light.position.xy, 0);
@@ -187,7 +192,7 @@ half3 ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv)
     // 
     float dist = distance(positionWS.xy, lightPos);
     if (dist > radius)
-        return 0;
+        return;
 
     float2 v = point2 - point1;
     float2 w = positionWS - point1;
@@ -198,7 +203,7 @@ half3 ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv)
 
     if (t < 0.0 || t > 1.0 || dot(lightDir, normalize(w)) < 0.0)
     {
-        return 0;
+        return;
     }
 
     // 阴影
@@ -223,7 +228,8 @@ half3 ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv)
     float edgeT = saturate(edgeDis - innerScale) / (1 - innerScale);
     float edgeAttenuation = (1.0 - edgeT);
 
-    return distanceAttenuation * edgeAttenuation * intensity * lightColor * shadow;
+    outShadowMask = shadow;
+    outColor = distanceAttenuation * edgeAttenuation * intensity * lightColor * shadow;
 }
 
 half4 LightingFrag(Varyings input) : SV_Target
@@ -237,6 +243,7 @@ half4 LightingFrag(Varyings input) : SV_Target
     uv = UV4To3(WorldToUV(positionWS));
 
     half3 totalLight = half3(0.0, 0.0, 0.0);
+    half shadowMask = 1.0;
 
     int lightCount = _MLightParams.x;
     int pointLightCount = _MLightParams.y;
@@ -245,9 +252,14 @@ half4 LightingFrag(Varyings input) : SV_Target
     // Point Light
     int start = 0;
     int end = pointLightCount;
+
+    half lightShadowMask = 1.0;
+    half3 lightColor = 0.0;
     for(int i = start; i < end; i++)
     {
-        totalLight += ComputePointLight(i, positionWS, uv);
+        ComputePointLight(i, positionWS, uv, lightColor, lightShadowMask);
+        totalLight += lightColor;
+        shadowMask *= lightShadowMask;
     }
 
     // Spot Light
@@ -255,7 +267,9 @@ half4 LightingFrag(Varyings input) : SV_Target
     end += spotLightCount;
     for(int i = start; i < end; i++)
     {
-        totalLight += ComputeSpotLight(i, positionWS, uv);
+        ComputeSpotLight(i, positionWS, uv, lightColor, lightShadowMask);
+        totalLight += lightColor;
+        shadowMask *= lightShadowMask;
     }
 
     // Area Light
@@ -263,8 +277,10 @@ half4 LightingFrag(Varyings input) : SV_Target
     end = lightCount;
     for(int i = start; i < end; i++)
     {
-        totalLight += ComputeAreaLight(i, positionWS, uv);
+        ComputeAreaLight(i, positionWS, uv, lightColor, lightShadowMask);
+        totalLight += lightColor;
+        shadowMask *= lightShadowMask;
     }
 
-    return float4(totalLight, 1);
+    return float4(totalLight, shadowMask);
 }

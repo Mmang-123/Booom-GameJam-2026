@@ -3,7 +3,7 @@
     Properties
     {
         _MainTex ("Sprite Texture", 2D) = "white" {}
-        _ObstacleMask ("Is Obstacle", Float) = 0
+        _ObstacleMaskValue ("Is Obstacle", Float) = 0
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
         [HideInInspector] _Color ("Tint", Color) = (1,1,1,1)

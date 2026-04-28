@@ -10,17 +10,14 @@ namespace Mmang.PixelartRender
     [ExecuteAlways]
     public class ObstacleMaskManager : SingletonMono<ObstacleMaskManager>
     {
-        public struct ChunkData
-        {
-            public Vector2Int PositionIndex;
-        }
-
         [SerializeField] GenerateDFRendererFeature m_DFFeature;
 
         private RenderTexture m_Mask;
         private RTHandle m_MaskHandle;
         private RenderTexture m_Lighting;
         private RTHandle m_LightingHandle;
+
+        public RTHandle MaskHandle => m_MaskHandle;
         public RTHandle LightingHandle => m_LightingHandle;
 
         private RenderTexture[] m_SDFs = new RenderTexture[9];
@@ -33,7 +30,6 @@ namespace Mmang.PixelartRender
         public float UnitSize => TileSize / Resolution;
 
         private Vector2Int m_CenterIndex;
-        private ChunkData[] m_ChunkDataArray = new ChunkData[9];
         private Camera m_Camera;
 
         public Vector2Int CenterIndex => m_CenterIndex;
@@ -45,7 +41,6 @@ namespace Mmang.PixelartRender
             RegisterSDFThreads();
 
             m_CenterIndex = Vector2Int.zero;
-            UpdateChunk();
         }
 
         private void OnDisable()
@@ -164,42 +159,56 @@ namespace Mmang.PixelartRender
         }
 
 
+        #region Chunk
+
+        public Vector2Int GetChunkIndex(Vector2 worldPosition)
+        {
+            Vector2Int index = new(Mathf.FloorToInt(worldPosition.x / TileSize), Mathf.FloorToInt(worldPosition.y / TileSize));
+            return index;
+        }
+
+        public Vector2Int GetChunkIndex(Vector2 worldPosition, out Vector2 offsetInChunk)
+        {
+            Vector2Int index = new(Mathf.FloorToInt(worldPosition.x / TileSize), Mathf.FloorToInt(worldPosition.y / TileSize));
+            
+            Vector2 origin = new(TileSize * index.x, TileSize * index.y);
+            Vector2 offset = worldPosition - origin;
+            offsetInChunk = new(offset.x / TileSize, offset.y / TileSize);
+
+            return index;
+        }
+
         public void UpdatePosition(Vector2 position)
         {
-            Vector2 pos = position;
-            Vector2Int index = new(Mathf.FloorToInt(pos.x / TileSize), Mathf.FloorToInt(pos.y / TileSize));
+            Vector2Int index = GetChunkIndex(position);
             if (index != m_CenterIndex)
             {
                 m_CenterIndex = index;
-                UpdateChunk();
             }
-        }
-
-        private void UpdateChunk()
-        {
-            Vector2Int leftBot = m_CenterIndex - Vector2Int.one;
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    m_ChunkDataArray[i + j * 3] = new()
-                    {
-                        PositionIndex = leftBot + new Vector2Int(i, j)
-                    };
-                }
-            }
-        }
-
-        public Vector3 GetPositionByIndex(int index)
-        {
-            var chunkData = m_ChunkDataArray[index];
-            return new Vector3(chunkData.PositionIndex.x * TileSize + HalfTileSize, chunkData.PositionIndex.y * TileSize + HalfTileSize, -10);
         }
 
         public Vector3 GetCenterPosition()
         {
             return new Vector3(m_CenterIndex.x * TileSize + HalfTileSize, m_CenterIndex.y * TileSize + HalfTileSize, -10);
         }
+
+        public bool IsVaildChunk(Vector2Int chunkIndex)
+        {
+            chunkIndex -= m_CenterIndex;
+            if (Mathf.Abs(chunkIndex.x) > 1 || Mathf.Abs(chunkIndex.y) > 1)
+                return false;
+            return true;
+        }
+
+        public int GetChunkTextureIndex(Vector2Int chunkIndex)
+        {
+            chunkIndex -= m_CenterIndex;
+            chunkIndex += Vector2Int.one;
+            return chunkIndex.x + chunkIndex.y * 3;
+        }
+
+        #endregion
+
 
         #region 相机绘制
 

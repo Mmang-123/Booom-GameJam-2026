@@ -47,7 +47,7 @@ BufferOutput PixelartFrag(Varyings input) : SV_Target
     clip(outputColor.a - 0.5);
 
     OUTPUT_ALBEDO4(outputColor);
-    OUTPUT_OBSTACLE_MASK(_ObstacleMask);
+    //OUTPUT_OBSTACLE_MASK(_ObstacleMaskValue);
 
     RETURN_BUFFER_VALUE();
 }

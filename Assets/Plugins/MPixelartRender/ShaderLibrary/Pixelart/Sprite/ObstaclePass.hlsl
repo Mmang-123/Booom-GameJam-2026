@@ -44,6 +44,7 @@ half4 ObstacleFrag(Varyings input) : SV_Target
 #endif
 
     clip(alpha - 0.5);
+    //clip(_ObstacleMaskValue - 0.5);
 
-    return 1;
+    return _ObstacleMaskValue;
 }
