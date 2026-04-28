@@ -14,19 +14,31 @@ void ShadingFragment(Varyings input, out half4 outColor : COLOR0, out float3 out
     GET_DEPTH(screenUV, depth);
     GET_ALBEDO(screenUV, albedo);
     GET_SMOOTHNESS_METALLIC(screenUV, smoothness, metallic);
-    GET_NORMAL(screenUV, normalWS);
+    //GET_NORMAL(screenUV, normalWS);
+    GET_EMISSION(screenUV, emission);
     GET_ORIGIN_UV(screenUV, originUV);
     GET_PROPERTIES(screenUV, lutIndex, outlineProperty, shadowTypeProperty);
     GET_POSITION(screenUV, depth, positionWS, positionCS);
     GET_OBSTACLE_MASK(screenUV, obstacleMask);
 
+    float3 outputColor = 0;
+
     //
     float3 light = SampleLight(screenUV);
 
+    outputColor += albedo * light + emission;
 
     // Color Output
-    outColor = half4(albedo * light, 1);
+    outColor = half4(outputColor, 1);
     outSpecular = 0;
+
+    // temp
+    /*
+    if (outColor.r == 0 && outColor.g == 0 && outColor.b == 0)
+    {
+        outColor = half4(0.005, 0.005, 0.04, 1);
+    }
+    */
 
     /*
     float3 outputColor = 0;

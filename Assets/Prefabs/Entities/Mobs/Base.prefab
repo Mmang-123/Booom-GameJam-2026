@@ -59,7 +59,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 14ac24b9cd0df70449b4f50a59fd54ab, type: 2}
+  - {fileID: 2100000, guid: d994fd874ed460b4d80d3be8d895b94a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -125,6 +125,7 @@ GameObject:
   - component: {fileID: 4800681294185171314}
   - component: {fileID: 2797730967065995784}
   - component: {fileID: 7792305372667502108}
+  - component: {fileID: 677004143986177848}
   - component: {fileID: 834712693967893020}
   - component: {fileID: 5141295183322557257}
   m_Layer: 0
@@ -181,6 +182,19 @@ MonoBehaviour:
   m_MoveSpeed: 10
   m_Acceleration: 5
   m_StopDistance: 0.8
+--- !u!114 &677004143986177848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6172189210337702716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa5dfc5bab6359a4cab48535637660c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Avoidance
+  m_BounceForce: 8
 --- !u!50 &834712693967893020
 Rigidbody2D:
   serializedVersion: 5

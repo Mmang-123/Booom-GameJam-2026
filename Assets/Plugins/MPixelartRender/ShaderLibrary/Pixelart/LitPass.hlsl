@@ -15,7 +15,7 @@ BufferOutput PixelartFrag(Varyings input) : SV_TARGET
     OUTPUT_DEPTHNORMAL(input.positionCS.z, input.normalWS);
     OUTPUT_ALBEDO3(albedoColor);
     OUTPUT_SMOOTHNESS_METALLIC(_Smoothness, _Metallic);
-    OUTPUT_NORMAL(input.normalWS);
+    //OUTPUT_NORMAL(input.normalWS);
     OUTPUT_ORIGIN_UV(input.originUV);
     OUTPUT_PROPERTIES(_LUTIndex, _Outline, SHADOWTYPE_NORMAL);
 

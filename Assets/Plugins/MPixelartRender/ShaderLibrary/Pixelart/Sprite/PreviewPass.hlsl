@@ -27,5 +27,7 @@ float4 UnlitFrag(Varyings input) : SV_Target
     float4 outputColor = input.color;
 #endif
 
+    outputColor.rgb *= _PreviewColor;
+
     return outputColor;
 }

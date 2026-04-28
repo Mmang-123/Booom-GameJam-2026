@@ -12,7 +12,7 @@ namespace Mmang.PixelartRender
         DepthNormal = 1, // 第二层深度和法线(屏幕空间), 用于描边 
         Albedo = 2,
         SmoothnessMetallic = 3,
-        Normal = 4,
+        Emission = 4,
         OriginUV = 5, // 原点的屏幕空间UV
         Properties = 6, // R: LUT索引  G: 描边+阴影采样模式  B: 2D障碍遮罩
         SpecularOutput = 7,
@@ -89,7 +89,7 @@ namespace Mmang.PixelartRender
                     };
 
                 case EPixelartBuffer.Albedo:
-                case EPixelartBuffer.Normal:
+                case EPixelartBuffer.Emission:
                     return new RenderTextureDescriptor(sourceResolution.x, sourceResolution.y)
                     {
                         depthBufferBits = 0,

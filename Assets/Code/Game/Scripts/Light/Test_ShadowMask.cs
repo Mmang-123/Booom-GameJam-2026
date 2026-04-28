@@ -21,10 +21,5 @@ namespace Game
             }
         }
 
-        [ContextMenu("Test")]
-        private void Test()
-        {
-            //m_Result = ShadowMaskManager.Instance.ReadShadowTexture(m_ChunkIndex);
-        }
     }
 }

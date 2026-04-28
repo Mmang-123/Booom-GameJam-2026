@@ -100,7 +100,7 @@ void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, out half3 o
 
     // 衰减
     float distanceAttenuation = saturate(1.0 - (dist / radius));
-    distanceAttenuation *= distanceAttenuation * (3.0 - 2.0 * distanceAttenuation);
+    distanceAttenuation *= distanceAttenuation;
 
     // 阴影
     float2 lightUV = UV4To3(WorldToUV(lightPos));
@@ -115,7 +115,12 @@ void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, out half3 o
         shadow = GetShadow(uv, lightUV);
     }
 
-    outColor = lightColor * intensity * distanceAttenuation * shadow;
+    // Step
+    float3 s = saturate(intensity * distanceAttenuation);
+    s = round(s * 2.0) / 2.0;
+    s *= s;
+
+    outColor = lightColor * s * shadow;
 }
 
 void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 outColor)

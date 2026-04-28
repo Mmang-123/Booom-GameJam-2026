@@ -9,8 +9,11 @@ namespace Game
         public void Init(Fish fish)
         {
             Fish = fish;
+            OnInit();
         }
 
+
+        protected virtual void OnInit() { }
         public virtual void BeforeFishUpdate() { }
         public virtual void BeforeFishFixedUpdate() { }
 

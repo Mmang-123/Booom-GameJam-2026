@@ -275,11 +275,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Test_ShadowMask
   m_Renderer: {fileID: 176655736}
---- !u!1 &200352957 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6172189210337702716, guid: dfdbc0c98fe5c4a4fbe147ea70ab971b, type: 3}
-  m_PrefabInstance: {fileID: 124827968456988762}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &239576260
 GameObject:
   m_ObjectHideFlags: 0
@@ -2202,7 +2197,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2797730967065995784, guid: dfdbc0c98fe5c4a4fbe147ea70ab971b, type: 3}
   m_PrefabInstance: {fileID: 124827968456988762}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 200352957}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91abe63ad75226842abac0cfd5e9f87b, type: 3}
@@ -2213,19 +2208,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4800681294185171314, guid: dfdbc0c98fe5c4a4fbe147ea70ab971b, type: 3}
   m_PrefabInstance: {fileID: 124827968456988762}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1452313924
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 200352957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa5dfc5bab6359a4cab48535637660c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Avoidance
-  m_BounceForce: 5
 --- !u!1 &1512681445
 GameObject:
   m_ObjectHideFlags: 0
@@ -2416,10 +2398,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 834712693967893020, guid: dfdbc0c98fe5c4a4fbe147ea70ab971b, type: 3}
-      propertyPath: m_Interpolate
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4800681294185171314, guid: dfdbc0c98fe5c4a4fbe147ea70ab971b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.87617
@@ -2464,17 +2442,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fish
       objectReference: {fileID: 0}
-    - target: {fileID: 7378699115958009860, guid: dfdbc0c98fe5c4a4fbe147ea70ab971b, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: d994fd874ed460b4d80d3be8d895b94a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6172189210337702716, guid: dfdbc0c98fe5c4a4fbe147ea70ab971b, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 1452313924}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfdbc0c98fe5c4a4fbe147ea70ab971b, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

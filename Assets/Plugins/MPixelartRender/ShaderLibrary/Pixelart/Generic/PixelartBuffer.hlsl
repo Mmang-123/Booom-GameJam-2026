@@ -4,14 +4,16 @@
 
 TEXTURE2D(_DepthBuffer);
 TEXTURE2D(_DepthNormalBuffer);
-TEXTURE2D(_NormalBuffer);
+//TEXTURE2D(_NormalBuffer);
+TEXTURE2D(_EmissionBuffer);
 TEXTURE2D(_OriginUVBuffer);
 TEXTURE2D(_AlbedoBuffer);
 TEXTURE2D(_SmoothnessMetallicBuffer);
 TEXTURE2D(_PropertiesBuffer);
 SAMPLER(sampler_DepthBuffer);
 SAMPLER(sampler_DepthNormalBuffer);
-SAMPLER(sampler_NormalBuffer);
+//SAMPLER(sampler_NormalBuffer);
+SAMPLER(sampler_EmissionBuffer);
 SAMPLER(sampler_OriginUVBuffer);
 SAMPLER(sampler_AlbedoBuffer);
 SAMPLER(sampler_SmoothnessMetallicBuffer);
@@ -70,10 +72,16 @@ inline float2 PB_GetSmoothnessMetallic(float2 screenUV)
     return SAMPLE_TEXTURE2D(_SmoothnessMetallicBuffer, sampler_SmoothnessMetallicBuffer, screenUV).rg;
 }
 
+/*
 inline float3 PB_GetNormal(float2 screenUV)
 {
     float3 __raw_normal = SAMPLE_TEXTURE2D(_NormalBuffer, sampler_NormalBuffer, screenUV).rgb;
     return (__raw_normal - 0.5) * 2.0;
+}
+*/
+inline float3 PB_GetEmission(float2 screenUV)
+{
+    return SAMPLE_TEXTURE2D(_EmissionBuffer, sampler_EmissionBuffer, screenUV).rgb;
 }
 
 inline float2 PB_GetOriginUV(float2 screenUV)
@@ -126,8 +134,13 @@ float2 __raw_SmoothnessMetallic = PB_GetSmoothnessMetallic(screenUV); \
 float outSmoothness = __raw_SmoothnessMetallic.x; \
 float outMetallic = __raw_SmoothnessMetallic.y; \
 
+/*
 #define GET_NORMAL(screenUV, outNormal) \
 float3 outNormal = PB_GetNormal(screenUV); \
+*/
+
+#define GET_EMISSION(screenUV, outEmission) \
+float3 outEmission = PB_GetEmission(screenUV); \
 
 #define GET_NORMAL2(screenUV, outNormal) \
 float3 outNormal = PB_GetNormal2(screenUV); \

@@ -8,7 +8,7 @@ struct BufferOutput
     half4 depthNormal : COLOR0;
     float4 albedo : COLOR1;
     float2 smoothnessMetallic : COLOR2;
-    float3 normal : COLOR3;
+    float4 emission : COLOR3;
     float2 originUV : COLOR4;
     float4 pixelartProperties : COLOR5;
 };
@@ -67,14 +67,15 @@ inline PixelartPropertiesG DecodePropertiesG(float rawG)
 
 #define BUFFER_OUTPUT_INIT() \
 BufferOutput __buffer_output = (BufferOutput)0; \
-__buffer_output.pixelartProperties.w = 1;
+__buffer_output.pixelartProperties.w = 1; \
 
 
 #define RETURN_BUFFER_VALUE() return __buffer_output
 
 #define OUTPUT_DEPTHNORMAL(inDepth, inNormalWS) __buffer_output.depthNormal = EncodeDepthNormal(inDepth, inNormalWS)
 
-#define OUTPUT_NORMAL(inNormalWS) __buffer_output.normal = normalize(inNormalWS) * 0.5 + 0.5
+//#define OUTPUT_NORMAL(inNormalWS) __buffer_output.normal = normalize(inNormalWS) * 0.5 + 0.5
+#define OUTPUT_EMISSION(inEmission) __buffer_output.emission = float4(inEmission.rgb, 1)
 
 #define OUTPUT_ORIGIN_UV(inOriginUV) __buffer_output.originUV = inOriginUV
 

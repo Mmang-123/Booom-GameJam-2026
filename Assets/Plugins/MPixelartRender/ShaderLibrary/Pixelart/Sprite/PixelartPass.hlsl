@@ -47,6 +47,28 @@ BufferOutput PixelartFrag(Varyings input) : SV_Target
     clip(outputColor.a - 0.5);
 
     OUTPUT_ALBEDO4(outputColor);
+    OUTPUT_EMISSION(_Emission);
+    //OUTPUT_OBSTACLE_MASK(_ObstacleMaskValue);
+
+    RETURN_BUFFER_VALUE();
+}
+
+
+BufferOutput PixelartEmissionFrag(Varyings input) : SV_Target
+{
+    BUFFER_OUTPUT_INIT();
+
+#ifdef TEXTURE_BASED
+    float4 outputColor = tex2D(_MainTex, input.uv) * input.color;
+#else
+    float4 outputColor = input.color;
+#endif
+
+    clip(outputColor.a - 0.5);
+
+    // 将color输出为emission
+    OUTPUT_ALBEDO4(float4(0, 0, 0, 1));
+    OUTPUT_EMISSION(outputColor);
     //OUTPUT_OBSTACLE_MASK(_ObstacleMaskValue);
 
     RETURN_BUFFER_VALUE();

@@ -98,7 +98,9 @@ namespace Game
         private void TraceUpdate(float dt)
         {
             float distance = Vector2.Distance(transform.position, TargetPoint);
-            if (distance > m_StopDistance)
+            float angle = Vector2.Angle(Fish.ForwardDirection, (TargetPoint - (Vector2)transform.position).normalized);
+
+            if (distance > m_StopDistance || angle >= 30f)
             {
                 CurrentSpeed = Mathf.Min(m_MoveSpeed, CurrentSpeed + dt * m_Acceleration);
             }
