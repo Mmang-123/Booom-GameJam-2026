@@ -56,7 +56,7 @@ namespace Mmang.PixelartRender
                     manager.UnitSize,
                     manager.CenterIndex.x,
                     manager.CenterIndex.y,
-                    0.5f
+                    0.0f
                 );
 
                 builder.UseRendererList(passData.RendererList);

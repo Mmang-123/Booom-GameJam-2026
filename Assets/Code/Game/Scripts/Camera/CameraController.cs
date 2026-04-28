@@ -39,14 +39,17 @@ namespace Game
 
         private void Update()
         {
-            
+            //ObstacleMaskManager.Instance.UpdatePosition(transform.position);
         }
 
         private void FixedUpdate()
         {
             ComputeTargetPoint();
             FollowTargetPoint(Time.fixedDeltaTime);
+        }
 
+        private void LateUpdate()
+        {
             ObstacleMaskManager.Instance.UpdatePosition(transform.position);
         }
 

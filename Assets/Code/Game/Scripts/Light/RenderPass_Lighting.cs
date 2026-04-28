@@ -16,6 +16,7 @@ namespace Mmang.PixelartRender
             public ComputeBuffer DataBuffer;
             public int LightCount;
             public int PointLightCount;
+            public int SpotLightCount;
             public int ChunkSize;
         }
 
@@ -70,6 +71,7 @@ namespace Mmang.PixelartRender
                     passData.DataBuffer = manager.DataBuffer;
                     passData.LightCount = manager.LightCount;
                     passData.PointLightCount = manager.PointLightCount;
+                    passData.SpotLightCount = manager.SpotLightCount;
                     passData.ChunkSize = ObstacleMaskManager.Instance.Resolution;
 
                     // 绘制
@@ -94,8 +96,7 @@ namespace Mmang.PixelartRender
         {
             cmd.SetGlobalVector(PShaderPropertyID.ObstacleChunkParams, new(passData.ChunkSize, passData.ChunkSize, passData.ChunkSize * 4, passData.ChunkSize * 4));
             cmd.SetGlobalBuffer(PShaderPropertyID.MLightDataBuffer, passData.DataBuffer);
-            //cmd.SetGlobalInt(PShaderPropertyID.MLightCount, passData.LightCount);
-            cmd.SetGlobalVector(PShaderPropertyID.MLightParams, new(passData.LightCount, passData.PointLightCount, 0, 0));
+            cmd.SetGlobalVector(PShaderPropertyID.MLightParams, new(passData.LightCount, passData.PointLightCount, passData.SpotLightCount, 0));
             Blitter.BlitTexture(cmd, new Vector4(1, 1, 0, 0), passData.Material, 0);
         }
     }

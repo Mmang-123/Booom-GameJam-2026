@@ -50,9 +50,11 @@ namespace Mmang.PixelartRender
             PointLightCount = 0;
             LightCount = 0;
             SpotLightCount = 0;
+            AreaLightCount = 0;
 
             m_PointLightsCache.Clear();
             m_SpotLightsCache.Clear();
+            m_AreaLightsCache.Clear();
 
             foreach (var light in m_Lights)
             {
@@ -86,6 +88,7 @@ namespace Mmang.PixelartRender
             // PointLight
             int start = 0;
             int end = PointLightCount;
+            end = Mathf.Min(end, MAX_LIGHT_COUNT);
             for (int i = start; i < end; i++)
             {
                 var pointLight = m_PointLightsCache[i];
@@ -101,6 +104,7 @@ namespace Mmang.PixelartRender
             // SpotLight
             start += PointLightCount;
             end += SpotLightCount;
+            end = Mathf.Min(end, MAX_LIGHT_COUNT);
             for (int i = start; i < end; i++)
             {
                 var spotLight = m_SpotLightsCache[i - start];
@@ -110,7 +114,7 @@ namespace Mmang.PixelartRender
                 {
                     color = new Vector4(spotLight.Color.r, spotLight.Color.g, spotLight.Color.b, spotLight.Intensity),
                     position = new Vector4(spotLight.Position.x, spotLight.Position.y, spotLight.Position.z, spotLight.Radius),
-                    spotLightParams = new(direction.x, direction.y, scaleOffset.x, scaleOffset.y),
+                    lightParams1 = new(direction.x, direction.y, scaleOffset.x, scaleOffset.y),
                 };
 
                 m_DataArray[i] = data;
@@ -119,9 +123,21 @@ namespace Mmang.PixelartRender
             // AreaLight
             start += SpotLightCount;
             end += AreaLightCount;
+            end = Mathf.Min(end, MAX_LIGHT_COUNT);
             for (int i = start; i < end; i++)
             {
                 var areaLight = m_AreaLightsCache[i - start];
+                Vector2 direction = areaLight.GetDirection();
+                Vector4 points = areaLight.GetPoints();
+                LightData2D data = new()
+                {
+                    color = new Vector4(areaLight.Color.r, areaLight.Color.g, areaLight.Color.b, areaLight.Intensity),
+                    position = new Vector4(areaLight.Position.x, areaLight.Position.y, areaLight.Position.z, areaLight.Radius),
+                    lightParams1 = new(direction.x, direction.y, points.x, points.y),
+                    lightParams2 = new(points.z, points.w),
+                };
+
+                m_DataArray[i] = data;
             }
 
             DataBuffer.SetData(m_DataArray);
