@@ -1,4 +1,4 @@
-﻿Shader "Hidden/Mmang/Pixelart/Blit/ReadShadow"
+﻿Shader "Hidden/Mmang/Pixelart/Blit/ReadLighting"
 {
     Properties
     {
@@ -30,6 +30,11 @@
             SAMPLER(sampler_MLightingTexture);
             int2 _ChunkIndex;
 
+            inline float GetStrength(float3 color)
+            {
+                return saturate(max(color.r, max(color.g, color.b)));
+            }
+
             half Fragment(Varyings input) : SV_Target
             {
                 GET_BLIT_UV();
@@ -37,12 +42,12 @@
                 float2 sampleUV = (uv + _ChunkIndex) / 3.0;
                 float unitSize = 1.0 / (256 * 3.0);
 
-                float shadow1 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(0, 0)).a;
-                float shadow2 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(unitSize, 0)).a;
-                float shadow3 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(0, unitSize)).a;
-                float shadow4 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(unitSize, unitSize)).a;
+                float3 color1 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(0, 0)).rgb;
+                float3 color2 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(unitSize, 0)).rgb;
+                float3 color3 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(0, unitSize)).rgb;
+                float3 color4 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(unitSize, unitSize)).rgb;
                 
-                return (shadow1 + shadow2 + shadow3 + shadow4) / 4.0;
+                return (GetStrength(color1), GetStrength(color2), GetStrength(color3), GetStrength(color4)) / 4.0;
             }
             ENDHLSL
         }

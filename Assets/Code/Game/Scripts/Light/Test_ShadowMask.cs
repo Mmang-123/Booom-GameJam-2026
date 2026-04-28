@@ -10,8 +10,8 @@ namespace Game
 
         private void FixedUpdate()
         {
-            float shadow = ShadowMaskManager.Instance.GetShadow(transform.position);
-            if (shadow <= 0.5f)
+            float strength = LightingTextureManager.Instance.GetLightStrength(transform.position);
+            if (strength <= 0.01f)
             {
                 m_Renderer.color = Color.red;
             }

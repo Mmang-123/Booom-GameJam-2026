@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 
 namespace Game
 {
-    public class ShadowMaskManager : SingletonMono<ShadowMaskManager>
+    public class LightingTextureManager : SingletonMono<LightingTextureManager>
     {
         private Material m_ReadShadowMaterial;
         
@@ -23,7 +23,7 @@ namespace Game
             if (m_ReadShadowMaterial != null)
                 return;
             
-            Shader shader = Shader.Find("Hidden/Mmang/Pixelart/Blit/ReadShadow");
+            Shader shader = Shader.Find("Hidden/Mmang/Pixelart/Blit/ReadLighting");
             m_ReadShadowMaterial = new(shader);
         }
 
@@ -42,7 +42,7 @@ namespace Game
             return newTexture;
         }
 
-        private Texture2D UpdateShadowTexture(Vector2Int chunk)
+        private Texture2D UpdateLightingTexture(Vector2Int chunk)
         {
             InitMaterial();
             var maskManager = ObstacleMaskManager.Instance;
@@ -74,7 +74,7 @@ namespace Game
             return texture;
         }
 
-        private Texture2D GetShadowTexture(Vector2Int chunk)
+        private Texture2D GetLightingTexture(Vector2Int chunk)
         {
             if (m_UpdatedSet.Contains(chunk))
             {
@@ -87,20 +87,20 @@ namespace Game
                     return null;
                 }
 
-                var result = UpdateShadowTexture(chunk);
+                var result = UpdateLightingTexture(chunk);
                 return result;
             }
         }
 
-        public float GetShadow(Vector2 worldPosition)
+        public float GetLightStrength(Vector2 worldPosition)
         {
             var manager = ObstacleMaskManager.Instance;
             var chunkIndex = manager.GetChunkIndex(worldPosition, out Vector2 offsetInChunk);
-            var texture = GetShadowTexture(chunkIndex);
+            var texture = GetLightingTexture(chunkIndex);
 
             if (texture == null)
             {
-                return 0f;
+                return 1f;
             }
 
             int resolution = manager.Resolution / 4;
