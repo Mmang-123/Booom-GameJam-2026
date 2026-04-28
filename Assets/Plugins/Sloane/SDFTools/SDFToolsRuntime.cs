@@ -71,6 +71,8 @@ namespace Sloane
             kernelNormalizeDistanceSingleChannel = sdfComputeShader.FindKernel("NormalizeDistanceSingleChannel");
             kernelFillBoundingDistance           = sdfComputeShader.FindKernel("FillBoundingDistance");
             kernelFillBoundingDistanceSingleChannel = sdfComputeShader.FindKernel("FillBoundingDistanceSingleChannel");
+            kernelCombineInnerOuterSingle = sdfComputeShader.FindKernel("CombineInnerOuterSingle");
+            kernelPackSDFToRGB = sdfComputeShader.FindKernel("PackSDFToRGB");
             initialized = true;
         }
 
@@ -247,6 +249,7 @@ namespace Sloane
             cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, sourceTexture.width);
             cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, sourceTexture.height);
             cmd.SetComputeTextureParam(sdfComputeShader, kernelCombineInnerOuterSingle, PropertyPreviousBufferSingle, outerRT);
+            cmd.SetComputeTextureParam(sdfComputeShader, kernelCombineInnerOuterSingle, PropertySingleChannelSourceTexture, innerRT);
             cmd.SetComputeTextureParam(sdfComputeShader, kernelCombineInnerOuterSingle, PropertySourceTexture, outerRT);
             cmd.SetComputeTextureParam(sdfComputeShader, kernelCombineInnerOuterSingle, PropertyCurrentBufferSingle, resultRT);
 
@@ -263,16 +266,22 @@ namespace Sloane
 
         public static Texture2D GenerateSDF(Texture sourceTexture, float alphaThreshold = 0.5f, int nearestPointSearchRange = 0, int factor = 64)
         {
-            var desc = new RenderTextureDescriptor(sourceTexture.width, sourceTexture.height, RenderTextureFormat.RFloat, 0) { enableRandomWrite = true };
-            RenderTexture sdfRT = RenderTexture.GetTemporary(desc);
-            
+            var descSDF = new RenderTextureDescriptor(sourceTexture.width, sourceTexture.height, RenderTextureFormat.RFloat, 0) { enableRandomWrite = true };
+            RenderTexture sdfRT = RenderTexture.GetTemporary(descSDF);
+            sdfRT.Create();
+
             GenerateSDF(sourceTexture, sdfRT, alphaThreshold, nearestPointSearchRange);
+
+            var descRGBA = new RenderTextureDescriptor(sourceTexture.width, sourceTexture.height, RenderTextureFormat.ARGB32, 0) { enableRandomWrite = true };
+            RenderTexture packedRT = RenderTexture.GetTemporary(descRGBA);
+            packedRT.Create();
 
             CommandBuffer cmd = new CommandBuffer { name = "PackingSDF" };
             cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, sourceTexture.width);
             cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, sourceTexture.height);
             cmd.SetComputeTextureParam(sdfComputeShader, kernelPackSDFToRGB, PropertyPreviousBufferSingle, sdfRT);
-            cmd.SetComputeTextureParam(sdfComputeShader, kernelPackSDFToRGB, PropertyCurrentBuffer, sdfRT);
+            cmd.SetComputeTextureParam(sdfComputeShader, kernelPackSDFToRGB, PropertySingleChannelSourceTexture, sdfRT);
+            cmd.SetComputeTextureParam(sdfComputeShader, kernelPackSDFToRGB, PropertyCurrentBuffer, packedRT);
             cmd.SetComputeFloatParam(sdfComputeShader, PropertyMaxDistance, factor);
 
             int threadGroupsX = Mathf.CeilToInt(sourceTexture.width / 8.0f);
@@ -283,11 +292,13 @@ namespace Sloane
             cmd.Release();
 
             Texture2D result = new Texture2D(sourceTexture.width, sourceTexture.height, TextureFormat.RGBA32, false);
-            RenderTexture.active = sdfRT;
-            result.ReadPixels(new Rect(0, 0, sdfRT.width, sdfRT.height), 0, 0);
+            RenderTexture.active = packedRT;
+            result.ReadPixels(new Rect(0, 0, packedRT.width, packedRT.height), 0, 0);
             result.Apply();
+            RenderTexture.active = null;
 
             RenderTexture.ReleaseTemporary(sdfRT);
+            RenderTexture.ReleaseTemporary(packedRT);
             return result;
         }
 
