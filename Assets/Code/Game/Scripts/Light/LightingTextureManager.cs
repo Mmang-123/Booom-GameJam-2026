@@ -8,14 +8,25 @@ namespace Game
 {
     public class LightingTextureManager : SingletonMono<LightingTextureManager>
     {
-        private Material m_ReadShadowMaterial;
-        
+        [SerializeField] private uint m_UpdateIntervalFrameCount = 4;
+
+        //
+        private Material m_ReadShadowMaterial;        
         private Dictionary<Vector2Int, Texture2D> m_TextureMap = new();
         private HashSet<Vector2Int> m_UpdatedSet = new();
+        private int m_CurrentFrameCount = 0;
 
         private void FixedUpdate()
         {
-            m_UpdatedSet.Clear();
+            if (m_CurrentFrameCount < m_UpdateIntervalFrameCount)
+            {
+                m_CurrentFrameCount++;
+            }
+            else
+            {
+                m_UpdatedSet.Clear();
+                m_CurrentFrameCount = 0;   
+            }
         }
 
         private void InitMaterial()
@@ -48,7 +59,7 @@ namespace Game
             var maskManager = ObstacleMaskManager.Instance;
 
             //
-            Vector2Int chunkIndex = chunk - maskManager.CenterIndex + Vector2Int.one;
+            Vector2Int chunkIndex = chunk - maskManager.LastCenterIndex + Vector2Int.one;
             m_ReadShadowMaterial.SetVector(Shader.PropertyToID("_ChunkIndex"), new(chunkIndex.x, chunkIndex.y));
 
             //
@@ -87,6 +98,7 @@ namespace Game
                     return null;
                 }
 
+                m_UpdatedSet.Add(chunk);
                 var result = UpdateLightingTexture(chunk);
                 return result;
             }
@@ -94,8 +106,8 @@ namespace Game
 
         public float GetLightStrength(Vector2 worldPosition)
         {
-            var manager = ObstacleMaskManager.Instance;
-            var chunkIndex = manager.GetChunkIndex(worldPosition, out Vector2 offsetInChunk);
+            var maskManager = ObstacleMaskManager.Instance;
+            var chunkIndex = maskManager.GetChunkIndex(worldPosition, out Vector2 offsetInChunk);
             var texture = GetLightingTexture(chunkIndex);
 
             if (texture == null)
@@ -103,7 +115,7 @@ namespace Game
                 return 1f;
             }
 
-            int resolution = manager.Resolution / 4;
+            int resolution = maskManager.Resolution / 4;
             int pixelX = Mathf.FloorToInt(offsetInChunk.x * resolution);
             int pixelY = Mathf.FloorToInt(offsetInChunk.y * resolution);
             return texture.GetPixel(pixelX, pixelY).r;

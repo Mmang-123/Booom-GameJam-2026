@@ -29,10 +29,11 @@ namespace Mmang.PixelartRender
         public float HalfTileSize => TileSize / 2f;
         public float UnitSize => TileSize / Resolution;
 
-        private Vector2Int m_CenterIndex;
         private Camera m_Camera;
 
-        public Vector2Int CenterIndex => m_CenterIndex;
+        //
+        public Vector2Int LastCenterIndex { get; private set; } // 上一帧的
+        public Vector2Int CenterIndex { get; private set; }
 
         private void OnEnable()
         {
@@ -40,7 +41,7 @@ namespace Mmang.PixelartRender
             CreateTextures();
             RegisterSDFThreads();
 
-            m_CenterIndex = Vector2Int.zero;
+            CenterIndex = Vector2Int.zero;
         }
 
         private void OnDisable()
@@ -64,6 +65,11 @@ namespace Mmang.PixelartRender
         {
             RenderMask();
             Shader.SetGlobalTexture(PShaderPropertyID.MLightingTexture, m_LightingHandle);
+        }
+
+        private void LateUpdate()
+        {
+            LastCenterIndex = CenterIndex;
         }
 
         private void RegisterSDFThreads()
@@ -181,20 +187,28 @@ namespace Mmang.PixelartRender
         public void UpdatePosition(Vector2 position)
         {
             Vector2Int index = GetChunkIndex(position);
-            if (index != m_CenterIndex)
+            if (index != CenterIndex)
             {
-                m_CenterIndex = index;
+                CenterIndex = index;
             }
         }
 
         public Vector3 GetCenterPosition()
         {
-            return new Vector3(m_CenterIndex.x * TileSize + HalfTileSize, m_CenterIndex.y * TileSize + HalfTileSize, -10);
+            return new Vector3(CenterIndex.x * TileSize + HalfTileSize, CenterIndex.y * TileSize + HalfTileSize, -10);
         }
 
         public bool IsVaildChunk(Vector2Int chunkIndex)
         {
-            chunkIndex -= m_CenterIndex;
+            chunkIndex -= CenterIndex;
+            if (Mathf.Abs(chunkIndex.x) > 1 || Mathf.Abs(chunkIndex.y) > 1)
+                return false;
+            return true;
+        }
+
+        public bool IsLastValidChunk(Vector2Int chunkIndex)
+        {
+            chunkIndex -= LastCenterIndex;
             if (Mathf.Abs(chunkIndex.x) > 1 || Mathf.Abs(chunkIndex.y) > 1)
                 return false;
             return true;
@@ -202,7 +216,7 @@ namespace Mmang.PixelartRender
 
         public int GetChunkTextureIndex(Vector2Int chunkIndex)
         {
-            chunkIndex -= m_CenterIndex;
+            chunkIndex -= CenterIndex;
             chunkIndex += Vector2Int.one;
             return chunkIndex.x + chunkIndex.y * 3;
         }

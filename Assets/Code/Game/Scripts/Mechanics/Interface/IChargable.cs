@@ -1,10 +1,7 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Game
 {
-    public interface IPowerSource { }
-
     public interface IChargable
     {
         public void StartCharge(IPowerSource powerSource);
