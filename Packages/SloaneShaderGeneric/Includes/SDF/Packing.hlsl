@@ -9,8 +9,7 @@ float UnpackSDF(float3 packedSDF, float factor = 1)
 
 float3 PackSDF(float sdf, float factor = 1)
 {
-    float sign = sdf >= 0 ? 1 : -1;
     float magnitude = abs(sdf) / factor;
     float2 packedMagnitude = PackFloatToR8G8(magnitude);
-    return float3(packedMagnitude, sign > 0 ? 1 : 0);
+    return float3(packedMagnitude, sdf > 0 ? 1 : 0);
 }

@@ -62,5 +62,10 @@ namespace Game
             m_DoorRenderer.transform.localPosition = new(-0.5f - newLength / 2f, 0f);
             m_CurrentDoorLength = newLength;
         }
+
+        private void OnValidate()
+        {
+            SetDoorLength(m_DoorLength);
+        }
     }
 }

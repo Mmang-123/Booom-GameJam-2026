@@ -248,8 +248,8 @@ namespace Sloane
             CommandBuffer cmd = new CommandBuffer { name = "CombineInnerOuter" };
             cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, sourceTexture.width);
             cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, sourceTexture.height);
-            cmd.SetComputeTextureParam(sdfComputeShader, kernelCombineInnerOuterSingle, PropertyPreviousBufferSingle, outerRT);
-            cmd.SetComputeTextureParam(sdfComputeShader, kernelCombineInnerOuterSingle, PropertySingleChannelSourceTexture, innerRT);
+            cmd.SetComputeTextureParam(sdfComputeShader, kernelCombineInnerOuterSingle, PropertySingleChannelSourceTexture, outerRT);
+            cmd.SetComputeTextureParam(sdfComputeShader, kernelCombineInnerOuterSingle, PropertyPreviousBufferSingle, innerRT);
             cmd.SetComputeTextureParam(sdfComputeShader, kernelCombineInnerOuterSingle, PropertySourceTexture, outerRT);
             cmd.SetComputeTextureParam(sdfComputeShader, kernelCombineInnerOuterSingle, PropertyCurrentBufferSingle, resultRT);
 

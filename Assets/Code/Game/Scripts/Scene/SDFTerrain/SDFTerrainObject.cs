@@ -59,9 +59,10 @@ namespace Sloane
             importer.textureType = TextureImporterType.Sprite;
             importer.spriteImportMode = SpriteImportMode.Single;
             importer.mipmapEnabled = false;
-            importer.filterMode = FilterMode.Bilinear;
+            importer.filterMode = FilterMode.Point;
             importer.wrapMode = TextureWrapMode.Clamp;
             importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.sRGBTexture = false;
             importer.SaveAndReimport();
 
             m_SDFSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/Terrain/SDFs" + $"/SDF_{m_UID}.png");
