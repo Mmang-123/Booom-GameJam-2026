@@ -60,6 +60,7 @@ Shader "Sloane/SDFSprite"
         Pass
         {
             Name "Obstacle Mask"
+            Blend One Zero
 
             Tags
             {
