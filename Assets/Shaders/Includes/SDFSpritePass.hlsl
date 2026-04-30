@@ -54,7 +54,7 @@ BufferOutput PixelartFrag(Varyings input) : SV_Target
     float4 outputColor = input.color;
 
     OUTPUT_ALBEDO4(outputColor);
-    OUTPUT_EMISSION(float3(0, 0, 0));
+    OUTPUT_EMISSION(float4(0, 0, 0, 0));
 
     RETURN_BUFFER_VALUE();
 }

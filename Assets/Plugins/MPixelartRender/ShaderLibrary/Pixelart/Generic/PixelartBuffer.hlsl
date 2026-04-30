@@ -79,9 +79,9 @@ inline float3 PB_GetNormal(float2 screenUV)
     return (__raw_normal - 0.5) * 2.0;
 }
 */
-inline float3 PB_GetEmission(float2 screenUV)
+inline float4 PB_GetEmission(float2 screenUV)
 {
-    return SAMPLE_TEXTURE2D(_EmissionBuffer, sampler_EmissionBuffer, screenUV).rgb;
+    return SAMPLE_TEXTURE2D(_EmissionBuffer, sampler_EmissionBuffer, screenUV).rgba;
 }
 
 inline float2 PB_GetOriginUV(float2 screenUV)
@@ -114,7 +114,7 @@ inline int PB_GetShadowType(float2 screenUV)
     return g.shadowType;
 }
 
-inline half PB_GetObstacleMask(float2 screenUV)
+inline half PB_GetSurfaceType(float2 screenUV)
 {
     return PB_GetProperties(screenUV).z;
 }
@@ -140,7 +140,7 @@ float3 outNormal = PB_GetNormal(screenUV); \
 */
 
 #define GET_EMISSION(screenUV, outEmission) \
-float3 outEmission = PB_GetEmission(screenUV); \
+float4 outEmission = PB_GetEmission(screenUV); \
 
 #define GET_NORMAL2(screenUV, outNormal) \
 float3 outNormal = PB_GetNormal2(screenUV); \
@@ -164,8 +164,8 @@ int outOutline = PB_GetOutline(screenUV); \
 #define GET_SHADOW_TYPE(screenUV, outShadowType) \
 int outShadowType = PB_GetShadowType(screenUV); \
 
-#define GET_OBSTACLE_MASK(screenUV, outMask) \
-half outMask = PB_GetObstacleMask(screenUV); \
+#define GET_SURFACE_TYPE(screenUV, outType) \
+half outType = PB_GetSurfaceType(screenUV); \
 
 
 #define GET_POSITION(screenUV, rawDepth, outPositionWS, outPositionCS) \

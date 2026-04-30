@@ -48,7 +48,7 @@ BufferOutput PixelartFrag(Varyings input) : SV_Target
 
     OUTPUT_ALBEDO4(outputColor);
     OUTPUT_EMISSION(_Emission);
-    //OUTPUT_OBSTACLE_MASK(_ObstacleMaskValue);
+    OUTPUT_SURFACE_TYPE(_MSurfaceType);
 
     RETURN_BUFFER_VALUE();
 }

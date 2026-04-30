@@ -1,22 +1,21 @@
 ﻿#include "../Generic/PixelartStructures.hlsl"
 #include "../Generic/PixelartShared.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Packing.hlsl"
+#include "Background.hlsl"
 
-float4 _ObstacleParams;
-
-Varyings ObstacleVert(Attributes v)
+Varyings PixelartVert(Attributes v)
 {
     Varyings o = (Varyings)0;
     UNITY_SETUP_INSTANCE_ID(v);
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
     float3 originWS = TransformObjectToWorld(float3(0.0, 0.0, 0.0));
-    float3 originVS = mul(UNITY_MATRIX_V, float4(originWS, 1.0)).xyz;
-    float3 originVSSnapped = float3(UNITSNAP(originVS.x, _ObstacleParams.x), UNITSNAP(originVS.y, _ObstacleParams.x), originVS.z);
+    float3 originVS = mul(PIXELART_CAMERA_MATRIX_V, float4(originWS, 1.0)).xyz;
+    float3 originVSSnapped = float3(UNITSNAP(originVS.x, _UnitSize), UNITSNAP(originVS.y, _UnitSize), originVS.z);
     float3 originVSOffset = originVSSnapped - originVS;
 
     o.positionWS = TransformObjectToWorld(v.positionOS.xyz);
-    float3 positionVS = mul(UNITY_MATRIX_V, float4(o.positionWS, 1.0)).xyz + originVSOffset;
+    float3 positionVS = mul(PIXELART_CAMERA_MATRIX_V, float4(o.positionWS, 1.0)).xyz + originVSOffset;
     o.positionCS = mul(GetViewToHClipMatrix(), float4(positionVS, 1.0));
 
 
@@ -35,15 +34,14 @@ Varyings ObstacleVert(Attributes v)
     return o;
 }
 
-half4 ObstacleFrag(Varyings input) : SV_Target
+BufferOutput BackgroundFrag(Varyings input) : SV_Target
 {
-#ifdef TEXTURE_BASED
-    float alpha = tex2D(_MainTex, input.uv).a * input.color.a;
-#else
-    float alpha = input.color.a;
-#endif
+    BUFFER_OUTPUT_INIT();
 
-    clip(alpha - 0.5);
+    float2 screenUV = input.positionCS.xy / _ScreenParams.xy;
+    float3 backgroundColor = SampleBackground(screenUV);
 
-    return _ObstacleMaskValue;
+    OUTPUT_ALBEDO3(backgroundColor);
+
+    RETURN_BUFFER_VALUE();
 }

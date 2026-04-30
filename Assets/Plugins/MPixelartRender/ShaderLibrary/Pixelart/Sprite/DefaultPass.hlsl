@@ -1,4 +1,5 @@
 ﻿#include "../Generic/PixelartStructures.hlsl"
+#include "../../Lighting/Lighting.hlsl"
 
 Varyings UnlitVert(Attributes v)
 {

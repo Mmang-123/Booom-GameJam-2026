@@ -5,6 +5,8 @@
 #include "../Generic/PixelartShading.hlsl"
 #include "../Generic/Outline.hlsl"
 #include "../../Lighting/Lighting.hlsl"
+#include "../Sprite/Background.hlsl"
+#include "../Sprite/SpriteShading.hlsl"
 
 void ShadingFragment(Varyings input, out half4 outColor : COLOR0, out float3 outSpecular : COLOR1)
 {
@@ -13,76 +15,42 @@ void ShadingFragment(Varyings input, out half4 outColor : COLOR0, out float3 out
     
     GET_DEPTH(screenUV, depth);
     GET_ALBEDO(screenUV, albedo);
-    GET_SMOOTHNESS_METALLIC(screenUV, smoothness, metallic);
+    //GET_SMOOTHNESS_METALLIC(screenUV, smoothness, metallic);
     //GET_NORMAL(screenUV, normalWS);
     GET_EMISSION(screenUV, emission);
-    GET_ORIGIN_UV(screenUV, originUV);
-    GET_PROPERTIES(screenUV, lutIndex, outlineProperty, shadowTypeProperty);
-    GET_POSITION(screenUV, depth, positionWS, positionCS);
-    GET_OBSTACLE_MASK(screenUV, obstacleMask);
+    //GET_ORIGIN_UV(screenUV, originUV);
+    //GET_PROPERTIES(screenUV, lutIndex, outlineProperty, shadowTypeProperty);
+    //GET_POSITION(screenUV, depth, positionWS, positionCS);
+    GET_SURFACE_TYPE(screenUV, surfaceType);
 
     float3 outputColor = 0;
 
     //
     float3 light = SampleLight(screenUV);
 
-    outputColor += albedo * light + emission;
+    //outputColor += albedo * light + emission;
+
+    if (light.r <= 0.001 && light.g <= 0.001 && light.b <= 0.001)
+    {
+        // Background
+        outputColor = SRGBToLinear(SampleBackground(screenUV)).rgb;
+    }
+    else
+    {
+        outputColor = MixAlbedoAndLightColor_Background(albedo, light);
+        // 有时候可以用emission表示在阴影中的颜色?
+        if (surfaceType == 1)
+        {
+            // 在有光照的时候取消emission
+            emission.a = 0;
+        }
+    }
+    
+
+    // Emission
+    outputColor = lerp(outputColor, emission.rgb, emission.a);
 
     // Color Output
     outColor = half4(outputColor, 1);
     outSpecular = 0;
-
-    // temp
-    /*
-    if (outColor.r == 0 && outColor.g == 0 && outColor.b == 0)
-    {
-        outColor = half4(0.005, 0.005, 0.04, 1);
-    }
-    */
-
-    /*
-    float3 outputColor = 0;
-    float3 outputSpecular = 0;
-    float3 viewDir = GetWorldSpaceNormalizeViewDir(positionWS);
-
-    // Shadow Position
-    float3 shadowPosition = 0;
-    if (shadowTypeProperty >= 1)
-    {
-        float originDepth = PB_GetDepth(originUV);
-        shadowPosition = GetWorldPositionWithRawDepth(originUV, originDepth);
-    }
-    else
-    {
-        shadowPosition = positionWS;
-    }
-
-    // Main Light
-    float4 shadowCoord = TransformWorldToShadowCoord(shadowPosition);
-    Light mainLight = GetMainLight(shadowCoord);
-    if (outlineProperty >= 1)
-    {
-        outputColor += MainLightShading_WithOutline(mainLight, normalWS, shadowPosition, screenUV, metallic, lutIndex);
-    }
-    else
-    {
-        outputColor += MainLightShading(mainLight, normalWS, shadowPosition, metallic, lutIndex);
-    }
-    outputSpecular += 5 * SpecularShading(mainLight, albedo, normalWS, positionWS, viewDir, smoothness, metallic);
-
-    // Additional Light
-    LIGHT_LOOP_BEGIN(_AdditionalLightCount)
-        Light light = GetAdditionalLightWithShadowAttenuation(lightIndex, shadowPosition);
-        outputColor += DiffuseShading(light, normalWS);
-    LIGHT_LOOP_END
-
-    // Albedo
-    outputColor *= albedo;
-
-    outputColor += outputSpecular;
-
-    // Color Output
-    outColor = half4(outputColor, 1);
-    outSpecular = outputSpecular;
-    */
 }

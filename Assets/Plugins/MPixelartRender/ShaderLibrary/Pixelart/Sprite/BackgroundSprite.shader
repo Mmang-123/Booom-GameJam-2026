@@ -1,12 +1,8 @@
-﻿Shader "Mmang/Pixelart/Sprite/Pixelart"
+﻿Shader "Mmang/Pixelart/Sprite/BackgroundSprite"
 {
     Properties
     {
         _MainTex ("Sprite Texture", 2D) = "white" {}
-        _ObstacleMaskValue ("Is Obstacle", Float) = 0
-        _MSurfaceType ("Surface Type", Float) = 0
-        _Emission ("Emission", Color) = (0,0,0,1)
-        _PreviewColor ("Preview Color", Color) = (1,1,1,1)
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
         [HideInInspector] _Color ("Tint", Color) = (1,1,1,1)
@@ -43,7 +39,7 @@
             // -------------------------------------
             // Shader Stages
             #pragma vertex PixelartVert
-            #pragma fragment PixelartFrag
+            #pragma fragment BackgroundFrag
 
             //--------------------------------------
             // GPU Instancing
@@ -53,35 +49,7 @@
             // -------------------------------------
             // Includes
             #include "PixelartInput.hlsl"
-            #include "PixelartPass.hlsl"
-            ENDHLSL
-        }
-
-        Pass
-        {
-            Name "Obstacle Mask"
-
-            Tags
-            {
-                "LightMode" = "ObstacleMask"
-            }
-
-            HLSLPROGRAM
-
-            // -------------------------------------
-            // Shader Stages
-            #pragma vertex ObstacleVert
-            #pragma fragment ObstacleFrag
-
-            //--------------------------------------
-            // GPU Instancing
-            #pragma multi_compile_instancing
-            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
-
-            // -------------------------------------
-            // Includes
-            #include "PixelartInput.hlsl"
-            #include "ObstaclePass.hlsl"
+            #include "BackgroundSpritePass.hlsl"
             ENDHLSL
         }
 
