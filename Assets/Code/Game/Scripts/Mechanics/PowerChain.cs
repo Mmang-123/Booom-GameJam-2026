@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using Mmang.Generic;
-using Mmang.Util;
 using UnityEngine.Pool;
 using UnityEngine;
 
 namespace Game
 {
-
     public class PowerChain : MonoBehaviour, IChargable, IPowerSource
     {
         [System.Serializable]

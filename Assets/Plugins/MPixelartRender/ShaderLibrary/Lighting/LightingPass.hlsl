@@ -28,12 +28,14 @@ inline float2 UV4To3(float2 uv)
     return clamp(uv - float2(0.125, 0.125), 0.0, 0.75) * 4.0 / 3.0;
 }
 
+inline float2 SnapLightPoisition(float2 rawPosition)
+{
+    const float UNIT_SIZE = 16.0 / 256.0;
+    return floor(rawPosition / UNIT_SIZE) * UNIT_SIZE;
+}
+
 half GetShadow(float2 screenUV, float2 lightUV)
 {
-    /*
-    screenUV.y *= _ObstacleChunkParams.y / _ObstacleChunkParams.x;
-    lightUV.y *= _ObstacleChunkParams.y / _ObstacleChunkParams.x;
-    */
     float2 direction = normalize(lightUV - screenUV);
 
     const int MAX_STEPS = 128;
@@ -86,8 +88,7 @@ void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, out half3 o
     outColor = 0.0;
     LightData2D light = _MLightDataBuffer[lightIndex];
         
-    //float2 lightPos = SnapWorldPosition(float3(light.position.xy, 0));
-    float2 lightPos = float3(light.position.xy, 0);
+    float2 lightPos = SnapLightPoisition(light.position.xy);
     float radius = light.position.w;
     
     half3 lightColor = light.color.rgb;
@@ -128,8 +129,7 @@ void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
     outColor = 0.0;
     LightData2D light = _MLightDataBuffer[lightIndex];
         
-    //float2 lightPos = SnapWorldPosition(float3(light.position.xy, 0));
-    float2 lightPos = float3(light.position.xy, 0);
+    float2 lightPos = SnapLightPoisition(light.position.xy);
     float radius = light.position.w;
     
     half3 lightColor = light.color.rgb;
@@ -178,7 +178,7 @@ void ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
     outColor = 0.0;
     LightData2D light = _MLightDataBuffer[lightIndex];
         
-    float2 lightPos = float3(light.position.xy, 0);
+    float2 lightPos = SnapLightPoisition(light.position.xy);
     float radius = light.position.w;
     
     half3 lightColor = light.color.rgb;
