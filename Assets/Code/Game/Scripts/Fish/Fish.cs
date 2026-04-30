@@ -51,6 +51,7 @@ namespace Game
 
             //
             m_Behaviours = GetComponents<FishBehaviour>().ToList();
+            m_BehaviourMap.Clear();
 
             foreach (var behaviour in m_Behaviours)
             {
