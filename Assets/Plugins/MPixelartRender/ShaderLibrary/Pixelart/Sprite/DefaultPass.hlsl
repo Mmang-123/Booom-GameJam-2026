@@ -14,7 +14,7 @@ Varyings UnlitVert(Attributes v)
 
     o.positionWS = TransformObjectToWorld(v.positionOS);
     //o.positionCS = TransformObjectToHClip(v.positionOS);
-    o.positionWS += float3(originWSOffset, 0);
+    //o.positionWS += float3(originWSOffset, 0);
     o.positionCS = TransformWorldToHClip(float4(o.positionWS, 1));
 
 #ifdef TEXTURE_BASED

@@ -24,12 +24,6 @@ namespace Mmang.PixelartRender
         private Shader m_Shader;
         private Material m_LightingMaterial;
 
-        #region Texture
-
-        string LightingTextureName => "_LightingTexture";
-
-        #endregion
-
         public RenderPass_Lighting(Shader shader)
         {
             m_Shader = shader;   
@@ -77,14 +71,9 @@ namespace Mmang.PixelartRender
                     passData.Mask = resourceData.activeColorTexture;
 
                     // 绘制
-                    var descriptor = cameraData.cameraTargetDescriptor;
-                    descriptor.depthBufferBits = 0;
-
                     var lightTexture = ObstacleMaskManager.Instance.LightingHandle;
                     TextureHandle lightingTextureHandle = renderGraph.ImportTexture(lightTexture);
-                    //TextureHandle lightingTextureHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, descriptor, LightingTextureName, false);
                     builder.SetRenderAttachment(lightingTextureHandle, 0, AccessFlags.Write);
-                    //builder.SetGlobalTextureAfterPass(lightingTextureHandle, PShaderPropertyID.MLightingTexture);
 
                     builder.SetRenderFunc((PassData data, RasterGraphContext rgContext) =>
                     {
