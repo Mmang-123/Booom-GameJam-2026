@@ -1655,6 +1655,17 @@ Transform:
   - {fileID: 768004970}
   m_Father: {fileID: 1665933075}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1223895954 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4528183735834795004, guid: 447cd5de874417a46976679662074b3b, type: 3}
+  m_PrefabInstance: {fileID: 7711994671767633609}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24464941bdac951478f930713f423538, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ChainDoor
 --- !u!1001 &1272061230
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1856,9 +1867,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0b34823c657ce4696ab1dfb4907342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.PowerChain
-  m_ChargeObject: {fileID: 2066143732}
-  m_ChargeInterval: 0.1
-  m_ReduceInterval: 0.3
+  m_PowerSource:
+    m_Object: {fileID: 5556821170103691167}
+  m_ChargeObject:
+    m_Object: {fileID: 1223895954}
+  m_ConductionTime: 3
+  m_MaintainTime: 3
   m_BigPoint_Sprite_On: {fileID: -320358638, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
   m_BigPoint_Sprite_Off: {fileID: -737230656, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
   m_SmallPoint_Sprite_On: {fileID: -1685350942, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
@@ -1891,17 +1905,6 @@ Transform:
   - {fileID: 482483941}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2066143732 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4528183735834795004, guid: 447cd5de874417a46976679662074b3b, type: 3}
-  m_PrefabInstance: {fileID: 7711994671767633609}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24464941bdac951478f930713f423538, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.ChainDoor
 --- !u!1001 &5556821170103691166
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1963,6 +1966,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dde1d40e97a388848913e409cefa53e3, type: 3}
+--- !u!114 &5556821170103691167 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 701018143478955409, guid: dde1d40e97a388848913e409cefa53e3, type: 3}
+  m_PrefabInstance: {fileID: 5556821170103691166}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33d39630dbf133f40bec9b9c86afbf45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.LightDetector
 --- !u!1001 &7711994671767633609
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2021,7 +2035,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4528183735834795004, guid: 447cd5de874417a46976679662074b3b, type: 3}
       propertyPath: m_DoorLength
-      value: 8
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7929921629348919250, guid: 447cd5de874417a46976679662074b3b, type: 3}
       propertyPath: m_Size.x

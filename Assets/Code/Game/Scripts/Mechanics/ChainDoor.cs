@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public class ChainDoor : ChargableMono
+    public class ChainDoor : MonoBehaviour, IChargable
     {
         [SerializeField] private float m_DoorLength = 3f;
         [SerializeField] private int m_RequirePowerSourceCount = 1;
@@ -11,13 +11,26 @@ namespace Game
         [SerializeField] private SpriteRenderer m_DoorRenderer;
         [SerializeField] private SpriteRenderer m_Emission;
 
-        private int m_PowerSourceCount = 0;
         private bool m_Active;
         private float m_CurrentDoorLength;
+
+        #region IChargable
+        public PowerSourceHandler PowerSourceHandler { get; } = new();
+        public bool IsPowered => PowerSourceHandler.IsPowered(m_RequirePowerSourceCount);
+
+        #endregion
 
         private void Start()
         {
             SetDoorLength(m_DoorLength);
+        }
+
+        private void FixedUpdate()
+        {
+            if (IsPowered != m_Active)
+            {
+                SetActive(IsPowered);
+            }
         }
 
         private void Update()
@@ -34,20 +47,6 @@ namespace Game
                 m_CurrentDoorLength = Mathf.Min(m_DoorLength, m_CurrentDoorLength);
                 SetDoorLength(m_CurrentDoorLength);
             }
-        }
-
-        public override void StartCharge(IPowerSource powerSource)
-        {
-            m_PowerSourceCount++;
-            if (m_PowerSourceCount >= m_RequirePowerSourceCount)
-                SetActive(true);
-        }
-
-        public override void StopCharge(IPowerSource powerSource)
-        {
-            m_PowerSourceCount--;
-            if (m_PowerSourceCount < m_RequirePowerSourceCount)
-                SetActive(false);
         }
 
         private void SetActive(bool active)

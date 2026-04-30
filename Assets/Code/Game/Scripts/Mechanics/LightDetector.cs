@@ -1,12 +1,22 @@
-﻿
+﻿using System.Collections.Generic;
+using Mmang.Generic;
 using UnityEngine;
 
 namespace Game
 {
     public class LightDetector : MonoBehaviour, IPowerSource
     {
-        [SerializeField] private ChargableMono m_ChargeObject;
         [SerializeField] private SpriteRenderer m_EmissionLight;
+        
+        private float ActiveTime => 0.1f;
+        private float MaxActiveTime => ActiveTime * 2f;
+
+        public bool Active => m_Active;
+        public bool PowerOn => Active;
+        public event System.Action<bool> OnPowerChanged;
+
+        // Runtime
+        private float m_ActiveTimer;
         private bool m_Active;
 
         private void Start()
@@ -16,15 +26,15 @@ namespace Game
 
         private void FixedUpdate()
         {
+            bool lightExist = CheckLightStrength();
+            m_ActiveTimer = Mathf.Clamp(m_ActiveTimer + Time.fixedDeltaTime * (lightExist ? 1 : -1), 0f, MaxActiveTime);
+            SetActive(m_ActiveTimer >= ActiveTime);
+        }
+
+        private bool CheckLightStrength()
+        {
             float strength = LightingTextureManager.Instance.GetLightStrength(transform.position);
-            if (strength <= 0.01f)
-            {
-                SetActive(false);
-            }
-            else
-            {
-                SetActive(true);
-            }
+            return strength >= 0.01f;
         }
 
         private void SetActive(bool active)
@@ -39,17 +49,7 @@ namespace Game
         private void OnActiveChanged()
         {
             m_EmissionLight.color = m_Active ? Color.green : Color.red;
-            if (m_ChargeObject != null)
-            {
-                if (m_Active)
-                {
-                    m_ChargeObject.StartCharge(this);
-                }
-                else
-                {
-                    m_ChargeObject.StopCharge(this);
-                }   
-            }
+            OnPowerChanged?.Invoke(m_Active);
         }
     }
 }
