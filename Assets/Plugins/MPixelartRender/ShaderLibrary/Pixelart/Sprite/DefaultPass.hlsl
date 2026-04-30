@@ -6,10 +6,17 @@ Varyings UnlitVert(Attributes v)
     UNITY_SETUP_INSTANCE_ID(v);
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-    o.positionCS = TransformObjectToHClip(v.positionOS);
-    #if defined(DEBUG_DISPLAY)
+    const float UNIT_SIZE = 16.0 / 256.0;
+
+    float2 originWS = TransformObjectToWorld(float3(0.0, 0.0, 0.0)).xy;
+    float2 originWSSnapped = round(originWS / UNIT_SIZE) * UNIT_SIZE;
+    float2 originWSOffset = originWSSnapped - originWS;
+
     o.positionWS = TransformObjectToWorld(v.positionOS);
-    #endif
+    //o.positionCS = TransformObjectToHClip(v.positionOS);
+    o.positionWS += float3(originWSOffset, 0);
+    o.positionCS = TransformWorldToHClip(float4(o.positionWS, 1));
+
 #ifdef TEXTURE_BASED
     o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 #else
