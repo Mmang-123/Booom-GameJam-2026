@@ -30,8 +30,9 @@ inline float2 UV4To3(float2 uv)
 
 inline float2 SnapLightPoisition(float2 rawPosition)
 {
-    const float UNIT_SIZE = 16.0 / 256.0;
-    return round(rawPosition / UNIT_SIZE) * UNIT_SIZE;
+    return rawPosition;
+    //const float UNIT_SIZE = 16.0 / 256.0;
+    //return round(rawPosition / UNIT_SIZE) * UNIT_SIZE;
 }
 
 half GetShadow(float2 screenUV, float2 lightUV)
