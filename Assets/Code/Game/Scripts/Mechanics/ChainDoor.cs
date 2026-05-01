@@ -10,6 +10,8 @@ namespace Game
 
         [SerializeField] private SpriteRenderer m_DoorRenderer;
         [SerializeField] private SpriteRenderer m_Emission;
+        [SerializeField] private Color m_ActiveColor = Color.green;
+        [SerializeField] private Color m_InactiveColor = Color.red;
 
         private bool m_Active;
         private float m_CurrentDoorLength;
@@ -52,7 +54,7 @@ namespace Game
         private void SetActive(bool active)
         {
             m_Active = active;
-            m_Emission.color = active ? Color.green : Color.red;
+            m_Emission.color = active ? m_ActiveColor : m_InactiveColor;
         }
 
         private void SetDoorLength(float newLength)

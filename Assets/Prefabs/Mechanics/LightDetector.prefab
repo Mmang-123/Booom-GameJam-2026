@@ -138,6 +138,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.LightDetector
   m_EmissionLight: {fileID: 7653661109557720908}
+  ActiveColor: {r: 0, g: 1, b: 0, a: 1}
+  InactiveColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &8896998452723560905
 GameObject:
   m_ObjectHideFlags: 0
