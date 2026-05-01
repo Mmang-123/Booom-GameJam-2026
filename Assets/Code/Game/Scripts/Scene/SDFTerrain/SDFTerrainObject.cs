@@ -5,6 +5,7 @@ using Sloane;
 #if UNITY_EDITOR
 using UnityEditor;
 using System.IO;
+using System.Collections.Generic;
 #endif
 
 namespace Sloane
@@ -155,13 +156,19 @@ namespace Sloane
             spriteQuadTree?.Dispose();
             spriteQuadTree = new SpriteQuadTree(texture, minSize);
 
+            var rects = new List<RectInt>();
             foreach (var node in spriteQuadTree.NodesWithContent)
-            {
-                float width = node.Bounds.width / ppu;
-                float height = node.Bounds.height / ppu;
-                Vector2 localCenter = (node.Bounds.center - new Vector2(texture.width, texture.height) * 0.5f) / ppu;
+                rects.Add(node.Bounds);
 
-                GameObject colliderObj = new GameObject($"Collider_{node.Bounds.x}_{node.Bounds.y}");
+            var colliderBounds = MergeRects(rects);
+
+            foreach (var bounds in colliderBounds)
+            {
+                float width = bounds.width / ppu;
+                float height = bounds.height / ppu;
+                Vector2 localCenter = (bounds.center - new Vector2(texture.width, texture.height) * 0.5f) / ppu;
+
+                GameObject colliderObj = new GameObject($"Collider_{bounds.x}_{bounds.y}");
                 colliderObj.transform.SetParent(m_ColliderRoot.transform);
                 colliderObj.transform.localPosition = localCenter;
                 colliderObj.transform.localRotation = Quaternion.identity;
@@ -172,6 +179,73 @@ namespace Sloane
             }
         }
 
-#endif
+        // 对任意一组非重叠 RectInt 做贪心水平+垂直合并，直到无法继续合并
+        // 可跨父节点合并相邻等高/等宽的矩形
+        private static List<RectInt> MergeRects(List<RectInt> input)
+        {
+            var rects = new List<RectInt>(input);
+            bool changed = true;
+            while (changed)
+            {
+                changed = false;
+
+                // 水平合并：同一 y、同一 height、x 相邻
+                for (int i = 0; i < rects.Count && !changed; i++)
+                {
+                    for (int j = i + 1; j < rects.Count; j++)
+                    {
+                        var a = rects[i];
+                        var b = rects[j];
+                        if (a.y == b.y && a.height == b.height)
+                        {
+                            if (a.x + a.width == b.x)
+                            {
+                                rects[i] = new RectInt(a.x, a.y, a.width + b.width, a.height);
+                                rects.RemoveAt(j);
+                                changed = true;
+                                break;
+                            }
+                            if (b.x + b.width == a.x)
+                            {
+                                rects[i] = new RectInt(b.x, b.y, a.width + b.width, a.height);
+                                rects.RemoveAt(j);
+                                changed = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // 垂直合并：同一 x、同一 width、y 相邻
+                for (int i = 0; i < rects.Count && !changed; i++)
+                {
+                    for (int j = i + 1; j < rects.Count; j++)
+                    {
+                        var a = rects[i];
+                        var b = rects[j];
+                        if (a.x == b.x && a.width == b.width)
+                        {
+                            if (a.y + a.height == b.y)
+                            {
+                                rects[i] = new RectInt(a.x, a.y, a.width, a.height + b.height);
+                                rects.RemoveAt(j);
+                                changed = true;
+                                break;
+                            }
+                            if (b.y + b.height == a.y)
+                            {
+                                rects[i] = new RectInt(b.x, b.y, a.width, a.height + b.height);
+                                rects.RemoveAt(j);
+                                changed = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            return rects;
+        }
     }
+    #endif
 }

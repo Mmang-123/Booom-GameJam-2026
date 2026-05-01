@@ -194,7 +194,8 @@ MonoBehaviour:
   m_RotateSpeed: 3
   m_FastRotateSpeed: 6
   m_MoveSpeed: 10
-  m_Acceleration: 5
+  m_Acceleration: 8
+  m_FastAcceleration: 16
   m_StopDistance: 0.8
 --- !u!50 &834712693967893020
 Rigidbody2D:

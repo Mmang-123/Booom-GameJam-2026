@@ -50,6 +50,7 @@ namespace Sloane
         }
 
         public List<QuadTreeNode> NodesWithContent => m_NodesWithContent;
+        public QuadTreeNode Root => m_Root;
 
         private bool m_Disposed;
 

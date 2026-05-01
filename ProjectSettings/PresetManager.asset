@@ -13,3 +13,6 @@ PresetManager:
     - m_Preset: {fileID: 2655988077585873504, guid: 7b3411a21ba616e4a8fe377bca47b6ba, type: 2}
       m_Filter: glob:"Assets/Sprites/**.png"
       m_Disabled: 0
+    - m_Preset: {fileID: 2655988077585873504, guid: 0b32a4e659d3ef1448aa2700a3bbf6c5, type: 2}
+      m_Filter: glob:"Assets/Sprites/Terrain/Base/**.png"
+      m_Disabled: 0
