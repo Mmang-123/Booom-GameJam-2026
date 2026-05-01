@@ -2,6 +2,8 @@
 #include "../Generic/PixelartShared.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Packing.hlsl"
 #include "Background.hlsl"
+#include "../../Lighting/Lighting.hlsl"
+#include "SpriteShading.hlsl"
 
 Varyings PixelartVert(Attributes v)
 {
@@ -34,6 +36,7 @@ Varyings PixelartVert(Attributes v)
     return o;
 }
 
+/*
 BufferOutput BackgroundFrag(Varyings input) : SV_Target
 {
     BUFFER_OUTPUT_INIT();
@@ -44,4 +47,19 @@ BufferOutput BackgroundFrag(Varyings input) : SV_Target
     OUTPUT_ALBEDO3(backgroundColor);
 
     RETURN_BUFFER_VALUE();
+}
+*/
+
+float4 BackgroundFrag(Varyings input) : SV_Target
+{
+    float2 screenUV = input.positionCS.xy / _ScreenParams.xy;
+    float3 backgroundColor = SampleBackground(screenUV);
+
+    float3 light = SampleLight(screenUV);
+
+    float3 outputColor = MixAlbedoAndLightColor_Background(backgroundColor, light);
+
+    //return float4(backgroundColor, 1);
+    //return float4(light, 1);
+    return float4(outputColor, 1);
 }

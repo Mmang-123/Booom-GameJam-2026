@@ -84,7 +84,7 @@ namespace Mmang.PixelartRender
                 builder.AllowPassCulling(false);
                 builder.AllowGlobalStateModification(true);
 
-
+                /*
                 for (EPixelartBuffer bufferType = PRenderStage.RawDataStart; bufferType <= PRenderStage.RawDataEnd; bufferType++)
                 {
                     TextureHandle bufferHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, PBuffer.GetBufferDescriptor(pixelartCamera.CameraData, bufferType), PBuffer.GetBufferName(bufferType), false);
@@ -93,18 +93,14 @@ namespace Mmang.PixelartRender
                     pixelartBufferData.AddBuffer(bufferType, bufferHandle);
                 }
 
-                
                 TextureHandle depthHandle = UniversalRenderer.CreateRenderGraphTexture(renderGraph, PBuffer.GetBufferDescriptor(pixelartCamera.CameraData, EPixelartBuffer.Depth), PBuffer.GetBufferName(EPixelartBuffer.Depth), false);
                 builder.SetRenderAttachmentDepth(depthHandle, AccessFlags.Write);
                 builder.SetGlobalTextureAfterPass(depthHandle, PBuffer.GetBufferShaderProperty(EPixelartBuffer.Depth));
                 pixelartBufferData.AddBuffer(EPixelartBuffer.Depth, depthHandle);
-
-                /*
-                TextureHandle depthHandle = resourceData.activeDepthTexture;
-                builder.SetRenderAttachmentDepth(depthHandle, AccessFlags.Write);
-                builder.SetGlobalTextureAfterPass(depthHandle, PBuffer.GetBufferShaderProperty(EPixelartBuffer.Depth));
-                pixelartBufferData.AddBuffer(EPixelartBuffer.Depth, depthHandle);
                 */
+
+                builder.SetRenderAttachment(resourceData.activeColorTexture, 0, AccessFlags.Write);
+                builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, AccessFlags.Write);
 
                 SortingCriteria sortingCriteria = cameraData.defaultOpaqueSortFlags;
                 DrawingSettings drawingSettings = RenderingUtils.CreateDrawingSettings(TargetShaderTag, renderingData, cameraData, lightData, sortingCriteria);

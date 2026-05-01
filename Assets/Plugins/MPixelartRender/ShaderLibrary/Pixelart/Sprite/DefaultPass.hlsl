@@ -23,8 +23,6 @@ Varyings UnlitVert(Attributes v)
     return o;
 }
 
-
-
 float3 ComputeLighting(float2 positionWS)
 {
     int lightCount = _MLightParams.x;

@@ -29,7 +29,7 @@ namespace Mmang.PixelartRender
         #region Pass
         private RenderPass_PixelartRenderSetup m_PixelartSetupPass;
         private RenderPass_OpaqueRendering m_OpaqueRenderingPass;
-        private RenderPass_PixelartShading m_PixelartShadingPass;
+        //private RenderPass_PixelartShading m_PixelartShadingPass;
         private RenderPass_PixelartRenderCleanup m_PixelartCleanupPass;
 
         private RenderPass_BufferOutput m_BufferOutputPass;
@@ -52,10 +52,12 @@ namespace Mmang.PixelartRender
                 renderPassEvent = RenderPassEvent.AfterRenderingPrePasses
             };
 
+            /*
             m_PixelartShadingPass = new(m_PixelartShader)
             {
                 renderPassEvent = RenderPassEvent.AfterRenderingOpaques
             };
+            */
 
             m_PixelartCleanupPass = new()
             {
@@ -101,7 +103,7 @@ namespace Mmang.PixelartRender
 
             renderer.EnqueuePass(m_OpaqueRenderingPass);
 
-            renderer.EnqueuePass(m_PixelartShadingPass);
+            //renderer.EnqueuePass(m_PixelartShadingPass);
 
 #if UNITY_EDITOR
             if (m_ObstacleDebug == EObstacleDebug.Off && m_DebugOutput)

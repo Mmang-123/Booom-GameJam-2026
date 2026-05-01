@@ -1,7 +1,9 @@
 ﻿#include "../Generic/PixelartStructures.hlsl"
 #include "../Generic/PixelartShared.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Packing.hlsl"
-
+#include "../../Lighting/Lighting.hlsl"
+#include "Background.hlsl"
+#include "SpriteShading.hlsl"
 
 Varyings PixelartVert(Attributes v)
 {
@@ -34,6 +36,7 @@ Varyings PixelartVert(Attributes v)
     return o;
 }
 
+/*
 BufferOutput PixelartFrag(Varyings input) : SV_Target
 {
     BUFFER_OUTPUT_INIT();
@@ -52,8 +55,38 @@ BufferOutput PixelartFrag(Varyings input) : SV_Target
 
     RETURN_BUFFER_VALUE();
 }
+*/
 
+float4 PixelartFrag(Varyings input) : SV_Target
+{
+#ifdef TEXTURE_BASED
+    float4 outputColor = tex2D(_MainTex, input.uv) * input.color;
+#else
+    float4 outputColor = input.color;
+#endif
 
+    clip(outputColor.a - 0.5);
+
+    float2 screenUV = input.positionCS.xy / _ScreenParams.xy;
+    float3 light = SampleLight(screenUV);
+
+    if (light.r <= 0.001 && light.g <= 0.001 && light.b <= 0.001)
+    {
+        // Background
+        outputColor.rgb = SRGBToLinear(SampleBackground(screenUV)).rgb;
+    }
+    else
+    {
+        outputColor.rgb = MixAlbedoAndLightColor_Background(outputColor.rgb, light);
+    }
+
+    // Emission
+    outputColor.rgb = lerp(outputColor.rgb, _Emission.rgb, _Emission.a);
+
+    return outputColor;
+}
+
+/*
 BufferOutput PixelartEmissionFrag(Varyings input) : SV_Target
 {
     BUFFER_OUTPUT_INIT();
@@ -72,4 +105,18 @@ BufferOutput PixelartEmissionFrag(Varyings input) : SV_Target
     //OUTPUT_OBSTACLE_MASK(_ObstacleMaskValue);
 
     RETURN_BUFFER_VALUE();
+}
+*/
+
+float4 PixelartEmissionFrag(Varyings input) : SV_Target
+{
+#ifdef TEXTURE_BASED
+    float4 outputColor = tex2D(_MainTex, input.uv) * input.color;
+#else
+    float4 outputColor = input.color;
+#endif
+
+    clip(outputColor.a - 0.5);
+
+    return outputColor;
 }
