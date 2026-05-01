@@ -46,7 +46,6 @@ namespace Mmang.PixelartRender
 
         private void Update()
         {
-            // TODO: 剔除后面再说
             PointLightCount = 0;
             LightCount = 0;
             SpotLightCount = 0;
@@ -56,6 +55,14 @@ namespace Mmang.PixelartRender
             m_SpotLightsCache.Clear();
             m_AreaLightsCache.Clear();
 
+            var maskManager = ObstacleMaskManager.Instance;
+            Vector2 centerPosition = maskManager.GetCenterPosition();
+            Bounds cameraBounds = new()
+            {
+                center = centerPosition,
+                extents = maskManager.TileSize * 1.5f * Vector3.one
+            };
+
             foreach (var light in m_Lights)
             {
                 if (LightCount >= MAX_LIGHT_COUNT)
@@ -64,6 +71,8 @@ namespace Mmang.PixelartRender
                 if (light.LightRadius <= 0f || light.LightIntensity <= 0f)
                     continue;
 
+                if (!cameraBounds.Intersects(light.GetBounds()))
+                    continue;
 
                 if (light is PointLight pointLight)
                 {

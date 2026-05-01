@@ -34,7 +34,14 @@ namespace Mmang.PixelartRender
 
         public override Bounds GetBounds()
         {
-            throw new System.NotImplementedException();
+            float len = Mathf.Max(Width, Radius) * 1.42f;
+            Bounds bounds = new()
+            {
+                center = (Vector2)transform.position + GetDirection() * Radius / 2f,
+                extents = new(len, len)
+            };
+
+            return bounds;
         }
     }
 }

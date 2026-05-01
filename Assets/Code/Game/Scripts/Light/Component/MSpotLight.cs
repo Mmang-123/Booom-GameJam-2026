@@ -34,7 +34,13 @@ namespace Mmang.PixelartRender
 
         public override Bounds GetBounds()
         {
-            throw new System.NotImplementedException();
+            Bounds bounds = new()
+            {
+                center = transform.position,
+                extents = new(LightRadius, LightRadius)
+            };
+
+            return bounds;
         }
     }
 }

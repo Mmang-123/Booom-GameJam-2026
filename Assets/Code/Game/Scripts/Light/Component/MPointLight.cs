@@ -18,9 +18,12 @@ namespace Mmang.PixelartRender
 
         public override Bounds GetBounds()
         {
-            Bounds bounds = new();
-            bounds.center = transform.position;
-            
+            Bounds bounds = new()
+            {
+                center = transform.position,
+                extents = new(LightRadius, LightRadius)
+            };
+
             return bounds;
         }
     }
