@@ -12,8 +12,9 @@ namespace Game
         [SerializeField] private Animator m_Animator;
         [SerializeField] private float m_LightIntensity = 1f;
         
-        //private float ActiveTime => 0.1f;
-        private float IntensityUpdateRate => m_LightIntensity / 1.0f;
+        private float IntensityUpdateRate => 1.0f / 1.0f;
+
+        private float m_IntensityT = 0f; // [0,1] 用于 smoothstep
 
         #region IChargable
         public PowerSourceHandler PowerSourceHandler { get; } = new();
@@ -26,7 +27,7 @@ namespace Game
 
         private void Start()
         {
-            m_Active = false;
+            m_IntensityT = m_Active ? 1f : 0f;
             m_Light.LightIntensity = m_Active ? m_LightIntensity : 0f;
             m_IndicatorRenderer.color = m_Active ? Color.green : Color.red;
         }
@@ -56,11 +57,13 @@ namespace Game
 
             if (m_Active && m_Light.LightIntensity < m_LightIntensity)
             {
-                m_Light.LightIntensity = Mathf.Min(m_Light.LightIntensity + IntensityUpdateRate * Time.fixedDeltaTime, m_LightIntensity);
+                m_IntensityT = Mathf.Clamp01(m_IntensityT + IntensityUpdateRate * Time.fixedDeltaTime);
+                m_Light.LightIntensity = Mathf.SmoothStep(0f, m_LightIntensity, m_IntensityT);
             }
             else if (!m_Active && m_Light.LightIntensity > 0f)
             {
-                m_Light.LightIntensity = Mathf.Max(m_Light.LightIntensity - IntensityUpdateRate * Time.fixedDeltaTime, 0f);
+                m_IntensityT = Mathf.Clamp01(m_IntensityT - IntensityUpdateRate * Time.fixedDeltaTime);
+                m_Light.LightIntensity = Mathf.SmoothStep(0f, m_LightIntensity, m_IntensityT);
             }
         }
 
