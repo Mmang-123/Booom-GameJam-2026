@@ -5,7 +5,9 @@
 
 float3 SampleBackground(float2 screenUV)
 {
-    return SRGBToLinear(float4(0.0313, 0.0352, 0.1215, 1)).rgb;
+    float3 backgroundColor = float3(0.0313, 0.0313, 0.1215);
+
+    return SRGBToLinear(backgroundColor);
 }
 
 #endif

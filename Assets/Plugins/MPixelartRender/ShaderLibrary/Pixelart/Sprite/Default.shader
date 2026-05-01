@@ -62,7 +62,7 @@
             // -------------------------------------
             // Shader Stages
             #pragma vertex ObstacleVert
-            #pragma fragment ObstacleFrag
+            #pragma fragment ObstacleExtendFrag
 
             //--------------------------------------
             // GPU Instancing
