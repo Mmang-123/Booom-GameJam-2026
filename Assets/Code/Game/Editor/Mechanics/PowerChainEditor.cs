@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 
 namespace Game.Editors
 {
+    /*
     [CustomEditor(typeof(PowerChain))]
     public class PowerChainEditor : Editor
     {
@@ -12,4 +13,5 @@ namespace Game.Editors
             return base.CreateInspectorGUI();
         }
     }
+    */
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using Mmang.Generic;
 using System.Collections;
 using UnityEditor.UIElements;
+using Mmang.Util;
 
 namespace Mmang.Editors
 {
@@ -75,7 +76,7 @@ namespace Mmang.Editors
                 }
             });
 
-
+            objectField.AddManipulator(new AlignLabelManipulator());
             root.Add(objectField);
 
             return root;
