@@ -1,5 +1,7 @@
 ﻿//#include "../Generic/PixelartStructures.hlsl"
 #include "../../Lighting/Lighting.hlsl"
+#include "Background.hlsl"
+#include "SpriteShading.hlsl"
 
 Varyings UnlitVert(Attributes v)
 {
@@ -80,17 +82,25 @@ float4 UnlitFrag(Varyings input) : SV_Target
     float2 positionOSSnapped = floor(input.positionOS / UNIT_SIZE) * UNIT_SIZE;
     float2 positionWS = TransformObjectToWorld(float4(positionOSSnapped, 0, 1));
     positionWS = floor(positionWS / UNIT_SIZE) * UNIT_SIZE;
-    /*
+
     float4 positionCS = TransformWorldToHClip(float4(positionWS, 0, 1));
     float4 screenPos = ComputeScreenPos(positionCS);
     float2 screenUV = screenPos.xy / screenPos.w;
-    */
 
     float3 lightColor = ComputeLighting(positionWS);
-    outputColor.rgb += lightColor;
+
+    if (lightColor.r <= 0.001 && lightColor.g <= 0.001 && lightColor.b <= 0.001)
+    {
+        // Background
+        outputColor.rgb = SampleBackground(screenUV).rgb;
+    }
+    else
+    {
+        outputColor.rgb = lerp(LightenBlend(outputColor.rgb, lightColor), outputColor.rgb * lightColor, _ShadingBlend);
+    }
 
     outputColor.rgb = lerp(outputColor.rgb, _Emission.rgb, _Emission.a);
 
-    return float4(lightColor, outputColor.a);
+    // return float4(lightColor, outputColor.a);
     return outputColor;
 }

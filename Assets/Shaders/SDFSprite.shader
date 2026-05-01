@@ -5,6 +5,7 @@ Shader "Sloane/SDFSprite"
         _MainTex ("Sprite Texture", 2D) = "white" {}
         _NoiseTexture("Noise Texture", 2D) = "white" {}
         _NoiseStrength ("Noise Strength", Float) = 0
+        _ShadingBlend ("Shading Blend", Range(0, 1)) = 0
         _ObstacleMaskValue ("Is Obstacle", Float) = 0
         _SDFThreshold ("SDF Threshold", Float) = 0.5
 

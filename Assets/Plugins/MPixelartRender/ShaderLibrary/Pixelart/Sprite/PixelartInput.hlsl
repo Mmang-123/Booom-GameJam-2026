@@ -9,5 +9,5 @@ float4 _Color;
 float4 _Emission;
 half4 _RendererColor;
 float _ObstacleMaskValue;
-half _MSurfaceType;
+float _ShadingBlend;
 CBUFFER_END

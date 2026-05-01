@@ -73,11 +73,11 @@ float4 PixelartFrag(Varyings input) : SV_Target
     if (light.r <= 0.001 && light.g <= 0.001 && light.b <= 0.001)
     {
         // Background
-        outputColor.rgb = SRGBToLinear(SampleBackground(screenUV)).rgb;
+        outputColor.rgb = SampleBackground(screenUV).rgb;
     }
     else
     {
-        outputColor.rgb = MixAlbedoAndLightColor_Background(outputColor.rgb, light);
+        outputColor.rgb = lerp(LightenBlend(outputColor.rgb, light), outputColor.rgb * light, _ShadingBlend);
     }
 
     // Emission

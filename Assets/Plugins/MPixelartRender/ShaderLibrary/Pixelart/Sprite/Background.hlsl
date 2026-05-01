@@ -1,9 +1,11 @@
 ﻿#ifndef SPRITE_BACKGROUND_INCLUDED
 #define SPRITE_BACKGROUND_INCLUDED
 
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
+
 float3 SampleBackground(float2 screenUV)
 {
-    return float4(0.0313, 0.0313, 0.1215, 1);
+    return SRGBToLinear(float4(0.0313, 0.0352, 0.1215, 1)).rgb;
 }
 
 #endif

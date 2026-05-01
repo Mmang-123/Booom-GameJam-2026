@@ -57,7 +57,7 @@ float4 BackgroundFrag(Varyings input) : SV_Target
 
     float3 light = SampleLight(screenUV);
 
-    float3 outputColor = MixAlbedoAndLightColor_Background(backgroundColor, light);
+    float3 outputColor = LightenBlend(backgroundColor, light);
 
     //return float4(backgroundColor, 1);
     //return float4(light, 1);

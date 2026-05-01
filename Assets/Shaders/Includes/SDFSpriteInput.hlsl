@@ -11,4 +11,5 @@ half4 _RendererColor;
 half _NoiseStrength;
 half _ObstacleMaskValue;
 half _SDFThreshold;
+float _ShadingBlend;
 CBUFFER_END

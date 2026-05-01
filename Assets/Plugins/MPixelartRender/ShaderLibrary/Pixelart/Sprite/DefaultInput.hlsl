@@ -7,6 +7,7 @@ sampler2D _MainTex;
 half4 _MainTex_ST;
 float4 _Color;
 float4 _Emission;
+float _ShadingBlend;
 half4 _RendererColor;
 CBUFFER_END
 

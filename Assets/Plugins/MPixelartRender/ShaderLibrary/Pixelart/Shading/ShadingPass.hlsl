@@ -37,7 +37,7 @@ void ShadingFragment(Varyings input, out half4 outColor : COLOR0, out float3 out
     }
     else
     {
-        outputColor = MixAlbedoAndLightColor_Background(albedo, light);
+        outputColor = LightenBlend(albedo, light);
         // 有时候可以用emission表示在阴影中的颜色?
         if (surfaceType == 1)
         {

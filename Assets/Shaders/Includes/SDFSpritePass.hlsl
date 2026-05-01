@@ -63,7 +63,7 @@ float4 PixelartFrag(Varyings input) : SV_Target
     }
     else
     {
-        outputColor.rgb = MixAlbedoAndLightColor_Background(outputColor.rgb, light);
+        outputColor.rgb = lerp(LightenBlend(outputColor.rgb, light), outputColor.rgb * light, _ShadingBlend);
     }
 
     return outputColor;
