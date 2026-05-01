@@ -15,5 +15,13 @@ namespace Mmang.PixelartRender
         public float Intensity = 1f;
 
         public Vector3 Position => transform.position;
+
+        public override Bounds GetBounds()
+        {
+            Bounds bounds = new();
+            bounds.center = transform.position;
+            
+            return bounds;
+        }
     }
 }

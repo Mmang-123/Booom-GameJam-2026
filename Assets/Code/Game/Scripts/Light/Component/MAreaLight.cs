@@ -31,5 +31,10 @@ namespace Mmang.PixelartRender
         {
             return Mathf.Clamp01(InnerWidth / Width);
         }
+
+        public override Bounds GetBounds()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

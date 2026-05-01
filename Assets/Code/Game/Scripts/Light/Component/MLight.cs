@@ -26,5 +26,7 @@ namespace Mmang.PixelartRender
             if (LightingManager.InstanceValid)
                 LightingManager.Instance.UnregisterLight(this);
         }
+
+        public abstract Bounds GetBounds();
     }
 }

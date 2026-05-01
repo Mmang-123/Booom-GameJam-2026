@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 namespace Game
 {
     public interface IMLight
@@ -7,5 +9,6 @@ namespace Game
         public float LightRadius { get; set; }
 
         // todo: 包围盒
+        public Bounds GetBounds();
     }
 }

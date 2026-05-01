@@ -31,5 +31,10 @@ namespace Mmang.PixelartRender
         {
             return transform.up;
         }
+
+        public override Bounds GetBounds()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
