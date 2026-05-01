@@ -1,5 +1,8 @@
 #include "../../Plugins/MPixelartRender/ShaderLibrary/Pixelart/Generic/PixelartStructures.hlsl"
 #include "../../Plugins/MPixelartRender/ShaderLibrary/Pixelart/Generic/PixelartShared.hlsl"
+#include "../../Plugins/MPixelartRender/ShaderLibrary/Pixelart/Sprite/SpriteShading.hlsl"
+#include "../../Plugins/MPixelartRender/ShaderLibrary/Lighting/Lighting.hlsl"
+#include "../../Plugins/MPixelartRender/ShaderLibrary/Pixelart/Sprite/Background.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Packing.hlsl"
 #include "Packages/SloaneShaderGeneric/Includes/SDF/Packing.hlsl"
 
@@ -42,28 +45,33 @@ Varyings PixelartVert(Attributes v)
     return o;
 }
 
-BufferOutput PixelartFrag(Varyings input) : SV_Target
+float4 PixelartFrag(Varyings input) : SV_Target
 {
-    BUFFER_OUTPUT_INIT();
-
     // 从 SDF 纹理解压距离值（R8G8 packed magnitude + B channel sign）
     float sdf = UnpackSDF(tex2D(_MainTex, input.uv).rgb);
     sdf = PerturbSDF(sdf, input.positionWS.xy);
     clip(sdf - _SDFThreshold);
 
     float4 outputColor = input.color;
+    float2 screenUV = input.positionCS.xy / _ScreenParams.xy;
+    float3 light = SampleLight(screenUV);
 
-    OUTPUT_ALBEDO4(outputColor);
-    OUTPUT_EMISSION(float4(0, 0, 0, 0));
+    if (light.r <= 0.001 && light.g <= 0.001 && light.b <= 0.001)
+    {
+        // Background
+        outputColor.rgb = SampleBackground(screenUV);
+    }
+    else
+    {
+        outputColor.rgb = MixAlbedoAndLightColor_Background(outputColor.rgb, light);
+    }
 
-    RETURN_BUFFER_VALUE();
+    return outputColor;
 }
 
 // ========================
 // Obstacle Pass
 // ========================
-
-float4 _ObstacleParams;
 
 Varyings ObstacleVert(Attributes v)
 {
