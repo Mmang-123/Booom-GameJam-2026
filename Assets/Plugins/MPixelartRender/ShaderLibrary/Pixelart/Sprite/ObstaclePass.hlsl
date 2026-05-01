@@ -47,3 +47,25 @@ half4 ObstacleFrag(Varyings input) : SV_Target
 
     return _ObstacleMaskValue;
 }
+
+half4 ObstacleExtendFrag(Varyings input) : SV_Target
+{
+    const float UNIT_SIZE = 1.0 / 256.0 * 4;
+
+#ifdef TEXTURE_BASED
+    float alpha = 0;
+    alpha += tex2D(_MainTex, input.uv + float2(0, 0)).a;
+    alpha += tex2D(_MainTex, input.uv + float2(UNIT_SIZE, 0)).a;
+    alpha += tex2D(_MainTex, input.uv + float2(0, UNIT_SIZE)).a;
+    alpha += tex2D(_MainTex, input.uv + float2(-UNIT_SIZE, 0)).a;
+    alpha += tex2D(_MainTex, input.uv + float2(0, -UNIT_SIZE)).a;
+
+    alpha *= input.color.a;
+#else
+    float alpha = input.color.a;
+#endif
+
+    clip(alpha - 0.5);
+
+    return _ObstacleMaskValue;
+}
