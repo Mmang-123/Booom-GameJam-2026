@@ -106,8 +106,10 @@ namespace Mmang.PixelartRender
 
             if (ResultBuffer == null)
             {
-                ResultBuffer = RenderTexture.GetTemporary(resultDesc);
-                ResultBuffer.filterMode = FilterMode.Point;
+                ResultBuffer = new(resultDesc)
+                {
+                    filterMode = FilterMode.Point
+                };
                 ResultBuffer.Create();
             }
             ResultBufferHandle = RTHandles.Alloc(ResultBuffer);
