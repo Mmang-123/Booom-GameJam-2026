@@ -29,10 +29,11 @@ namespace Game
     {
         public enum State { Normal, Trace }
 
-        [SerializeField] private float m_RotateSpeed = 10f;
-        [SerializeField] private float m_FastRotateSpeed = 10f;
-        [SerializeField] private float m_MoveSpeed = 2f;
-        [SerializeField] private float m_Acceleration = 2f;
+        [SerializeField] private float m_RotateSpeed = 3f;
+        [SerializeField] private float m_FastRotateSpeed = 6f;
+        [SerializeField] private float m_MoveSpeed = 10f;
+        [SerializeField] private float m_Acceleration = 5f;
+        [SerializeField] private float m_FastAcceleration = 16f;
         [SerializeField] private float m_StopDistance;
 
         // Runtime
@@ -115,13 +116,15 @@ namespace Game
                 CurrentSpeed = 0f;
             }
 
+            float acceleration = RequireFastRotate(angle) ? m_FastAcceleration : m_Acceleration;
+
             if (distance > m_StopDistance && !RequireFastRotate(angle))
             {
-                CurrentSpeed = Mathf.Min(m_MoveSpeed, CurrentSpeed + dt * m_Acceleration);
+                CurrentSpeed = Mathf.Min(m_MoveSpeed, CurrentSpeed + dt * acceleration);
             }
             else
             {
-                CurrentSpeed = Mathf.Max(0f, CurrentSpeed - dt * m_Acceleration * 2f);
+                CurrentSpeed = Mathf.Max(0f, CurrentSpeed - dt * acceleration * 2f);
             }
 
             float moveDistance = CurrentSpeed * dt;
