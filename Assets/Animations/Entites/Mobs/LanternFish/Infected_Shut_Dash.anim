@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Regular_Shut_Dash
+  m_Name: Infected_Shut_Dash
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,13 +21,13 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -1006220157, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
+      value: {fileID: 2000060821, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
     - time: 0.1
-      value: {fileID: -1966123895, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
+      value: {fileID: -376182219, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
     - time: 0.2
-      value: {fileID: 728864708, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
+      value: {fileID: -1340460571, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
     - time: 0.3
-      value: {fileID: -1481921140, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
+      value: {fileID: 1956919608, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -50,10 +50,10 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: -1006220157, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
-    - {fileID: -1966123895, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
-    - {fileID: 728864708, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
-    - {fileID: -1481921140, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
+    - {fileID: 2000060821, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
+    - {fileID: -376182219, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
+    - {fileID: -1340460571, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
+    - {fileID: 1956919608, guid: d6f6758e92193404ebb20ebe91d18b56, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
