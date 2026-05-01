@@ -125,7 +125,7 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _NoiseStrength: 0.0625
-    - _ObstacleMaskValue: 1
+    - _ObstacleMaskValue: 0.75
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0
