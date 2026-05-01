@@ -1,2 +1,17 @@
 fileFormatVersion: 2
 guid: 7a55abf864b929442ae0e169ecca21fc
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_OriginalSprite: {instanceID: 0}
+  - m_OutlineSpriteRenderer: {instanceID: 0}
+  - m_SolidSpriteRenderer: {instanceID: 0}
+  - m_SDFSprite: {instanceID: 0}
+  - m_SDFOutlineMaterial: {fileID: 2100000, guid: d95fbf1b26fc25c4e80677ca58195970, type: 2}
+  - m_SDFSolidMaterial: {fileID: 2100000, guid: 479ad81162a9e8e4eb6a556acf7d1b97, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
