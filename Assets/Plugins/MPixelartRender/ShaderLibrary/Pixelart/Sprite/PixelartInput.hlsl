@@ -10,4 +10,5 @@ float4 _Emission;
 half4 _RendererColor;
 float _ObstacleMaskValue;
 float _ShadingBlend;
+float _LightenBlend;
 CBUFFER_END

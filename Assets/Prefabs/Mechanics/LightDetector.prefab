@@ -58,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 30cf64431890dcc43ac397db18626fa4, type: 2}
+  - {fileID: 2100000, guid: e5ef0bf36c7eb1a42837579a3ae688e7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -137,7 +137,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d39630dbf133f40bec9b9c86afbf45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.LightDetector
-  m_ChargeObject: {fileID: 0}
   m_EmissionLight: {fileID: 7653661109557720908}
 --- !u!1 &8896998452723560905
 GameObject:

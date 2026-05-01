@@ -4,6 +4,7 @@
     {
         _MainTex ("Sprite Texture", 2D) = "white" {}
         _ObstacleMaskValue ("Is Obstacle", Float) = 0
+        _LightenBlend ("Lighten Blend", Range(0, 1)) = 0.16
         _ShadingBlend ("Shading Blend", Range(0, 1)) = 0
         _Emission ("Emission", Color) = (0,0,0,0)
         _PreviewColor ("Preview Color", Color) = (1,1,1,1)

@@ -12,4 +12,5 @@ half _NoiseStrength;
 half _ObstacleMaskValue;
 half _SDFThreshold;
 float _ShadingBlend;
+float _LightenBlend;
 CBUFFER_END
