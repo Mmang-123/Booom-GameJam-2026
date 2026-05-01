@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4463218048325410829
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4606634451808651763}
+  - component: {fileID: 5161660380949998133}
+  m_Layer: 0
+  m_Name: PowerChain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4606634451808651763
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4463218048325410829}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.95, y: 1.39, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5161660380949998133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4463218048325410829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d0b34823c657ce4696ab1dfb4907342, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.PowerChain
+  m_PowerSource:
+    m_Object: {fileID: 0}
+  m_ChargeObject:
+    m_Object: {fileID: 0}
+  m_ConductionTime: 3
+  m_MaintainTime: 3
+  m_PointPrefab_Big: {fileID: 5269184669066008097, guid: a3384093ef3f4e2439f34ccd53ba6caf, type: 3}
+  m_PointPrefab_Small: {fileID: 6040145401005625939, guid: 6fa8200095b374a4a991a32ba452f8bb, type: 3}
+  m_BigPoint_Sprite_On: {fileID: -320358638, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
+  m_BigPoint_Sprite_Off: {fileID: -737230656, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
+  m_SmallPoint_Sprite_On: {fileID: -1685350942, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
+  m_SmallPoint_Sprite_Off: {fileID: 1180154085, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
+  m_PointDistance: 0.3
+  m_ControlPoints:
+  - Position1: {x: -1, y: 0}
+    Position2: {x: -1, y: 1}
+  - Position1: {x: 1, y: 0}
+    Position2: {x: 1, y: 1}
+  m_Points: []

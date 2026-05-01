@@ -2,9 +2,32 @@
 using Mmang.Generic;
 using UnityEngine.Pool;
 using UnityEngine;
+using UnityEditor;
+using Mmang.Util;
 
 namespace Game
 {
+    [System.Serializable]
+    public struct BezierControlPoint
+    {
+        public Vector2 Position1;
+        public Vector2 Position2;
+        public BezierControlPoint(Vector2 p1, Vector2 p2)
+        {
+            Position1 = p1;
+            Position2 = p2;
+        }
+
+        public Vector2 GetNegativePoint2()
+        {
+            Vector2 offset = Position2 - Position1;
+            return Position1 - offset;
+        }
+
+        public void SetPosition1(Vector2 pos) => Position1 = pos;
+        public void SetPosition2(Vector2 pos) => Position2 = pos;
+    }
+
     public class PowerChain : MonoBehaviour, IChargable, IPowerSource
     {
         [System.Serializable]
@@ -27,12 +50,24 @@ namespace Game
         [SerializeField] private float m_MaintainTime = 1f;
 
         [Header("Sprites")]
+        [SerializeField] private SpriteRenderer m_PointPrefab_Big;
+        [SerializeField] private SpriteRenderer m_PointPrefab_Small;
         [SerializeField] private Sprite m_BigPoint_Sprite_On;
         [SerializeField] private Sprite m_BigPoint_Sprite_Off;
         [SerializeField] private Sprite m_SmallPoint_Sprite_On;
         [SerializeField] private Sprite m_SmallPoint_Sprite_Off;
 
+        [Header("生成设置")]
+        [SerializeField] private float m_PointDistance = 0.8f;
+        [SerializeField] private List<BezierControlPoint> m_ControlPoints = new()
+        {
+            new(new(-1, 0), new(-1, 1)), new(new(1, 0), new(1, 1))
+        };
+
+        [Header("节点引用")]
         [SerializeField] private List<ChainPoint> m_Points = new();
+
+        public List<BezierControlPoint> ControlPoints => m_ControlPoints;
 
         #region IChargable
         public PowerSourceHandler PowerSourceHandler { get; } = new();
@@ -45,7 +80,6 @@ namespace Game
         public event System.Action<bool> OnPowerChanged;
 
         #endregion
-
 
         // Runtime
         private List<PointData> m_PointDataList;
@@ -172,6 +206,107 @@ namespace Game
             PowerOn = on;
             OnPowerChanged?.Invoke(on);
         }
+        #endregion
+
+
+
+        #region 工具
+#if UNITY_EDITOR
+
+        private SpriteRenderer Editor_CreatePointInstance(bool isBig)
+        {
+            var prefab = isBig ? m_PointPrefab_Big : m_PointPrefab_Small;
+            var instance = Object.Instantiate<SpriteRenderer>(prefab);
+            instance.transform.SetParent(transform, false);
+            return instance;
+        }
+
+        public void Editor_ClearPoints()
+        {
+            foreach (var point in m_Points)
+            {
+                if (point.Renderer1 != null)
+                    Object.DestroyImmediate(point.Renderer1.gameObject);
+                if (point.Renderer2 != null)
+                    Object.DestroyImmediate(point.Renderer2.gameObject);
+            }
+            m_Points.Clear();
+        }
+
+        public void Editor_GeneratePoints()
+        {
+            Vector2 P(Vector2 localPosition)
+            {
+                return (Vector2)transform.position + localPosition;
+            }
+
+            Editor_ClearPoints();
+            var path = new BezierPath();
+
+            float step = m_PointDistance;
+
+            for (int i = 0; i < ControlPoints.Count - 1; i++)
+            {
+                var point1 = ControlPoints[i];
+                var point2 = ControlPoints[i + 1];
+
+                if (i > 0)
+                {
+                    point1.Position2 = point1.GetNegativePoint2();
+                }
+
+                path.Initialize(P(point1.Position1), P(point1.Position2), P(point2.Position2), P(point2.Position1));
+
+                int pointCount = Mathf.FloorToInt(path.TotalLength / step) + 1;
+                if (pointCount % 2 == 0)
+                    pointCount++;
+                
+                float newStep = path.TotalLength / (pointCount - 1);
+
+                SpriteRenderer preSmall = null;
+                bool isBig = true;
+                for (int j = 0; j < pointCount; j++)
+                {
+                    float currentLength = j * newStep;
+                    Vector2 position = path.GetPointAtDistance(currentLength);
+                
+                    var instance = Editor_CreatePointInstance(isBig);
+                    instance.transform.position = position;
+
+                    if (isBig)
+                    {
+                        ChainPoint chainPoint = new()
+                        {
+                            Renderer1 = instance,
+                            Renderer2 = preSmall
+                        };
+                        m_Points.Add(chainPoint);
+                    }
+
+                    if (!isBig)
+                    {
+                        preSmall = instance;
+                    }
+
+                    isBig = !isBig;
+                }
+
+            }
+            EditorUtility.SetDirty(this);
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (ControlPoints.Count > 0)
+            {
+                var rawColor= Gizmos.color;
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireCube((Vector3)ControlPoints[0].Position1 + transform.position, Vector3.one * 0.08f);
+                Gizmos.color = rawColor;
+            }
+        }
+
+#endif
         #endregion
     }
 }
