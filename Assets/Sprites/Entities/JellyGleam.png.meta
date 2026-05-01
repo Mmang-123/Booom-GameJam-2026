@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: JellyFish_0_0
+      name: JellyGleam_0_0
       rect:
         serializedVersion: 2
         x: 0
@@ -132,7 +132,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: JellyFish_0_1
+      name: JellyGleam_0_1
       rect:
         serializedVersion: 2
         x: 16
@@ -154,7 +154,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: JellyFish_0_2
+      name: JellyGleam_0_2
       rect:
         serializedVersion: 2
         x: 32
@@ -176,7 +176,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: JellyFish_0_3
+      name: JellyGleam_0_3
       rect:
         serializedVersion: 2
         x: 48
@@ -198,7 +198,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: JellyFish_0_4
+      name: JellyGleam_0_4
       rect:
         serializedVersion: 2
         x: 0
@@ -220,7 +220,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: JellyFish_0_5
+      name: JellyGleam_0_5
       rect:
         serializedVersion: 2
         x: 16
@@ -242,7 +242,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: JellyFish_0_6
+      name: JellyGleam_0_6
       rect:
         serializedVersion: 2
         x: 32
@@ -264,7 +264,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: JellyFish_0_7
+      name: JellyGleam_0_7
       rect:
         serializedVersion: 2
         x: 48
@@ -286,7 +286,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: JellyFish_0_8
+      name: JellyGleam_0_8
       rect:
         serializedVersion: 2
         x: 0
@@ -323,15 +323,15 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":4.0,"y":3.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      JellyFish_0_0: -1751969879
-      JellyFish_0_1: 1045283626
-      JellyFish_0_2: -751239148
-      JellyFish_0_3: -1027424122
-      JellyFish_0_4: -1832116038
-      JellyFish_0_5: -1593560685
-      JellyFish_0_6: 1039641592
-      JellyFish_0_7: 1858197656
-      JellyFish_0_8: 660822695
+      JellyGleam_0_0: -1751969879
+      JellyGleam_0_1: 1045283626
+      JellyGleam_0_2: -751239148
+      JellyGleam_0_3: -1027424122
+      JellyGleam_0_4: -1832116038
+      JellyGleam_0_5: -1593560685
+      JellyGleam_0_6: 1039641592
+      JellyGleam_0_7: 1858197656
+      JellyGleam_0_8: 660822695
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

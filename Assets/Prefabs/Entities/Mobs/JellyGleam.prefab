@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 834712693967893020}
   - component: {fileID: 5141295183322557257}
   m_Layer: 0
-  m_Name: JellyFish
+  m_Name: JellyGleam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
