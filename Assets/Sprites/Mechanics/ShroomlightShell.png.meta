@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GroundShroomlightShell_0
+      name: GroundShroomlightShell_2
       rect:
         serializedVersion: 2
         x: 0
@@ -132,11 +132,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GroundShroomlightShell_1
+      name: ShroomlightShell_1
       rect:
         serializedVersion: 2
         x: 16
-        y: 0
+        y: 16
         width: 16
         height: 16
       alignment: 0
@@ -149,6 +149,28 @@ TextureImporter:
       bones: []
       spriteID: 459d7862c962bbb4f8edab8d5464046c
       internalID: 971104206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShroomlightShell_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae46f5cb35b7fa34c9c714821b1b8a21
+      internalID: -1733489060
       vertices: []
       indices: 
       edges: []
@@ -169,10 +191,11 @@ TextureImporter:
       - key: SpriteEditor.SliceOnImport
         value: False
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":16.0,"y":16.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":2,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      GroundShroomlightShell_0: -1937689200
-      GroundShroomlightShell_1: 971104206
+      GroundShroomlightShell_2: -1937689200
+      ShroomlightShell_0: -1733489060
+      ShroomlightShell_1: 971104206
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
