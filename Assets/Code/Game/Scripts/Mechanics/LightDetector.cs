@@ -15,6 +15,9 @@ namespace Game
         public bool PowerOn => Active;
         public event System.Action<bool> OnPowerChanged;
 
+        public Color ActiveColor = Color.green;
+        public Color InactiveColor = Color.red;
+
         // Runtime
         private float m_ActiveTimer;
         private bool m_Active;
@@ -48,7 +51,7 @@ namespace Game
 
         private void OnActiveChanged()
         {
-            m_EmissionLight.color = m_Active ? Color.green : Color.red;
+            m_EmissionLight.color = m_Active ? ActiveColor : InactiveColor;
             OnPowerChanged?.Invoke(m_Active);
         }
     }

@@ -1,12 +1,12 @@
 ﻿#ifndef SPRITE_SHADING_INCLUDED
 #define SPRITE_SHADING_INCLUDED
 
-float3 LightenBlend(float3 albedo, float3 lightColor, float factor = 0.24)
+float3 LightenBlend(float3 albedo, float3 lightColor, float factor = 0.2)
 {
     // lightColor = SRGBToLinear(lightColor);
     // albedo = SRGBToLinear(albedo);
     // return albedo;
-    
+
     return lerp(albedo, max(albedo, lightColor), factor);
 }
 

@@ -1,6 +1,8 @@
 ﻿#ifndef M_LIGHTING_INCLUDED
 #define M_LIGHTING_INCLUDED
 
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
+
 struct LightData2D
 {
     float4 position; 
@@ -30,7 +32,7 @@ float3 SampleLight(float2 screenUV)
     float2 sampleUV = (screenUV - originUV) / chunkSize;
 
     //return float3(sampleUV, 0);
-    return SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV).rgb;
+    return SRGBToLinear(SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV).rgb);
 }
 
 void ComputePointLight(int lightIndex, float2 positionWS, out half3 outColor)

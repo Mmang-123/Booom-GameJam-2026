@@ -20,6 +20,7 @@ namespace Game
             public float ConductionTimer;
             public float OffTimer;
         }
+        [SerializeField] private Color m_ActiveColor = Color.green;
 
         [SerializeField] private InterfaceObject<IPowerSource> m_PowerSource;
         [SerializeField] private InterfaceObject<IChargable> m_ChargeObject;
@@ -149,7 +150,7 @@ namespace Game
 
         private void SetPointSprite(int index, bool active)
         {
-            var color = active ? Color.green : Color.white;
+            var color = active ? m_ActiveColor : Color.white;
             var point = m_Points[index];
             if (point.Renderer1 != null)
             {

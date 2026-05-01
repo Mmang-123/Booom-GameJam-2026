@@ -51,6 +51,8 @@ MonoBehaviour:
   m_RequirePowerSourceCount: 1
   m_DoorRenderer: {fileID: 7929921629348919250}
   m_Emission: {fileID: 1998068274918605304}
+  m_ActiveColor: {r: 0, g: 1, b: 0, a: 1}
+  m_InactiveColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &3666696633256872173
 GameObject:
   m_ObjectHideFlags: 0
@@ -200,7 +202,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 74ed06a3cabf03a43b15745f87fa6969, type: 2}
+  - {fileID: 2100000, guid: a554b7b92596eb5419ac873f6780b3b4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -291,7 +293,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 74ed06a3cabf03a43b15745f87fa6969, type: 2}
+  - {fileID: 2100000, guid: a554b7b92596eb5419ac873f6780b3b4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
