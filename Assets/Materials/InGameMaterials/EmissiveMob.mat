@@ -106,6 +106,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _LightenBlend: 0
     - _Metallic: 0
     - _ObstacleMask: 0
     - _ObstacleMaskValue: 0
