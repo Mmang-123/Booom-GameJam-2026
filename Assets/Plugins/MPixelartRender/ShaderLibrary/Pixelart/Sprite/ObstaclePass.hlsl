@@ -50,7 +50,7 @@ half4 ObstacleFrag(Varyings input) : SV_Target
 
 half4 ObstacleExtendFrag(Varyings input) : SV_Target
 {
-    const float UNIT_SIZE = 1.0 / 256.0 * 4;
+    float UNIT_SIZE = 1.0 / _ScreenParams.x;
 
 #ifdef TEXTURE_BASED
     float alpha = 0;

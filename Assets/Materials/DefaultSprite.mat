@@ -106,13 +106,15 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _LightenBlend: 0.16
     - _Metallic: 0
     - _ObstacleMask: 0
-    - _ObstacleMaskValue: 0
+    - _ObstacleMaskValue: 0.75
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _ShadingBlend: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

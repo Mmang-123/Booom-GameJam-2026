@@ -35,7 +35,7 @@ inline float2 SnapLightPoisition(float2 rawPosition)
     //return round(rawPosition / UNIT_SIZE) * UNIT_SIZE;
 }
 
-half GetShadow(float2 screenUV, float2 lightUV)
+half GetShadow(float2 screenUV, float2 lightUV, float innerRadius)
 {
     float2 direction = normalize(lightUV - screenUV);
 
@@ -48,6 +48,13 @@ half GetShadow(float2 screenUV, float2 lightUV)
     [loop]
     for (int i = 0; i <= MAX_STEPS; i++)
     {
+        float dist = distance(current, lightUV);
+        if (dist <= innerRadius)
+        {
+            shadowMask = 1.0;
+            break;
+        }
+
         half obstacleMask = GetObstacleMask_RawCamera(current);
         if (obstacleMask > 0.1)
         {
@@ -55,7 +62,6 @@ half GetShadow(float2 screenUV, float2 lightUV)
             break;
         }
 
-        float dist = distance(current, lightUV);
         float sdf = GetObstacleSDF_RawCamera(current);
         float nextStep = UnpackSDFToRaw(sdf) * 0.9;
         if (nextStep <= 4.0 * unitSize)
@@ -72,7 +78,7 @@ half GetShadow(float2 screenUV, float2 lightUV)
             }
         }
 
-        if (dist < 0.01 || dist <= nextStep)
+        if (dist <= nextStep)
         {
             shadowMask = 1.0;
             break;
@@ -86,11 +92,13 @@ half GetShadow(float2 screenUV, float2 lightUV)
 
 void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, out half3 outColor, out half outShadow)
 {
+    const float UNIT_SIZE = 1.0 / 256.0 * 3.0;
     outShadow = 0.0;
     outColor = 0.0;
     LightData2D light = _MLightDataBuffer[lightIndex];
         
     float2 lightPos = SnapLightPoisition(light.position.xy);
+    float innerRadius = light.position.z;
     float radius = light.position.w;
     
     half3 lightColor = light.color.rgb;
@@ -109,14 +117,9 @@ void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, out half3 o
     float2 lightUV = UV4To3(WorldToUV(lightPos));
 
     float shadow = 1.0;
-    if (GetObstacleMask_RawCamera(lightUV) > 0.1)
-    {
-        shadow = 0.0;
-    }
-    else
-    {
-        shadow = GetShadow(uv, lightUV);
-    }
+
+    shadow = GetShadow(uv, lightUV, innerRadius * UNIT_SIZE);
+    
 
     // Step
     float3 s = saturate(intensity * distanceAttenuation);
@@ -134,6 +137,7 @@ void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
     LightData2D light = _MLightDataBuffer[lightIndex];
         
     float2 lightPos = SnapLightPoisition(light.position.xy);
+    float innerRadius = light.position.z;
     float radius = light.position.w;
     
     half3 lightColor = light.color.rgb;
@@ -165,13 +169,13 @@ void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
 
     // 阴影
     float shadow = 1.0;
-    if (GetObstacleMask_RawCamera(lightUV) > 0.1)
+    if (GetObstacleMask_RawCamera(lightUV) > 0.1 && dist > innerRadius)
     {
         shadow = 0.0;
     }
     else
     {
-        shadow = GetShadow(uv, lightUV);
+        shadow = GetShadow(uv, lightUV, innerRadius);
     }
 
     outShadow = shadow;
@@ -222,7 +226,7 @@ void ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
     }
     else
     {
-        shadow = GetShadow(uv, lightUV);
+        shadow = GetShadow(uv, lightUV, 0.01);
     }
 
     // 距离衰减
