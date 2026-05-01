@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Mmang.Util;
+﻿using Mmang.Util;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
@@ -33,7 +32,6 @@ namespace Mmang.PixelartRender
         private Camera m_Camera;
 
         //
-        public Vector2Int LastCenterIndex { get; private set; } // 上一帧的
         public Vector2Int CenterIndex { get; private set; }
 
         private void OnEnable()
@@ -66,11 +64,6 @@ namespace Mmang.PixelartRender
         {
             RenderMask();
             Shader.SetGlobalTexture(PShaderPropertyID.MLightingTexture, m_LightingHandle);
-        }
-
-        private void LateUpdate()
-        {
-            LastCenterIndex = CenterIndex;
         }
 
         private void RegisterSDFThreads()
@@ -161,7 +154,6 @@ namespace Mmang.PixelartRender
                 };
                 m_SDFs[i].Create();
                 m_SDFHandles[i] = RTHandles.Alloc(m_SDFs[i]);
-                // Shader.SetGlobalTexture(Shader.PropertyToID($"_ObstacleSDF_{i}"), m_SDFs[i]);
             }
         }
 
@@ -209,7 +201,7 @@ namespace Mmang.PixelartRender
 
         public bool IsLastValidChunk(Vector2Int chunkIndex)
         {
-            chunkIndex -= LastCenterIndex;
+            chunkIndex -= CenterIndex;
             if (Mathf.Abs(chunkIndex.x) > 1 || Mathf.Abs(chunkIndex.y) > 1)
                 return false;
             return true;

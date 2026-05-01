@@ -59,9 +59,12 @@ namespace Mmang.PixelartRender
             foreach (var light in m_Lights)
             {
                 if (LightCount >= MAX_LIGHT_COUNT)
-                {
                     break;
-                }
+
+                if (light.LightRadius <= 0f || light.LightIntensity <= 0f)
+                    continue;
+
+
                 if (light is PointLight pointLight)
                 {
                     m_PointLightsCache.Add(pointLight);

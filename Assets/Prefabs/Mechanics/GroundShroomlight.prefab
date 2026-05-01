@@ -148,6 +148,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1705922924207880123}
+  - component: {fileID: 8096547589301963036}
   m_Layer: 0
   m_Name: GroundShroomlight
   m_TagString: Untagged
@@ -174,6 +175,24 @@ Transform:
   - {fileID: 4268269890045514270}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 1, y: 0, z: 0}
+--- !u!114 &8096547589301963036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2515919645008708593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 438b156268c6f404eb9c929d6f1f4341, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ShroomlightShell
+  m_Active: 0
+  m_Light: {fileID: 7516412517399248101}
+  m_IndicatorRenderer: {fileID: 506190078791923583}
+  m_SourceRenderer: {fileID: 1850862394557193616}
+  m_Animator: {fileID: 8983423747948033076}
+  m_LightIntensity: 3
 --- !u!1 &3611058062338218836
 GameObject:
   m_ObjectHideFlags: 0

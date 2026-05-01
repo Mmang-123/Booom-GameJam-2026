@@ -59,7 +59,7 @@ namespace Game
             var maskManager = ObstacleMaskManager.Instance;
 
             //
-            Vector2Int chunkIndex = chunk - maskManager.LastCenterIndex + Vector2Int.one;
+            Vector2Int chunkIndex = chunk - maskManager.CenterIndex + Vector2Int.one;
             m_ReadShadowMaterial.SetVector(Shader.PropertyToID("_ChunkIndex"), new(chunkIndex.x, chunkIndex.y));
 
             //
@@ -119,6 +119,13 @@ namespace Game
             int pixelX = Mathf.FloorToInt(offsetInChunk.x * resolution);
             int pixelY = Mathf.FloorToInt(offsetInChunk.y * resolution);
             return texture.GetPixel(pixelX, pixelY).r;
+        }
+
+        public bool InValidChunk(Vector2 worldPosition)
+        {
+            var maskManager = ObstacleMaskManager.Instance;
+            var chunkIndex = maskManager.GetChunkIndex(worldPosition);
+            return maskManager.IsVaildChunk(chunkIndex);
         }
     }
 }

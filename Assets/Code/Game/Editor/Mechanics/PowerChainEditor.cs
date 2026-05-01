@@ -14,7 +14,6 @@ namespace Game.Editors
         {
             var pc = (PowerChain)target;
             var root = new VisualElement();
-            UIElementHelper.DrawDefaultInspector(root, serializedObject);
 
             var generateButton = new Button() { text = "Generate Points" };
             generateButton.clicked += () => pc.Editor_GeneratePoints();
@@ -25,6 +24,8 @@ namespace Game.Editors
             root.Add(generateButton);
             root.Add(clearButton);
 
+            UIElementHelper.DrawDefaultInspector(root, serializedObject);
+            
             return root;
         }
 
@@ -63,11 +64,6 @@ namespace Game.Editors
             for (int i = 0; i < pc.ControlPoints.Count - 1; i++)
             {
                 Debug.DrawLine(P(pc.ControlPoints[i].Position1), P(pc.ControlPoints[i + 1].Position1), Color.red, 0f);
-            }
-
-            if (pc.ControlPoints.Count > 0)
-            {
-                //Gizmos.DrawWireCube(P(pc.ControlPoints[0].Position1), 0.1f * Vector2.one);
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Game;
+using UnityEngine;
 
 namespace Mmang.PixelartRender
 {
@@ -8,8 +9,13 @@ namespace Mmang.PixelartRender
     }
 
     [ExecuteAlways]
-    public abstract class MLight : MonoBehaviour
+    public abstract class MLight : MonoBehaviour, IMLight
     {
+        #region IMLight
+        public abstract float LightRadius { get; set; }
+        public abstract float LightIntensity { get; set; }
+        #endregion
+
         protected virtual void OnEnable()
         {
             LightingManager.Instance.RegisterLight(this);
