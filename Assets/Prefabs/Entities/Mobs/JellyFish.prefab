@@ -44,8 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e0552c8d70e72449b248ec737d9f5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.MPointLight
-  Color: {r: 0.4716981, g: 0.084549606, b: 0.3610843, a: 1}
+  Color: {r: 0.12100001, g: 0.005041669, b: 0.035291664, a: 1}
   Radius: 3
+  InnerRadius: 1
   Intensity: 2.2
 --- !u!1 &5554110311380033062
 GameObject:
@@ -228,6 +229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Swim
   m_RotateSpeed: 2
+  m_FastRotateSpeed: 5
   m_MoveSpeed: 4
   m_Acceleration: 2.5
   m_StopDistance: 0.8

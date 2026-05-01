@@ -30,6 +30,7 @@ namespace Game
         public enum State { Normal, Trace }
 
         [SerializeField] private float m_RotateSpeed = 10f;
+        [SerializeField] private float m_FastRotateSpeed = 10f;
         [SerializeField] private float m_MoveSpeed = 2f;
         [SerializeField] private float m_Acceleration = 2f;
         [SerializeField] private float m_StopDistance;
@@ -72,6 +73,11 @@ namespace Game
             CurrentState = Tracing ? State.Trace : State.Normal;
         }
 
+        private bool RequireFastRotate(float currentAngle)
+        {
+            return currentAngle >= 60f;
+        }
+
         private void RotateToTarget()
         {
             float offsetAngle = 0f;
@@ -88,11 +94,13 @@ namespace Game
                     break;
             }
 
+            float angle = Vector2.Angle(Fish.ForwardDirection, (TargetPoint - (Vector2)transform.position).normalized);
+            float rotateSpeed = RequireFastRotate(angle) ? m_FastRotateSpeed : m_RotateSpeed;
 
             Vector2 direction = TargetPoint - (Vector2)transform.position;
             float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + offsetAngle;
             Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
-            Fish.SetRotation(Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * m_RotateSpeed));
+            Fish.SetRotation(Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed));
         }
 
         private void TraceUpdate(float dt)
@@ -100,7 +108,14 @@ namespace Game
             float distance = Vector2.Distance(transform.position, TargetPoint);
             float angle = Vector2.Angle(Fish.ForwardDirection, (TargetPoint - (Vector2)transform.position).normalized);
 
-            if (distance > m_StopDistance || angle >= 30f)
+            if (RequireFastRotate(angle) && CurrentSpeed > 0.1f)
+            {
+                var additionalVelocity = AdditionalVelocity.Create(Fish.ForwardDirection * CurrentSpeed, CurrentSpeed / 0.5f);
+                AddAdditionalVelocity(additionalVelocity);
+                CurrentSpeed = 0f;
+            }
+
+            if (distance > m_StopDistance && !RequireFastRotate(angle))
             {
                 CurrentSpeed = Mathf.Min(m_MoveSpeed, CurrentSpeed + dt * m_Acceleration);
             }
