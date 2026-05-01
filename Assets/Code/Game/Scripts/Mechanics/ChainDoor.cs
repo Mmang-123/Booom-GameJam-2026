@@ -3,11 +3,13 @@ using UnityEngine;
 
 namespace Game
 {
+    [ExecuteAlways]
     public class ChainDoor : MonoBehaviour, IChargable
     {
         [SerializeField] private float m_DoorLength = 3f;
         [SerializeField] private int m_RequirePowerSourceCount = 1;
 
+        [SerializeField] private BoxCollider2D m_BoxCollider;
         [SerializeField] private SpriteRenderer m_DoorRenderer;
         [SerializeField] private SpriteRenderer m_Emission;
         [SerializeField] private Color m_ActiveColor = Color.green;
@@ -21,6 +23,10 @@ namespace Game
         public bool IsPowered => PowerSourceHandler.IsPowered(m_RequirePowerSourceCount);
 
         #endregion
+
+#if UNITY_EDITOR
+        private float m_OldDoorLength;
+#endif
 
         private void Start()
         {
@@ -37,6 +43,18 @@ namespace Game
 
         private void Update()
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                if (m_OldDoorLength != m_DoorLength)
+                {
+                    m_OldDoorLength = m_DoorLength;
+                    SetDoorLength(m_DoorLength);
+                }
+                return;
+            }
+#endif
+
             if (m_Active && m_CurrentDoorLength > 0f)
             {
                 m_CurrentDoorLength -= Time.deltaTime * 6f;
@@ -59,9 +77,20 @@ namespace Game
 
         private void SetDoorLength(float newLength)
         {
-            m_DoorRenderer.size = new(newLength, 1f);
-            m_DoorRenderer.transform.localPosition = new(-0.5f - newLength / 2f, 0f);
-            m_CurrentDoorLength = newLength;
+            Vector2 pos = new(-0.5f - newLength / 2f, 0f);
+
+            if (m_DoorRenderer != null)
+            {
+                m_DoorRenderer.size = new(newLength, 1f);
+                m_DoorRenderer.transform.localPosition = pos;
+                m_CurrentDoorLength = newLength;   
+            }
+
+            if (m_BoxCollider != null)
+            {
+                m_BoxCollider.size = new(newLength, m_BoxCollider.size.y);
+                m_BoxCollider.offset = pos;
+            }
         }
     }
 }
