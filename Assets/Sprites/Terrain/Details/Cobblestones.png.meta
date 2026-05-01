@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Rocks_0
+      name: Cobblestones_0
       rect:
         serializedVersion: 2
         x: 0
@@ -132,7 +132,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_1
+      name: Cobblestones_1
       rect:
         serializedVersion: 2
         x: 32
@@ -154,7 +154,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_2
+      name: Cobblestones_2
       rect:
         serializedVersion: 2
         x: 64
@@ -176,7 +176,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_3
+      name: Cobblestones_3
       rect:
         serializedVersion: 2
         x: 96
@@ -198,7 +198,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_4
+      name: Cobblestones_4
       rect:
         serializedVersion: 2
         x: 0
@@ -220,7 +220,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_5
+      name: Cobblestones_5
       rect:
         serializedVersion: 2
         x: 32
@@ -242,7 +242,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_6
+      name: Cobblestones_6
       rect:
         serializedVersion: 2
         x: 64
@@ -264,7 +264,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_7
+      name: Cobblestones_7
       rect:
         serializedVersion: 2
         x: 96
@@ -286,7 +286,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_8
+      name: Cobblestones_8
       rect:
         serializedVersion: 2
         x: 0
@@ -308,7 +308,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_9
+      name: Cobblestones_9
       rect:
         serializedVersion: 2
         x: 32
@@ -330,7 +330,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_10
+      name: Cobblestones_10
       rect:
         serializedVersion: 2
         x: 64
@@ -352,7 +352,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_11
+      name: Cobblestones_11
       rect:
         serializedVersion: 2
         x: 96
@@ -374,7 +374,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_12
+      name: Cobblestones_12
       rect:
         serializedVersion: 2
         x: 0
@@ -396,7 +396,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_13
+      name: Cobblestones_13
       rect:
         serializedVersion: 2
         x: 32
@@ -418,7 +418,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_14
+      name: Cobblestones_14
       rect:
         serializedVersion: 2
         x: 64
@@ -440,7 +440,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocks_15
+      name: Cobblestones_15
       rect:
         serializedVersion: 2
         x: 96
@@ -479,22 +479,22 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Rocks_0: 343861228
-      Rocks_1: 1440221096
-      Rocks_10: 9070611
-      Rocks_11: 2005379798
-      Rocks_12: 122005794
-      Rocks_13: 324662967
-      Rocks_14: 142407703
-      Rocks_15: -2077519136
-      Rocks_2: 11437292
-      Rocks_3: -1485612815
-      Rocks_4: 212903998
-      Rocks_5: 860231001
-      Rocks_6: 1536491689
-      Rocks_7: -2125535779
-      Rocks_8: -779715855
-      Rocks_9: -386713202
+      Cobblestones_0: 343861228
+      Cobblestones_1: 1440221096
+      Cobblestones_10: 9070611
+      Cobblestones_11: 2005379798
+      Cobblestones_12: 122005794
+      Cobblestones_13: 324662967
+      Cobblestones_14: 142407703
+      Cobblestones_15: -2077519136
+      Cobblestones_2: 11437292
+      Cobblestones_3: -1485612815
+      Cobblestones_4: 212903998
+      Cobblestones_5: 860231001
+      Cobblestones_6: 1536491689
+      Cobblestones_7: -2125535779
+      Cobblestones_8: -779715855
+      Cobblestones_9: -386713202
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
