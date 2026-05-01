@@ -1,4 +1,4 @@
-﻿#include "../Generic/PixelartStructures.hlsl"
+﻿//#include "../Generic/PixelartStructures.hlsl"
 #include "../../Lighting/Lighting.hlsl"
 
 Varyings UnlitVert(Attributes v)
@@ -9,13 +9,9 @@ Varyings UnlitVert(Attributes v)
 
     const float UNIT_SIZE = 16.0 / 256.0;
 
-    float2 originWS = TransformObjectToWorld(float3(0.0, 0.0, 0.0)).xy;
-    float2 originWSSnapped = round(originWS / UNIT_SIZE) * UNIT_SIZE;
-    float2 originWSOffset = originWSSnapped - originWS;
-
     o.positionWS = TransformObjectToWorld(v.positionOS);
-    //o.positionCS = TransformObjectToHClip(v.positionOS);
-    //o.positionWS += float3(originWSOffset, 0);
+    o.positionOS = v.positionOS.xy;
+
     o.positionCS = TransformWorldToHClip(float4(o.positionWS, 1));
 
 #ifdef TEXTURE_BASED
@@ -27,6 +23,51 @@ Varyings UnlitVert(Attributes v)
     return o;
 }
 
+
+
+float3 ComputeLighting(float2 positionWS)
+{
+    int lightCount = _MLightParams.x;
+    int pointLightCount = _MLightParams.y;
+    int spotLightCount = _MLightParams.z;
+
+    float3 totalLight = 0;
+
+    // Point Light
+    int start = 0;
+    int end = pointLightCount;
+
+    half3 lightColor = 0.0;
+    half lightShadow = 0.0;
+    for(int i = start; i < end; i++)
+    {
+        ComputePointLight(i, positionWS, lightColor);
+        totalLight += lightColor;
+    }
+
+    // Spot Light
+    start += pointLightCount;
+    end += spotLightCount;
+    for(int i = start; i < end; i++)
+    {
+        ComputeSpotLight(i, positionWS, lightColor);
+        totalLight += lightColor;
+    }
+
+    // Area Light
+    start += spotLightCount;
+    end = lightCount;
+    for(int i = start; i < end; i++)
+    {
+        ComputeAreaLight(i, positionWS, lightColor);
+        totalLight += lightColor;
+    }
+
+    return totalLight;
+}
+
+
+
 float4 UnlitFrag(Varyings input) : SV_Target
 {
 #ifdef TEXTURE_BASED
@@ -35,5 +76,23 @@ float4 UnlitFrag(Varyings input) : SV_Target
     float4 outputColor = input.color;
 #endif
 
+    clip(outputColor.a - 0.1);
+
+    const float UNIT_SIZE = 16.0 / 256.0;
+    float2 positionOSSnapped = floor(input.positionOS / UNIT_SIZE) * UNIT_SIZE;
+    float2 positionWS = TransformObjectToWorld(float4(positionOSSnapped, 0, 1));
+    positionWS = floor(positionWS / UNIT_SIZE) * UNIT_SIZE;
+    /*
+    float4 positionCS = TransformWorldToHClip(float4(positionWS, 0, 1));
+    float4 screenPos = ComputeScreenPos(positionCS);
+    float2 screenUV = screenPos.xy / screenPos.w;
+    */
+
+    float3 lightColor = ComputeLighting(positionWS);
+    outputColor.rgb += lightColor;
+
+    outputColor.rgb = lerp(outputColor.rgb, _Emission.rgb, _Emission.a);
+
+    return float4(lightColor, outputColor.a);
     return outputColor;
 }

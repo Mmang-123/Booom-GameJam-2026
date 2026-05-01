@@ -22,8 +22,6 @@ float2 WorldToUV(float2 posWS)
     float4 posCS = TransformWorldToHClip(float3(posWS, 0.0));
     float4 scrPos = ComputeScreenPos(posCS);
     float2 uv = scrPos.xy / scrPos.w;
-    //uv.x = floor(uv.x * _ScreenParams.x) / _ScreenParams.x;
-    //uv.y = floor(uv.y * _ScreenParams.y) / _ScreenParams.y;
 
     return uv;
 }
