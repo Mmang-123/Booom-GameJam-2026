@@ -66,8 +66,9 @@ namespace Game
                 var ability = m_Abilities[i];
                 if (!ability.Active && ability.CanActivateAbility())
                 {
+                    //Debug.Log(ability);
                     // CancelAbilitiesWithTags(ability.CancelTags, ability.Priority);
-                    // m_AbilitiesPendingToActivate.Add(ability);
+                    //m_AbilitiesPendingToActivate.Add(ability);
                     PendingActivateAbility(ability);
                 }
             }

@@ -27,7 +27,7 @@ namespace Game
 
     public class FB_Swim : FishBehaviour
     {
-        public enum State { Normal, Trace }
+        public enum State { Normal, Trace, Disable }
 
         [SerializeField] private float m_RotateSpeed = 3f;
         [SerializeField] private float m_FastRotateSpeed = 6f;
@@ -43,6 +43,7 @@ namespace Game
         public Vector2 TargetDirection { get; set; }
         public float CurrentSpeed { get; set; }
         public bool RotateToTargetPoint { get; set; }
+        public bool IsDisable { get; set; }
 
         public float MaxSpeed => m_MoveSpeed;
         public float StopDistance => m_StopDistance;
@@ -58,7 +59,10 @@ namespace Game
                 TargetDirection = (TargetPoint - (Vector2)transform.position).normalized;
             }
 
-            RotateToTarget();
+            if (!IsDisable)
+            {
+                RotateToTarget();
+            }
         }
 
         public override void BeforeFishFixedUpdate()
@@ -71,6 +75,9 @@ namespace Game
                 case State.Trace:
                     TraceUpdate(Time.fixedDeltaTime);
                     break;
+                default:
+                    DefaultUpdate(Time.fixedDeltaTime);
+                    break;
             }
 
             //
@@ -80,7 +87,10 @@ namespace Game
         private void UpdateState()
         {
             // 大概是管理当前帧的状态机
-            CurrentState = Tracing ? State.Trace : State.Normal;
+            if (IsDisable)
+                CurrentState = State.Disable;
+            else
+                CurrentState = Tracing ? State.Trace : State.Normal;
         }
 
         private bool RequireFastRotate(float currentAngle)
@@ -152,6 +162,14 @@ namespace Game
                 Vector2 motion = moveDistance * Fish.ForwardDirection;
                 Fish.Move(motion);
             }
+        }
+
+        private void DefaultUpdate(float dt)
+        {
+            float moveDistance = CurrentSpeed * dt;
+
+            Vector2 motion = moveDistance * Fish.ForwardDirection;
+            Fish.Move(motion);
         }
 
         private void HandleAdditionalVelocity(float dt)

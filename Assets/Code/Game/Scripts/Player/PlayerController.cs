@@ -11,6 +11,7 @@ namespace Game
 
         // Runtime
         private Transform m_PlayerDirectionPoint; // 根据朝向实时更新的点
+        private bool m_MouseRBPressedLastFrame = false;
 
         private void Awake()
         {
@@ -46,6 +47,12 @@ namespace Game
         private void Update()
         {
             TraceMousePoint();
+
+            if (Mouse.current.rightButton.isPressed && !m_MouseRBPressedLastFrame)
+            {
+                UseSkill();
+            }
+            m_MouseRBPressedLastFrame = Mouse.current.rightButton.isPressed;
         }
 
         private void TraceMousePoint()
@@ -65,6 +72,18 @@ namespace Game
 
                 m_PlayerDirectionPoint.transform.position = m_CurrentFish.Position
                     + m_CurrentFish.ForwardDirection * t;
+            }
+        }
+
+        private void UseSkill()
+        {
+            if (m_CurrentFish != null
+            && m_CurrentFish.TryGetBehaviour<FB_Skill>(out var skillBehaviour))
+            {
+                if (skillBehaviour.CanUse())
+                {
+                    skillBehaviour.Use();
+                }    
             }
         }
     }

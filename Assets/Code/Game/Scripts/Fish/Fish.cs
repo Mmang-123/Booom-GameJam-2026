@@ -120,6 +120,12 @@ namespace Game
             return null;
         }
 
+        public bool TryGetBehaviour<T>(out T outBehaviour) where T : FishBehaviour
+        {
+            outBehaviour = GetBehaviour<T>();
+            return outBehaviour != null;
+        }
+
         public void SetRotation(Quaternion rotation)
         {
             transform.rotation = rotation;

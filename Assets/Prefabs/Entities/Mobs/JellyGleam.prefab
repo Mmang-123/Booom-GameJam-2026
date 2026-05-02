@@ -175,6 +175,7 @@ GameObject:
   - component: {fileID: 7792305372667502108}
   - component: {fileID: 677004143986177848}
   - component: {fileID: 1332117869217679411}
+  - component: {fileID: 7741573196834149294}
   - component: {fileID: 834712693967893020}
   - component: {fileID: 5141295183322557257}
   - component: {fileID: 7216697439400483689}
@@ -231,8 +232,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Swim
   m_RotateSpeed: 2
   m_FastRotateSpeed: 6
-  m_MoveSpeed: 6
-  m_Acceleration: 4
+  m_MoveSpeed: 8
+  m_Acceleration: 6
   m_FastAcceleration: 8
   m_StopDistance: 1.6
 --- !u!114 &677004143986177848
@@ -261,6 +262,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.FB_GenericAnimator
   m_Animator: {fileID: 6154330326010664966}
+--- !u!114 &7741573196834149294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6172189210337702716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2916bcad262cc9f40aa667c43e080f29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Dash
+  m_CD: 0.5
+  m_DashSpeed: 16
+  m_DashEndDamping: 16
 --- !u!50 &834712693967893020
 Rigidbody2D:
   serializedVersion: 5

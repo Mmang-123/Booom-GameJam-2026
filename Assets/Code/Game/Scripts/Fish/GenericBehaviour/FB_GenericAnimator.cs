@@ -18,5 +18,10 @@ namespace Game
         {
             m_Animator.SetBool("IsMoving", m_SwimBehaviour.CurrentSpeed > 0.1f);
         }
+
+        public void TriggerDashAnimation()
+        {
+            m_Animator.SetTrigger("Dash");
+        }
     }
 }
