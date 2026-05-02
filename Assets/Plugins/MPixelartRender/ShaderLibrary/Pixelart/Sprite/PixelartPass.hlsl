@@ -61,8 +61,11 @@ float4 PixelartFrag(Varyings input) : SV_Target
 {
 #ifdef TEXTURE_BASED
     float4 outputColor = tex2D(_MainTex, input.uv) * input.color;
+    float4 emissionTex = tex2D(_EmissionTexture, input.uv);
+    float4 emission = lerp(_Emission, emissionTex, emissionTex.a);
 #else
     float4 outputColor = input.color;
+    float4 emission = _Emission;
 #endif
 
     clip(outputColor.a - 0.5);
@@ -81,7 +84,7 @@ float4 PixelartFrag(Varyings input) : SV_Target
     }
 
     // Emission
-    outputColor.rgb = lerp(outputColor.rgb, _Emission.rgb, _Emission.a);
+    outputColor.rgb = lerp(outputColor.rgb, emission.rgb, emission.a);
 
     return outputColor;
 }

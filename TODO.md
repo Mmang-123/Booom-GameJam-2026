@@ -9,7 +9,7 @@
 7.  饥饿值
 8.  进食功能
 9.  巡逻与随机游走
-10. _EmissionMap实施
+10. _EmissionMap实施（现在是_EmissionTexture） （√）
 11. 移动块逻辑
 12. CPU的灯光包围盒剔除 （√）
 13. 链条门可以被物理阻挡

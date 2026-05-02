@@ -4,6 +4,7 @@
 
 CBUFFER_START(UnityPerMaterial)
 sampler2D _MainTex;
+sampler2D _EmissionTexture;
 half4 _MainTex_ST;
 float4 _Color;
 float4 _Emission;
