@@ -112,7 +112,7 @@ namespace Game
 
             if (texture == null)
             {
-                return 1f;
+                return 0f;
             }
 
             int resolution = maskManager.Resolution / 4;
