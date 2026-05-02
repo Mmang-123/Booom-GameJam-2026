@@ -13,8 +13,8 @@ namespace Sloane.Editor
         private class ClipConfig
         {
             public string ClipName = "NewAnimation";
-            public bool Loop = true;
-            public int FrameCount = 1;
+            public bool Loop = false;
+            public int FrameCount = 4;
             public bool Fold = true;
         }
 
@@ -137,7 +137,16 @@ namespace Sloane.Editor
                 {
                     float labelW = EditorGUIUtility.labelWidth;
                     EditorGUIUtility.labelWidth = 80f;
+                    EditorGUI.BeginChangeCheck();
                     cfg.ClipName   = EditorGUILayout.TextField("Clip Name", cfg.ClipName);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        string lower = cfg.ClipName.ToLower();
+                        if (lower.Contains("idle") || lower.Contains("move"))
+                            cfg.Loop = true;
+                        else
+                            cfg.Loop = false;
+                    }
                     cfg.FrameCount = Mathf.Max(1, EditorGUILayout.IntField("Frame Count", cfg.FrameCount));
                     cfg.Loop       = EditorGUILayout.Toggle("Loop", cfg.Loop);
                     EditorGUIUtility.labelWidth = labelW;
