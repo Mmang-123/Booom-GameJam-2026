@@ -61,23 +61,23 @@ MonoBehaviour:
   m_Name: Gameplay Tags
   m_EditorClassIdentifier: MGame.Runtime::Mmang.Game.GameplayTagsSettings
   m_Nodes:
-  - m_Guid: c4c158fc-bde5-400e-8dc3-6790cf65094a
-    NodeName: Entity
+  - m_Guid: 7e5e7439-004d-4fcc-9d4a-0c9e7f0eed88
+    NodeName: Fish
     m_Children:
-    - rid: 1344522747699527780
-    - rid: 1344522747699527781
+    - rid: 7953988112356737024
+    - rid: 7953988113818452048
   references:
     version: 2
     RefIds:
-    - rid: 1344522747699527780
+    - rid: 7953988112356737024
       type: {class: SerializableGameplayTagNode, ns: Mmang.Game, asm: MGame.Runtime}
       data:
-        m_Guid: f2a82814-3c0a-47c6-a505-4b198b51c312
-        NodeName: Player
+        m_Guid: cba444d2-d736-44d4-ba3d-05bc74342ec6
+        NodeName: CantTrace
         m_Children: []
-    - rid: 1344522747699527781
+    - rid: 7953988113818452048
       type: {class: SerializableGameplayTagNode, ns: Mmang.Game, asm: MGame.Runtime}
       data:
-        m_Guid: 059e8f95-0bb3-4a1e-9f2f-1fcc460e4007
-        NodeName: Enemy
+        m_Guid: 0143efe5-7db0-4920-8d62-82cec5e1310e
+        NodeName: ControlAbility
         m_Children: []

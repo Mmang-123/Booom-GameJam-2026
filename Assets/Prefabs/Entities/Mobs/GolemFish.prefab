@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5428743268945966197}
   - component: {fileID: 7378699115958009860}
   - component: {fileID: 6154330326010664966}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 2039827837968094968}
   - component: {fileID: 834712693967893020}
   - component: {fileID: 5141295183322557257}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GolemFish
   m_TagString: Untagged
   m_Icon: {fileID: 0}

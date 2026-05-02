@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3353933650458865424}
   - component: {fileID: 5243026660686698322}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PointLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 5428743268945966197}
   - component: {fileID: 7378699115958009860}
   - component: {fileID: 6154330326010664966}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 834712693967893020}
   - component: {fileID: 5141295183322557257}
   - component: {fileID: 7216697439400483689}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: JellyGleam
   m_TagString: Untagged
   m_Icon: {fileID: 0}

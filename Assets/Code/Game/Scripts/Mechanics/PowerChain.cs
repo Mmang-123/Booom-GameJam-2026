@@ -163,6 +163,10 @@ namespace Game
             {
                 SetPowerOn(m_PointDataList[MaxPowerPointCount - 1].Active);
             }
+
+            HashSetPool<int>.Release(toTurnOff);
+            HashSetPool<int>.Release(toTurnOn);
+            HashSetPool<int>.Release(changed);
         }
 
         private void SetPointActive(int index, bool active)

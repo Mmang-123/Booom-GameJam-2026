@@ -11,16 +11,23 @@ namespace Game
 
     public abstract class FishAIAbility : MonoBehaviour
     {
+        [SerializeField] private GameplayTagContainer m_Tags;
+        [SerializeField] private GameplayTag m_SingletonTag;
+        [SerializeField] private GameplayTagContainer m_CancelTags;
         [SerializeField] private int m_Priority = 0;
+        public IReadOnlyGameplayTagContainer Tags => m_Tags.AsReadOnly();
+        public GameplayTag SingletonTag => m_SingletonTag;
+        public IReadOnlyGameplayTagContainer CancelTags => m_CancelTags.AsReadOnly();
         public int Priority => m_Priority;
 
         // Runtime
-        public Fish Fish { get; private set; }
+        public FishAIComponent FishAI { get; private set; }
+        public Fish Fish => FishAI.Fish;
         public bool Active { get; protected set; }
 
-        public void Init(Fish fish)
+        public void Init(FishAIComponent fishAI)
         {
-            Fish = fish;
+            FishAI = fishAI;
         }
 
         public virtual bool CanActivateAbility()

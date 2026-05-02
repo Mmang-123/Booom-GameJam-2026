@@ -1467,6 +1467,73 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1665933075}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &656228168
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 656228169}
+  - component: {fileID: 656228171}
+  - component: {fileID: 656228170}
+  m_Layer: 0
+  m_Name: FA_Trace
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &656228169
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 656228168}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1594391830}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &656228170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 656228168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 430da451769b4c6468d56d185fc4b75b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.CircleTraceSetting
+  m_StartRadius: 7
+  m_StopRadius: 10
+--- !u!114 &656228171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 656228168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 391fe0ece66298544a70f29256463a94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.FA_Trace
+  m_Tags:
+    m_Tags: []
+  m_SingletonTag:
+    m_Guid: 0143efe5-7db0-4920-8d62-82cec5e1310e
+  m_CancelTags:
+    m_Tags: []
+  m_Priority: 10
+  m_TraceSetting: {fileID: 656228170}
 --- !u!1 &728458692
 GameObject:
   m_ObjectHideFlags: 0
@@ -2668,7 +2735,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 1810766580}
+  m_TargetTexture: {fileID: 1317689484}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -3418,6 +3485,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91abe63ad75226842abac0cfd5e9f87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Fish
+--- !u!84 &1317689484
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 480
+  m_Height: 270
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1 &1475238665
 GameObject:
   m_ObjectHideFlags: 0
@@ -3860,6 +3964,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.FishAIComponent
   m_Fish: {fileID: 1173779462}
   m_Abilities:
+  - {fileID: 656228171}
   - {fileID: 1697628527}
   m_OwnedTags:
     m_Tags: []
@@ -3876,6 +3981,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 656228169}
   - {fileID: 1697628526}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4033,6 +4139,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67f4068d0677d8846af993e899f1ff9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.FA_Patrol
+  m_Tags:
+    m_Tags: []
+  m_SingletonTag:
+    m_Guid: 0143efe5-7db0-4920-8d62-82cec5e1310e
+  m_CancelTags:
+    m_Tags: []
   m_Priority: 0
   m_LoopType: 1
   m_PatrolPoints:
@@ -4224,43 +4336,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1665933075}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &1810766580
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 480
-  m_Height: 270
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1 &1895227921
 GameObject:
   m_ObjectHideFlags: 0

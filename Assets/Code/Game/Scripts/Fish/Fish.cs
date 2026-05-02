@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mmang.Game;
 using UnityEngine;
+using UnityEngine.Pool;
 
 namespace Game
 {
@@ -35,6 +36,8 @@ namespace Game
         private Dictionary<System.Type, FishBehaviour> m_BehaviourMap = new();
         private bool m_FacingLeft = false; // 这里是相机角度的左右
 
+        private List<Collider2D> m_Colliders = new();
+
         public EDirection EDirection => m_EDirection;
         public Vector2 ForwardDirection => transform.rotation * s_DirectionMap[m_EDirection];
         public Vector2 Position => transform.position;
@@ -53,7 +56,22 @@ namespace Game
             m_Inited = true;
             m_Rigidbody = GetComponent<Rigidbody2D>();
 
-            //
+            // Collider
+            var colliders = GetComponentsInChildren<Collider2D>();
+            HashSet<GameObject> goSet = HashSetPool<GameObject>.Get();
+            foreach (var collider in colliders)
+            {
+                if (goSet.Contains(collider.gameObject))
+                    continue;
+                
+                goSet.Add(collider.gameObject);
+                var component = collider.gameObject.AddComponent<FishCollider>();
+                component.Init(this);
+            }
+
+            HashSetPool<GameObject>.Release(goSet);
+
+            // Behaviour
             m_Behaviours = GetComponents<FishBehaviour>().ToList();
             m_BehaviourMap.Clear();
 

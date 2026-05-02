@@ -112,7 +112,7 @@ float2 UnpackSDFToScreen(float rawSDF)
 
 float UnpackSDFToRaw(float rawSDF)
 {
-    // TODO 按256单元 ~ 256 * 3换算
+    // 按256单元 ~ 256 * 3换算
     return rawSDF * 0.35355;
 }
 

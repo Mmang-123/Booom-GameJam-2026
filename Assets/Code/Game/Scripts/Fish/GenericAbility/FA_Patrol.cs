@@ -29,6 +29,7 @@ namespace Game
 
         public override void OnActivate()
         {
+            Debug.Log("Patrol_Start");
             FindNearestPoint(out int index, out bool reverse);
             CurrentIndex = index;
             IsReverse = reverse;
@@ -39,6 +40,7 @@ namespace Game
 
         public override void OnEnd(EEndAbilityType endType)
         {
+            Debug.Log("Patrol_End");
             SwimBehaviour.Tracing = false;
         }
 
