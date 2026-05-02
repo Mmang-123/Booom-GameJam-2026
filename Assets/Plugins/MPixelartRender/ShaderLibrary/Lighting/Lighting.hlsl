@@ -19,6 +19,9 @@ TEXTURE2D(_MLightingTexture);
 SAMPLER(sampler_MLightingTexture);
 
 float4 _ObstacleParams;
+float4 _ObstacleChunkParams;
+float4 _Resolution;
+
 
 float3 SampleLight(float2 screenUV)
 {
@@ -29,7 +32,7 @@ float3 SampleLight(float2 screenUV)
     float2 originUV = scrPos.xy / scrPos.w;
 
     // TODO: 这里写死了
-    float2 chunkSize = float2(256, 256) * 3 / float2(480, 270);
+    float2 chunkSize = _ObstacleChunkParams.xy * 3.0 / _Resolution.zw;
     float2 sampleUV = (screenUV - originUV) / chunkSize;
 
     //return float3(sampleUV, 0);

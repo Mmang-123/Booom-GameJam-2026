@@ -100,8 +100,6 @@ float4 UnlitFrag(Varyings input) : SV_Target
         outputColor.rgb = lerp(LightenBlend(outputColor.rgb, lightColor, _LightenBlend), outputColor.rgb * lightColor, _ShadingBlend);
     }
 
-    outputColor.rgb = sampledLight;
-
     // return float4(lightColor, outputColor.a);
     return outputColor;
 }

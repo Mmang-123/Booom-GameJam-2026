@@ -19,6 +19,7 @@ namespace Mmang.PixelartRender
             public int AdditionalLightsCount;
             public Vector3 FocusPosition;
             public bool IsDebugLUTOn;
+            public Vector4 Resolution;
         }
 
         public bool IsDebugLUTOn = false;
@@ -54,6 +55,7 @@ namespace Mmang.PixelartRender
                 passData.CameraScale = cameraScale;
                 passData.FocusPosition = focusPosition;
                 passData.AdditionalLightsCount = lightData.additionalLightsCount;
+                passData.Resolution = new Vector4(pixelartCamera.CameraData.SourceResolution.x * cameraScale, pixelartCamera.CameraData.SourceResolution.y * cameraScale, pixelartCamera.CameraData.SourceResolution.x, pixelartCamera.CameraData.SourceResolution.y);
 
                 passData.IsDebugLUTOn = IsDebugLUTOn;
 
@@ -83,6 +85,7 @@ namespace Mmang.PixelartRender
             // Camera Params
             cmd.SetGlobalFloat(PShaderPropertyID.UnitSize, unitSize);
             cmd.SetGlobalFloat(PShaderPropertyID.CameraScale, cameraScale);
+            cmd.SetGlobalVector(PShaderPropertyID.Resolution, data.Resolution);
 
             // Lighting
             //cmd.SetGlobalInt(PShaderPropertyID.AdditionalLightCount, data.AdditionalLightsCount);
