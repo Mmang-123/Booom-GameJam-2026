@@ -116,10 +116,7 @@ void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, out half3 o
     // 阴影
     float2 lightUV = UV4To3(WorldToUV(lightPos));
 
-    float shadow = 1.0;
-
-    shadow = GetShadow(uv, lightUV, innerRadius * UNIT_SIZE);
-    
+    float shadow = GetShadow(uv, lightUV, innerRadius * UNIT_SIZE);
 
     // Step
     float3 s = saturate(intensity * distanceAttenuation);
@@ -132,6 +129,7 @@ void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, out half3 o
 
 void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 outColor, out half outShadow)
 {
+    const float UNIT_SIZE = 1.0 / 256.0 * 3.0;
     outShadow = 0.0;
     outColor = 0.0;
     LightData2D light = _MLightDataBuffer[lightIndex];
@@ -168,7 +166,8 @@ void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
     }
 
     // 阴影
-    float shadow = 1.0;
+    float shadow = GetShadow(uv, lightUV, innerRadius * UNIT_SIZE);
+    /*
     if (GetObstacleMask_RawCamera(lightUV) > 0.1 && dist > innerRadius)
     {
         shadow = 0.0;
@@ -177,6 +176,7 @@ void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
     {
         shadow = GetShadow(uv, lightUV, innerRadius);
     }
+    */
 
     outShadow = shadow;
     outColor = distanceAttenuation * angleAttenuation * intensity * lightColor;
