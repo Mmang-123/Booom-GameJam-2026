@@ -39,6 +39,7 @@ namespace Mmang.PixelartRender
             InitCamera();
             CreateTextures();
             RegisterSDFThreads();
+            Application.targetFrameRate = 60;
 
             CenterIndex = Vector2Int.zero;
         }
