@@ -29,7 +29,6 @@ namespace Game
 
         public override void OnActivate()
         {
-            Debug.Log("Active");
             FindNearestPoint(out int index, out bool reverse);
             CurrentIndex = index;
             IsReverse = reverse;

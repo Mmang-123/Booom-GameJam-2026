@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 7792305372667502108}
   - component: {fileID: 834712693967893020}
   - component: {fileID: 5141295183322557257}
+  - component: {fileID: 7674641376341971388}
   m_Layer: 0
   m_Name: LanternFish
   m_TagString: Untagged
@@ -261,6 +262,20 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: -0.20965838, y: -0.085769415}
   m_Radius: 0.5762396
+--- !u!114 &7674641376341971388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6172189210337702716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 650801f30ef9e204ca9e3868f82cea7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.CameraTargetPoint
+  m_MixRange: {x: 0.3, y: 0.9}
+  m_Weight: 0.5
 --- !u!1 &9181764966427111591
 GameObject:
   m_ObjectHideFlags: 0

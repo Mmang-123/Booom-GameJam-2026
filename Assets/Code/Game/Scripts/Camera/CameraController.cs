@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Game
 {
     [System.Serializable]
-    public class CameraTarget
+    public class CameraTarget : IReference
     {
         public Transform Trans;
         public float Weight;
@@ -18,18 +18,30 @@ namespace Game
             Trans = trans;
             Weight = weight;
         }
+        public CameraTarget() { }
+
+        public void Clear()
+        {
+            Trans = null;
+            Weight = 0f;
+        }
     }
 
     public class CameraController : SingletonMono<CameraController>
     {
-        [SerializeField] private List<CameraTarget> m_Targets = new();
-
         [Header("跟随设置")]
         [SerializeField] private SecondOrderDynamicsSetting m_FollowSetting;
+        [SerializeField] private Vector2 m_CameraViewSize = new(30f, 16.875f);
 
         // Runtime
+        private Transform m_MainTarget;
+        private List<CameraTarget> m_Targets = new();
+        private Dictionary<Transform, CameraTarget> m_TargetMap = new();
+
         public Vector2 TargetPoint { get; private set; }
         private Vector2SecondOrderDynamics m_FollowDamper;
+
+        public Transform MainTarget => m_MainTarget;
 
         protected override void OnAwake()
         {
@@ -39,7 +51,7 @@ namespace Game
 
         private void Update()
         {
-            //ObstacleMaskManager.Instance.UpdatePosition(transform.position);
+            
         }
 
         private void FixedUpdate()
@@ -51,6 +63,27 @@ namespace Game
         private void LateUpdate()
         {
             ObstacleMaskManager.Instance.UpdatePosition(transform.position);
+        }
+
+        public float GetMixWeight(Vector2 position, Vector2 mixRange)
+        {
+            Transform trans = m_MainTarget == null ? transform : m_MainTarget;
+
+            float xDis = Mathf.Abs(position.x - trans.position.x);
+            float yDis = Mathf.Abs(position.y - trans.position.y);
+
+            xDis = Mathf.Clamp01(xDis / m_CameraViewSize.x * 2f);
+            yDis = Mathf.Clamp01(yDis / m_CameraViewSize.y * 2f);
+
+            float dis = Mathf.Max(xDis, yDis);
+            mixRange.x = Mathf.Min(mixRange.x, mixRange.y);
+
+            if (mixRange.x == mixRange.y)
+            {
+                return dis <= mixRange.x ? 1f : 0f;
+            }
+
+            return 1.0f - (Mathf.Clamp(dis, mixRange.x, mixRange.y) - mixRange.x) / (mixRange.y - mixRange.x);
         }
 
         #region 追踪计算
@@ -93,26 +126,55 @@ namespace Game
 
         #region 设置追踪点
 
+        public void SetMainTarget(Transform transform)
+        {
+            m_MainTarget = transform;
+            if (transform != null)
+                AddFollowPoint(transform, 1f);
+        }
+
         public bool ContainsFollowPoint(Transform trans)
         {
-            return m_Targets.Any(i => i.Trans == trans);
+            return m_TargetMap.ContainsKey(trans);
         }
 
         public void AddFollowPoint(Transform trans, float weight = 1f)
         {
-            m_Targets.Add(new(trans, weight));
+            if (ContainsFollowPoint(trans))
+            {
+                m_TargetMap[trans].Weight = weight;
+            }
+            else
+            {
+                var instance = ReferencePool.Acquire<CameraTarget>();
+                instance.Trans = trans;
+                instance.Weight = weight;
+                m_Targets.Add(instance);
+                m_TargetMap.Add(trans, instance);
+            }
         }
 
         public void RemoveFollowPoint(Transform trans)
         {
-            m_Targets.RemoveAll(t => t.Trans == trans);
+            if (m_TargetMap.TryGetValue(trans, out var point))
+            {
+                m_TargetMap.Remove(trans);
+                m_Targets.Remove(point);
+                ReferencePool.Release(point);
+            }
+
+            if (trans == m_MainTarget)
+            {
+                m_MainTarget = null;
+            }
         }
 
         public void SetWeight(Transform trans, float newWeight)
         {
-            // todo: 后面改成map
-            var pair = m_Targets.Find(i => i.Trans == trans);
-            pair.Weight = newWeight;
+            if (m_TargetMap.TryGetValue(trans, out var point))
+            {
+                point.Weight = newWeight;
+            }
         }
 
         #endregion

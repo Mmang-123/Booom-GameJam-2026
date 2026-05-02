@@ -22,18 +22,24 @@ namespace Game
 
         private void SetFish(Fish fish)
         {
+            var cameraController = CameraController.Instance;
+            if (m_CurrentFish != null)
+            {
+                cameraController.SetMainTarget(null);
+            } 
+            
             m_CurrentFish = fish;
 
             if (fish == null)
             {
-                CameraController.Instance.RemoveFollowPoint(m_PlayerDirectionPoint);
+                cameraController.RemoveFollowPoint(m_PlayerDirectionPoint);
             }
             else
             {
                 m_CurrentFish.Init();
                 m_CurrentFish.GetBehaviour<FB_Swim>().RotateToTargetPoint = true;
-                if (!CameraController.Instance.ContainsFollowPoint(m_PlayerDirectionPoint))
-                    CameraController.Instance.AddFollowPoint(m_PlayerDirectionPoint, m_LookAtOffset);
+                cameraController.AddFollowPoint(m_PlayerDirectionPoint, m_LookAtOffset);
+                cameraController.SetMainTarget(fish.transform);
             }
         }
 
