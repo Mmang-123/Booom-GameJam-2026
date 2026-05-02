@@ -94,7 +94,7 @@
             // -------------------------------------
             // Shader Stages
             #pragma vertex UnlitVert
-            #pragma fragment UnlitFrag
+            #pragma fragment EmissionFrag
 
             //--------------------------------------
             // GPU Instancing
