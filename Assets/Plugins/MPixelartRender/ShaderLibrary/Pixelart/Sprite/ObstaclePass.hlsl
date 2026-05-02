@@ -53,19 +53,19 @@ half4 ObstacleExtendFrag(Varyings input) : SV_Target
     float UNIT_SIZE = 1.0 / _ScreenParams.x;
 
 #ifdef TEXTURE_BASED
-    float alpha = 0;
-    alpha += tex2D(_MainTex, input.uv + float2(0, 0)).a;
-    alpha += tex2D(_MainTex, input.uv + float2(UNIT_SIZE, 0)).a;
-    alpha += tex2D(_MainTex, input.uv + float2(0, UNIT_SIZE)).a;
-    alpha += tex2D(_MainTex, input.uv + float2(-UNIT_SIZE, 0)).a;
-    alpha += tex2D(_MainTex, input.uv + float2(0, -UNIT_SIZE)).a;
+    float4 color = float4(0, 0, 0, 0);
+    color += tex2D(_MainTex, input.uv + float2(0, 0));
+    color += tex2D(_MainTex, input.uv + float2(UNIT_SIZE, 0));
+    color += tex2D(_MainTex, input.uv + float2(0, UNIT_SIZE));
+    color += tex2D(_MainTex, input.uv + float2(-UNIT_SIZE, 0));
+    color += tex2D(_MainTex, input.uv + float2(0, -UNIT_SIZE));
 
-    alpha *= input.color.a;
+    color *= input.color;
 #else
-    float alpha = input.color.a;
+    float4 color = input.color;
 #endif
 
-    clip(alpha - 0.5);
+    clip(min(color.a - 0.5, color.r + color.g + color.b - 0.001));
 
     return _ObstacleMaskValue;
 }
