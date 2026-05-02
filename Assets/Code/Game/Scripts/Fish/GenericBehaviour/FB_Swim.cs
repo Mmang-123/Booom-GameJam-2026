@@ -40,14 +40,23 @@ namespace Game
         public State CurrentState { get; private set; }
         public bool Tracing { get; set; }
         public Vector2 TargetPoint { get; set; }
+        public Vector2 TargetDirection { get; set; }
         public float CurrentSpeed { get; set; }
+        public bool RotateToTargetPoint { get; set; }
+
         public float MaxSpeed => m_MoveSpeed;
+        public float StopDistance => m_StopDistance;
 
         private List<AdditionalVelocity> m_AddtionalVelocities = new();
 
         private void Update()
         {
             UpdateState();
+
+            if (RotateToTargetPoint || Tracing)
+            {
+                TargetDirection = (TargetPoint - (Vector2)transform.position).normalized;
+            }
 
             RotateToTarget();
         }
@@ -95,11 +104,10 @@ namespace Game
                     break;
             }
 
-            float angle = Vector2.Angle(Fish.ForwardDirection, (TargetPoint - (Vector2)transform.position).normalized);
+            float angle = Vector2.Angle(Fish.ForwardDirection, TargetDirection);
             float rotateSpeed = RequireFastRotate(angle) ? m_FastRotateSpeed : m_RotateSpeed;
 
-            Vector2 direction = TargetPoint - (Vector2)transform.position;
-            float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + offsetAngle;
+            float targetAngle = Mathf.Atan2(TargetDirection.y, TargetDirection.x) * Mathf.Rad2Deg + offsetAngle;
             Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
             Fish.SetRotation(Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed));
         }
@@ -107,7 +115,7 @@ namespace Game
         private void TraceUpdate(float dt)
         {
             float distance = Vector2.Distance(transform.position, TargetPoint);
-            float angle = Vector2.Angle(Fish.ForwardDirection, (TargetPoint - (Vector2)transform.position).normalized);
+            float angle = Vector2.Angle(Fish.ForwardDirection, TargetDirection);
 
             if (RequireFastRotate(angle) && CurrentSpeed > 0.1f)
             {
@@ -131,7 +139,6 @@ namespace Game
             moveDistance = Mathf.Min(moveDistance, distance - 0.05f);
 
             Vector2 motion = moveDistance * Fish.ForwardDirection;
-            //transform.position += (Vector3)motion;
             Fish.Move(motion);
         }
 
@@ -143,7 +150,6 @@ namespace Game
                 float moveDistance = CurrentSpeed * dt;
 
                 Vector2 motion = moveDistance * Fish.ForwardDirection;
-                //transform.position += (Vector3)motion;
                 Fish.Move(motion);
             }
         }

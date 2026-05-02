@@ -28,6 +28,7 @@ namespace Game
 
 
         // Runtime
+        private bool m_Inited = false;
         private Rigidbody2D m_Rigidbody;
 
         private List<FishBehaviour> m_Behaviours;
@@ -45,8 +46,11 @@ namespace Game
             Init();
         }
 
-        private void Init()
+        public void Init()
         {
+            if (m_Inited)
+                return;
+            m_Inited = true;
             m_Rigidbody = GetComponent<Rigidbody2D>();
 
             //

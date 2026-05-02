@@ -28,9 +28,12 @@ namespace Game
             {
                 CameraController.Instance.RemoveFollowPoint(m_PlayerDirectionPoint);
             }
-            else if (!CameraController.Instance.ContainsFollowPoint(m_PlayerDirectionPoint))
+            else
             {
-                CameraController.Instance.AddFollowPoint(m_PlayerDirectionPoint, m_LookAtOffset);
+                m_CurrentFish.Init();
+                m_CurrentFish.GetBehaviour<FB_Swim>().RotateToTargetPoint = true;
+                if (!CameraController.Instance.ContainsFollowPoint(m_PlayerDirectionPoint))
+                    CameraController.Instance.AddFollowPoint(m_PlayerDirectionPoint, m_LookAtOffset);
             }
         }
 
@@ -49,7 +52,6 @@ namespace Game
                 var swimBehaviour = m_CurrentFish.GetBehaviour<FB_Swim>();
                 swimBehaviour.TargetPoint = worldPos;
                 swimBehaviour.Tracing = Mouse.current.leftButton.isPressed;
-
 
                 // 相机偏移
                 float distance = Vector2.Distance(worldPos, m_CurrentFish.Position);
