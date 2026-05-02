@@ -41,7 +41,7 @@ namespace Sloane
             Vector2 dir = GetDirectionToNearestTerrain();
             int seed = GetPositionSeed();
             Sprite sprite = m_Pool.GetSprite(dir, seed);
-            if (sprite != null)
+            if (sprite != null && sprite != sr.sprite)
             {
                 sr.sprite = sprite;
                 EditorUtility.SetDirty(this);

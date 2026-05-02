@@ -322,5 +322,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Mmang.PixelartRender.MPointLight
   Color: {r: 1, g: 0.62352943, b: 0.30588236, a: 1}
   Radius: 8
-  InnerRadius: 0.3
+  InnerRadius: 2.35
   Intensity: 6
