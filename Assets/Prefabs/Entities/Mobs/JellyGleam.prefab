@@ -262,6 +262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.FB_GenericAnimator
   m_Animator: {fileID: 6154330326010664966}
+  m_CanEat: 0
 --- !u!114 &7741573196834149294
 MonoBehaviour:
   m_ObjectHideFlags: 0

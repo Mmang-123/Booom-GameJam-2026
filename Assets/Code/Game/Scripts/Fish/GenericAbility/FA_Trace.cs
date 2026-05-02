@@ -10,6 +10,7 @@ namespace Game
 
         // Runtime
         private FB_Swim SwimBehaviour { get; set; }
+        private FB_Eat EatBehaviour { get; set; }
         private Fish TargetFish { get; set; }
 
         public override bool CanActivateAbility()
@@ -27,6 +28,9 @@ namespace Game
 
             SwimBehaviour = Fish.GetBehaviour<FB_Swim>();
             SwimBehaviour.Tracing = true;
+
+            EatBehaviour = Fish.GetBehaviour<FB_Eat>();
+            EatBehaviour.Target = TargetFish;
         }
 
         public override void OnEnd(EEndAbilityType endType)
