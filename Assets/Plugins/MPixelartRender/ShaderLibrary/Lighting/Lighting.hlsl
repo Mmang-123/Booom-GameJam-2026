@@ -28,7 +28,8 @@ float3 SampleLight(float2 screenUV)
     float4 scrPos = ComputeScreenPos(posCS);
     float2 originUV = scrPos.xy / scrPos.w;
 
-    float2 chunkSize = float2(256, 256) * 3 / _ScreenParams.xy;
+    // TODO: 这里写死了
+    float2 chunkSize = float2(256, 256) * 3 / float2(480, 270);
     float2 sampleUV = (screenUV - originUV) / chunkSize;
 
     //return float3(sampleUV, 0);
