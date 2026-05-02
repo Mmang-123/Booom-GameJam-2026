@@ -89,10 +89,10 @@ float4 UnlitFrag(Varyings input) : SV_Target
 
     float3 lightColor = ComputeLighting(positionWS);
 
-    if (lightColor.r <= 0.001 && lightColor.g <= 0.001 && lightColor.b <= 0.001)
+    if ((lightColor.r <= 0.001 && lightColor.g <= 0.001 && lightColor.b <= 0.001) || (outputColor.r <= 0.001 && outputColor.g <= 0.001 && outputColor.b <= 0.001))
     {
         // Background
-        outputColor.rgb = SampleBackground(screenUV).rgb;
+        outputColor.rgb = LightenBlend(SampleBackground(screenUV).rgb, lightColor);
     }
     else
     {

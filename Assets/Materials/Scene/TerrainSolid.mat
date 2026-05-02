@@ -123,6 +123,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _LightenBlend: 0.16
     - _Metallic: 0
     - _NoiseStrength: 0.0625
     - _ObstacleMaskValue: 0.75
@@ -131,6 +132,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _SDFThreshold: 0.03125
+    - _ShadingBlend: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -142,7 +144,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 0.03137255, g: 0.03529412, b: 0.12156863, a: 1}
+    - _Color: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

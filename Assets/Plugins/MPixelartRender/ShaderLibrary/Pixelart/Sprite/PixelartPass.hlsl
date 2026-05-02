@@ -73,7 +73,7 @@ float4 PixelartFrag(Varyings input) : SV_Target
     if ((light.r <= 0.001 && light.g <= 0.001 && light.b <= 0.001) || (outputColor.r <= 0.001 && outputColor.g <= 0.001 && outputColor.b <= 0.001))
     {
         // Background
-        outputColor.rgb = SampleBackground(screenUV).rgb;
+        outputColor.rgb = LightenBlend(SampleBackground(screenUV).rgb, light);
     }
     else
     {
