@@ -37,6 +37,11 @@ namespace Game
         {
             m_Fish = fish;
             m_Fish?.SetController(this);
+
+            if (m_Fish.TryGetBehaviour<FB_Swim>(out var behaviour))
+            {
+                behaviour.CanAvoidance = true;
+            }
         }
 
         public void LoseControl(IFishController otherController)

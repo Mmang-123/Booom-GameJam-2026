@@ -2,6 +2,8 @@
 
 namespace Game
 {
+
+    // 这里本意是写玩家避障的，但是变成了某种墙壁碰撞效果
     public class FB_Avoidance : FishBehaviour
     {
         [SerializeField] private float m_BounceForce = 5f;

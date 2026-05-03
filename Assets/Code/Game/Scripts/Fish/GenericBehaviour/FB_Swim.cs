@@ -29,12 +29,20 @@ namespace Game
     {
         public enum State { Normal, Trace, Disable }
 
+        [Header("基础设置")]
         [SerializeField] private float m_RotateSpeed = 3f;
         [SerializeField] private float m_FastRotateSpeed = 6f;
         [SerializeField] private float m_MoveSpeed = 10f;
         [SerializeField] private float m_Acceleration = 5f;
         [SerializeField] private float m_FastAcceleration = 16f;
         [SerializeField] private float m_StopDistance;
+
+        [Header("避障")]
+        [SerializeField] private bool m_CanAvoidance = false;
+        [SerializeField] private float m_RayDistance = 2f;    // 射线检测距离
+        [SerializeField] private float m_RayAngle = 30f;      // 左右射线的角度
+        //[SerializeField] private float avoidanceForce = 3f; // 避障时的排斥力倍数
+        [SerializeField] private LayerMask m_ObstacleLayer;   // 障碍物图层
 
         // Runtime
         public State CurrentState { get; private set; }
@@ -54,13 +62,26 @@ namespace Game
 
         private List<AdditionalVelocity> m_AddtionalVelocities = new();
 
+        public bool CanAvoidance { get => m_CanAvoidance; set => m_CanAvoidance = value; }
+
         private void Update()
         {
             UpdateState();
 
             if (RotateToTargetPoint || Tracing)
             {
-                TargetDirection = (TargetPoint - (Vector2)transform.position).normalized;
+                Vector2 targetDirection = (TargetPoint - (Vector2)transform.position).normalized;
+                if (m_CanAvoidance && TryAvoidance(targetDirection, out var avoidanceVector))
+                {
+                    //var q = Quaternion.Lerp(Quaternion.LookRotation(targetDirection), Quaternion.LookRotation(avoidanceVector), 0.5f);
+                    //Vector2 vec = (q * Vector3.forward).GetXY().normalized;
+                    Vector2 vec = avoidanceVector.normalized;
+                    TargetDirection = vec;
+                }
+                else
+                {
+                    TargetDirection = targetDirection;
+                }
             }
 
             if (!IsDisable)
@@ -127,6 +148,8 @@ namespace Game
             Fish.SetRotation(Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed));
         }
 
+        #region Update
+
         private void TraceUpdate(float dt)
         {
             float distance = Vector2.Distance(transform.position, TargetPoint);
@@ -179,13 +202,159 @@ namespace Game
             Fish.Move(motion);
         }
 
+        #endregion
+
+
+        #region 避障
+
+        private bool TryAvoidance(Vector2 targetDirection, out Vector2 avoidanceDirection)
+        {
+            Vector2 forward = targetDirection;
+            Vector2 leftRayDir = Quaternion.Euler(0, 0, m_RayAngle) * forward;
+            Vector2 rightRayDir = Quaternion.Euler(0, 0, -m_RayAngle) * forward;
+
+            RaycastHit2D hitCenter = Physics2D.Raycast(transform.position, forward, m_RayDistance, m_ObstacleLayer);
+            RaycastHit2D hitLeft = Physics2D.Raycast(transform.position, leftRayDir, m_RayDistance, m_ObstacleLayer);
+            RaycastHit2D hitRight = Physics2D.Raycast(transform.position, rightRayDir, m_RayDistance, m_ObstacleLayer);
+
+            // Debug 画线
+            Debug.DrawRay(transform.position, forward * m_RayDistance, Color.green);
+            Debug.DrawRay(transform.position, leftRayDir * m_RayDistance, Color.yellow);
+            Debug.DrawRay(transform.position, rightRayDir * m_RayDistance, Color.yellow);
+
+            int turnDir = 0;
+            Vector2 hitNormal = Vector2.zero;
+
+            if (hitCenter)
+            {
+                if (Vector3.Cross(targetDirection, Fish.ForwardDirection).z > 0f)
+                    turnDir = 1; // 向左
+                else
+                    turnDir = -1;
+                
+                hitNormal = hitCenter.normal;
+                //avoidanceDirection = (avoidanceTurnDir == 1f ? Quaternion.Euler(0, 0, 70f) : Quaternion.Euler(0, 0, -70f)) * -hitCenter.normal;
+                //Debug.DrawRay(transform.position, avoidanceDirection, Color.red);
+            }
+            else if (hitLeft && hitRight)
+            {
+                if (hitLeft.distance <= hitRight.distance)
+                {
+                    turnDir = -1;
+                    hitNormal = hitLeft.normal;
+                }
+                else
+                {
+                    turnDir = 1;
+                    hitNormal = hitRight.normal;
+                }
+            }
+            else if (hitLeft)
+            {
+                turnDir = -1;
+                hitNormal = hitLeft.normal;
+            }
+            else if (hitRight)
+            {
+                turnDir = 1;
+                hitNormal = hitRight.normal;
+            }
+
+            if (turnDir != 0)
+            {
+                avoidanceDirection = (turnDir == 1f ? Quaternion.Euler(0, 0, 90f) : Quaternion.Euler(0, 0, -90f)) * -hitNormal;
+                return true;
+            }
+
+            /*
+            if (hitLeft)
+            {
+                avoidanceDirection = Quaternion.Euler(0, 0, -70f) * -hitLeft.normal;
+                Debug.DrawRay(transform.position, avoidanceDirection, Color.red);
+                return true;
+            }
+            if (hitRight)
+            {
+                avoidanceDirection = Quaternion.Euler(0, 0, 70f) * -hitRight.normal;
+                Debug.DrawRay(transform.position, avoidanceDirection, Color.red);
+                return true;
+            }
+            */
+
+
+            avoidanceDirection = Vector2.zero;
+            return false;
+        }
+
+        /*
+        private Vector2 CalculateAvoidanceForce()
+        {
+            Vector2 avoidanceVector = Vector2.zero;
+            Vector2 forward = Fish.ForwardDirection;
+
+            // 定义三根触须的方向 (正前, 左前, 右前)
+            Vector2 leftRayDir = Quaternion.Euler(0, 0, m_RayAngle) * forward;
+            Vector2 rightRayDir = Quaternion.Euler(0, 0, -m_RayAngle) * forward;
+
+            // 发射射线
+            RaycastHit2D hitCenter = Physics2D.Raycast(transform.position, forward, m_RayDistance, m_ObstacleLayer);
+            RaycastHit2D hitLeft = Physics2D.Raycast(transform.position, leftRayDir, m_RayDistance, m_ObstacleLayer);
+            RaycastHit2D hitRight = Physics2D.Raycast(transform.position, rightRayDir, m_RayDistance, m_ObstacleLayer);
+
+            // Debug 画线，方便在 Scene 视图中观察
+            Debug.DrawRay(transform.position, forward * m_RayDistance, Color.green);
+            Debug.DrawRay(transform.position, leftRayDir * m_RayDistance, Color.yellow);
+            Debug.DrawRay(transform.position, rightRayDir * m_RayDistance, Color.yellow);
+
+            // 逻辑判断：计算排斥力方向
+            float centerDistance = 0, leftDistance = 0, rightDistance = 0;
+            float maxDistance = 0;
+            if (hitCenter.collider != null)
+            {
+                // 正前方有障碍物，优先沿碰撞点的法线方向推开 (法线通常垂直于障碍物表面)
+                //avoidanceVector += hitCenter.normal;
+                centerDistance = hitCenter.distance;
+                maxDistance = Mathf.Max(maxDistance, centerDistance);
+                Debug.DrawRay(hitCenter.point, hitCenter.normal, Color.red);
+            }
+            else if (hitLeft.collider != null)
+            {
+                // 左侧有障碍物，向右推开
+                //avoidanceVector += rightRayDir;
+                leftDistance = hitLeft.distance;
+                maxDistance = Mathf.Max(maxDistance, leftDistance);
+            }
+            else if (hitRight.collider != null)
+            {
+                // 右侧有障碍物，向左推开
+                //avoidanceVector += leftRayDir;
+                rightDistance = hitRight.distance;
+                maxDistance = Mathf.Max(maxDistance, rightDistance);
+            }
+
+            if (hitCenter.collider != null)
+            {
+                avoidanceVector += hitCenter.normal * ()
+            }
+
+            Debug.DrawRay(transform.position, avoidanceVector, Color.red);
+
+            return avoidanceVector;
+        }
+        */
+
+        #endregion
+
+
+        #region Additional Velocity
+
         private void HandleAdditionalVelocity(float dt)
         {
-            var toRemove = ListPool<AdditionalVelocity>.Get();            
+            var toRemove = ListPool<AdditionalVelocity>.Get();
             foreach (var velocity in m_AddtionalVelocities)
             {
                 //
-                Fish.Move(dt * velocity.Value);       
+                Fish.Move(dt * velocity.Value);
 
                 //
                 Vector2 direction = velocity.Value.normalized;
@@ -203,7 +372,7 @@ namespace Game
             }
 
             m_AddtionalVelocities.RemoveAll(i => toRemove.Contains(i));
-            
+
             ListPool<AdditionalVelocity>.Release(toRemove);
         }
 
@@ -220,6 +389,8 @@ namespace Game
             }
             m_AddtionalVelocities.Clear();
         }
+
+        #endregion
 
     }
 }

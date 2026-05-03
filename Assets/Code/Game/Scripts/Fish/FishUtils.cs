@@ -11,8 +11,17 @@ namespace Game
 
         public static void GetFishInCircle(Vector2 center, float radius, List<Fish> result, bool onlyLiving = true, bool clearResultList = true, Fish ignoreFish = null)
         {
+            HashSet<Fish> fishSet = HashSetPool<Fish>.Get();
+            fishSet.Clear();
             if (clearResultList)
                 result.Clear();
+            else
+            {
+                foreach (var fish in result)
+                {
+                    fishSet.Add(fish);
+                }
+            }
 
             ContactFilter2D filter = new()
             {
@@ -22,7 +31,6 @@ namespace Game
             };
 
             int colliderCount = Physics2D.OverlapCircle(center, radius, filter, s_ColliderCache);
-            HashSet<Fish> fishSet = HashSetPool<Fish>.Get();
             for (int i = 0; i < colliderCount; i++)
             {
                 var collider = s_ColliderCache[i];
@@ -34,11 +42,12 @@ namespace Game
                     && (!onlyLiving || fish.IsLiving))
                     {
                         fishSet.Add(fish);
+                        result.Add(fish);
                     }
                 }
             }
 
-            result.AddRange(fishSet);
+            HashSetPool<Fish>.Release(fishSet);
         }
     }
 }

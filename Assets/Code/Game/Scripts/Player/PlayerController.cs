@@ -31,12 +31,17 @@ namespace Game
         {
             fish.SetController(this);
             SetFish(fish);
+
+            if (fish.TryGetBehaviour<FB_Swim>(out var behaviour))
+            {
+                behaviour.CanAvoidance = false;
+            }
         }
 
         public void LoseControl(IFishController newController)
         {
             // 这大概是不会发生的
-            Debug.Log("???");
+            Debug.Log("发生了什么???");
             SetFish(null);
         }
 

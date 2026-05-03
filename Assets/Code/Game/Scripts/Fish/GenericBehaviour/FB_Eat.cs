@@ -86,7 +86,7 @@ namespace Game
             if (Target != null)
             {
                 EatTimer += Time.deltaTime;   
-                if (EatTimer >= 0.2f)
+                if (EatTimer >= 0.25f)
                 {
                     Eat();
                     return;
