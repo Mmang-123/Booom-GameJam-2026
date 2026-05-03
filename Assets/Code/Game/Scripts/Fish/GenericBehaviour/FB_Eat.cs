@@ -116,8 +116,11 @@ namespace Game
             State = EState.Eat;
             EatTimer = 0f;
 
-            // TODO: 动画
-            //..
+            // 动画
+            if (Fish.TryGetBehaviour<FB_GenericAnimator>(out var animatorBehaviour))
+            {
+                animatorBehaviour.TriggerCatchAnimation();
+            }
 
             var swimBehaviour = Fish.GetBehaviour<FB_Swim>();
             swimBehaviour.AdditionalSpeed += m_EatDashAdditionalSpeed;
@@ -168,7 +171,7 @@ namespace Game
                 // 动画
                 if (Fish.TryGetBehaviour<FB_GenericAnimator>(out var animatorBehaviour))
                 {
-                    animatorBehaviour.TriggerEatAnimation(infected);
+                    animatorBehaviour.TriggerSwallowAnimation(infected);
                 }
                 
                 ListPool<Fish>.Release(fishInRange);

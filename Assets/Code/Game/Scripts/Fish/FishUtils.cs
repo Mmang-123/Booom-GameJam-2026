@@ -9,9 +9,11 @@ namespace Game
         public static readonly LayerMask FishLayer = LayerMask.GetMask("Fish");
         private static Collider2D[] s_ColliderCache = new Collider2D[64];
 
-        public static void GetFishInCircle(Vector2 center, float radius, List<Fish> result, bool onlyLiving = true, Fish ignoreFish = null)
+        public static void GetFishInCircle(Vector2 center, float radius, List<Fish> result, bool onlyLiving = true, bool clearResultList = true, Fish ignoreFish = null)
         {
-            result.Clear();
+            if (clearResultList)
+                result.Clear();
+
             ContactFilter2D filter = new()
             {
                 useTriggers = false,

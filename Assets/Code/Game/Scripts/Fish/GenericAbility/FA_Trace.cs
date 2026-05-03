@@ -30,7 +30,8 @@ namespace Game
             SwimBehaviour.Tracing = true;
 
             EatBehaviour = Fish.GetBehaviour<FB_Eat>();
-            EatBehaviour.Target = TargetFish;
+            if (EatBehaviour != null)
+                EatBehaviour.Target = TargetFish;
         }
 
         public override void OnEnd(EEndAbilityType endType)
