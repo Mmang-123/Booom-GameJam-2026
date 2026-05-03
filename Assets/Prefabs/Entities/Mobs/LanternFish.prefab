@@ -91,6 +91,74 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &4961212597436515556
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4676287859476144602}
+  - component: {fileID: 3565601229386575618}
+  m_Layer: 7
+  m_Name: EatRange
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4676287859476144602
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4961212597436515556}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.84, y: -0.13, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5428743268945966197}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &3565601229386575618
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4961212597436515556}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 1
 --- !u!1 &5554110311380033062
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,6 +191,7 @@ Transform:
   m_Children:
   - {fileID: 2857518606711012575}
   - {fileID: 6428133358885697745}
+  - {fileID: 4676287859476144602}
   m_Father: {fileID: 4800681294185171314}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7378699115958009860
@@ -241,6 +310,14 @@ MonoBehaviour:
   m_EDirection: 2
   m_AutoFlip: 1
   m_FlipRoot: {fileID: 5428743268945966197}
+  m_SporeRenderer1: {fileID: 531898999858827687}
+  m_SporeRenderer2: {fileID: 7487976368210890969}
+  m_BodyRenderer: {fileID: 7378699115958009860}
+  m_DefaultBodyColor: {r: 1, g: 0.62352943, b: 0.30588236, a: 1}
+  m_InfectedBodyColor: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}
+  m_InitSaturation: 100
+  m_MaxSaturation: 100
+  m_InfectedLevel: 0
 --- !u!114 &547956989833178184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,6 +363,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Eat
   m_OpenDistance: 3
   m_ShutDistance: 5
+  m_EatDistance: 1.5
+  m_ReduceSaturationPerBite: 50
+  m_EatRange: {fileID: 3565601229386575618}
+  m_WaitTimeAfterEat: 1
 --- !u!50 &834712693967893020
 Rigidbody2D:
   serializedVersion: 5

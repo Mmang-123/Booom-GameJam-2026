@@ -31,5 +31,15 @@ namespace Game
         {
             m_Animator.SetTrigger("Dash");
         }
+
+        public void TriggerEatAnimation(bool infected)
+        {
+            m_Animator.SetTrigger(infected ? "InfectedEat" : "RegularEat");
+        }
+
+        public void TriggerDieAnimation()
+        {
+            m_Animator.SetTrigger("Die");
+        }
     }
 }

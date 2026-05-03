@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e0552c8d70e72449b248ec737d9f5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.MPointLight
-  Color: {r: 0.12100001, g: 0.005041669, b: 0.035291664, a: 1}
+  Color: {r: 0.6415094, g: 0.09380562, b: 0.23985995, a: 1}
   Radius: 3
   InnerRadius: 1
   Intensity: 2.2
@@ -218,6 +218,14 @@ MonoBehaviour:
   m_EDirection: 0
   m_AutoFlip: 0
   m_FlipRoot: {fileID: 5428743268945966197}
+  m_SporeRenderer1: {fileID: 0}
+  m_SporeRenderer2: {fileID: 0}
+  m_BodyRenderer: {fileID: 0}
+  m_DefaultBodyColor: {r: 0, g: 0, b: 0, a: 0}
+  m_InfectedBodyColor: {r: 0, g: 0, b: 0, a: 0}
+  m_InitSaturation: 100
+  m_MaxSaturation: 100
+  m_InfectedLevel: 0
 --- !u!114 &7792305372667502108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,10 +286,11 @@ MonoBehaviour:
   m_CD: 0.5
   m_DashSpeed: 16
   m_DashEndDamping: 16
-  m_AfterimageRoot: {fileID: 0}
   m_AfterimageTint: {r: 0.55, g: 0.85, b: 1, a: 0.75}
   m_AfterimageFadeDuration: 0.25
   m_AfterimageInterval: 0.05
+  m_AfterimageSpawnDuration: 0.4
+  m_AfterimageMaterial: {fileID: 2100000, guid: 8784ce32ca7776a4e8ce240208dd817a, type: 2}
 --- !u!50 &834712693967893020
 Rigidbody2D:
   serializedVersion: 5

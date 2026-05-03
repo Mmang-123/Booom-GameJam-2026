@@ -6,7 +6,7 @@ using UnityEngine.Pool;
 
 namespace Game
 {
-    public class FishAIComponent : MonoBehaviour
+    public class FishAIComponent : MonoBehaviour, IFishController
     {
         [SerializeField] private Fish m_Fish;
         [SerializeField] private List<FishAIAbility> m_Abilities = new();
@@ -29,12 +29,24 @@ namespace Game
                 return;
             }
 
+            ControlFish(m_Fish);
             Init(m_Fish);
+        }
+
+        public void ControlFish(Fish fish)
+        {
+            m_Fish = fish;
+            m_Fish?.SetController(this);
+        }
+
+        public void LoseControl(IFishController otherController)
+        {
+            m_Fish = null;
+            gameObject.SetActive(false);
         }
 
         public void Init(Fish fish)
         {
-            m_Fish = fish;
             Tags = new(m_OwnedTags);
             SortAbilities();
             foreach (var ability in m_Abilities)

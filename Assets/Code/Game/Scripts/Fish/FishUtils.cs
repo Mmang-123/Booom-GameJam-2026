@@ -9,7 +9,7 @@ namespace Game
         public static readonly LayerMask FishLayer = LayerMask.GetMask("Fish");
         private static Collider2D[] s_ColliderCache = new Collider2D[64];
 
-        public static void GetFishInCircle(Vector2 center, float radius, List<Fish> result)
+        public static void GetFishInCircle(Vector2 center, float radius, List<Fish> result, bool onlyLiving = true, Fish ignoreFish = null)
         {
             result.Clear();
             ContactFilter2D filter = new()
@@ -26,9 +26,12 @@ namespace Game
                 var collider = s_ColliderCache[i];
                 if (collider.TryGetComponent<FishCollider>(out var fishCollider))
                 {
-                    if (!fishSet.Contains(fishCollider.Fish) && fishCollider.Fish != null)
+                    var fish = fishCollider.Fish;
+                    if (!fishSet.Contains(fish) && fish != null
+                    && (ignoreFish == null || fish != ignoreFish)
+                    && (!onlyLiving || fish.IsLiving))
                     {
-                        fishSet.Add(fishCollider.Fish);
+                        fishSet.Add(fish);
                     }
                 }
             }

@@ -26,5 +26,14 @@ namespace Game
                 manager.RemoveFollowPoint(transform);
             }
         }
+        
+        private void OnDisable()
+        {
+            if (CameraController.InstanceValid)
+            {
+                var manager = CameraController.Instance;
+                manager.RemoveFollowPoint(transform);   
+            }
+        }
     }
 }

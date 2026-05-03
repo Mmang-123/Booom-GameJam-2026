@@ -1,28 +1,48 @@
-﻿using UnityEngine;
+﻿using Mmang.Util;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Game
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : SingletonMono<PlayerController>, IFishController
     {
         [SerializeField] private Fish m_CurrentFish;
         [SerializeField] private float m_LookAtOffset = 0.5f;
         [SerializeField] private float m_LookAtOffsetMouseRadius = 2f; // 根据鼠标到中心的距离/半径 作为偏移的强度
 
+        public Fish Fish { get; private set; }
+
+        public bool Active { get; private set; } = true;
+        public float DisableTimer { get; set; }
+
         // Runtime
         private Transform m_PlayerDirectionPoint; // 根据朝向实时更新的点
         private bool m_MouseRBPressedLastFrame = false;
 
-        private void Awake()
+        protected override void OnAwake()
         {
             GameObject pointGO = new("Player Direction Point");
             m_PlayerDirectionPoint = pointGO.transform;
             
-            SetFish(m_CurrentFish);
+            ControlFish(m_CurrentFish);
+        }
+
+        public void ControlFish(Fish fish)
+        {
+            fish.SetController(this);
+            SetFish(fish);
+        }
+
+        public void LoseControl(IFishController newController)
+        {
+            // 这大概是不会发生的
+            Debug.Log("???");
+            SetFish(null);
         }
 
         private void SetFish(Fish fish)
         {
+            Fish = fish;
             var cameraController = CameraController.Instance;
             if (m_CurrentFish != null)
             {
@@ -38,7 +58,7 @@ namespace Game
             else
             {
                 m_CurrentFish.Init();
-                m_CurrentFish.GetBehaviour<FB_Swim>().RotateToTargetPoint = true;
+                m_CurrentFish.GetBehaviour<FB_Swim>().RotateToTargetPoint = Active;
                 cameraController.AddFollowPoint(m_PlayerDirectionPoint, m_LookAtOffset);
                 cameraController.SetMainTarget(fish.transform);
             }
@@ -46,13 +66,48 @@ namespace Game
 
         private void Update()
         {
+            if (!Active)
+            {
+                if (DisableTimer > 0f)
+                {
+                    DisableTimer -= Time.deltaTime;
+                    if (DisableTimer <= 0f)
+                    {
+                        SetControlActive(true);
+                    }
+                }
+                return;
+            }
+
             TraceMousePoint();
 
             if (Mouse.current.rightButton.isPressed && !m_MouseRBPressedLastFrame)
             {
                 UseSkill();
             }
+        }
+
+        private void LateUpdate()
+        {
             m_MouseRBPressedLastFrame = Mouse.current.rightButton.isPressed;
+        }
+
+        public void SetControlActive(bool active)
+        {
+            if (Active == active)
+                return;
+            
+            Active = active;
+            if (m_CurrentFish != null)
+            {
+                m_CurrentFish.GetBehaviour<FB_Swim>().RotateToTargetPoint = Active;
+            }
+        }
+
+        public void DisableControl(float disableTime)
+        {
+            SetControlActive(false);
+            DisableTimer = disableTime;
         }
 
         private void TraceMousePoint()

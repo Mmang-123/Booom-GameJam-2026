@@ -12,15 +12,12 @@ namespace Game
         public override bool FindTarget(FishAIComponent fishAI, out Fish outTarget)
         {
             List<Fish> fishList = ListPool<Fish>.Get();
-            FishUtils.GetFishInCircle(fishAI.Fish.Position, m_StartRadius, fishList);
+            FishUtils.GetFishInCircle(fishAI.Fish.Position, m_StartRadius, fishList, ignoreFish: fishAI.Fish);
 
             bool flag = false;
             outTarget = null;
             foreach (var fish in fishList)
             {
-                if (fish == fishAI.Fish)
-                    continue;
-
                 flag = true;
                 outTarget = fish;
                 break;

@@ -45,6 +45,10 @@ namespace Game
         public bool RotateToTargetPoint { get; set; }
         public bool IsDisable { get; set; }
 
+        //
+        public float AdditionalSpeed { get; set; } = 0f;
+        public float AdditionalRotateSpeed { get; set; } = 0f;
+
         public float MaxSpeed => m_MoveSpeed;
         public float StopDistance => m_StopDistance;
 
@@ -116,6 +120,7 @@ namespace Game
 
             float angle = Vector2.Angle(Fish.ForwardDirection, TargetDirection);
             float rotateSpeed = RequireFastRotate(angle) ? m_FastRotateSpeed : m_RotateSpeed;
+            rotateSpeed += AdditionalRotateSpeed;
 
             float targetAngle = Mathf.Atan2(TargetDirection.y, TargetDirection.x) * Mathf.Rad2Deg + offsetAngle;
             Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
@@ -145,7 +150,8 @@ namespace Game
                 CurrentSpeed = Mathf.Max(0f, CurrentSpeed - dt * acceleration * 2f);
             }
 
-            float moveDistance = CurrentSpeed * dt;
+            float speed = CurrentSpeed + AdditionalSpeed;
+            float moveDistance = speed * dt;
             moveDistance = Mathf.Min(moveDistance, distance - 0.05f);
 
             Vector2 motion = moveDistance * Fish.ForwardDirection;
