@@ -23,7 +23,7 @@ namespace Sloane.Editor
         private float m_FrameRate = 10f;
         private string m_SavePath = "Assets/Animations";
         // 用于追踪每个 Renderer 已消耗的帧偏移（生成时计算，不持久化）
-        private int m_NextStartFrame = 0;
+        // private int m_NextStartFrame = 0;
 
         private List<SpriteRenderer> m_Renderers = new List<SpriteRenderer>();
         // 全局：每个 Renderer 对应一张 Multiple Sprite 纹理

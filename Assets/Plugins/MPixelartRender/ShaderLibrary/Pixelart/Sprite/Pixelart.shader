@@ -7,7 +7,7 @@
         _ShadingBlend ("Shading Blend", Range(0, 1)) = 0
         _LightenBlend ("Lighten Blend", Range(0, 1)) = 0.16
         _Emission ("Emission", Color) = (0,0,0,1)
-        _EmissionTexture ("Emission Map", 2D) = "black" {}
+        _EmissionMap ("Emission Map", 2D) = "black" {}
         _PreviewColor ("Preview Color", Color) = (1,1,1,1)
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
