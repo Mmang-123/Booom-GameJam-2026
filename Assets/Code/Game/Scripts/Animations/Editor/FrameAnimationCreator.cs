@@ -282,23 +282,17 @@ namespace Sloane.Editor
             }
 
             string fullPath = $"{m_SavePath}/{cfg.ClipName}.anim";
-            AnimationClip result;
             var existing = AssetDatabase.LoadAssetAtPath<AnimationClip>(fullPath);
             if (existing != null)
             {
-                EditorUtility.CopySerialized(clip, existing);
-                EditorGUIUtility.PingObject(existing);
-                Debug.Log($"[FrameAnimationCreator] Updated: {fullPath}");
-                result = existing;
+                Debug.Log($"[FrameAnimationCreator] Skipped (already exists): {fullPath}");
+                return null;
             }
-            else
-            {
-                AssetDatabase.CreateAsset(clip, fullPath);
-                EditorGUIUtility.PingObject(clip);
-                Debug.Log($"[FrameAnimationCreator] Created: {fullPath}");
-                result = clip;
-            }
-            return result;
+
+            AssetDatabase.CreateAsset(clip, fullPath);
+            EditorGUIUtility.PingObject(clip);
+            Debug.Log($"[FrameAnimationCreator] Created: {fullPath}");
+            return clip;
         }
 
         private AnimatorController GetAnimatorController()
