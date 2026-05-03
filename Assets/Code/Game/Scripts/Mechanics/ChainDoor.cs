@@ -17,7 +17,7 @@ namespace Game
 
         private bool m_Active;
         private float m_CurrentDoorLength;
-
+        
         #region IChargable
         public PowerSourceHandler PowerSourceHandler { get; } = new();
         public bool IsPowered => PowerSourceHandler.IsPowered(m_RequirePowerSourceCount);
