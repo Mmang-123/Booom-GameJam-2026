@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -791708409, guid: a20a4ebdbacf681499350ab22e5dc071, type: 3}
+  m_Sprite: {fileID: 690646446, guid: a20a4ebdbacf681499350ab22e5dc071, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -243,12 +243,12 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 770626486, guid: 12a0a9f13bcb59444a1373bf6d0ed8c5, type: 3}
+  m_Sprite: {fileID: -671510840, guid: 12a0a9f13bcb59444a1373bf6d0ed8c5, type: 3}
   m_Color: {r: 1, g: 0.62352943, b: 0.30588236, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -365,6 +365,8 @@ MonoBehaviour:
   m_ShutDistance: 5
   m_EatDistance: 1.5
   m_ReduceSaturationPerBite: 50
+  m_EatDashAdditionalSpeed: 3
+  m_EatDashAdditionalRotateSpeed: 3
   m_EatRange: {fileID: 3565601229386575618}
   m_WaitTimeAfterEat: 1
 --- !u!50 &834712693967893020
@@ -561,7 +563,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -710529107, guid: 823b2b750c4736441aa451b0cbd89d32, type: 3}
+  m_Sprite: {fileID: 1823743128, guid: 823b2b750c4736441aa451b0cbd89d32, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
