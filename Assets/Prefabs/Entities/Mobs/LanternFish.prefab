@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 4676287859476144602}
   - component: {fileID: 3565601229386575618}
   m_Layer: 7
-  m_Name: EatRange
+  m_Name: EatRange_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -192,6 +192,7 @@ Transform:
   - {fileID: 2857518606711012575}
   - {fileID: 6428133358885697745}
   - {fileID: 4676287859476144602}
+  - {fileID: 6942960810412817057}
   m_Father: {fileID: 4800681294185171314}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7378699115958009860
@@ -253,6 +254,74 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &5893966109052506484
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6942960810412817057}
+  - component: {fileID: 6326553700453780270}
+  m_Layer: 7
+  m_Name: EatRange_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6942960810412817057
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5893966109052506484}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.01, y: -0.13, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5428743268945966197}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &6326553700453780270
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5893966109052506484}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.5
 --- !u!1 &6172189210337702716
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,6 +340,7 @@ GameObject:
   - component: {fileID: 7674641376341971388}
   - component: {fileID: 8714769430092249421}
   - component: {fileID: 8483200656115565937}
+  - component: {fileID: 979170183609600313}
   m_Layer: 7
   m_Name: LanternFish
   m_TagString: Untagged
@@ -361,13 +431,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74fcf1db195c45f43be49637954d825b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Eat
-  m_OpenDistance: 3
-  m_ShutDistance: 5
-  m_EatDistance: 1.5
+  m_OpenDistance: 3.5
+  m_ShutDistance: 5.5
+  m_EatDistance: 2
   m_ReduceSaturationPerBite: 50
   m_EatDashAdditionalSpeed: 3
   m_EatDashAdditionalRotateSpeed: 3
-  m_EatRange: {fileID: 3565601229386575618}
+  m_EatRanges:
+  - {fileID: 3565601229386575618}
+  - {fileID: 6326553700453780270}
   m_WaitTimeAfterEat: 1
 --- !u!50 &834712693967893020
 Rigidbody2D:
@@ -482,6 +554,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.FB_GenericAnimator
   m_Animator: {fileID: 8714769430092249421}
   m_CanEat: 1
+--- !u!114 &979170183609600313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6172189210337702716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2916bcad262cc9f40aa667c43e080f29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Dash
+  m_CD: 0.5
+  m_DashSpeed: 16
+  m_DashEndDamping: 16
+  m_AfterimageTint: {r: 0.55, g: 0.85, b: 1, a: 0.75}
+  m_AfterimageFadeDuration: 0.25
+  m_AfterimageInterval: 0.05
+  m_AfterimageSpawnDuration: 0.4
+  m_AfterimageMaterial: {fileID: 2100000, guid: 8784ce32ca7776a4e8ce240208dd817a, type: 2}
 --- !u!1 &6380261139651368926
 GameObject:
   m_ObjectHideFlags: 0
