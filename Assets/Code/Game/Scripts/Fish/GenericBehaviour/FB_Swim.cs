@@ -152,7 +152,8 @@ namespace Game
 
             float speed = CurrentSpeed + AdditionalSpeed;
             float moveDistance = speed * dt;
-            moveDistance = Mathf.Min(moveDistance, distance - m_StopDistance / 2f);
+            moveDistance = Mathf.Min(moveDistance, Mathf.Max(0f, distance - m_StopDistance / 4f));
+            //moveDistance = Mathf.Min(moveDistance, Mathf.Max(0f, distance - 0.005f));
 
             Vector2 motion = moveDistance * Fish.ForwardDirection;
             Fish.Move(motion);
