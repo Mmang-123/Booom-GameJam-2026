@@ -286,7 +286,7 @@ MonoBehaviour:
   m_CD: 0.5
   m_DashSpeed: 16
   m_DashEndDamping: 16
-  m_AfterimageTint: {r: 0.55, g: 0.85, b: 1, a: 0.75}
+  m_AfterimageTint: {r: 1, g: 1, b: 1, a: 0.5019608}
   m_AfterimageFadeDuration: 0.25
   m_AfterimageInterval: 0.05
   m_AfterimageSpawnDuration: 0.4
