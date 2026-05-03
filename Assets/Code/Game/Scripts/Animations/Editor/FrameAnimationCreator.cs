@@ -241,7 +241,7 @@ namespace Sloane.Editor
 
         private AnimationClip CreateClip(ClipConfig cfg, int[] startFrames)
         {
-            var clip = new AnimationClip { frameRate = m_FrameRate };
+            var clip = new AnimationClip { name = cfg.ClipName, frameRate = m_FrameRate };
 
             var clipSettings = AnimationUtility.GetAnimationClipSettings(clip);
             clipSettings.loopTime = cfg.Loop;
@@ -282,17 +282,23 @@ namespace Sloane.Editor
             }
 
             string fullPath = $"{m_SavePath}/{cfg.ClipName}.anim";
+            AnimationClip result;
             var existing = AssetDatabase.LoadAssetAtPath<AnimationClip>(fullPath);
             if (existing != null)
             {
-                Debug.Log($"[FrameAnimationCreator] Skipped (already exists): {fullPath}");
-                return null;
+                EditorUtility.CopySerialized(clip, existing);
+                EditorGUIUtility.PingObject(existing);
+                Debug.Log($"[FrameAnimationCreator] Updated: {fullPath}");
+                result = existing;
             }
-
-            AssetDatabase.CreateAsset(clip, fullPath);
-            EditorGUIUtility.PingObject(clip);
-            Debug.Log($"[FrameAnimationCreator] Created: {fullPath}");
-            return clip;
+            else
+            {
+                AssetDatabase.CreateAsset(clip, fullPath);
+                EditorGUIUtility.PingObject(clip);
+                Debug.Log($"[FrameAnimationCreator] Created: {fullPath}");
+                result = clip;
+            }
+            return result;
         }
 
         private AnimatorController GetAnimatorController()
