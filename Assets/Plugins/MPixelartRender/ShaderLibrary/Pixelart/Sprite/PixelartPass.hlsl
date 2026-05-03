@@ -73,9 +73,10 @@ float4 PixelartFrag(Varyings input) : SV_Target
     float2 screenUV = input.positionCS.xy / _ScreenParams.xy;
     float3 light = SampleLight(screenUV);
 
-    if ((light.r <= 0.001 && light.g <= 0.001 && light.b <= 0.001) || (outputColor.r <= 0.001 && outputColor.g <= 0.001 && outputColor.b <= 0.001))
+    if ((light.r <= 0.001 && light.g <= 0.001 && light.b <= 0.001) || (outputColor.r <= 0.001 && outputColor.g <= 0.001))
     {
         // Background
+        light *= 1.0 - outputColor.b;
         outputColor.rgb = LightenBlend(SampleBackground(screenUV).rgb, light);
     }
     else
