@@ -4,18 +4,30 @@ using UnityEngine;
 
 namespace Game
 {
-    public class FA_Trace : FishAIAbility
+    public abstract class FA_Trace : FishAIAbility
     {
-        [SerializeField] private TraceSetting m_TraceSetting;
+        [System.Serializable]
+        public struct TargetPriority
+        {
+            public GameplayTag Tag;
+            public int Priority;
+        }
+
+        [SerializeField] private List<TargetPriority> m_TargetPriorityList = new();
+        public List<TargetPriority> TargetPriorityList => m_TargetPriorityList;
+
 
         // Runtime
-        private FB_Swim SwimBehaviour { get; set; }
-        private FB_Eat EatBehaviour { get; set; }
-        private Fish TargetFish { get; set; }
+        protected FB_Swim SwimBehaviour { get; set; }
+        protected FB_Eat EatBehaviour { get; set; }
+        protected Fish TargetFish { get; set; }
+        
+
+        protected abstract bool FindTarget(out Fish outTarget);
 
         public override bool CanActivateAbility()
         {
-            bool flag = m_TraceSetting.FindTarget(FishAI, out var result);
+            bool flag = FindTarget(out var result);
             if (flag)
                 TargetFish = result;
             return flag;
@@ -40,17 +52,6 @@ namespace Game
             Debug.Log("Trace_End");
 
             SwimBehaviour.Tracing = false;
-        }
-
-        public override void OnUpdate(float dt)
-        {
-            if (TargetFish != null)
-                SwimBehaviour.TargetPoint = TargetFish.Position;
-
-            if (!m_TraceSetting.CanTrace(FishAI, TargetFish))
-            {
-                FishAI.PendingEndAbility(this, EEndAbilityType.End);
-            }
         }
 
     }

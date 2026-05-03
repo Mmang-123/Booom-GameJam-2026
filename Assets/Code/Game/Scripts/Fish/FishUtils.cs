@@ -7,6 +7,7 @@ namespace Game
     public static class FishUtils
     {
         public static readonly LayerMask FishLayer = LayerMask.GetMask("Fish");
+        public static readonly LayerMask WithoutFishLayer = ~FishLayer;
         private static Collider2D[] s_ColliderCache = new Collider2D[64];
 
         public static void GetFishInCircle(Vector2 center, float radius, List<Fish> result, bool onlyLiving = true, bool clearResultList = true, Fish ignoreFish = null)

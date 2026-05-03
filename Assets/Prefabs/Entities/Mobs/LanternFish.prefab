@@ -419,6 +419,12 @@ MonoBehaviour:
   m_Acceleration: 8
   m_FastAcceleration: 16
   m_StopDistance: 0.8
+  m_CanAvoidance: 1
+  m_RayDistance: 1.8
+  m_RayAngle: 30
+  m_ObstacleLayer:
+    serializedVersion: 2
+    m_Bits: 119
 --- !u!114 &3926140103201188042
 MonoBehaviour:
   m_ObjectHideFlags: 0

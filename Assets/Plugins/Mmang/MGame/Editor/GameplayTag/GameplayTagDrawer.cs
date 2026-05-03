@@ -56,7 +56,8 @@ namespace Mmang.Game.Editors
             tagDisplayName.style.alignItems = Align.Center;
             tagDisplayName.style.justifyContent = Justify.Center;
 
-            Label tagDisplayLabel = new(GetTagName(property.GetValue<GameplayTag>()));
+            var propertyValue = property.GetValue();
+            Label tagDisplayLabel = propertyValue != null ? new(GetTagName((GameplayTag)propertyValue)) : new("Missing");
             tagDisplayLabel.AddToClassList("gameplay-tag-display__label");
             
             tagDisplayName.Add(tagDisplayLabel);

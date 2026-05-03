@@ -263,6 +263,14 @@ namespace Game
             if (turnDir != 0)
             {
                 avoidanceDirection = (turnDir == 1f ? Quaternion.Euler(0, 0, 90f) : Quaternion.Euler(0, 0, -90f)) * -hitNormal;
+
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, avoidanceDirection, m_RayDistance, m_ObstacleLayer);
+                if (hit)
+                {
+                    avoidanceDirection = (turnDir == 1f ? Quaternion.Euler(0, 0, 45f) : Quaternion.Euler(0, 0, -45f)) * avoidanceDirection;
+                }
+
+                Debug.DrawRay(transform.position, avoidanceDirection, Color.red);
                 return true;
             }
 
@@ -285,63 +293,6 @@ namespace Game
             avoidanceDirection = Vector2.zero;
             return false;
         }
-
-        /*
-        private Vector2 CalculateAvoidanceForce()
-        {
-            Vector2 avoidanceVector = Vector2.zero;
-            Vector2 forward = Fish.ForwardDirection;
-
-            // 定义三根触须的方向 (正前, 左前, 右前)
-            Vector2 leftRayDir = Quaternion.Euler(0, 0, m_RayAngle) * forward;
-            Vector2 rightRayDir = Quaternion.Euler(0, 0, -m_RayAngle) * forward;
-
-            // 发射射线
-            RaycastHit2D hitCenter = Physics2D.Raycast(transform.position, forward, m_RayDistance, m_ObstacleLayer);
-            RaycastHit2D hitLeft = Physics2D.Raycast(transform.position, leftRayDir, m_RayDistance, m_ObstacleLayer);
-            RaycastHit2D hitRight = Physics2D.Raycast(transform.position, rightRayDir, m_RayDistance, m_ObstacleLayer);
-
-            // Debug 画线，方便在 Scene 视图中观察
-            Debug.DrawRay(transform.position, forward * m_RayDistance, Color.green);
-            Debug.DrawRay(transform.position, leftRayDir * m_RayDistance, Color.yellow);
-            Debug.DrawRay(transform.position, rightRayDir * m_RayDistance, Color.yellow);
-
-            // 逻辑判断：计算排斥力方向
-            float centerDistance = 0, leftDistance = 0, rightDistance = 0;
-            float maxDistance = 0;
-            if (hitCenter.collider != null)
-            {
-                // 正前方有障碍物，优先沿碰撞点的法线方向推开 (法线通常垂直于障碍物表面)
-                //avoidanceVector += hitCenter.normal;
-                centerDistance = hitCenter.distance;
-                maxDistance = Mathf.Max(maxDistance, centerDistance);
-                Debug.DrawRay(hitCenter.point, hitCenter.normal, Color.red);
-            }
-            else if (hitLeft.collider != null)
-            {
-                // 左侧有障碍物，向右推开
-                //avoidanceVector += rightRayDir;
-                leftDistance = hitLeft.distance;
-                maxDistance = Mathf.Max(maxDistance, leftDistance);
-            }
-            else if (hitRight.collider != null)
-            {
-                // 右侧有障碍物，向左推开
-                //avoidanceVector += leftRayDir;
-                rightDistance = hitRight.distance;
-                maxDistance = Mathf.Max(maxDistance, rightDistance);
-            }
-
-            if (hitCenter.collider != null)
-            {
-                avoidanceVector += hitCenter.normal * ()
-            }
-
-            Debug.DrawRay(transform.position, avoidanceVector, Color.red);
-
-            return avoidanceVector;
-        }
-        */
 
         #endregion
 

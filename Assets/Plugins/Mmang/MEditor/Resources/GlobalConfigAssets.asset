@@ -66,6 +66,11 @@ MonoBehaviour:
     m_Children:
     - rid: 7953988112356737024
     - rid: 7953988113818452048
+  - m_Guid: 5d16715f-89ff-4bd4-9fbe-098bcc9cb13c
+    NodeName: FishType
+    m_Children:
+    - rid: 7953988145858740321
+    - rid: 7953988145858740322
   references:
     version: 2
     RefIds:
@@ -80,4 +85,16 @@ MonoBehaviour:
       data:
         m_Guid: 0143efe5-7db0-4920-8d62-82cec5e1310e
         NodeName: ControlAbility
+        m_Children: []
+    - rid: 7953988145858740321
+      type: {class: SerializableGameplayTagNode, ns: Mmang.Game, asm: MGame.Runtime}
+      data:
+        m_Guid: dd157287-33e2-4403-ba4c-cbe22f78f346
+        NodeName: JellyGleam
+        m_Children: []
+    - rid: 7953988145858740322
+      type: {class: SerializableGameplayTagNode, ns: Mmang.Game, asm: MGame.Runtime}
+      data:
+        m_Guid: 832afeb0-35ee-4ecb-a3f0-9571693e253b
+        NodeName: LanternFish
         m_Children: []
