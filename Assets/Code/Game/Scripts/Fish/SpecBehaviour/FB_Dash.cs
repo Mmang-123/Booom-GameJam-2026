@@ -6,13 +6,23 @@ namespace Game
     {
         [SerializeField] private float m_CD = 2.5f;
         [SerializeField] private float m_DashSpeed = 16f;
-        [SerializeField] private float m_DashEndDamping = 32f;     
+        [SerializeField] private float m_DashEndDamping = 32f;
+
+        [Header("残影")]
+        [SerializeField] private Color m_AfterimageTint = new Color(0.55f, 0.85f, 1f, 0.75f);
+        [SerializeField] private float m_AfterimageFadeDuration = 0.25f;
+        [SerializeField] private float m_AfterimageInterval = 0.05f;
+        [SerializeField] private float m_AfterimageSpawnDuration = 0.4f; // 残影生成持续时长，可长于冲刺本身
+        [SerializeField] private Material m_AfterimageMaterial;
 
         // Runtime
         public bool Active { get; private set; }
         public float CD { get; private set; }
         public float Timer { get; private set; }
         public int DashState { get; private set; }
+
+        private float m_AfterimageTimer;
+        private float m_AfterimageSpawnTimer; // > 0 时持续生成残影
 
         private void Update()
         {
@@ -23,6 +33,18 @@ namespace Game
             else if (Active)
             {
                 DashUpdate();
+            }
+
+            // 残影生成独立于冲刺逻辑，持续到 m_AfterimageSpawnTimer 归零
+            if (m_AfterimageSpawnTimer > 0f)
+            {
+                m_AfterimageSpawnTimer -= Time.deltaTime;
+                m_AfterimageTimer -= Time.deltaTime;
+                if (m_AfterimageTimer <= 0f)
+                {
+                    SpawnAfterimage();
+                    m_AfterimageTimer = m_AfterimageInterval;
+                }
             }
         }
 
@@ -42,6 +64,8 @@ namespace Game
         {
             Active = true;
             Timer = 0f;
+            m_AfterimageTimer = 0f;
+            m_AfterimageSpawnTimer = m_AfterimageSpawnDuration;
             var swimBehaviour = Fish.GetBehaviour<FB_Swim>();
             var animatorBehaviour = Fish.GetBehaviour<FB_GenericAnimator>();
             swimBehaviour.IsDisable = true;
@@ -49,10 +73,17 @@ namespace Game
             DashState = 0;
         }
 
+        private void SpawnAfterimage()
+        {
+            var root = transform;
+            AfterimagePool.Spawn(root, m_AfterimageTint, m_AfterimageFadeDuration, m_AfterimageMaterial);
+        }
+
         private void DashUpdate()
         {
             var swimBehaviour = Fish.GetBehaviour<FB_Swim>();
             Timer += Time.deltaTime;
+
             if (Timer <= 0.2f)
             {
                 float t = Mathf.Clamp01(Timer / 0.2f);

@@ -38,12 +38,12 @@ Varyings ObstacleVert(Attributes v)
 half4 ObstacleFrag(Varyings input) : SV_Target
 {
 #ifdef TEXTURE_BASED
-    float alpha = tex2D(_MainTex, input.uv).a * input.color.a;
+    float4 color = tex2D(_MainTex, input.uv) * input.color;
 #else
-    float alpha = input.color.a;
+    float4 color = input.color;
 #endif
 
-    clip(alpha - 0.5);
+    clip(min(color.a - 0.5, color.r + color.g + color.b - 0.001));
 
     return _ObstacleMaskValue;
 }

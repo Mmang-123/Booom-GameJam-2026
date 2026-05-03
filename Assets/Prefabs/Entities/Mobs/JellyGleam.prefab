@@ -278,6 +278,10 @@ MonoBehaviour:
   m_CD: 0.5
   m_DashSpeed: 16
   m_DashEndDamping: 16
+  m_AfterimageRoot: {fileID: 0}
+  m_AfterimageTint: {r: 0.55, g: 0.85, b: 1, a: 0.75}
+  m_AfterimageFadeDuration: 0.25
+  m_AfterimageInterval: 0.05
 --- !u!50 &834712693967893020
 Rigidbody2D:
   serializedVersion: 5

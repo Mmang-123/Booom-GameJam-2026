@@ -113,7 +113,7 @@ Material:
     - _LightenBlend: 0.1
     - _Metallic: 0
     - _ObstacleMask: 0
-    - _ObstacleMaskValue: 1
+    - _ObstacleMaskValue: 3.81
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0
