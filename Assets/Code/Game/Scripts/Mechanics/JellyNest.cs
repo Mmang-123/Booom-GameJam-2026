@@ -61,7 +61,6 @@ namespace Game
                 || m_LivingList[i].IsPlayer)
                 {
                     m_LivingList.RemoveAt(i);
-                    i++;
                 }
             }
         }

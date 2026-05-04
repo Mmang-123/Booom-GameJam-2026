@@ -22,6 +22,10 @@ namespace Game
         [SerializeField] private List<CircleCollider2D> m_EatRanges;
         [SerializeField] private float m_WaitTimeAfterEat = 1f;
 
+        [Header("吞食范围前移")]
+        [SerializeField] private float m_MaxEatRangeOffset = 0.8f;
+        [SerializeField] private float m_MaxEatRangeOffsetRequireSpeed = 4f;
+
         [SerializeField] private GameplayTagContainer m_CanEatTags = new();
 
         // Runtime
@@ -29,6 +33,7 @@ namespace Game
         public EState State { get; private set; }
         public float EatTimer { get; private set; }
         public float WaitTimer { get; private set; }
+        public bool ContinuousCheck { get; set; } = false;
 
         private void Update()
         {
@@ -88,8 +93,19 @@ namespace Game
         {
             if (Target != null)
             {
-                EatTimer += Time.deltaTime;   
-                if (EatTimer >= 0.25f)
+                EatTimer += Time.deltaTime; 
+                if (ContinuousCheck && EatTimer >= 0.1f)
+                {
+                    List<Fish> fishInRange = ListPool<Fish>.Get();
+                    CheckFishInRange(fishInRange);
+
+                    if (fishInRange.Count > 0)
+                        ApplyEat(fishInRange);
+                        
+                    ListPool<Fish>.Release(fishInRange);
+                }
+  
+                if (EatTimer >= 0.28f)
                 {
                     Eat();
                     return;
@@ -134,15 +150,35 @@ namespace Game
         {
             // 检测
             List<Fish> fishInRange = ListPool<Fish>.Get();
-            List<Fish> toEat = ListPool<Fish>.Get();
+            CheckFishInRange(fishInRange);
 
+            ApplyEat(fishInRange);
+            ListPool<Fish>.Release(fishInRange);
+        }
+
+        private void CheckFishInRange(List<Fish> fishInRange)
+        {
+            bool moveForward = true; // 只对第一个碰撞体有效
             foreach (var range in m_EatRanges)
             {
                 Vector2 center = (Vector2)range.transform.position + range.offset;
                 float radius = range.radius;
+
+                if (moveForward)
+                {
+                    var swimBehaviour = Fish.GetBehaviour<FB_Swim>();
+                    float offset = m_MaxEatRangeOffset * Mathf.Clamp01(swimBehaviour.CurrentSpeed / m_MaxEatRangeOffsetRequireSpeed);
+                    center += Fish.ForwardDirection * offset;
+                }
+
                 FishUtils.GetFishInCircle(center, radius, fishInRange, ignoreFish: Fish, clearResultList: false);
+                moveForward = false;
             }
-            
+        }
+
+        private void ApplyEat(List<Fish> fishInRange)
+        {
+            List<Fish> toEat = ListPool<Fish>.Get();
             float reduceSaturation = m_ReduceSaturationPerBite;
             
             foreach (var fish in fishInRange)
@@ -183,7 +219,6 @@ namespace Game
                 animatorBehaviour.TriggerSwallowAnimation(infected);
             }
             
-            ListPool<Fish>.Release(fishInRange);
             ListPool<Fish>.Release(toEat);
             
             

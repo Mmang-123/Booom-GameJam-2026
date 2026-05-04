@@ -25,14 +25,7 @@ namespace Game
         private float m_CurrentPatience; 
 
         private RaycastHit2D Raycast(Vector2 start, Vector2 end)
-        {
-            Vector2 direction = end - start;
-            float distance = direction.sqrMagnitude;
-            direction.Normalize();
-
-            var hit = Physics2D.Raycast(start, direction, distance, FishUtils.WithoutFishLayer);
-            return hit;
-        }
+            => FishUtils.RaycastObstacle(start, end);
 
         protected override bool FindTarget(out Fish outTarget)
         {

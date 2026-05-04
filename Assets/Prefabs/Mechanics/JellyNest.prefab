@@ -235,7 +235,7 @@ SpriteRenderer:
   m_SortingLayer: -2
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 586854207, guid: 11349ccdcd429c341a69c6c32e0d4788, type: 3}
+  m_Sprite: {fileID: -685326951, guid: 11349ccdcd429c341a69c6c32e0d4788, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -258,6 +258,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sloane.SpriteRandomizer
   m_Pool: {fileID: 11400000, guid: 340de8c331060c04287711b9ca1f4ea8, type: 2}
+  m_LockDirection: 0
+  m_LockedDirection: {x: 1, y: 0}
+  m_WasLocked: 0
 --- !u!114 &3766914358949485516
 MonoBehaviour:
   m_ObjectHideFlags: 0

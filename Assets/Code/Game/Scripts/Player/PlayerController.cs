@@ -1,7 +1,9 @@
-﻿using Mmang.Game;
+﻿using System.Collections.Generic;
+using Mmang.Game;
 using Mmang.Util;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Pool;
 
 namespace Game
 {
@@ -19,6 +21,7 @@ namespace Game
         // Runtime
         private Transform m_PlayerDirectionPoint; // 根据朝向实时更新的点
         private bool m_MouseRBPressedLastFrame = false;
+        private ControlFishConfig m_FishConfig;
 
         protected override void OnAwake()
         {
@@ -37,6 +40,8 @@ namespace Game
             {
                 behaviour.CanAvoidance = false;
             }
+
+            m_FishConfig = PlayerConfig.GetConfig(fish.FishTypeTag);
         }
 
         public void LoseControl(IFishController newController)
@@ -99,6 +104,14 @@ namespace Game
             }
         }
 
+        private void FixedUpdate()
+        {
+            if (m_FishConfig != null && m_FishConfig.CanEatTags.Count > 0)
+            {
+                HuntUpdate();
+            }
+        }
+
         private void LateUpdate()
         {
             m_MouseRBPressedLastFrame = Mouse.current.rightButton.isPressed;
@@ -150,9 +163,6 @@ namespace Game
                     }
                 }
             }
-
-            
-            
         }
 
         private void UseSkill()
@@ -166,5 +176,55 @@ namespace Game
                 }    
             }
         }
+
+
+        #region 捕食
+
+        private void HuntUpdate()
+        {
+            var target = FindTargetInRange(out float distance);
+            var eatBehaviour = Fish.GetBehaviour<FB_Eat>();
+            eatBehaviour.Target = target;
+            eatBehaviour.ContinuousCheck = true;
+        }
+
+        private Fish FindTargetInRange(out float nearestDistance)
+        {
+            List<Fish> fishList = ListPool<Fish>.Get();
+            FishUtils.GetFishInCircle(Fish.Position, m_FishConfig.OpenMouseDistance, fishList, ignoreFish: Fish, clearResultList: true);
+
+            Fish result = null;
+            nearestDistance = float.MaxValue;
+
+            foreach (var fish in fishList)
+            {
+                if (!m_FishConfig.CanEatTags.Contains(fish.FishTypeTag))
+                    continue;
+
+                // 距离
+                float distance = Vector2.Distance(fish.Position, Fish.Position);
+                if (distance > nearestDistance)
+                    continue;
+
+                // 角度
+                float angle = Vector2.Angle(Fish.ForwardDirection, (fish.Position - Fish.Position).normalized);
+                if (angle > m_FishConfig.OpenMouseAngle)
+                    continue;
+
+                // 障碍检测
+                var hit = FishUtils.RaycastObstacle(Fish.Position, fish.Position);
+                if (!hit)
+                {
+                    result = fish;
+                    nearestDistance = distance;
+                }
+            }
+
+            ListPool<Fish>.Release(fishList);
+            return result;
+        }
+
+
+        #endregion
     }
 }

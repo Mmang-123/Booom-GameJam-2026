@@ -16,6 +16,49 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!114 &-5977757015505406730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93475bdd833a3af42ad18626b17dbf69, type: 3}
+  m_Name: PlayerConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Game.PlayerConfig
+  m_ControlFishConfigs: []
+--- !u!114 &-4964557183547973912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93475bdd833a3af42ad18626b17dbf69, type: 3}
+  m_Name: Player Config
+  m_EditorClassIdentifier: Assembly-CSharp::Game.PlayerConfig
+  m_ControlFishConfigs:
+  - m_FishTypeTag:
+      m_Guid: dd157287-33e2-4403-ba4c-cbe22f78f346
+    m_ReduceSaturationRate: 1
+    m_CanEatTags:
+      m_Tags: []
+    m_OpenMouseDistance: 3.5
+    m_OpenMouseAngle: 40
+    m_EatDistance: 1.8
+  - m_FishTypeTag:
+      m_Guid: 832afeb0-35ee-4ecb-a3f0-9571693e253b
+    m_ReduceSaturationRate: 1
+    m_CanEatTags:
+      m_Tags:
+      - m_Guid: dd157287-33e2-4403-ba4c-cbe22f78f346
+    m_OpenMouseDistance: 4.5
+    m_OpenMouseAngle: 40
+    m_EatDistance: 1.8
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35,6 +78,8 @@ MonoBehaviour:
     SO: {fileID: 5634330168002120619}
   - Name: Entity Config
     SO: {fileID: 6752554598863162}
+  - Name: Player Config
+    SO: {fileID: -4964557183547973912}
 --- !u!114 &6752554598863162
 MonoBehaviour:
   m_ObjectHideFlags: 0
