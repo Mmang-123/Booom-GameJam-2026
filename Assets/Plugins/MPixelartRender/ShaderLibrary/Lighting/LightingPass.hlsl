@@ -25,7 +25,8 @@ inline float2 UV3To4(float2 uv)
 
 inline float2 UV4To3(float2 uv)
 {
-    return clamp(uv - float2(0.125, 0.125), 0.0, 0.75) * 4.0 / 3.0;
+    return (uv - 0.5) * 4 / 3 + 0.5;
+    //return clamp(uv - float2(0.125, 0.125), 0.0, 0.75) * 4.0 / 3.0;
 }
 
 inline float2 SnapLightPoisition(float2 rawPosition)
@@ -180,6 +181,7 @@ void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
 
     outShadow = shadow;
     outColor = distanceAttenuation * angleAttenuation * intensity * lightColor;
+    outColor = float3(light.lightParams1.zw, 0);
 }
 
 void ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv, out half3 outColor, out half outShadow)
