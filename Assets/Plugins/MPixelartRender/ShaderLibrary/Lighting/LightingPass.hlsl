@@ -181,7 +181,6 @@ void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
 
     outShadow = shadow;
     outColor = distanceAttenuation * angleAttenuation * intensity * lightColor;
-    outColor = float3(light.lightParams1.zw, 0);
 }
 
 void ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv, out half3 outColor, out half outShadow)
