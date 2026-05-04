@@ -37,10 +37,6 @@ namespace Game
         [SerializeField] private float m_FastAcceleration = 16f;
         [SerializeField] private float m_StopDistance;
 
-        [Header("重力")]
-        [SerializeField] private bool m_UseGravity;
-        //[SerializeField] private float m_
-
         [Header("避障")]
         [SerializeField] private bool m_CanAvoidance = false;
         [SerializeField] private float m_RayDistance = 2f;    // 射线检测距离

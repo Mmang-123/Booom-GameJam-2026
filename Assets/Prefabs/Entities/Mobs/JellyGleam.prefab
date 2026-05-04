@@ -223,11 +223,16 @@ MonoBehaviour:
   m_FlipRoot: {fileID: 5428743268945966197}
   m_SporeRenderer1: {fileID: 0}
   m_SporeRenderer2: {fileID: 0}
-  m_BodyRenderer: {fileID: 0}
-  m_DefaultBodyColor: {r: 0, g: 0, b: 0, a: 0}
-  m_InfectedBodyColor: {r: 0, g: 0, b: 0, a: 0}
-  m_InitSaturation: 100
-  m_MaxSaturation: 100
+  m_BodyRenderer: {fileID: 7378699115958009860}
+  m_Light:
+    m_Object: {fileID: 5243026660686698322}
+  m_DefaultBodyColor: {r: 0.30588236, g: 1, b: 0.9098039, a: 1}
+  m_InfectedBodyColor: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}
+  m_SetLightColor: 1
+  m_DefaultLightColor: {r: 0.30588236, g: 1, b: 0.9098039, a: 1}
+  m_InfectedLightColor: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}
+  m_InitSaturation: 50
+  m_MaxSaturation: 50
   m_InfectedLevel: 0
 --- !u!114 &7792305372667502108
 MonoBehaviour:
@@ -247,7 +252,6 @@ MonoBehaviour:
   m_Acceleration: 6
   m_FastAcceleration: 8
   m_StopDistance: 1.6
-  m_UseGravity: 0
   m_CanAvoidance: 0
   m_RayDistance: 2
   m_RayAngle: 30

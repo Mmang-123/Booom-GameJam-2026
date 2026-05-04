@@ -67,6 +67,12 @@ namespace Game
                 m_CurrentFish.GetBehaviour<FB_Swim>().RotateToTargetPoint = Active;
                 cameraController.AddFollowPoint(m_PlayerDirectionPoint, m_LookAtOffset);
                 cameraController.SetMainTarget(fish.transform);
+
+                // 水母感染等级直接设置为2
+                if (m_CurrentFish.FishTypeTag.Equals(GameplayTag.CreateByName("FishType.JellyGleam")))
+                {
+                    m_CurrentFish.SetInfectedLevel(EInfectedLevel.High);
+                }
             }
         }
 

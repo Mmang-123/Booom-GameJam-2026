@@ -169,7 +169,7 @@ MonoBehaviour:
   m_FollowSetting:
     F: 0.78
     Z: 0.77
-    R: 3.17
+    R: 1.15
   m_CameraViewSize: {x: 30, y: 16.875}
 --- !u!1 &5871530576880214300
 GameObject:

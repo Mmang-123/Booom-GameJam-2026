@@ -12,6 +12,7 @@ namespace Mmang.PixelartRender
     public abstract class MLight : MonoBehaviour, IMLight
     {
         #region IMLight
+        public abstract Color LightColor { get; set; }
         public abstract float LightRadius { get; set; }
         public abstract float LightIntensity { get; set; }
         #endregion

@@ -20,6 +20,7 @@ namespace Game
         private List<FishAIAbility> m_AbilitiesPendingToActivate = new();
         private List<(FishAIAbility ability, EEndAbilityType endType)> m_AbilitiesPendingToEnd = new();
         private Dictionary<GameplayTag, FishAIAbility> m_SingletonAbilitiesMap = new();
+        private Dictionary<System.Type, FishAIAbility> m_TypeToAbilityMap = new();
 
         private void Start()
         {
@@ -74,6 +75,18 @@ namespace Game
             }
 
             UpdateAbility(Time.fixedDeltaTime);
+
+            // 如果是水母, Idle时自动回正
+            if (Fish.FishTypeTag.Equals(GameplayTag.CreateByName("FishType.JellyGleam")))
+            {
+                var swimBehaviour = Fish.GetBehaviour<FB_Swim>();
+                
+                if (!swimBehaviour.Tracing && swimBehaviour.CurrentSpeed <= 0.1f)
+                {
+                    swimBehaviour.RotateToTargetPoint = true;
+                    swimBehaviour.TargetPoint = Fish.Position + Vector2.up;
+                }
+            }
         }
 
         private void UpdateAbility(float dt)
@@ -87,7 +100,9 @@ namespace Game
             for (int i = m_Abilities.Count - 1; i >= 0; i--)
             {
                 var ability = m_Abilities[i];
-                if (!ability.Active && ability.CanActivateAbility())
+                if (!ability.Active
+                && !IsOtherSingletonTagAbilityActive(ability) // 这个判定顺序对逻辑有一定影响
+                && ability.CanActivateAbility())
                 {
                     //Debug.Log(ability);
                     // CancelAbilitiesWithTags(ability.CancelTags, ability.Priority);
@@ -195,11 +210,13 @@ namespace Game
             m_AbilitiesPendingToEnd.Clear();
         }
 
+        public bool IsOtherSingletonTagAbilityActive(FishAIAbility ability)
+        {
+            return !ability.SingletonTag.IsRoot() && !CanActiveSingletonTag(ability.SingletonTag, ability.Priority);
+        }
+
         public void PendingActivateAbility(FishAIAbility ability)
         {
-            if (!ability.SingletonTag.IsRoot() && !CanActiveSingletonTag(ability.SingletonTag, ability.Priority))
-                return;
-
             if (!m_AbilitiesPendingToActivate.Contains(ability))
                 m_AbilitiesPendingToActivate.Add(ability);
         }
@@ -271,6 +288,30 @@ namespace Game
 
 
         #endregion
+
+        #region Get
+        
+        public T GetAbility<T>() where T : FishAIAbility
+        {
+            if (m_TypeToAbilityMap.TryGetValue(typeof(T), out var result))
+            {
+                return result as T;
+            }
+
+            foreach (var ability in m_Abilities)
+            {
+                if (ability is T tAbility)
+                {
+                    m_TypeToAbilityMap.Add(typeof(T), ability);
+                    return tAbility;
+                }
+            }
+
+            return null;
+        }
+
+        #endregion
+
 
     }
 }

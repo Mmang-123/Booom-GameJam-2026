@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mmang.Game;
+using Mmang.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -42,8 +43,12 @@ namespace Game
         [SerializeField] private SpriteRenderer m_SporeRenderer1;
         [SerializeField] private SpriteRenderer m_SporeRenderer2;
         [SerializeField] private SpriteRenderer m_BodyRenderer;
+        [SerializeField] private InterfaceObject<IMLight> m_Light;
         [SerializeField] private Color m_DefaultBodyColor;
         [SerializeField] private Color m_InfectedBodyColor;
+        [SerializeField] private bool m_SetLightColor = false;
+        [SerializeField] private Color m_DefaultLightColor;
+        [SerializeField] private Color m_InfectedLightColor;
 
         [Header("饱食度")]
         [SerializeField] private float m_InitSaturation = 100f;
@@ -156,6 +161,8 @@ namespace Game
             m_TotalMotion = Vector2.zero;
         }
 
+        #region Behaviour
+
         public T GetBehaviour<T>() where T : FishBehaviour
         {
             if (m_BehaviourMap.TryGetValue(typeof(T), out var result))
@@ -181,6 +188,11 @@ namespace Game
             outBehaviour = GetBehaviour<T>();
             return outBehaviour != null;
         }
+
+        #endregion
+
+
+        #region RB
 
         public void SetRotation(Quaternion rotation)
         {
@@ -210,6 +222,8 @@ namespace Game
         {
             m_TotalMotion += motion;
         }
+
+        #endregion
 
         #region 饥饿值
 
@@ -274,26 +288,26 @@ namespace Game
 
         private void UpdateInfectedView()
         {
-            if (m_SporeRenderer1 == null || m_SporeRenderer2 == null)
-                return;
-
             if (m_InfectedLevel == EInfectedLevel.None)
             {
-                m_SporeRenderer1.gameObject.SetActive(false);
-                m_SporeRenderer2.gameObject.SetActive(false);
-                m_BodyRenderer.color = m_DefaultBodyColor;
+                if (m_SporeRenderer1 != null) m_SporeRenderer1.gameObject.SetActive(false);
+                if (m_SporeRenderer2 != null) m_SporeRenderer2.gameObject.SetActive(false);
+                if (m_BodyRenderer != null) m_BodyRenderer.color = m_DefaultBodyColor;
+                if (m_Light.Value != null && m_SetLightColor) m_Light.Value.LightColor = m_DefaultLightColor;
             }
             else if (m_InfectedLevel == EInfectedLevel.Mid)
             {
-                m_SporeRenderer1.gameObject.SetActive(true);
-                m_SporeRenderer2.gameObject.SetActive(false);
-                m_BodyRenderer.color = m_DefaultBodyColor;
+                if (m_SporeRenderer1 != null) m_SporeRenderer1.gameObject.SetActive(true);
+                if (m_SporeRenderer2 != null) m_SporeRenderer2.gameObject.SetActive(false);
+                if (m_BodyRenderer != null) m_BodyRenderer.color = m_DefaultBodyColor;
+                if (m_Light.Value != null && m_SetLightColor) m_Light.Value.LightColor = m_DefaultLightColor;
             }
             else if (m_InfectedLevel == EInfectedLevel.High)
             {
-                m_SporeRenderer1.gameObject.SetActive(false);
-                m_SporeRenderer2.gameObject.SetActive(true);
-                m_BodyRenderer.color = m_InfectedBodyColor;
+                if (m_SporeRenderer1 != null) m_SporeRenderer1.gameObject.SetActive(false);
+                if (m_SporeRenderer2 != null) m_SporeRenderer2.gameObject.SetActive(true);
+                if (m_BodyRenderer != null) m_BodyRenderer.color = m_InfectedBodyColor;
+                if (m_Light.Value != null && m_SetLightColor) m_Light.Value.LightColor = m_InfectedLightColor;
             }
         }
 
