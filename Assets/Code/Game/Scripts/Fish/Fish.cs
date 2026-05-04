@@ -161,6 +161,8 @@ namespace Game
             m_TotalMotion = Vector2.zero;
         }
 
+        #region Behaviour
+
         public T GetBehaviour<T>() where T : FishBehaviour
         {
             if (m_BehaviourMap.TryGetValue(typeof(T), out var result))
@@ -186,6 +188,11 @@ namespace Game
             outBehaviour = GetBehaviour<T>();
             return outBehaviour != null;
         }
+
+        #endregion
+
+
+        #region RB
 
         public void SetRotation(Quaternion rotation)
         {
@@ -215,6 +222,8 @@ namespace Game
         {
             m_TotalMotion += motion;
         }
+
+        #endregion
 
         #region 饥饿值
 

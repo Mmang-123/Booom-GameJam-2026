@@ -28,6 +28,7 @@ namespace Game
         public void Init(FishAIComponent fishAI)
         {
             FishAI = fishAI;
+            OnInit();
         }
 
         public virtual bool CanActivateAbility()
@@ -47,6 +48,7 @@ namespace Game
             OnEnd(endType);
         }
 
+        protected virtual void OnInit() { }
         public virtual void OnActivate() { }
         public virtual void OnEnd(EEndAbilityType endType) { }
         public virtual void OnUpdate(float dt) { }

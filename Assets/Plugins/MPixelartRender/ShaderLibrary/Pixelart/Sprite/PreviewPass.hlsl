@@ -23,10 +23,13 @@ float4 UnlitFrag(Varyings input) : SV_Target
 {
 #ifdef TEXTURE_BASED
     float4 outputColor = tex2D(_MainTex, input.uv) * input.color;
+    float4 emission = tex2D(_EmissionMap, input.uv);
 #else
     float4 outputColor = input.color;
+    float4 emission = _Emission;
 #endif
 
+    outputColor.rgb = lerp(outputColor.rgb, emission.rgb, emission.a);
     outputColor.rgb *= _PreviewColor;
 
     return outputColor;
