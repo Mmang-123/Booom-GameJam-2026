@@ -243,6 +243,9 @@ void ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
     outColor = distanceAttenuation * edgeAttenuation * intensity * lightColor;
 }
 
+// A + B - A * B
+#define SCREEN_BLEND(a, b) ((a) + (b) - (a) * (b))
+
 half4 LightingFrag(Varyings input) : SV_Target
 {
     GET_BLIT_UV();
@@ -269,11 +272,12 @@ half4 LightingFrag(Varyings input) : SV_Target
     for(int i = start; i < end; i++)
     {
         ComputePointLight(i, positionWS, uv, lightColor, lightShadow);
-        totalLight += lightColor * lightShadow;
+        half3 litPoint = lightColor * lightShadow;
+        totalLight = SCREEN_BLEND(totalLight, litPoint);
         if (mask >= 0.9)
-            outputLight += lightColor;
+            outputLight = SCREEN_BLEND(outputLight, lightColor);
         else
-            outputLight += lightColor * lightShadow;
+            outputLight = SCREEN_BLEND(outputLight, litPoint);
     }
 
     // Spot Light
@@ -282,11 +286,12 @@ half4 LightingFrag(Varyings input) : SV_Target
     for(int i = start; i < end; i++)
     {
         ComputeSpotLight(i, positionWS, uv, lightColor, lightShadow);
-        totalLight += lightColor * lightShadow;
+        half3 litSpot = lightColor * lightShadow;
+        totalLight = SCREEN_BLEND(totalLight, litSpot);
         if (mask >= 0.9)
-            outputLight += lightColor;
+            outputLight = SCREEN_BLEND(outputLight, lightColor);
         else
-            outputLight += lightColor * lightShadow;
+            outputLight = SCREEN_BLEND(outputLight, litSpot);
     }
 
     // Area Light
@@ -295,11 +300,12 @@ half4 LightingFrag(Varyings input) : SV_Target
     for(int i = start; i < end; i++)
     {
         ComputeAreaLight(i, positionWS, uv, lightColor, lightShadow);
-        totalLight += lightColor * lightShadow;
+        half3 litArea = lightColor * lightShadow;
+        totalLight = SCREEN_BLEND(totalLight, litArea);
         if (mask >= 0.9)
-            outputLight += lightColor;
+            outputLight = SCREEN_BLEND(outputLight, lightColor);
         else
-            outputLight += lightColor * lightShadow;
+            outputLight = SCREEN_BLEND(outputLight, litArea);
     }
 
     // 简易算一下光照强度
