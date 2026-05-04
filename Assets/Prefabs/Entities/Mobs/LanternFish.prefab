@@ -454,6 +454,7 @@ MonoBehaviour:
   - {fileID: 3565601229386575618}
   - {fileID: 6326553700453780270}
   m_WaitTimeAfterEat: 1
+  m_EatAnimationDuration: 0.2
   m_MaxEatRangeOffset: 0.4
   m_MaxEatRangeOffsetRequireSpeed: 1.8
   m_CanEatTags:
@@ -587,7 +588,7 @@ MonoBehaviour:
   m_CD: 0.5
   m_DashSpeed: 16
   m_DashEndDamping: 16
-  m_AfterimageTint: {r: 0.55, g: 0.85, b: 1, a: 0.75}
+  m_AfterimageTint: {r: 1, g: 1, b: 1, a: 0.8}
   m_AfterimageFadeDuration: 0.25
   m_AfterimageInterval: 0.05
   m_AfterimageSpawnDuration: 0.4

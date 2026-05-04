@@ -29,5 +29,7 @@ namespace Mmang.PixelartRender
         }
 
         public abstract Bounds GetBounds();
+
+        public float ScaleFactor => Mathf.Max(Mathf.Abs(transform.lossyScale.x), Mathf.Abs(transform.lossyScale.y));
     }
 }

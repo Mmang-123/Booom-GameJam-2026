@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DG.Tweening;
 using Mmang.Game;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -21,6 +22,7 @@ namespace Game
         [SerializeField] private float m_EatDashAdditionalRotateSpeed = 3f;
         [SerializeField] private List<CircleCollider2D> m_EatRanges;
         [SerializeField] private float m_WaitTimeAfterEat = 1f;
+        [SerializeField] private float m_EatAnimationDuration = 0.125f;
 
         [Header("吞食范围前移")]
         [SerializeField] private float m_MaxEatRangeOffset = 0.8f;
@@ -200,6 +202,7 @@ namespace Game
 
             // 吞食
             bool infected = false;
+            CircleCollider2D suckTarget = m_EatRanges.Count > 0 ? m_EatRanges[0] : null;
             foreach (var fish in toEat)
             {
                 if (fish.IsPlayer)
@@ -210,7 +213,11 @@ namespace Game
                     PlayerController.Instance.ControlFish(Fish);
                     Target = null;
                 }
-                fish.Die(EDieType.Eaten);
+
+                if (suckTarget != null)
+                    StartSuckAnimation(fish, suckTarget);
+                else
+                    fish.Die(EDieType.Eaten);
             }
 
             // 动画
@@ -234,6 +241,60 @@ namespace Game
             var swimBehaviour = Fish.GetBehaviour<FB_Swim>();
             swimBehaviour.AdditionalSpeed -= m_EatDashAdditionalSpeed;
             swimBehaviour.AdditionalRotateSpeed -= m_EatDashAdditionalRotateSpeed;
+        }
+
+        private void StartSuckAnimation(Fish fish, CircleCollider2D collider)
+        {
+            // 停止被吃鱼的一切行为
+            foreach (var behaviour in fish.GetComponents<FishBehaviour>())
+                behaviour.enabled = false;
+
+            var rb = fish.GetComponent<Rigidbody2D>();
+            if (rb != null)
+                rb.bodyType = RigidbodyType2D.Kinematic;
+
+            Vector3 startPos = fish.transform.position;
+            float progress = 0f;
+            var predator = Fish; // 捕获捕食者引用，避免闭包访问 this
+
+            Sequence seq = null;
+            seq = DOTween.Sequence();
+
+            // 跟随捕食者的吃范围中心（实时更新目标位置）
+            seq.Join(
+                DOTween.To(
+                    () => progress,
+                    p =>
+                    {
+                        // 捕食者已死，提前结束
+                        if (predator == null || !predator.gameObject.activeSelf)
+                        {
+                            seq?.Kill();
+                            fish.transform.localScale = Vector3.one;
+                            fish.Die(EDieType.Eaten);
+                            return;
+                        }
+
+                        progress = p;
+                        if (collider == null) return;
+                        Vector3 target = collider.transform.position + (Vector3)collider.offset;
+                        fish.transform.position = Vector3.LerpUnclamped(startPos, target, p);
+                    },
+                    1f,
+                    m_EatAnimationDuration
+                ).SetEase(Ease.OutSine)
+            );
+
+            // 缩小到零
+            seq.Join(
+                fish.transform.DOScale(Vector3.zero, m_EatAnimationDuration).SetEase(Ease.OutSine)
+            );
+
+            seq.OnComplete(() =>
+            {
+                fish.transform.localScale = Vector3.one;
+                fish.Die(EDieType.Eaten);
+            });
         }
 
     }

@@ -259,7 +259,7 @@ namespace Game
             Saturation = Mathf.Min(MaxSaturation, Saturation + value);
         }
 
-        public void Die(EDieType dieType)
+        public void Die(EDieType dieType, Vector2 suckPosition = default)
         {
             Saturation = 0f;
             if (dieType == EDieType.Eaten)

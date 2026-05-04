@@ -107,7 +107,7 @@ namespace Mmang.PixelartRender
                 LightData2D data = new()
                 {
                     color = new Vector4(pointLight.Color.r, pointLight.Color.g, pointLight.Color.b, pointLight.Intensity),
-                    position = new Vector4(pointLight.Position.x, pointLight.Position.y, pointLight.InnerRadius, pointLight.Radius)
+                    position = new Vector4(pointLight.Position.x, pointLight.Position.y, pointLight.InnerRadius * pointLight.ScaleFactor, pointLight.LightRadius)
                 };
 
                 m_DataArray[i] = data;
@@ -125,7 +125,7 @@ namespace Mmang.PixelartRender
                 LightData2D data = new()
                 {
                     color = new Vector4(spotLight.Color.r, spotLight.Color.g, spotLight.Color.b, spotLight.Intensity),
-                    position = new Vector4(spotLight.Position.x, spotLight.Position.y, spotLight.InnerRadius, spotLight.Radius),
+                    position = new Vector4(spotLight.Position.x, spotLight.Position.y, spotLight.InnerRadius * spotLight.ScaleFactor, spotLight.LightRadius),
                     lightParams1 = new(direction.x, direction.y, scaleOffset.x, scaleOffset.y),
                 };
 
@@ -145,7 +145,7 @@ namespace Mmang.PixelartRender
                 LightData2D data = new()
                 {
                     color = new Vector4(areaLight.Color.r, areaLight.Color.g, areaLight.Color.b, areaLight.Intensity),
-                    position = new Vector4(areaLight.Position.x, areaLight.Position.y, 0f, areaLight.Radius),
+                    position = new Vector4(areaLight.Position.x, areaLight.Position.y, 0f, areaLight.LightRadius),
                     lightParams1 = new(direction.x, direction.y, points.x, points.y),
                     lightParams2 = new(points.z, points.w, innerScale),
                 };

@@ -7,7 +7,7 @@ namespace Mmang.PixelartRender
         #region IMLight
         public override Color LightColor { get => Color; set => Color = value; }
         public override float LightIntensity { get => Intensity; set => Intensity = value; }
-        public override float LightRadius { get => Radius; set => Radius = value; }
+        public override float LightRadius { get => Radius * ScaleFactor; set => Radius = value; }
         #endregion
   
         public Color Color = Color.white;
@@ -50,21 +50,22 @@ namespace Mmang.PixelartRender
             Vector3 pos = transform.position;
             Vector3 up = transform.up;
 
+            float scaledRadius = LightRadius;
             // Outer cone
             Gizmos.color = new Color(Color.r, Color.g, Color.b, 1f);
-            Vector3 outerLeft  = Quaternion.Euler(0, 0, -OuterSpotAngle * 0.5f) * up * Radius;
-            Vector3 outerRight = Quaternion.Euler(0, 0,  OuterSpotAngle * 0.5f) * up * Radius;
+            Vector3 outerLeft  = Quaternion.Euler(0, 0, -OuterSpotAngle * 0.5f) * up * scaledRadius;
+            Vector3 outerRight = Quaternion.Euler(0, 0,  OuterSpotAngle * 0.5f) * up * scaledRadius;
             Gizmos.DrawLine(pos, pos + outerLeft);
             Gizmos.DrawLine(pos, pos + outerRight);
-            DrawArc(pos, up, OuterSpotAngle, Radius);
+            DrawArc(pos, up, OuterSpotAngle, scaledRadius);
 
             // Inner cone
             Gizmos.color = new Color(Color.r, Color.g, Color.b, 0.4f);
-            Vector3 innerLeft  = Quaternion.Euler(0, 0, -InnerSpotAngle * 0.5f) * up * Radius;
-            Vector3 innerRight = Quaternion.Euler(0, 0,  InnerSpotAngle * 0.5f) * up * Radius;
+            Vector3 innerLeft  = Quaternion.Euler(0, 0, -InnerSpotAngle * 0.5f) * up * scaledRadius;
+            Vector3 innerRight = Quaternion.Euler(0, 0,  InnerSpotAngle * 0.5f) * up * scaledRadius;
             Gizmos.DrawLine(pos, pos + innerLeft);
             Gizmos.DrawLine(pos, pos + innerRight);
-            DrawArc(pos, up, InnerSpotAngle, Radius);
+            DrawArc(pos, up, InnerSpotAngle, scaledRadius);
         }
 
         private static void DrawArc(Vector3 center, Vector3 direction, float angle, float radius, int segments = 24)
