@@ -63,9 +63,11 @@ float4 PixelartFrag(Varyings input) : SV_Target
     float4 outputColor = tex2D(_MainTex, input.uv) * input.color;
     float4 emissionTex = tex2D(_EmissionMap, input.uv);
     float4 emission = lerp(_Emission, emissionTex, emissionTex.a);
+    outputColor.a = saturate(outputColor.a + emission.a);
 #else
     float4 outputColor = input.color;
     float4 emission = _Emission;
+    float4 emissionTex = float4(0, 0, 0, 0);
 #endif
 
     clip(outputColor.a - 0.5);
