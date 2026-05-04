@@ -126,26 +126,11 @@ namespace Game
 
         private void RotateToTarget()
         {
-            float offsetAngle = 0f;
-            switch (Fish.EDirection)
-            {
-                case EDirection.Up:
-                    offsetAngle = -90f;
-                    break;
-                case EDirection.Down:
-                    offsetAngle = 90f;
-                    break;
-                case EDirection.Left:
-                    offsetAngle = 180f;
-                    break;
-            }
-
             float angle = Vector2.Angle(Fish.ForwardDirection, TargetDirection);
             float rotateSpeed = RequireFastRotate(angle) ? m_FastRotateSpeed : m_RotateSpeed;
             rotateSpeed += AdditionalRotateSpeed;
 
-            float targetAngle = Mathf.Atan2(TargetDirection.y, TargetDirection.x) * Mathf.Rad2Deg + offsetAngle;
-            Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle);
+            Quaternion targetRotation = Fish.GetRotation(TargetDirection);
             Fish.SetRotation(Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed));
         }
 

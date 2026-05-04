@@ -13,6 +13,7 @@ namespace Game
         [SerializeField] private GameplayTagContainer m_OwnedTags = new();
 
         // Runtime
+        private bool m_Inited = false;
         public Fish Fish => m_Fish;
         public GameplayTagCountContainer Tags { get; private set; }
         private HashSet<FishAIAbility> m_ActiveAbilities = new();
@@ -21,6 +22,13 @@ namespace Game
         private List<(FishAIAbility ability, EEndAbilityType endType)> m_AbilitiesPendingToEnd = new();
         private Dictionary<GameplayTag, FishAIAbility> m_SingletonAbilitiesMap = new();
         private Dictionary<System.Type, FishAIAbility> m_TypeToAbilityMap = new();
+
+        public void SetFishBeforeInit(Fish fish)
+        {
+            if (m_Inited)
+                return;
+            m_Fish = fish;
+        }
 
         private void Start()
         {
@@ -37,11 +45,15 @@ namespace Game
         public void ControlFish(Fish fish)
         {
             m_Fish = fish;
-            m_Fish?.SetController(this);
 
-            if (m_Fish.TryGetBehaviour<FB_Swim>(out var behaviour))
+            if (m_Fish != null)
             {
-                behaviour.CanAvoidance = true;
+                m_Fish.Init();
+                m_Fish.SetController(this);
+                if (m_Fish.TryGetBehaviour<FB_Swim>(out var behaviour))
+                {
+                    behaviour.CanAvoidance = true;
+                }   
             }
         }
 
@@ -53,6 +65,7 @@ namespace Game
 
         public void Init(Fish fish)
         {
+            m_Inited = true;
             Tags = new(m_OwnedTags);
             SortAbilities();
             foreach (var ability in m_Abilities)
@@ -63,7 +76,7 @@ namespace Game
 
         public void Dispose()
         {
-            
+            m_Inited = false;
         }
 
         private void FixedUpdate()
@@ -104,9 +117,7 @@ namespace Game
                 && !IsOtherSingletonTagAbilityActive(ability) // 这个判定顺序对逻辑有一定影响
                 && ability.CanActivateAbility())
                 {
-                    //Debug.Log(ability);
                     // CancelAbilitiesWithTags(ability.CancelTags, ability.Priority);
-                    //m_AbilitiesPendingToActivate.Add(ability);
                     PendingActivateAbility(ability);
                 }
             }
@@ -308,6 +319,12 @@ namespace Game
             }
 
             return null;
+        }
+
+        public bool TryGetAbility<T>(out T outAbility) where T : FishAIAbility
+        {
+            outAbility = GetAbility<T>();
+            return outAbility != null;
         }
 
         #endregion

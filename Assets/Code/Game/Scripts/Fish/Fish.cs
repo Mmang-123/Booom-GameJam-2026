@@ -165,6 +165,7 @@ namespace Game
 
         public T GetBehaviour<T>() where T : FishBehaviour
         {
+            Init();
             if (m_BehaviourMap.TryGetValue(typeof(T), out var result))
             {
                 return result as T;
@@ -216,6 +217,27 @@ namespace Game
                     }
                 }
             }
+        }
+
+        public Quaternion GetRotation(Vector2 direction, float offset = 0f)
+        {
+            float offsetAngle = 0f;
+            switch (EDirection)
+            {
+                case EDirection.Up:
+                    offsetAngle = -90f;
+                    break;
+                case EDirection.Down:
+                    offsetAngle = 90f;
+                    break;
+                case EDirection.Left:
+                    offsetAngle = 180f;
+                    break;
+            }
+
+            float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + offsetAngle;
+            Quaternion targetRotation = Quaternion.Euler(0, 0, targetAngle + offset);
+            return targetRotation;
         }
 
         public void Move(Vector2 motion)

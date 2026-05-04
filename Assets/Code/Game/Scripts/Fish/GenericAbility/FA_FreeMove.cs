@@ -20,7 +20,7 @@ namespace Game
 
         protected override void OnInit()
         {
-            SetRange((Vector2)m_Range.transform.position + m_Range.offset, m_Range.radius);
+            SetRange(m_Range);
         }
 
         public override bool CanActivateAbility()
@@ -79,6 +79,13 @@ namespace Game
         {
             m_RangeCenter = center;
             m_RangeRadius = radius;
+        }
+
+        public void SetRange(CircleCollider2D collider)
+        {
+            m_Range = collider;
+            if (collider != null)
+                SetRange((Vector2)m_Range.transform.position + m_Range.offset, m_Range.radius);
         }
 
         private Vector2 GetRandomPointInCircle()

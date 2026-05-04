@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Mmang.Game;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -50,6 +49,20 @@ namespace Game
             }
 
             HashSetPool<Fish>.Release(fishSet);
+        }
+
+        public static (FishAIComponent ai, Fish fish) Create(FishAIComponent aiPrefab, Fish fishPrefab, Vector2 position, Quaternion rotation)
+        {
+            (FishAIComponent ai, Fish fish) result = new();
+            if (aiPrefab == null || fishPrefab == null)
+                return result;
+            
+            result.ai = Object.Instantiate(aiPrefab, position, rotation);
+            result.fish = Object.Instantiate(fishPrefab, position, rotation);
+
+            result.ai.SetFishBeforeInit(result.fish);
+
+            return result;
         }
     }
 }
