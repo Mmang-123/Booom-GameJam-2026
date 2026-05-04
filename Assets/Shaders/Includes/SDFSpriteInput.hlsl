@@ -4,6 +4,7 @@
 CBUFFER_START(UnityPerMaterial)
 sampler2D _MainTex;
 half4 _MainTex_ST;
+float4 _MainTex_TexelSize;
 sampler2D _NoiseTexture;
 half4 _NoiseTexture_ST;
 float4 _Color;
@@ -13,4 +14,7 @@ half _ObstacleMaskValue;
 half _SDFThreshold;
 float _ShadingBlend;
 float _LightenBlend;
+float _EmissionStrength;
+
+float _BoilDuration;
 CBUFFER_END

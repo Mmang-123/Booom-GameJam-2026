@@ -11,12 +11,19 @@ namespace Sloane
     public class SpriteRandomizer : MonoBehaviour
     {
         [SerializeField] private SpriteRandomizerPool m_Pool;
+        [SerializeField] private bool m_LockDirection = false;
+        [SerializeField] private Vector2 m_LockedDirection = Vector2.right;
+        [SerializeField, HideInInspector] private bool m_WasLocked = false;
 
 #if UNITY_EDITOR
         private Vector3 m_LastPosition;
 
         private void OnValidate()
         {
+            // 仅在从未锁定 -> 锁定的瞬间捕获方向，之后不再覆盖
+            if (m_LockDirection && !m_WasLocked)
+                m_LockedDirection = GetDirectionToNearestTerrain();
+            m_WasLocked = m_LockDirection;
             Apply();
         }
 
@@ -38,7 +45,7 @@ namespace Sloane
             var sr = GetComponent<SpriteRenderer>();
             if (sr == null) return;
 
-            Vector2 dir = GetDirectionToNearestTerrain();
+            Vector2 dir = m_LockDirection ? m_LockedDirection : GetDirectionToNearestTerrain();
             int seed = GetPositionSeed();
             Sprite sprite = m_Pool.GetSprite(dir, seed);
             if (sprite != null && sprite != sr.sprite)

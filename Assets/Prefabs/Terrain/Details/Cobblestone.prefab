@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 8164838273943488127}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.86, y: -1.27, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -1485612815, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
+  m_Sprite: {fileID: 2005379798, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
   m_Color: {r: 0.65882355, g: 0.65882355, b: 0.65882355, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -105,3 +105,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sloane.SpriteRandomizer
   m_Pool: {fileID: 11400000, guid: 3df81b1d5706d4848ac086534e1a0f78, type: 2}
+  m_LockDirection: 0
+  m_LockedDirection: {x: 1, y: 0}
+  m_WasLocked: 0

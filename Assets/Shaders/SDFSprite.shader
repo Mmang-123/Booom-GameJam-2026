@@ -9,6 +9,10 @@ Shader "Sloane/SDFSprite"
         _LightenBlend ("Lighten Blend", Range(0, 1)) = 0.16
         _ObstacleMaskValue ("Is Obstacle", Float) = 0
         _SDFThreshold ("SDF Threshold", Float) = 0.5
+        _EmissionStrength ("Emission Strength", Range(0, 1)) = 0
+
+        [HideInInspector] _BoilDuration ("Boil Duration", Float) = 0.25
+        [HideInInspector] _BoilEnabled ("Boil Enabled", Float) = 0
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
         _Color ("Tint", Color) = (1,1,1,1)
@@ -50,6 +54,7 @@ Shader "Sloane/SDFSprite"
             //--------------------------------------
             // GPU Instancing
             #pragma multi_compile_instancing
+            #pragma multi_compile _ _BOIL_EFFECT_ENABLED
             #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
 
             // -------------------------------------
@@ -114,4 +119,6 @@ Shader "Sloane/SDFSprite"
             ENDHLSL
         }
     }
+
+    CustomEditor "Sloane.SDFSpriteShaderGUI"
 }

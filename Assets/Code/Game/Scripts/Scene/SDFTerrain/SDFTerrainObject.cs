@@ -17,8 +17,10 @@ namespace Sloane
         [SerializeField, HideInInspector] private SpriteRenderer m_OutlineSpriteRenderer;
         [SerializeField, HideInInspector] private SpriteRenderer m_SolidSpriteRenderer;
         [SerializeField, HideInInspector] private Sprite m_SDFSprite;
-        [SerializeField, HideInInspector] private Material m_SDFOutlineMaterial;
-        [SerializeField, HideInInspector] private Material m_SDFSolidMaterial;
+        [SerializeField] private bool m_ShowOutline = true;
+        [SerializeField] private bool m_GenerateCollider = true;
+        [SerializeField] private Material m_SDFOutlineMaterial;
+        [SerializeField] private Material m_SDFSolidMaterial;
         [SerializeField] private string m_UID = string.Empty;
         [SerializeField, HideInInspector] private GameObject m_ColliderRoot;
         [SerializeField, HideInInspector] private int m_SortingLayerID = 0;
@@ -63,14 +65,28 @@ namespace Sloane
 
             UpdateSpriteTexture();
             GenerateSpriteRenderers();
-            GeneratePhysicsCollider();
+
+            if (m_GenerateCollider)
+            {
+                GeneratePhysicsCollider();
+            }
+            else
+            {
+                if (m_ColliderRoot != null)
+                {
+                    DestroyImmediate(m_ColliderRoot);
+                    m_ColliderRoot = null;
+                }
+            }
+
             PreviewResult();
         }
 
         public void PreviewResult()
         {
             m_OriginalSprite.enabled = false;
-            m_OutlineSpriteRenderer.enabled = true;
+            if (m_OutlineSpriteRenderer != null)
+                m_OutlineSpriteRenderer.enabled = true;
             m_SolidSpriteRenderer.enabled = true;
         }
 
@@ -108,23 +124,33 @@ namespace Sloane
 
         private void GenerateSpriteRenderers()
         {
-            if (m_OutlineSpriteRenderer == null)
+            // 描边 renderer：根据配置决定是否创建/销毁
+            if (m_ShowOutline)
             {
-                GameObject outlineObj = new GameObject("Outline");
-                outlineObj.transform.SetParent(transform);
-                outlineObj.transform.localPosition = Vector3.zero;
-                outlineObj.transform.localRotation = Quaternion.identity;
-                outlineObj.transform.localScale = Vector3.one;
+                if (m_OutlineSpriteRenderer == null)
+                {
+                    GameObject outlineObj = new GameObject("Outline");
+                    outlineObj.transform.SetParent(transform);
+                    outlineObj.transform.localPosition = Vector3.zero;
+                    outlineObj.transform.localRotation = Quaternion.identity;
+                    outlineObj.transform.localScale = Vector3.one;
+                    m_OutlineSpriteRenderer = outlineObj.AddComponent<SpriteRenderer>();
+                }
 
-                m_OutlineSpriteRenderer = outlineObj.AddComponent<SpriteRenderer>();
+                int sortingLayerID = m_SortingLayerID;
+                m_OutlineSpriteRenderer.sprite = m_SDFSprite;
+                m_OutlineSpriteRenderer.material = m_SDFOutlineMaterial;
+                m_OutlineSpriteRenderer.sortingLayerID = sortingLayerID;
+                m_OutlineSpriteRenderer.sortingOrder = m_SortingOrder;
             }
-
-            int sortingLayerID = m_SortingLayerID;
-
-            m_OutlineSpriteRenderer.sprite = m_SDFSprite;
-            m_OutlineSpriteRenderer.material = m_SDFOutlineMaterial;
-            m_OutlineSpriteRenderer.sortingLayerID = sortingLayerID;
-            m_OutlineSpriteRenderer.sortingOrder = m_SortingOrder;
+            else
+            {
+                if (m_OutlineSpriteRenderer != null)
+                {
+                    DestroyImmediate(m_OutlineSpriteRenderer.gameObject);
+                    m_OutlineSpriteRenderer = null;
+                }
+            }
 
             if (m_SolidSpriteRenderer == null)
             {
@@ -139,7 +165,7 @@ namespace Sloane
 
             m_SolidSpriteRenderer.sprite = m_SDFSprite;
             m_SolidSpriteRenderer.material = m_SDFSolidMaterial;
-            m_SolidSpriteRenderer.sortingLayerID = sortingLayerID;
+            m_SolidSpriteRenderer.sortingLayerID = m_SortingLayerID;
             m_SolidSpriteRenderer.sortingOrder = m_SortingOrder + 1;
         }
 

@@ -107,7 +107,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 14ac24b9cd0df70449b4f50a59fd54ab, type: 2}
+  - {fileID: 2100000, guid: e9c6ddf569000664cb1c6f8e8ff7875c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -397,3 +397,5 @@ MonoBehaviour:
   m_FallTime: 1.2
   m_RiseTime: 0.4
   m_FallDistance: 0.8
+  m_PlayAnim: 1
+  m_AnimName: IdleJump

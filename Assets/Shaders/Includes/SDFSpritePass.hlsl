@@ -6,14 +6,32 @@
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Packing.hlsl"
 #include "Packages/SloaneShaderGeneric/Includes/SDF/Packing.hlsl"
 
-// 采样噪声并按表面接近度加权扰动 SDF
-// 仅在距阈值 _NoiseStrength 范围内的边界区域施加噪声，深内部/外部权重为 0
-float PerturbSDF(float sdf, float2 worldXY)
+#include "Packages\SloaneShaderGeneric\Includes\Random.hlsl"
+
+float2 GetBoiledUV (float2 uv, float2 noiseUV, float strength, float duration) {
+    float currentSeed = floor(_Time.y / duration);
+    float2 noiseUVOffset = hash21(currentSeed) + noiseUV;
+	float noiseSample = tex2D(_NoiseTexture, noiseUVOffset).r * 2.0 * PI;
+	float2 direction = float2(cos(noiseSample), sin(noiseSample));
+	
+    return uv + direction * strength;
+}
+
+float PerturbSDF(float2 uv, float2 worldXY)
 {
-    float noise = tex2D(_NoiseTexture, worldXY * _NoiseTexture_ST.xy + _NoiseTexture_ST.zw).r * 2.0 - 1.0;
+    float2 worldUV = worldXY * _NoiseTexture_ST.xy + _NoiseTexture_ST.zw;
+    // _NoiseStrength 单位为像素，换算为 UV 偏移
+    float pixelStrength = _NoiseStrength * _MainTex_TexelSize.x;
+#if !defined(_BOIL_EFFECT_ENABLED)
+    float sdf = UnpackSDF(tex2D(_MainTex, uv).rgb);
+    float noise = tex2D(_NoiseTexture, worldUV).r * 2.0 - 1.0;
     float distToSurface = abs(sdf - _SDFThreshold);
-    float surfaceMask = 1.0 - smoothstep(0.0, max(_NoiseStrength, 0.0001), distToSurface);
-    return sdf + noise * _NoiseStrength * surfaceMask;
+    float surfaceMask = 1.0 - smoothstep(0.0, max(pixelStrength, 0.0001), distToSurface);
+    return sdf + noise * pixelStrength * surfaceMask;
+#else
+    float2 boiledUV = GetBoiledUV(uv, worldUV, pixelStrength, _BoilDuration);
+    return UnpackSDF(tex2D(_MainTex, boiledUV).rgb);
+#endif
 }
 
 // ========================
@@ -48,8 +66,7 @@ Varyings PixelartVert(Attributes v)
 float4 PixelartFrag(Varyings input) : SV_Target
 {
     // 从 SDF 纹理解压距离值（R8G8 packed magnitude + B channel sign）
-    float sdf = UnpackSDF(tex2D(_MainTex, input.uv).rgb);
-    sdf = PerturbSDF(sdf, input.positionWS.xy);
+    float sdf = PerturbSDF(input.uv, input.positionWS.xy);
     clip(sdf - _SDFThreshold);
 
     float4 outputColor = input.color;
@@ -65,6 +82,8 @@ float4 PixelartFrag(Varyings input) : SV_Target
     {
         outputColor.rgb = lerp(LightenBlend(outputColor.rgb, light, _LightenBlend), outputColor.rgb * light, _ShadingBlend);
     }
+
+    outputColor.rgb = lerp(outputColor.rgb, input.color.rgb, _EmissionStrength);
 
     return outputColor;
 }
@@ -100,8 +119,7 @@ Varyings ObstacleVert(Attributes v)
 
 half4 ObstacleFrag(Varyings input) : SV_Target
 {
-    float sdf = UnpackSDF(tex2D(_MainTex, input.uv).rgb);
-    sdf = PerturbSDF(sdf, input.positionWS.xy);
+    float sdf = PerturbSDF(input.uv, input.positionWS.xy);
     clip(sdf - _SDFThreshold);
 
     return _ObstacleMaskValue;
@@ -126,8 +144,7 @@ Varyings UnlitVert(Attributes v)
 
 float4 UnlitFrag(Varyings input) : SV_Target
 {
-    float sdf = UnpackSDF(tex2D(_MainTex, input.uv).rgb);
-    sdf = PerturbSDF(sdf, input.positionWS.xy);
+    float sdf = PerturbSDF(input.uv, input.positionWS.xy);
     clip(sdf - _SDFThreshold);
 
     return input.color;

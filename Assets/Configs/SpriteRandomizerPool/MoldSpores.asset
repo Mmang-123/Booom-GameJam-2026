@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d04be3e96ee6a614aa7954fde4c3fbe2, type: 3}
+  m_Name: MoldSpores
+  m_EditorClassIdentifier: Assembly-CSharp::Sloane.SpriteRandomizerPool
+  m_Pools:
+  - Direction: 2
+    Sprites:
+    - {fileID: 21300000, guid: 4afe36ef1341d8b4cb5c0504599469ab, type: 3}
+    - {fileID: 21300000, guid: b29586053305ab047980769cef2c4804, type: 3}
+    - {fileID: 21300000, guid: 990fe838a457b87439873fd2a4705677, type: 3}
+    - {fileID: 21300000, guid: e7ca79ae6afb6f24abc0bab86cd3a9da, type: 3}
+  - Direction: 3
+    Sprites: []
+  - Direction: 4
+    Sprites: []
+  - Direction: 5
+    Sprites: []
+  - Direction: 6
+    Sprites: []
+  - Direction: 7
+    Sprites: []
+  - Direction: 0
+    Sprites: []
+  - Direction: 1
+    Sprites: []
