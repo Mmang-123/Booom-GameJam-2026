@@ -42,5 +42,42 @@ namespace Mmang.PixelartRender
 
             return bounds;
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            Vector3 pos = transform.position;
+            Vector3 up = transform.up;
+
+            // Outer cone
+            Gizmos.color = new Color(Color.r, Color.g, Color.b, 1f);
+            Vector3 outerLeft  = Quaternion.Euler(0, 0, -OuterSpotAngle * 0.5f) * up * Radius;
+            Vector3 outerRight = Quaternion.Euler(0, 0,  OuterSpotAngle * 0.5f) * up * Radius;
+            Gizmos.DrawLine(pos, pos + outerLeft);
+            Gizmos.DrawLine(pos, pos + outerRight);
+            DrawArc(pos, up, OuterSpotAngle, Radius);
+
+            // Inner cone
+            Gizmos.color = new Color(Color.r, Color.g, Color.b, 0.4f);
+            Vector3 innerLeft  = Quaternion.Euler(0, 0, -InnerSpotAngle * 0.5f) * up * Radius;
+            Vector3 innerRight = Quaternion.Euler(0, 0,  InnerSpotAngle * 0.5f) * up * Radius;
+            Gizmos.DrawLine(pos, pos + innerLeft);
+            Gizmos.DrawLine(pos, pos + innerRight);
+            DrawArc(pos, up, InnerSpotAngle, Radius);
+        }
+
+        private static void DrawArc(Vector3 center, Vector3 direction, float angle, float radius, int segments = 24)
+        {
+            float startAngle = -angle * 0.5f;
+            float step = angle / segments;
+            Vector3 prev = center + Quaternion.Euler(0, 0, startAngle) * direction * radius;
+            for (int i = 1; i <= segments; i++)
+            {
+                Vector3 next = center + Quaternion.Euler(0, 0, startAngle + step * i) * direction * radius;
+                Gizmos.DrawLine(prev, next);
+                prev = next;
+            }
+        }
+#endif
     }
 }

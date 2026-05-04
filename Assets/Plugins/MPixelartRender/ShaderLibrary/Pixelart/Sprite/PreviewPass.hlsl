@@ -42,3 +42,22 @@ float4 EmissionFrag(Varyings input) : SV_Target
 
     return outputColor;
 }
+
+float4 BackgroundFrag(Varyings input) : SV_Target
+{
+#if defined(DEBUG_DISPLAY)
+    float2 cell = floor(input.positionWS.xy);
+    // fmod is truncation-toward-zero and returns negative for negative inputs;
+    // frac(sum * 0.5) is always in [0,1) so parity works for all coordinates.
+    float checker = step(0.5, frac((cell.x + cell.y) * 0.5));
+    return SRGBToLinear(checker < 1.0 ? float4(0.5, 0.5, 0.5, 1.0) : float4(0.75, 0.75, 0.75, 1.0));
+#else
+#ifdef TEXTURE_BASED
+    float4 outputColor = tex2D(_MainTex, input.uv) * input.color;
+#else
+    float4 outputColor = input.color;
+#endif
+    outputColor.rgb *= _PreviewColor;
+    return outputColor;
+#endif
+}

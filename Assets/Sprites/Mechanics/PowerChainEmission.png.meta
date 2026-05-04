@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 763e7be8e707ec24fa9be3d68e3bb48d
+guid: e315a14e75c02b84b910e598e3219e33
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PowerChain_0
+      name: PowerChainEmission_0
       rect:
         serializedVersion: 2
         x: 0
@@ -125,14 +125,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 26133756a428f33408756a032a5e63cb
-      internalID: -320358638
+      spriteID: 681e718ab12fee24c9dae39e36f231f0
+      internalID: 530442634
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PowerChain_1
+      name: PowerChainEmission_1
       rect:
         serializedVersion: 2
         x: 8
@@ -147,14 +147,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cf8030c8bb7905b4c8512b8cb1277e77
-      internalID: -737230656
+      spriteID: 596cc92a9e32dee449bc9ddd26cdbe5e
+      internalID: -701038594
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PowerChain_2
+      name: PowerChainEmission_2
       rect:
         serializedVersion: 2
         x: 0
@@ -169,14 +169,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f4ece2e406d87384d91e52600337cc85
-      internalID: -1685350942
+      spriteID: dfdc9f0c8f48b04478df477f061bed56
+      internalID: 978083138
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PowerChain_3
+      name: PowerChainEmission_3
       rect:
         serializedVersion: 2
         x: 8
@@ -191,8 +191,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6e2e14b046dd72f43b431a448518ca27
-      internalID: 1180154085
+      spriteID: d7a6288b63509e843984299e77f308b8
+      internalID: 1705405703
       vertices: []
       indices: 
       edges: []
@@ -207,18 +207,18 @@ TextureImporter:
     indices: 
     edges: []
     weights: []
-    secondaryTextures:
-    - texture: {fileID: 2800000, guid: e315a14e75c02b84b910e598e3219e33, type: 3}
-      name: _EmissionMap
+    secondaryTextures: []
     spriteCustomMetadata:
       entries:
+      - key: SpriteEditor.SliceOnImport
+        value: True
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":8.0,"y":8.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":true,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":8.0,"y":8.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":true,"isAlternate":false}'
     nameFileIdTable:
-      PowerChain_0: -320358638
-      PowerChain_1: -737230656
-      PowerChain_2: -1685350942
-      PowerChain_3: 1180154085
+      PowerChainEmission_0: 530442634
+      PowerChainEmission_1: -701038594
+      PowerChainEmission_2: 978083138
+      PowerChainEmission_3: 1705405703
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

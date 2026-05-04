@@ -34,6 +34,9 @@ namespace Sloane
             }
 
             Sprite sprite = m_OriginalSprite.sprite;
+            
+            string previousUID = m_UID;
+
             if (sprite == null)
             {
                 m_UID = string.Empty;
@@ -42,10 +45,17 @@ namespace Sloane
             {
                 m_UID = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(sprite));
             }
+
+            if (m_UID != previousUID)
+            {
+                m_SDFSprite = null;
+            }
         }
 
         public void UpdateObject()
         {
+            OnValidate();
+            
             if (m_OriginalSprite == null || m_OriginalSprite.sprite == null)
             {
                 return;
@@ -79,7 +89,7 @@ namespace Sloane
                 AssetDatabase.DeleteAsset(path);
             }
 
-            Texture2D sdfTexture = SDFTools.GenerateSDF(m_OriginalSprite.sprite.texture, 0.5f, 64, 128);
+            Texture2D sdfTexture = SDFTools.GenerateSDF(m_OriginalSprite.sprite.texture, 0.5f, 128, 256);
             File.WriteAllBytes("Assets/Sprites/Terrain/SDFs" + $"/SDF_{m_UID}.png", sdfTexture.EncodeToPNG());
             AssetDatabase.Refresh();
 

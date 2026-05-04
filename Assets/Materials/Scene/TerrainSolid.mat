@@ -131,7 +131,7 @@ Material:
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _SDFThreshold: 0.03125
+    - _SDFThreshold: 0.015625
     - _ShadingBlend: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0

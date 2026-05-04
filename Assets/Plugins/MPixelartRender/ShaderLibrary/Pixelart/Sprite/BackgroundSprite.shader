@@ -65,7 +65,7 @@
             // -------------------------------------
             // Shader Stages
             #pragma vertex UnlitVert
-            #pragma fragment UnlitFrag
+            #pragma fragment BackgroundFrag
 
             //--------------------------------------
             // GPU Instancing
@@ -74,6 +74,7 @@
 
             // -------------------------------------
             // Includes
+            #define DEBUG_DISPLAY
             #include "PreviewInput.hlsl"
             #include "PreviewPass.hlsl"
             ENDHLSL

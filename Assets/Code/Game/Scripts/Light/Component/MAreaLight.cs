@@ -43,5 +43,32 @@ namespace Mmang.PixelartRender
 
             return bounds;
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            Vector3 pos   = transform.position;
+            Vector3 right = transform.right;
+            Vector3 up    = transform.up;
+
+            // Light source line — outer width
+            Gizmos.color = new Color(Color.r, Color.g, Color.b, 1f);
+            Vector3 p1 = pos - right * Width * 0.5f;
+            Vector3 p2 = pos + right * Width * 0.5f;
+            Gizmos.DrawLine(p1, p2);
+
+            // Inner width
+            Gizmos.color = new Color(Color.r, Color.g, Color.b, 0.4f);
+            Gizmos.DrawLine(pos - right * InnerWidth * 0.5f, pos + right * InnerWidth * 0.5f);
+
+            // Reach (Radius) — side walls + far edge
+            Gizmos.color = new Color(Color.r, Color.g, Color.b, 0.7f);
+            Vector3 p1Far = p1 + up * Radius;
+            Vector3 p2Far = p2 + up * Radius;
+            Gizmos.DrawLine(p1, p1Far);
+            Gizmos.DrawLine(p2, p2Far);
+            Gizmos.DrawLine(p1Far, p2Far);
+        }
+#endif
     }
 }
