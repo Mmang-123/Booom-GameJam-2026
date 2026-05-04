@@ -592,43 +592,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 768582962}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &121697179
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 480
-  m_Height: 270
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1 &166168248
 GameObject:
   m_ObjectHideFlags: 0
@@ -2145,7 +2108,9 @@ MonoBehaviour:
   m_CancelTags:
     m_Tags: []
   m_Priority: 10
-  m_TargetPriorityList: []
+  m_TargetPriorityList:
+  - Tag: FishType.JellyGleam
+    Priority: 0
   m_StartRadius: 7
   m_StopRadius: 10
 --- !u!1 &442940565
@@ -3046,7 +3011,9 @@ MonoBehaviour:
   m_CancelTags:
     m_Tags: []
   m_Priority: 10
-  m_TargetPriorityList: []
+  m_TargetPriorityList:
+  - Tag: FishType.JellyGleam
+    Priority: 0
   m_StartRadius: 7
   m_StopRadius: 10
 --- !u!1 &663708686
@@ -4349,6 +4316,43 @@ Transform:
   m_Children: []
   m_Father: {fileID: 520423028}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!84 &882871660
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 480
+  m_Height: 270
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1 &908280099
 GameObject:
   m_ObjectHideFlags: 0
@@ -5210,7 +5214,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 121697179}
+  m_TargetTexture: {fileID: 882871660}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -5345,10 +5349,15 @@ MonoBehaviour:
   m_CancelTags:
     m_Tags: []
   m_Priority: 10
-  m_TargetPriorityList: []
+  m_TargetPriorityList:
+  - Tag: FishType.JellyGleam
+    Priority: 0
   m_SearchingRayLength: 7
   m_TracingRayLength: 12
   m_MaxTurningPointCount: 5
+  m_Patience: 100
+  m_LosePatienceSpeed: 15
+  m_RegainPatienceSpeed: 20
 --- !u!1 &1157021211
 GameObject:
   m_ObjectHideFlags: 0
@@ -9350,10 +9359,15 @@ MonoBehaviour:
   m_CancelTags:
     m_Tags: []
   m_Priority: 10
-  m_TargetPriorityList: []
+  m_TargetPriorityList:
+  - Tag: FishType.JellyGleam
+    Priority: 0
   m_SearchingRayLength: 7
   m_TracingRayLength: 12
   m_MaxTurningPointCount: 5
+  m_Patience: 100
+  m_LosePatienceSpeed: 30
+  m_RegainPatienceSpeed: 20
 --- !u!1001 &4764487089957916683
 PrefabInstance:
   m_ObjectHideFlags: 0

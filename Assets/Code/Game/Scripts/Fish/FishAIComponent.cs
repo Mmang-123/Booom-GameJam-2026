@@ -67,6 +67,12 @@ namespace Game
 
         private void FixedUpdate()
         {
+            if (Fish == null || !Fish.IsLiving)
+            {
+                LoseControl(null);
+                return;
+            }
+
             UpdateAbility(Time.fixedDeltaTime);
         }
 

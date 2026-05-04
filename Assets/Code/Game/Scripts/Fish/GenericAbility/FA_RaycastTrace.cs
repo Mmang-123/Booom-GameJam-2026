@@ -6,14 +6,23 @@ namespace Game
 {
     public class FA_RaycastRangeTrace : FA_Trace
     {
+        [Header("检测")]
         [SerializeField] private float m_SearchingRayLength = 7f;
         [SerializeField] private float m_TracingRayLength = 12f;
         [SerializeField] private int m_MaxTurningPointCount = 2;
 
-        private Vector2 m_CurrentTurningPoint;
+        [Header("追逐保持")]
+        [SerializeField] private float m_Patience = 100f;
+        [SerializeField] private float m_LosePatienceSpeed = 30f;
+        [SerializeField] private float m_RegainPatienceSpeed = 20f;
+
+
+        // Runtime
         private List<Vector2> m_TurningPoints = new();
         private bool m_HasPreTracingPoint;
         private Vector2 m_PreTracingPoint;
+
+        private float m_CurrentPatience; 
 
         private RaycastHit2D Raycast(Vector2 start, Vector2 end)
         {
@@ -35,7 +44,8 @@ namespace Game
 
             foreach (var fish in fishList)
             {
-                if (!Raycast(Fish.Position, fish.Position))
+                if (TargetPriorityMap.ContainsKey(fish.FishTypeTag)
+                && !Raycast(Fish.Position, fish.Position))
                 {
                     flag = true;
                     outTarget = fish;
@@ -54,12 +64,15 @@ namespace Game
 
             m_HasPreTracingPoint = true;
             m_PreTracingPoint = TargetFish.Position;
+
+            m_CurrentPatience = m_Patience;
         }
 
         public override void OnUpdate(float dt)
         {
-            if (TargetFish == null)
+            if (TargetFish == null || !TargetFish.IsLiving)
             {
+                TargetFish = null;
                 FishAI.PendingEndAbility(this, EEndAbilityType.End);
                 return;
             }
@@ -73,11 +86,11 @@ namespace Game
                 m_HasPreTracingPoint = true;
 
                 SwimBehaviour.TargetPoint = TargetFish.Position;
+
+                m_Patience = Mathf.Clamp(m_Patience + dt * m_RegainPatienceSpeed, 0f, m_Patience);
             }
             else
             {
-                
-
                 if (m_TurningPoints.Count < m_MaxTurningPointCount)
                 {
                     UpdateTurningPoint();   
@@ -89,8 +102,7 @@ namespace Game
                     if (m_TurningPoints.Count > 1)
                     {
                         var nextPoint = m_TurningPoints[1];
-                        if (Vector2.Distance(Fish.Position, nextPoint) <= m_TracingRayLength
-                        && !Raycast(Fish.Position, nextPoint))
+                        if (!Raycast(Fish.Position, nextPoint))
                         {
                             m_TurningPoints.RemoveAt(0);
                         }
@@ -99,7 +111,7 @@ namespace Game
                     SwimBehaviour.TargetPoint = m_TurningPoints[0];
                     if (Vector2.Distance(Fish.Position, SwimBehaviour.TargetPoint) <= 1f)
                     {
-                        Debug.Log("到达拐点 " + m_TurningPoints[0]);
+                        // Debug.Log("到达拐点 " + m_TurningPoints[0]);
                         m_TurningPoints.RemoveAt(0);
                     }
                 }
@@ -108,8 +120,18 @@ namespace Game
                     FishAI.PendingEndAbility(this, EEndAbilityType.End);
                     return;
                 }
+
+                // 失去耐心
+                m_CurrentPatience -= dt * m_LosePatienceSpeed;
+                if (m_CurrentPatience <= 0f)
+                {
+                    TargetFish = null;
+                    FishAI.PendingEndAbility(this, EEndAbilityType.End);
+                    return;
+                }
             }
 
+            // Debug
             {
                 Vector2 point = Fish.Position;
                 foreach (var nextPoint in m_TurningPoints)

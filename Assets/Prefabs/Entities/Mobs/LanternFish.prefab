@@ -377,6 +377,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91abe63ad75226842abac0cfd5e9f87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Fish
+  m_FishTypeTag:
+    m_Guid: 832afeb0-35ee-4ecb-a3f0-9571693e253b
   m_EDirection: 2
   m_AutoFlip: 1
   m_FlipRoot: {fileID: 5428743268945966197}

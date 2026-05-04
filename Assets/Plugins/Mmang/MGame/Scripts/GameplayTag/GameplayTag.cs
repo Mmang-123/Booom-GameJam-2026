@@ -8,7 +8,7 @@ namespace Mmang.Game
     {
         [SerializeField]
         private string m_Guid;
-        public readonly string Guid => m_Guid;
+        public readonly string Guid => m_Guid ?? string.Empty;
 
         public GameplayTag(string guid)
         {

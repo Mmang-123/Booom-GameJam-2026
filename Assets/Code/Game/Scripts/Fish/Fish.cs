@@ -31,6 +31,8 @@ namespace Game
 
     public class Fish : MonoBehaviour
     {
+        [SerializeField] private GameplayTag m_FishTypeTag;
+
         [Header("精灵图设置")]
         [SerializeField] private EDirection m_EDirection;
         [SerializeField] private bool m_AutoFlip = true; // 应该仅对向左向右的朝向有用
@@ -65,6 +67,8 @@ namespace Game
 
         public IFishController FishController { get; private set; }
         public bool IsPlayer => FishController is PlayerController;
+
+        public GameplayTag FishTypeTag => m_FishTypeTag;
 
         private List<FishBehaviour> m_Behaviours;
         private Dictionary<System.Type, FishBehaviour> m_BehaviourMap = new();

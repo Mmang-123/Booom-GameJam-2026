@@ -215,6 +215,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91abe63ad75226842abac0cfd5e9f87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Fish
+  m_FishTypeTag:
+    m_Guid: dd157287-33e2-4403-ba4c-cbe22f78f346
   m_EDirection: 0
   m_AutoFlip: 0
   m_FlipRoot: {fileID: 5428743268945966197}
@@ -244,6 +246,12 @@ MonoBehaviour:
   m_Acceleration: 6
   m_FastAcceleration: 8
   m_StopDistance: 1.6
+  m_CanAvoidance: 0
+  m_RayDistance: 2
+  m_RayAngle: 30
+  m_ObstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &677004143986177848
 MonoBehaviour:
   m_ObjectHideFlags: 0

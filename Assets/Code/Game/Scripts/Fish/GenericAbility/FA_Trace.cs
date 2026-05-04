@@ -9,24 +9,40 @@ namespace Game
         [System.Serializable]
         public struct TargetPriority
         {
-            public GameplayTag Tag;
+            public string Tag;
             public int Priority;
         }
 
         [SerializeField] private List<TargetPriority> m_TargetPriorityList = new();
-        public List<TargetPriority> TargetPriorityList => m_TargetPriorityList;
-
+        public Dictionary<GameplayTag, int> TargetPriorityMap { get; } = new();
 
         // Runtime
         protected FB_Swim SwimBehaviour { get; set; }
         protected FB_Eat EatBehaviour { get; set; }
         protected Fish TargetFish { get; set; }
-        
+
+        private bool m_Inited = false;
+
+        private void Init()
+        {
+            if (m_Inited)
+                return;
+            m_Inited = true;
+
+            TargetPriorityMap.Clear();
+            foreach (var pair in m_TargetPriorityList)
+            {
+                var gameplayTag = GameplayTag.CreateByName(pair.Tag);
+                if (!TargetPriorityMap.ContainsKey(gameplayTag))
+                    TargetPriorityMap.Add(gameplayTag, pair.Priority);
+            }
+        }
 
         protected abstract bool FindTarget(out Fish outTarget);
 
         public override bool CanActivateAbility()
         {
+            Init();
             bool flag = FindTarget(out var result);
             if (flag)
                 TargetFish = result;
