@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Mmang.Game
@@ -9,6 +10,8 @@ namespace Mmang.Game
         [SerializeField]
         private string m_Guid;
         public readonly string Guid => m_Guid ?? string.Empty;
+
+        private static Dictionary<string, GameplayTag> s_NameToTagMap = new();
 
         public GameplayTag(string guid)
         {
@@ -34,7 +37,13 @@ namespace Mmang.Game
                 return RootTag;
             }
 
-            return CreateByName(tagName.Split('.'));
+            if (s_NameToTagMap.TryGetValue(tagName, out var outTag))
+                return outTag;
+
+            var result = CreateByName(tagName.Split('.'));
+            s_NameToTagMap.Add(tagName, result);
+
+            return result;
         }
 
         public static GameplayTag CreateByName(params string[] tagNodeNames)

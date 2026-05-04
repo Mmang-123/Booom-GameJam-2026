@@ -37,12 +37,17 @@ namespace Game
         [SerializeField] private float m_FastAcceleration = 16f;
         [SerializeField] private float m_StopDistance;
 
+        [Header("重力")]
+        [SerializeField] private bool m_UseGravity;
+        //[SerializeField] private float m_
+
         [Header("避障")]
         [SerializeField] private bool m_CanAvoidance = false;
         [SerializeField] private float m_RayDistance = 2f;    // 射线检测距离
         [SerializeField] private float m_RayAngle = 30f;      // 左右射线的角度
         //[SerializeField] private float avoidanceForce = 3f; // 避障时的排斥力倍数
         [SerializeField] private LayerMask m_ObstacleLayer;   // 障碍物图层
+
 
         // Runtime
         public State CurrentState { get; private set; }

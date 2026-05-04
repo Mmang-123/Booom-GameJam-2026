@@ -14,7 +14,7 @@ namespace Mmang.PixelartRender
     public class LightingManager : SingletonMono<LightingManager>
     {
         //
-        public const int MAX_LIGHT_COUNT = 16;
+        public const int MAX_LIGHT_COUNT = 32;
 
         private List<Light> m_Lights = new();
 

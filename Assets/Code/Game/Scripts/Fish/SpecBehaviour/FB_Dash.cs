@@ -69,6 +69,7 @@ namespace Game
             var swimBehaviour = Fish.GetBehaviour<FB_Swim>();
             var animatorBehaviour = Fish.GetBehaviour<FB_GenericAnimator>();
             swimBehaviour.IsDisable = true;
+            swimBehaviour.ClearAdditionalVelocity();
             animatorBehaviour.TriggerDashAnimation();
             DashState = 0;
         }

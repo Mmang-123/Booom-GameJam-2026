@@ -1,4 +1,5 @@
-﻿using Mmang.Util;
+﻿using Mmang.Game;
+using Mmang.Util;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -132,7 +133,20 @@ namespace Game
 
                 m_PlayerDirectionPoint.transform.position = m_CurrentFish.Position
                     + m_CurrentFish.ForwardDirection * t;
+
+
+                // 如果是水母, Idle时自动回正
+                if (m_CurrentFish.FishTypeTag.Equals(GameplayTag.CreateByName("FishType.JellyGleam")))
+                {
+                    if (!swimBehaviour.Tracing && swimBehaviour.CurrentSpeed <= 0.1f)
+                    {
+                        swimBehaviour.TargetPoint = m_CurrentFish.Position + Vector2.up;
+                    }
+                }
             }
+
+            
+            
         }
 
         private void UseSkill()
