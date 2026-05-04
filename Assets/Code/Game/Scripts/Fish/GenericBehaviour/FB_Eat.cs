@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mmang.Game;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -20,6 +21,8 @@ namespace Game
         [SerializeField] private float m_EatDashAdditionalRotateSpeed = 3f;
         [SerializeField] private List<CircleCollider2D> m_EatRanges;
         [SerializeField] private float m_WaitTimeAfterEat = 1f;
+
+        [SerializeField] private GameplayTagContainer m_CanEatTags = new();
 
         // Runtime
         public Fish Target { get; set; }
@@ -144,6 +147,11 @@ namespace Game
             
             foreach (var fish in fishInRange)
             {
+                if (!m_CanEatTags.Contains(fish.FishTypeTag))
+                {
+                    continue;
+                }
+
                 if (fish.Saturation > reduceSaturation)
                 {
                     fish.RemoveSaturation(reduceSaturation);

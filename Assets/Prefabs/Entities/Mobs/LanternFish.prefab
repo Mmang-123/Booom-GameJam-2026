@@ -449,6 +449,9 @@ MonoBehaviour:
   - {fileID: 3565601229386575618}
   - {fileID: 6326553700453780270}
   m_WaitTimeAfterEat: 1
+  m_CanEatTags:
+    m_Tags:
+    - m_Guid: dd157287-33e2-4403-ba4c-cbe22f78f346
 --- !u!50 &834712693967893020
 Rigidbody2D:
   serializedVersion: 5
