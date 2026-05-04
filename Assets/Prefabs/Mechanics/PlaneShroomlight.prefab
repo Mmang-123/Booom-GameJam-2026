@@ -189,7 +189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.ShroomlightShell
   m_Active: 0
-  m_Light: {fileID: 0}
+  m_Light: {fileID: 1976910580540784111}
   m_IndicatorRenderer: {fileID: 506190078791923583}
   m_SourceRenderer: {fileID: 1850862394557193616}
   m_Animator: {fileID: 8983423747948033076}

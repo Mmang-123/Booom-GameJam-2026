@@ -59,7 +59,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 14ac24b9cd0df70449b4f50a59fd54ab, type: 2}
+  - {fileID: 2100000, guid: e9c6ddf569000664cb1c6f8e8ff7875c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -163,9 +163,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91abe63ad75226842abac0cfd5e9f87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Fish
+  m_FishTypeTag:
+    m_Guid: 
   m_EDirection: 2
   m_AutoFlip: 1
   m_FlipRoot: {fileID: 5428743268945966197}
+  m_SporeRenderer1: {fileID: 0}
+  m_SporeRenderer2: {fileID: 0}
+  m_BodyRenderer: {fileID: 0}
+  m_Light:
+    m_Object: {fileID: 0}
+  m_DefaultBodyColor: {r: 0, g: 0, b: 0, a: 0}
+  m_InfectedBodyColor: {r: 0, g: 0, b: 0, a: 0}
+  m_SetLightColor: 0
+  m_DefaultLightColor: {r: 0, g: 0, b: 0, a: 0}
+  m_InfectedLightColor: {r: 0, g: 0, b: 0, a: 0}
+  m_InitSaturation: 100
+  m_MaxSaturation: 100
+  m_InfectedLevel: 0
 --- !u!114 &7792305372667502108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,6 +199,12 @@ MonoBehaviour:
   m_Acceleration: 5
   m_FastAcceleration: 16
   m_StopDistance: 0.8
+  m_CanAvoidance: 0
+  m_RayDistance: 2
+  m_RayAngle: 30
+  m_ObstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &2039827837968094968
 MonoBehaviour:
   m_ObjectHideFlags: 0
