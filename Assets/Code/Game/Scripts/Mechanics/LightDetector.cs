@@ -21,6 +21,7 @@ namespace Game
         // Runtime
         private float m_ActiveTimer;
         private bool m_Active;
+        private bool m_PreLightState;
 
         private void Start()
         {
@@ -29,9 +30,12 @@ namespace Game
 
         private void FixedUpdate()
         {
-            bool lightExist = CheckLightStrength();
-            m_ActiveTimer = Mathf.Clamp(m_ActiveTimer + Time.fixedDeltaTime * (lightExist ? 1 : -1), 0f, MaxActiveTime);
-            SetActive(m_ActiveTimer >= ActiveTime);
+            if (LightingTextureManager.Instance.InValidChunk(transform.position))
+            {
+                bool lightExist = CheckLightStrength();
+                m_ActiveTimer = Mathf.Clamp(m_ActiveTimer + Time.fixedDeltaTime * (lightExist ? 1 : -1), 0f, MaxActiveTime);
+                SetActive(m_ActiveTimer >= ActiveTime);
+            }
         }
 
         private bool CheckLightStrength()
