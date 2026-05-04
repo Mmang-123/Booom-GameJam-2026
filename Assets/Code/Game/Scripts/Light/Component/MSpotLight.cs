@@ -5,6 +5,7 @@ namespace Mmang.PixelartRender
     public class MSpotPointLight : MLight
     {
         #region IMLight
+        public override Color LightColor { get => Color; set => Color = value; }
         public override float LightIntensity { get => Intensity; set => Intensity = value; }
         public override float LightRadius { get => Radius; set => Radius = value; }
         #endregion
