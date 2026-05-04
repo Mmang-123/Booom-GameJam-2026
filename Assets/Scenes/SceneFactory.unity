@@ -13903,94 +13903,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
---- !u!1001 &664123694
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4800681294185171314, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 12.29
-      objectReference: {fileID: 0}
-    - target: {fileID: 4800681294185171314, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4800681294185171314, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 5.10367
-      objectReference: {fileID: 0}
-    - target: {fileID: 4800681294185171314, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.9902681
-      objectReference: {fileID: 0}
-    - target: {fileID: 4800681294185171314, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4800681294185171314, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4800681294185171314, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.13917309
-      objectReference: {fileID: 0}
-    - target: {fileID: 4800681294185171314, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4800681294185171314, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4800681294185171314, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 6172189210337702716, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_Name
-      value: GolemFish
-      objectReference: {fileID: 0}
-    - target: {fileID: 7378699115958009860, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 062df16de4df9ad4796fdc908877d1eb, type: 2}
-    - target: {fileID: 7792305372667502108, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_MoveSpeed
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7792305372667502108, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_RotateSpeed
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7792305372667502108, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_Acceleration
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7792305372667502108, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-      propertyPath: m_FastRotateSpeed
-      value: 8
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
---- !u!114 &664123695 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2797730967065995784, guid: 723cc118c031e9742a1927a2a935d6d6, type: 3}
-  m_PrefabInstance: {fileID: 664123694}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91abe63ad75226842abac0cfd5e9f87b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Fish
 --- !u!4 &664153831 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6728073975342758353, guid: 04bbfbd0b3651c64aba414db79b3e5ed, type: 3}
@@ -26439,6 +26351,43 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3.5, y: 0.5}
   m_EdgeRadius: 0
+--- !u!84 &1301587983
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 480
+  m_Height: 270
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1 &1301627114
 GameObject:
   m_ObjectHideFlags: 0
@@ -37260,43 +37209,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.25}
   m_EdgeRadius: 0
---- !u!84 &1845766591
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 480
-  m_Height: 270
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1 &1846974041
 GameObject:
   m_ObjectHideFlags: 0
@@ -41966,7 +41878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aedeb72e97762d9429570939761329cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.FishAIComponent
-  m_Fish: {fileID: 664123695}
+  m_Fish: {fileID: 0}
   m_Abilities:
   - {fileID: 0}
   - {fileID: 2018507673}
@@ -44314,7 +44226,6 @@ SceneRoots:
   - {fileID: 941426137}
   - {fileID: 697971239}
   - {fileID: 803991880}
-  - {fileID: 664123694}
   - {fileID: 1367044789}
   - {fileID: 2055185860}
   - {fileID: 2052102082}
