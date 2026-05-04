@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 834712693967893020}
   - component: {fileID: 5141295183322557257}
   - component: {fileID: 7216697439400483689}
+  - component: {fileID: 1173844231529691144}
   m_Layer: 7
   m_Name: JellyGleam
   m_TagString: Untagged
@@ -377,3 +378,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.CameraTargetPoint
   m_MixRange: {x: 0.3, y: 0.9}
   m_Weight: 0.35
+--- !u!114 &1173844231529691144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6172189210337702716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef4116ff8845324cbad25021981744b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Floating
+  m_FallTime: 1.2
+  m_RiseTime: 0.4
+  m_FallDistance: 0.8
