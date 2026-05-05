@@ -14,7 +14,7 @@ namespace Mmang.Editors
         [MenuItem("Tools/Helper/Init Global Configs")]
         public static void Init()
         {
-            EditorApplication.delayCall += () => InitConfigs();
+            //EditorApplication.delayCall += () => InitConfigs();
         }
 
         public static void InitConfigs()

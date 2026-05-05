@@ -3,7 +3,7 @@ using Mmang;
 
 namespace Game
 {
-    [MGlobalConfig]
+    [MGlobalConfig(configName = "Particle Config")]
     public class ParticleConfig : ScriptableObject
     {
         

@@ -7,7 +7,8 @@ namespace Game
     public class LightDetector : MonoBehaviour, IPowerSource
     {
         [SerializeField] private SpriteRenderer m_EmissionLight;
-        
+        [SerializeField] private bool m_InitTurnOn = false;
+
         private float ActiveTime => 0.1f;
         private float MaxActiveTime => ActiveTime * 2f;
 
@@ -21,11 +22,14 @@ namespace Game
         // Runtime
         private float m_ActiveTimer;
         private bool m_Active;
-        private bool m_PreLightState;
 
         private void Start()
         {
-            m_Active = false;
+            m_Active = m_InitTurnOn;
+            if (m_Active)
+            {
+                
+            }
         }
 
         private void FixedUpdate()

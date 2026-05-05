@@ -169,6 +169,11 @@ namespace Game
             HashSetPool<int>.Release(changed);
         }
 
+        public void ChargeAllPoint()
+        {
+            
+        }
+
         private void SetPointActive(int index, bool active)
         {
             var data = m_PointDataList[index];

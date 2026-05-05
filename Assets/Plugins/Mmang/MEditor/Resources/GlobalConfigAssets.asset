@@ -322,16 +322,18 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f81e8f0e9fcb0ca488e86d63276642bf, type: 3}
   m_Name: GlobalConfigAssets
-  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.GlobalConfigAssets
+  m_EditorClassIdentifier: MEditor.Runtime::Mmang.GlobalConfigAssets
   m_Configs:
-  - Name: Global Properties
-    SO: {fileID: -9149357591198023373}
-  - Name: Gameplay Tags
-    SO: {fileID: 5634330168002120619}
   - Name: Entity Config
-    SO: {fileID: 6752554598863162}
+    SO: {fileID: 11400000, guid: 27b13fc1c04709a4ba50c155e5fc5c7b, type: 2}
+  - Name: Gameplay Tags
+    SO: {fileID: 11400000, guid: be4f865bff0d0af4ea761731e2c4719d, type: 2}
   - Name: Player Config
-    SO: {fileID: -4964557183547973912}
+    SO: {fileID: 11400000, guid: 8f8cda6ba9c8ebe438d0ea2f62c68e50, type: 2}
+  - Name: Global Properties
+    SO: {fileID: 11400000, guid: 500712f3b25b4944c826fe6fa6d3470f, type: 2}
+  - Name: Particle Config
+    SO: {fileID: 11400000, guid: 6be6f6091ceabae42965da7bcc179052, type: 2}
 --- !u!114 &6752554598863162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,6 +384,18 @@ MonoBehaviour:
   m_Name: ParticleConfig
   m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
 --- !u!114 &1342550727596007420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
+  m_Name: ParticleConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
+--- !u!114 &1999664176996578367
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
