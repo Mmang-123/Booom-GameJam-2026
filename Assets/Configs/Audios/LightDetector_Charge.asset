@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b640a27fa013ef4458f5a1c440e112a6, type: 3}
+  m_Name: LightDetector_Charge
+  m_EditorClassIdentifier: Assembly-CSharp::Game.AudioClipSet
+  m_PlayMode: 1
+  m_Clips:
+  - {fileID: 8300000, guid: 298d215d6b84e7746b5b619cb33cbb89, type: 3}
+  - {fileID: 8300000, guid: b771db541eb19fd43a7424c79a9724ee, type: 3}
+  - {fileID: 8300000, guid: 298d215d6b84e7746b5b619cb33cbb89, type: 3}
+  - {fileID: 8300000, guid: b771db541eb19fd43a7424c79a9724ee, type: 3}
+  - {fileID: 8300000, guid: 9d05a06f1c09b9a45924df48b6570fbc, type: 3}
+  - {fileID: 8300000, guid: b771db541eb19fd43a7424c79a9724ee, type: 3}
+  - {fileID: 8300000, guid: 9d05a06f1c09b9a45924df48b6570fbc, type: 3}
+  - {fileID: 8300000, guid: b771db541eb19fd43a7424c79a9724ee, type: 3}
+  - {fileID: 8300000, guid: e8692ace075520a4d839a9eb73d27e89, type: 3}
+  - {fileID: 8300000, guid: b771db541eb19fd43a7424c79a9724ee, type: 3}
+  - {fileID: 8300000, guid: e8692ace075520a4d839a9eb73d27e89, type: 3}
+  - {fileID: 8300000, guid: b771db541eb19fd43a7424c79a9724ee, type: 3}
+  - {fileID: 8300000, guid: 83fcfa872b7da834a87bd1d80335a827, type: 3}
+  - {fileID: 8300000, guid: b771db541eb19fd43a7424c79a9724ee, type: 3}
+  - {fileID: 8300000, guid: 83fcfa872b7da834a87bd1d80335a827, type: 3}
+  - {fileID: 8300000, guid: b771db541eb19fd43a7424c79a9724ee, type: 3}
+  m_TheHarmony: []

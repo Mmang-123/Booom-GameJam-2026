@@ -14,6 +14,9 @@ namespace Game.Editor
         private bool m_OneSetPerFolder = true;
         private AudioClipSet.EPlayMode m_PlayMode = AudioClipSet.EPlayMode.Random;
 
+        private enum EHarmonyPattern3 { Interleaved, Chunked }
+        private EHarmonyPattern3 m_HarmonyPattern3 = EHarmonyPattern3.Interleaved;
+
         [MenuItem("Sloane/Audio/AudioClipSet Packer")]
         private static void Open() =>
             GetWindow<AudioClipSetPackerWindow>("AudioClipSet Packer").minSize = new Vector2(340, 180);
@@ -37,6 +40,20 @@ namespace Game.Editor
             GUI.enabled = m_SourceFolder != null;
             if (GUILayout.Button("Pack", GUILayout.Height(30)))
                 Pack();
+            GUI.enabled = true;
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.LabelField("Harmony", EditorStyles.boldLabel);
+            m_HarmonyPattern3 = (EHarmonyPattern3)EditorGUILayout.EnumPopup(
+                new GUIContent("0~3 Pattern",
+                    "Interleaved: 0 1 2 1 0 1 3 1 ...\nChunked: 0 0 0 0 1 1 1 1 2 2 2 2 ..."),
+                m_HarmonyPattern3);
+            EditorGUILayout.HelpBox(
+                "将选定目录中 0.wav ~ 8.wav 按照序列打包为 Sequence AudioClipSet。",
+                MessageType.None);
+            GUI.enabled = m_SourceFolder != null;
+            if (GUILayout.Button("Pack Harmony", GUILayout.Height(30)))
+                PackHarmony();
             GUI.enabled = true;
         }
 
@@ -137,6 +154,99 @@ namespace Game.Editor
             so.ApplyModifiedPropertiesWithoutUndo();
 
             EditorUtility.SetDirty(set);
+        }
+
+        private void PackHarmony()
+        {
+            string rootPath = AssetDatabase.GetAssetPath(m_SourceFolder);
+            if (!AssetDatabase.IsValidFolder(rootPath))
+            {
+                EditorUtility.DisplayDialog("错误", "请选择一个文件夹。", "OK");
+                return;
+            }
+
+            // 加载 0~8 号 clip（存在则加载，不存在则留 null）
+            var indexed = new AudioClip[9];
+            int maxIndex = 0;
+            for (int i = 0; i <= 8; i++)
+            {
+                string path = $"{rootPath}/{i}.wav";
+                indexed[i] = AssetDatabase.LoadAssetAtPath<AudioClip>(path);
+                if (indexed[i] != null) maxIndex = i;
+            }
+
+            // 根据最大有效编号选择排列规则
+            int[] sequence;
+            string patternDesc;
+            if (maxIndex <= 3)
+            {
+                if (m_HarmonyPattern3 == EHarmonyPattern3.Interleaved)
+                {
+                    // 0 1 2 1 0 1 3 1 0 1 2 1 0 1 3 1
+                    sequence = new int[] { 0, 1, 2, 1, 0, 1, 3, 1, 0, 1, 2, 1, 0, 1, 3, 1 };
+                    patternDesc = "0 1 2 1 0 1 3 1 0 1 2 1 0 1 3 1";
+                }
+                else
+                {
+                    // 0 0 0 0 1 1 1 1 2 2 2 2 3 3 3 3
+                    sequence = new int[] { 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3 };
+                    patternDesc = "0 0 0 0 1 1 1 1 2 2 2 2 3 3 3 3";
+                }
+            }
+            else if (maxIndex <= 4)
+            {
+                // 只有 0~4：1 0 1 0 2 0 2 0 3 0 3 0 4 0 4 0
+                sequence = new int[] { 1, 0, 1, 0, 2, 0, 2, 0, 3, 0, 3, 0, 4, 0, 4, 0 };
+                patternDesc = "1 0 1 0 2 0 2 0 3 0 3 0 4 0 4 0";
+            }
+            else
+            {
+                // 0~8：1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0
+                sequence = new int[] { 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8, 0 };
+                patternDesc = "1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0";
+            }
+
+            Debug.Log($"[Harmony] 检测到最大编号 {maxIndex}，使用排列：{patternDesc}");
+
+            var clips = sequence
+                .Select(idx => idx < indexed.Length ? indexed[idx] : null)
+                .Where(c => c != null)
+                .ToList();
+
+            if (clips.Count == 0)
+            {
+                EditorUtility.DisplayDialog("提示", "未找到任何有效 clip。", "OK");
+                return;
+            }
+
+            EnsureDirectory(k_OutputDir);
+
+            string folderName = Path.GetFileName(rootPath);
+            string assetPath = $"{k_OutputDir}/{folderName}.asset";
+
+            var set = AssetDatabase.LoadAssetAtPath<AudioClipSet>(assetPath);
+            if (set == null)
+            {
+                set = CreateInstance<AudioClipSet>();
+                AssetDatabase.CreateAsset(set, assetPath);
+            }
+
+            var so = new SerializedObject(set);
+            so.FindProperty("m_PlayMode").enumValueIndex = (int)AudioClipSet.EPlayMode.Sequence;
+            var clipsProp = so.FindProperty("m_Clips");
+            clipsProp.ClearArray();
+            for (int i = 0; i < clips.Count; i++)
+            {
+                clipsProp.InsertArrayElementAtIndex(i);
+                clipsProp.GetArrayElementAtIndex(i).objectReferenceValue = clips[i];
+            }
+            so.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(set);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            EditorUtility.DisplayDialog("完成",
+                $"Harmony AudioClipSet 已写入：\n{assetPath}\n共 {clips.Count} 条（序列含 null 项已跳过）。", "OK");
         }
 
         private static void EnsureDirectory(string path)

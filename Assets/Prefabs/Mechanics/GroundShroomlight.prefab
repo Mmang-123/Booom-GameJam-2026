@@ -187,12 +187,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 438b156268c6f404eb9c929d6f1f4341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.ShroomlightShell
-  m_Active: 0
   m_Light: {fileID: 7516412517399248101}
   m_IndicatorRenderer: {fileID: 506190078791923583}
   m_SourceRenderer: {fileID: 1850862394557193616}
   m_Animator: {fileID: 8983423747948033076}
   m_LightIntensity: 3
+  m_Particle: {fileID: 0}
+  m_LitClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: 98cc6a56eb44f7e44aed20d6ee6c5bbd, type: 2}
+  m_UnlitClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: bb54fb698c409e24fb0923e951c05ead, type: 2}
 --- !u!1 &3611058062338218836
 GameObject:
   m_ObjectHideFlags: 0

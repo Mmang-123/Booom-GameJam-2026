@@ -139,6 +139,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.LightDetector
   m_EmissionLight: {fileID: 7653661109557720908}
   m_InitTurnOn: 0
+  m_ActivateClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: 156b780596ddf0c40824f75d9164ee4d, type: 2}
+  m_DeactivateClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &8896998452723560905

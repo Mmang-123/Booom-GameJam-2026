@@ -9,6 +9,10 @@ namespace Game
         [SerializeField] private SpriteRenderer m_EmissionLight;
         [SerializeField] private bool m_InitTurnOn = false;
 
+        [Header("音效")]
+        [SerializeField] private AudioClipRef m_ActivateClip;
+        [SerializeField] private AudioClipRef m_DeactivateClip;
+
         private float ActiveTime => 0.1f;
         private float MaxActiveTime => ActiveTime * 2f;
 
@@ -52,7 +56,7 @@ namespace Game
         private bool CheckLightStrength()
         {
             float strength = LightingTextureManager.Instance.GetLightStrength(transform.position);
-            return strength >= 0.01f;
+            return strength >= 0.0625f;
         }
 
         private void SetActive(bool active)
@@ -68,6 +72,9 @@ namespace Game
         {
             m_EmissionLight.color = m_Active ? ActiveColor : InactiveColor;
             OnPowerChanged?.Invoke(m_Active);
+
+            var clip = m_Active ? m_ActivateClip : m_DeactivateClip;
+            AudioManager.PlayAtPosition(clip, transform.position);
         }
     }
 }
