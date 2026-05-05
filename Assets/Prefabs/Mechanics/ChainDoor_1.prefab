@@ -56,6 +56,22 @@ MonoBehaviour:
   m_Emission: {fileID: 1998068274918605304}
   m_ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   m_InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_OpenStartClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: 5504d2fbdc433044d8ac51a4c7bacbc0, type: 2}
+  m_OpenCompleteClip:
+    m_Source: 0
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 0}
+  m_CloseStartClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: 5093b893794dd924a8e5b1496d08bf2b, type: 2}
+  m_CloseCompleteClip:
+    m_Source: 0
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 0}
 --- !u!61 &719257212773946482
 BoxCollider2D:
   m_ObjectHideFlags: 0

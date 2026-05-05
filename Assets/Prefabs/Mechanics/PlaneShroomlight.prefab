@@ -195,6 +195,14 @@ MonoBehaviour:
   m_Animator: {fileID: 8983423747948033076}
   m_LightIntensity: 1
   m_Particle: {fileID: 5545629359660865028}
+  m_LitClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: 98cc6a56eb44f7e44aed20d6ee6c5bbd, type: 2}
+  m_UnlitClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: bb54fb698c409e24fb0923e951c05ead, type: 2}
 --- !u!1 &3611058062338218836
 GameObject:
   m_ObjectHideFlags: 0

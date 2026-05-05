@@ -11,6 +11,10 @@ namespace Game
         [SerializeField] private Animator m_Animator;
         [SerializeField] private float m_LightIntensity = 1f;
         [SerializeField] private ParticleSystem m_Particle;
+
+        [Header("音效")]
+        [SerializeField] private AudioClipRef m_LitClip;
+        [SerializeField] private AudioClipRef m_UnlitClip;
         
         private float IntensityUpdateRate => 1.0f / 1.0f;
 
@@ -77,6 +81,8 @@ namespace Game
                 else
                     m_Particle.Stop();
             }
+
+            AudioManager.PlayAtPosition(m_Active ? m_LitClip : m_UnlitClip, transform.position);
         }
 
         public void SetChargeComplete()
