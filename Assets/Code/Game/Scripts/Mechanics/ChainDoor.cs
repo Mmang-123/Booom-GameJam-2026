@@ -15,9 +15,18 @@ namespace Game
         [SerializeField] private Color m_ActiveColor = Color.green;
         [SerializeField] private Color m_InactiveColor = Color.red;
 
+        [Header("音效")]
+        [SerializeField] private AudioClipRef m_OpenStartClip;
+        [SerializeField] private AudioClipRef m_OpenCompleteClip;
+        [SerializeField] private AudioClipRef m_CloseStartClip;
+        [SerializeField] private AudioClipRef m_CloseCompleteClip;
+
         private bool m_Active;
         private float m_CurrentDoorLength;
-        
+        private bool m_IsInitializing = true;
+        private AudioSource m_CurrentStartSource;
+        private AudioSource m_CurrentCompleteSource;
+
         #region IChargable
         public PowerSourceHandler PowerSourceHandler { get; } = new();
         public bool IsPowered => PowerSourceHandler.IsPowered(m_RequirePowerSourceCount);
@@ -31,6 +40,7 @@ namespace Game
         private void Start()
         {
             SetDoorLength(m_DoorLength);
+            m_IsInitializing = false;
         }
 
         private void FixedUpdate()
@@ -60,19 +70,33 @@ namespace Game
                 m_CurrentDoorLength -= Time.deltaTime * 6f;
                 m_CurrentDoorLength = Mathf.Max(0f, m_CurrentDoorLength);
                 SetDoorLength(m_CurrentDoorLength);
+
+                if (m_CurrentDoorLength == 0f)
+                    m_CurrentCompleteSource = AudioManager.PlayManaged(m_OpenCompleteClip, transform.position);
             }
             else if (!m_Active && m_CurrentDoorLength < m_DoorLength)
             {
                 m_CurrentDoorLength += Time.deltaTime * 6f;
                 m_CurrentDoorLength = Mathf.Min(m_DoorLength, m_CurrentDoorLength);
                 SetDoorLength(m_CurrentDoorLength);
+
+                if (m_CurrentDoorLength == m_DoorLength)
+                    m_CurrentCompleteSource = AudioManager.PlayManaged(m_CloseCompleteClip, transform.position);
             }
         }
 
         private void SetActive(bool active)
         {
+            bool changed = (m_Active != active);
             m_Active = active;
             m_Emission.color = active ? m_ActiveColor : m_InactiveColor;
+
+            if (!m_IsInitializing && changed)
+            {
+                AudioManager.StopManaged(ref m_CurrentStartSource);
+                AudioManager.StopManaged(ref m_CurrentCompleteSource);
+                m_CurrentStartSource = AudioManager.PlayManaged(active ? m_OpenStartClip : m_CloseStartClip, transform.position);
+            }
         }
 
         private void SetDoorLength(float newLength)

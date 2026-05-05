@@ -28749,7 +28749,7 @@ PrefabInstance:
     - target: {fileID: 8344340175939204246, guid: 187b5d9051a9193418881161c2b658cc, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1536491689, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
+      objectReference: {fileID: 9070611, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -35873,43 +35873,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
---- !u!84 &1475775774
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 480
-  m_Height: 270
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1 &1477816968
 GameObject:
   m_ObjectHideFlags: 0
@@ -36241,6 +36204,43 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.25, y: 0.25}
   m_EdgeRadius: 0
+--- !u!84 &1495869768
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 480
+  m_Height: 270
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1 &1498907342
 GameObject:
   m_ObjectHideFlags: 0
@@ -42988,7 +42988,7 @@ PrefabInstance:
     - target: {fileID: 936846824445931431, guid: 0987423758466984aa3c765c093caf7d, type: 3}
       propertyPath: m_TargetTexture
       value: 
-      objectReference: {fileID: 1475775774}
+      objectReference: {fileID: 1495869768}
     - target: {fileID: 5625299763618099865, guid: 0987423758466984aa3c765c093caf7d, type: 3}
       propertyPath: m_Name
       value: Camera
@@ -54041,6 +54041,18 @@ PrefabInstance:
     - target: {fileID: 5112906870545564731, guid: c75bf7584c467e84c86bd74aac7e167d, type: 3}
       propertyPath: m_Name
       value: ChainDoorGroup
+      objectReference: {fileID: 0}
+    - target: {fileID: 7271434745171312301, guid: c75bf7584c467e84c86bd74aac7e167d, type: 3}
+      propertyPath: m_OpenStartClip
+      value: 
+      objectReference: {fileID: 8300000, guid: b088d08a7b145a54ca4bb86426853fda, type: 3}
+    - target: {fileID: 7271434745171312301, guid: c75bf7584c467e84c86bd74aac7e167d, type: 3}
+      propertyPath: m_CloseStartClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 992d8f4b8533f4444984edef2bd8fc92, type: 3}
+    - target: {fileID: 7271434745171312301, guid: c75bf7584c467e84c86bd74aac7e167d, type: 3}
+      propertyPath: m_OpenStartClip.m_Source
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7548696107726773175, guid: c75bf7584c467e84c86bd74aac7e167d, type: 3}
       propertyPath: m_LocalPosition.x

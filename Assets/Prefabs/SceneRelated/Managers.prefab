@@ -35,6 +35,7 @@ Transform:
   - {fileID: 3356014929866678129}
   - {fileID: 6296023770827828214}
   - {fileID: 7896905919347702269}
+  - {fileID: 6747781461010279700}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &438071255606428513

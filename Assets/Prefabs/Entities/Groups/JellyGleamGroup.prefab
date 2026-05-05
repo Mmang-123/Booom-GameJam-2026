@@ -153,6 +153,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: JellyGleam
       objectReference: {fileID: 0}
+    - target: {fileID: 7741573196834149294, guid: a7f4295396ae9534ebd7dcc9f610ac23, type: 3}
+      propertyPath: m_DashStartClip.m_Source
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
