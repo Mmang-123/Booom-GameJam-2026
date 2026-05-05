@@ -67,7 +67,21 @@ namespace Game
 
             int hitCount = Physics2D.Raycast(start, direction, filter, s_RaycastHitCache, distance);
             //var hit = Physics2D.Raycast(start, direction, distance, filter);
-            return hitCount > 0 ? s_RaycastHitCache[0] : new();
+            return hitCount > 0 ? s_RaycastHitCache[0] : default;
+        }
+
+        public static RaycastHit2D RaycastObstacle(Vector2 start, Vector2 direction, float distance)
+        {
+            ContactFilter2D filter = new()
+            {
+                useTriggers = false,
+                useLayerMask = true,
+                layerMask = WithoutFishLayer
+            };
+
+            int hitCount = Physics2D.Raycast(start, direction, filter, s_RaycastHitCache, distance);
+            //var hit = Physics2D.Raycast(start, direction, distance, filter);
+            return hitCount > 0 ? s_RaycastHitCache[0] : default;
         }
 
         public static (FishAIComponent ai, Fish fish) Create(FishAIComponent aiPrefab, Fish fishPrefab, Vector2 position, Quaternion rotation)

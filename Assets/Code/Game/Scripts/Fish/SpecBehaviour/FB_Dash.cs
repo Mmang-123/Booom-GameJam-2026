@@ -103,7 +103,6 @@ namespace Game
             // 旋转阶段
             if (DashState == 0)
             {
-                Debug.Log(m_TargetDirection);
                 Quaternion targetRotation = Fish.GetRotation(m_TargetDirection);
                 Fish.SetRotation(Quaternion.Lerp(Fish.transform.rotation, targetRotation, Time.deltaTime * m_PreRotateSpeed));
                 

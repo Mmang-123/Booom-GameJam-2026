@@ -205,9 +205,9 @@ namespace Game
             RaycastHit2D hitRight = Physics2D.Raycast(transform.position, rightRayDir, m_RayDistance, m_ObstacleLayer);
             */
 
-            RaycastHit2D hitCenter = FishUtils.RaycastObstacle(Fish.Position, Fish.Position + forward * m_RayDistance);
-            RaycastHit2D hitLeft = FishUtils.RaycastObstacle(Fish.Position, Fish.Position + leftRayDir * m_RayDistance);
-            RaycastHit2D hitRight = FishUtils.RaycastObstacle(Fish.Position, Fish.Position + rightRayDir * m_RayDistance);
+            RaycastHit2D hitCenter = FishUtils.RaycastObstacle(Fish.Position, forward, m_RayDistance);
+            RaycastHit2D hitLeft = FishUtils.RaycastObstacle(Fish.Position, leftRayDir, m_RayDistance);
+            RaycastHit2D hitRight = FishUtils.RaycastObstacle(Fish.Position, rightRayDir, m_RayDistance);
 
             // Debug 画线
             Debug.DrawRay(transform.position, forward * m_RayDistance, Color.green);
@@ -225,6 +225,7 @@ namespace Game
                     turnDir = -1;
                 
                 hitNormal = hitCenter.normal;
+                Debug.Log(hitCenter.collider.transform.parent.parent.gameObject);
                 //avoidanceDirection = (avoidanceTurnDir == 1f ? Quaternion.Euler(0, 0, 70f) : Quaternion.Euler(0, 0, -70f)) * -hitCenter.normal;
                 //Debug.DrawRay(transform.position, avoidanceDirection, Color.red);
             }
@@ -234,11 +235,13 @@ namespace Game
                 {
                     turnDir = -1;
                     hitNormal = hitLeft.normal;
+                    Debug.Log(hitLeft.collider);
                 }
                 else
                 {
                     turnDir = 1;
                     hitNormal = hitRight.normal;
+                    Debug.Log(hitRight.collider);
                 }
             }
             else if (hitLeft)
@@ -257,7 +260,7 @@ namespace Game
                 avoidanceDirection = (turnDir == 1f ? Quaternion.Euler(0, 0, 90f) : Quaternion.Euler(0, 0, -90f)) * -hitNormal;
 
                 //RaycastHit2D hit = Physics2D.Raycast(transform.position, avoidanceDirection, m_RayDistance, m_ObstacleLayer);
-                RaycastHit2D hit = FishUtils.RaycastObstacle(Fish.Position, Fish.Position + avoidanceDirection * m_RayDistance);
+                RaycastHit2D hit = FishUtils.RaycastObstacle(Fish.Position, avoidanceDirection.normalized, m_RayDistance);
                 if (hit)
                 {
                     avoidanceDirection = (turnDir == 1f ? Quaternion.Euler(0, 0, 45f) : Quaternion.Euler(0, 0, -45f)) * avoidanceDirection;
