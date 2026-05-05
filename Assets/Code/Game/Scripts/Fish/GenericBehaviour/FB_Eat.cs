@@ -100,14 +100,19 @@ namespace Game
             if (Target != null)
             {
                 EatTimer += Time.deltaTime; 
-                if (ContinuousCheck && EatTimer >= 0.1f)
+                if ((ContinuousCheck && EatTimer >= 0.08f)
+                || EatTimer >= 0.18f)
                 {
                     List<Fish> fishInRange = ListPool<Fish>.Get();
                     CheckFishInRange(fishInRange);
 
                     if (fishInRange.Count > 0)
+                    {
                         ApplyEat(fishInRange);
-                        
+                        ListPool<Fish>.Release(fishInRange);
+                        return;
+                    }
+
                     ListPool<Fish>.Release(fishInRange);
                 }
   

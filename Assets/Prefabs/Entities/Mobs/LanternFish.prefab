@@ -158,7 +158,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 0.7
 --- !u!1 &5554110311380033062
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,7 +321,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 0.6
 --- !u!1 &6172189210337702716
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,8 +444,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74fcf1db195c45f43be49637954d825b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Eat
-  m_OpenDistance: 3.5
-  m_ShutDistance: 5.5
+  m_OpenDistance: 4.5
+  m_ShutDistance: 6
   m_EatDistance: 2
   m_ReduceSaturationPerBite: 65535
   m_EatDashAdditionalSpeed: 3
