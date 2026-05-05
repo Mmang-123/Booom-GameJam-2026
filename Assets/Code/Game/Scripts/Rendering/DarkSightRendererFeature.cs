@@ -26,7 +26,8 @@ namespace Game
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            if (m_Shader != null)
+            if (m_Shader != null && DarkSightManager.InstanceValid
+            && DarkSightManager.Instance.Radius > 0f)
             {
                 renderer.EnqueuePass(m_Pass);
                 renderer.EnqueuePass(m_BlitBackPass);   

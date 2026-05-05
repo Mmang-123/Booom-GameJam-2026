@@ -11,6 +11,9 @@ namespace Game
         [SerializeField] private float m_Radius;
         [SerializeField] private bool m_OverrideByLight;
     
+        public Vector2 CenterPosition => m_CenterPosition;
+        public float Radius => m_Radius;
+
         static readonly int Property_DarkSightParams = Shader.PropertyToID("_DarkSightParams");
 
 
