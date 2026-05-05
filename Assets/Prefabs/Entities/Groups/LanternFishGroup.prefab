@@ -236,7 +236,7 @@ MonoBehaviour:
   m_SearchingRayLength: 7
   m_TracingRayLength: 12
   m_MaxTurningPointCount: 5
-  m_Patience: 100
+  m_Patience: 320
   m_LosePatienceSpeed: 15
   m_RegainPatienceSpeed: 20
 --- !u!1 &7460192398420353148
