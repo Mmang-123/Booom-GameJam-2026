@@ -1,5 +1,9 @@
 ﻿#include "../Generic/PixelartStructures.hlsl"
 #include "../Generic/PixelartShared.hlsl"
+#include "../../Lighting/Lighting.hlsl"
+#include "../Sprite/Background.hlsl"
+#include "../Sprite/SpriteShading.hlsl"
+
 
 VaryingsParticle PixelartVert(PixelartParticleInput input)
 {
@@ -85,6 +89,48 @@ half4 PixelartFrag(VaryingsParticle input) : SV_Target
 
     //finalColor.rgb = MixFog(finalColor.rgb, inputData.fogCoord);
     finalColor.a = input.color.a;
+
+    return finalColor;
+}
+
+half4 ShadedPixelartFrag(VaryingsParticle input) : SV_Target
+{
+    UNITY_SETUP_INSTANCE_ID(input);
+    UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+
+    float2 screenUV = input.clipPos.xy / _ScreenParams.xy;
+
+    ParticleParams particleParams;
+    InitParticleParams(input, particleParams);
+
+    SurfaceData surfaceData;
+    InitializeSurfaceData(particleParams, surfaceData);
+    InputData inputData;
+    InitializeInputData(input, surfaceData, inputData);
+    //SETUP_DEBUG_TEXTURE_DATA_FOR_TEX(inputData, input.texcoord, _BaseMap);
+
+    half4 finalColor = UniversalFragmentUnlit(inputData, surfaceData);
+
+    #if defined(_SCREEN_SPACE_OCCLUSION) && !defined(_SURFACE_TYPE_TRANSPARENT)
+        float2 normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(input.clipPos);
+        AmbientOcclusionFactor aoFactor = GetScreenSpaceAmbientOcclusion(normalizedScreenSpaceUV);
+        finalColor.rgb *= aoFactor.directAmbientOcclusion;
+    #endif
+
+    finalColor.a = input.color.a;
+
+    float3 light = SampleLight(screenUV);
+
+    if ((light.r <= 0.001 && light.g <= 0.001 && light.b <= 0.001) || (finalColor.r <= 0.001 && finalColor.g <= 0.001))
+    {
+        // Background
+        light *= 1.0 - finalColor.b;
+        finalColor.rgb = LightenBlend(SampleBackground(screenUV).rgb, light);
+    }
+    else
+    {
+        finalColor.rgb = lerp(LightenBlend(finalColor.rgb, light, 0.55), finalColor.rgb * light, 0.85);
+    }
 
     return finalColor;
 }

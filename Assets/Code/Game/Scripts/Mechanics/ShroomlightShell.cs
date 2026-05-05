@@ -10,6 +10,7 @@ namespace Game
         [SerializeField] private SpriteRenderer m_SourceRenderer;
         [SerializeField] private Animator m_Animator;
         [SerializeField] private float m_LightIntensity = 1f;
+        [SerializeField] private ParticleSystem m_Particle;
         
         private float IntensityUpdateRate => 1.0f / 1.0f;
 
@@ -44,25 +45,6 @@ namespace Game
 
         private void FixedUpdate()
         {
-            /*
-            if (!m_Active && LightingTextureManager.Instance.InValidChunk(transform.position))
-            {
-                bool lightExist = CheckLightStrength();
-                if (lightExist)
-                {
-                    m_ActiveTimer = Mathf.Clamp(m_ActiveTimer + Time.fixedDeltaTime, 0f, ActiveTime);
-                    if (m_ActiveTimer >= ActiveTime)
-                    {
-                        SetActive(true);
-                    }
-                }
-                else
-                {
-                    m_ActiveTimer = 0f;
-                }
-            }
-            */
-
             SetActive(IsPowered);
 
             if (m_Active && m_Light.LightIntensity < m_LightIntensity)
@@ -88,6 +70,13 @@ namespace Game
             if (m_Animator != null)
                 m_Animator.SetTrigger(m_Active ? "Lit" : "Unlit");
             
+            if (m_Particle != null)
+            {
+                if (m_Active)
+                    m_Particle.Play();
+                else
+                    m_Particle.Stop();
+            }
         }
 
         public void SetChargeComplete()

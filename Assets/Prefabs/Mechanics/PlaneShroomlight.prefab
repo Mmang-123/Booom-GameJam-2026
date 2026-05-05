@@ -174,6 +174,7 @@ Transform:
   - {fileID: 2071302172480074305}
   - {fileID: 6413363551852400571}
   - {fileID: 4268269890045514270}
+  - {fileID: 8128645459121214459}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8096547589301963036
@@ -188,12 +189,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 438b156268c6f404eb9c929d6f1f4341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.ShroomlightShell
-  m_Active: 0
   m_Light: {fileID: 1976910580540784111}
   m_IndicatorRenderer: {fileID: 506190078791923583}
   m_SourceRenderer: {fileID: 1850862394557193616}
   m_Animator: {fileID: 8983423747948033076}
   m_LightIntensity: 1
+  m_Particle: {fileID: 5545629359660865028}
 --- !u!1 &3611058062338218836
 GameObject:
   m_ObjectHideFlags: 0
@@ -399,3 +400,74 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1001 &625371063314321392
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1705922924207880123}
+    m_Modifications:
+    - target: {fileID: 1487662345844343499, guid: deaba74646bef3144921fc71784223fe, type: 3}
+      propertyPath: m_Name
+      value: DustParticle
+      objectReference: {fileID: 0}
+    - target: {fileID: 4925754017888901620, guid: deaba74646bef3144921fc71784223fe, type: 3}
+      propertyPath: ShapeModule.m_Scale.x
+      value: 1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674913996621192203, guid: deaba74646bef3144921fc71784223fe, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674913996621192203, guid: deaba74646bef3144921fc71784223fe, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.38
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674913996621192203, guid: deaba74646bef3144921fc71784223fe, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674913996621192203, guid: deaba74646bef3144921fc71784223fe, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674913996621192203, guid: deaba74646bef3144921fc71784223fe, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674913996621192203, guid: deaba74646bef3144921fc71784223fe, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674913996621192203, guid: deaba74646bef3144921fc71784223fe, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674913996621192203, guid: deaba74646bef3144921fc71784223fe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674913996621192203, guid: deaba74646bef3144921fc71784223fe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674913996621192203, guid: deaba74646bef3144921fc71784223fe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: deaba74646bef3144921fc71784223fe, type: 3}
+--- !u!198 &5545629359660865028 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4925754017888901620, guid: deaba74646bef3144921fc71784223fe, type: 3}
+  m_PrefabInstance: {fileID: 625371063314321392}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8128645459121214459 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8674913996621192203, guid: deaba74646bef3144921fc71784223fe, type: 3}
+  m_PrefabInstance: {fileID: 625371063314321392}
+  m_PrefabAsset: {fileID: 0}
