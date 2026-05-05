@@ -37,6 +37,9 @@ namespace Game
         public float WaitTimer { get; private set; }
         public bool ContinuousCheck { get; set; } = false;
 
+        public bool UseOverrideEatDistance { get; set; }
+        public float OverrideEatDistance { get; set; }
+
         private void Update()
         {
             switch (State)
@@ -74,12 +77,13 @@ namespace Game
             if (Target != null)
             {
                 float distance = Vector2.Distance(Fish.Position, Target.Position);
+                float eatDistance = UseOverrideEatDistance ? OverrideEatDistance : m_EatDistance;
                 if (distance > m_ShutDistance)
                 {
                     State = EState.Shut;
                     return;
                 }
-                if (distance <= m_EatDistance)
+                if (distance <= eatDistance)
                 {
                     PreEat();
                     return;
