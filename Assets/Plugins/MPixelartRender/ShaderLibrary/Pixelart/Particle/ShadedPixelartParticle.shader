@@ -1,4 +1,4 @@
-﻿Shader "Mmang/Pixelart/PixelartParticle"
+﻿Shader "Mmang/Pixelart/ShadedPixelartParticle"
 {
     Properties
     {
@@ -100,7 +100,7 @@
             // -------------------------------------
             // Shader Stages
             #pragma vertex PixelartVert
-            #pragma fragment PixelartFrag
+            #pragma fragment ShadedPixelartFrag
 
             // -------------------------------------
             // Material Keywords
