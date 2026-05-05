@@ -11,6 +11,7 @@ namespace Game
         [SerializeField] private Fish m_FishPrefab;
         
         [Header("基础设置")]
+        [SerializeField] private bool m_InitGenerate = true;
         [SerializeField] private CircleCollider2D m_MoveRange;
         [SerializeField] private int m_MaxCount = 3;
         [SerializeField] private Vector2 m_GenerateIntervalTime = new(2.5f, 4.5f);
@@ -30,6 +31,14 @@ namespace Game
         private void Start()
         {
             m_IntervalTime = RandomUtil.GetRandomValueInRange(m_GenerateIntervalTime);
+
+            if (m_InitGenerate)
+            {
+                for (int i = 0; i < m_MaxCount; i++)
+                {
+                    CreateNewJelly();
+                }
+            }
         }
 
         private void FixedUpdate()
