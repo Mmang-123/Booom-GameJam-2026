@@ -16,6 +16,18 @@ MonoBehaviour:
   references:
     version: 2
     RefIds: []
+--- !u!114 &-8946558817614370884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
+  m_Name: ParticleConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
 --- !u!114 &-8448941073956832944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,6 +101,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
   m_Name: ParticleConfig
   m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
+--- !u!114 &-5533566603750748895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
+  m_Name: ParticleConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
+--- !u!114 &-5213080080925554245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
+  m_Name: ParticleConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
 --- !u!114 &-4964557183547973912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,6 +155,18 @@ MonoBehaviour:
     m_OpenMouseDistance: 4.5
     m_OpenMouseAngle: 40
     m_EatDistance: 1.5
+--- !u!114 &-4543119631423398409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
+  m_Name: ParticleConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
 --- !u!114 &-3238323965577210352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,7 +203,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
   m_Name: ParticleConfig
   m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
+--- !u!114 &-3072263781218942115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
+  m_Name: ParticleConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
 --- !u!114 &-2540958582607991249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
+  m_Name: ParticleConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
+--- !u!114 &-2528189755879344689
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -225,6 +297,18 @@ MonoBehaviour:
   m_Name: Entity Config
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.Game.EntityConfigCollection
   m_Data: []
+--- !u!114 &131344888128723159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
+  m_Name: ParticleConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
 --- !u!114 &295669355156719084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,6 +334,18 @@ MonoBehaviour:
   m_Name: ParticleConfig
   m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
 --- !u!114 &2427864997750972448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
+  m_Name: ParticleConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
+--- !u!114 &2747543667304443144
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
