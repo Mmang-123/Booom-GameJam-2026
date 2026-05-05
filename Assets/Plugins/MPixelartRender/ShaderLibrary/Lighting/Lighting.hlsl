@@ -96,12 +96,16 @@ void ComputeSpotLight(int lightIndex, float2 positionWS, out half3 outColor)
     float angleAttenuation = saturate(SdotL * scaleOffset.x + scaleOffset.y);
     angleAttenuation *= angleAttenuation; // 边缘平滑
 
-    if (angleAttenuation <= 0)
+    // Step
+    float s = angleAttenuation;
+    s = round(s * 2.0) / 2.0;
+
+    if (s <= 0)
     {
         return;
     }
 
-    outColor = distanceAttenuation * angleAttenuation * intensity * lightColor;
+    outColor = distanceAttenuation * s * intensity * lightColor;
 }
 
 void ComputeAreaLight(int lightIndex, float2 positionWS, out half3 outColor)
