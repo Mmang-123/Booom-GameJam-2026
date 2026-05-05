@@ -225,7 +225,6 @@ namespace Game
                     turnDir = -1;
                 
                 hitNormal = hitCenter.normal;
-                Debug.Log(hitCenter.collider.transform.parent.parent.gameObject);
                 //avoidanceDirection = (avoidanceTurnDir == 1f ? Quaternion.Euler(0, 0, 70f) : Quaternion.Euler(0, 0, -70f)) * -hitCenter.normal;
                 //Debug.DrawRay(transform.position, avoidanceDirection, Color.red);
             }
