@@ -235,7 +235,7 @@ SpriteRenderer:
   m_SortingLayer: -2
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -685326951, guid: 11349ccdcd429c341a69c6c32e0d4788, type: 3}
+  m_Sprite: {fileID: 1218276305, guid: 11349ccdcd429c341a69c6c32e0d4788, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -275,6 +275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.JellyNest
   m_AIPrefab: {fileID: 3346650483682979678, guid: a9fbd98459380b3479bdeb1fcfada50e, type: 3}
   m_FishPrefab: {fileID: 2797730967065995784, guid: a7f4295396ae9534ebd7dcc9f610ac23, type: 3}
+  m_InitGenerate: 1
   m_MoveRange: {fileID: 3906581405414107545}
   m_MaxCount: 3
   m_GenerateIntervalTime: {x: 2.5, y: 4.5}

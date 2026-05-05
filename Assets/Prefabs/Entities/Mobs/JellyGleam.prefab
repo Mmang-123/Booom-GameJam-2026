@@ -254,7 +254,7 @@ MonoBehaviour:
   m_MoveSpeed: 8
   m_Acceleration: 6
   m_FastAcceleration: 8
-  m_StopDistance: 1.6
+  m_StopDistance: 0.5
   m_CanAvoidance: 0
   m_RayDistance: 0.5
   m_RayAngle: 30

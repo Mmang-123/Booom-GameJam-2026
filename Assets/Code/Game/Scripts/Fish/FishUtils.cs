@@ -55,7 +55,7 @@ namespace Game
         public static RaycastHit2D RaycastObstacle(Vector2 start, Vector2 end)
         {
             Vector2 direction = end - start;
-            float distance = direction.sqrMagnitude;
+            float distance = direction.magnitude;
             direction.Normalize();
 
             ContactFilter2D filter = new()

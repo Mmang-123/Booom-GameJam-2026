@@ -15,39 +15,87 @@ namespace Game
         [SerializeField] private float m_Patience = 100f;
         [SerializeField] private float m_LosePatienceSpeed = 30f;
         [SerializeField] private float m_RegainPatienceSpeed = 20f;
-
+        [SerializeField] private float m_LosePatienceOnCatchFailed = 30f;
+        [SerializeField] private float m_ChangeTargetPatienceTheshold = 50f;
+        [SerializeField] private float m_SearchNewTargetIntervalTime = 0.2f;
 
         // Runtime
         [System.NonSerialized] private List<Vector2> m_TurningPoints = new();
         private bool m_HasPreTracingPoint;
         private Vector2 m_PreTracingPoint;
 
-        private float m_CurrentPatience; 
+        [SerializeField] private float m_CurrentPatience;
+        private float m_SearchNewTargetTimer;
 
         private RaycastHit2D Raycast(Vector2 start, Vector2 end)
             => FishUtils.RaycastObstacle(start, end);
 
         protected override bool FindTarget(out Fish outTarget)
+            => FindTarget(out outTarget, false);
+        protected bool FindTarget(out Fish outTarget, bool ignoreCurrentTarget)
         {
             List<Fish> fishList = ListPool<Fish>.Get();
             FishUtils.GetFishInCircle(Fish.Position, m_SearchingRayLength, fishList, ignoreFish: Fish, clearResultList: true);
 
-            bool flag = false;
             outTarget = null;
+            int currentPriority = 0;
 
             foreach (var fish in fishList)
             {
-                if (TargetPriorityMap.ContainsKey(fish.FishTypeTag)
+                if ((!ignoreCurrentTarget || (ignoreCurrentTarget && fish != TargetFish))
+                && TargetPriorityMap.ContainsKey(fish.FishTypeTag)
                 && !Raycast(Fish.Position, fish.Position))
                 {
-                    flag = true;
-                    outTarget = fish;
-                    break;
+                    if (outTarget == null)
+                    {
+                        outTarget = fish;
+                        currentPriority = TargetPriorityMap[fish.FishTypeTag];
+                    }
+                    else
+                    {
+                        int p = TargetPriorityMap[fish.FishTypeTag];
+                        if (p > currentPriority)
+                        {
+                            outTarget = fish;
+                            currentPriority = p;
+                        }
+                        else if (p == currentPriority && fish.IsPlayer)
+                        {
+                            outTarget = fish;
+                        }
+                    }
                 }
             }
 
             ListPool<Fish>.Release(fishList);
-            return flag;
+            return outTarget != null;
+        }
+
+        private Fish FindMorePriorityTarget()
+        {
+            List<Fish> fishList = ListPool<Fish>.Get();
+            FishUtils.GetFishInCircle(Fish.Position, m_SearchingRayLength, fishList, ignoreFish: Fish, clearResultList: true);
+
+            Fish newTarget = null;
+            int currentPriority = TargetPriorityMap[TargetFish.FishTypeTag];
+
+            foreach (var fish in fishList)
+            {
+                if (fish == TargetFish
+                || !TargetPriorityMap.ContainsKey(fish.FishTypeTag)
+                || Raycast(Fish.Position, fish.Position))
+                    continue;
+                
+                int p = TargetPriorityMap[fish.FishTypeTag];
+                if (p > currentPriority)
+                {
+                    newTarget = fish;
+                    currentPriority = p;
+                }
+            }
+
+            ListPool<Fish>.Release(fishList);
+            return newTarget;
         }
 
         public override void OnActivate()
@@ -59,6 +107,46 @@ namespace Game
             m_PreTracingPoint = TargetFish.Position;
 
             m_CurrentPatience = m_Patience;
+
+            if (Fish.TryGetBehaviour<FB_Eat>(out var eatBehaviour))
+            {
+                eatBehaviour.OnCatchFailed += OnCatchFailed;
+            }
+        }
+
+        public override void OnEnd(EEndAbilityType endType)
+        {
+            base.OnEnd(endType);
+
+            if (Fish != null && Fish.TryGetBehaviour<FB_Eat>(out var eatBehaviour))
+            {
+                eatBehaviour.OnCatchFailed -= OnCatchFailed;
+            }
+        }
+
+        private void OnCatchFailed()
+        {
+            if (TargetFish != null)
+            {
+                Debug.Log("Catch Failed");
+                m_CurrentPatience = Mathf.Max(1f, m_CurrentPatience - m_LosePatienceOnCatchFailed);
+            }
+        }
+
+        private void SetTarget(Fish fish)
+        {
+            m_TurningPoints.Clear();
+
+            TargetFish = fish;
+
+            m_HasPreTracingPoint = true;
+            m_PreTracingPoint = TargetFish.Position;
+            m_CurrentPatience = m_Patience;
+
+            if (Fish.TryGetBehaviour<FB_Eat>(out var eatBehaviour))
+            {
+                eatBehaviour.Target = fish;
+            }
         }
 
         public override void OnUpdate(float dt)
@@ -68,6 +156,21 @@ namespace Game
                 TargetFish = null;
                 FishAI.PendingEndAbility(this, EEndAbilityType.End);
                 return;
+            }
+
+            if (m_CurrentPatience <= m_ChangeTargetPatienceTheshold)
+            {
+                m_SearchNewTargetTimer += dt;
+                if (m_SearchNewTargetTimer >= m_SearchNewTargetIntervalTime)
+                {
+                    Debug.Log("Find New Target");
+                    m_SearchNewTargetTimer = 0f;
+                    if (FindTarget(out var newTarget, ignoreCurrentTarget: true))
+                    {
+                        SetTarget(newTarget);
+                        return;
+                    }
+                }
             }
 
             // 如果可以直接追踪到目标，放弃所有拐点
@@ -80,7 +183,7 @@ namespace Game
 
                 SwimBehaviour.TargetPoint = TargetFish.Position;
 
-                m_Patience = Mathf.Clamp(m_Patience + dt * m_RegainPatienceSpeed, 0f, m_Patience);
+                m_CurrentPatience = Mathf.Clamp(m_CurrentPatience + dt * m_RegainPatienceSpeed, 0f, m_CurrentPatience);
             }
             else
             {
