@@ -232,12 +232,12 @@ MonoBehaviour:
   m_TargetPriorityList:
   - Tag: FishType.JellyGleam
     Priority: 0
-  m_SearchingRayLength: 7
-  m_TracingRayLength: 12
+  m_SearchingRayLength: 8
+  m_TracingRayLength: 16
   m_MaxTurningPointCount: 5
-  m_Patience: 320
-  m_LosePatienceSpeed: 15
-  m_RegainPatienceSpeed: 20
+  m_Patience: 640
+  m_LosePatienceSpeed: 16
+  m_RegainPatienceSpeed: 32
 --- !u!1 &8720236568300699792
 GameObject:
   m_ObjectHideFlags: 0
