@@ -42,6 +42,11 @@ namespace Game
             Init(m_Fish);
         }
 
+        private void OnDisable()
+        {
+            Dispose();
+        }
+
         public void ControlFish(Fish fish)
         {
             m_Fish = fish;
@@ -77,6 +82,13 @@ namespace Game
         public void Dispose()
         {
             m_Inited = false;
+
+            foreach (var ability in m_ActiveAbilities)
+            {
+                ability.EndAbility(EEndAbilityType.Cancelled);
+            }
+
+            m_ActiveAbilities.Clear();
         }
 
         private void FixedUpdate()

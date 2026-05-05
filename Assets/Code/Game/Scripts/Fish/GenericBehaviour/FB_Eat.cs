@@ -40,6 +40,8 @@ namespace Game
         public bool UseOverrideEatDistance { get; set; }
         public float OverrideEatDistance { get; set; }
 
+        public event System.Action OnCatchFailed;
+
         private void Update()
         {
             switch (State)
@@ -223,7 +225,7 @@ namespace Game
                 {
                     infected = true;
                     Fish.AddInfectedLevel();
-                    PlayerController.Instance.DisableControl(1.2f);
+                    PlayerController.Instance.DisableControl(0.8f);
                     PlayerController.Instance.ControlFish(Fish);
                 }
                 else if (fish.InfectedLevel >= EInfectedLevel.Mid)
@@ -252,6 +254,11 @@ namespace Game
                 animatorBehaviour.TriggerSwallowAnimation(infected);
             }
             
+            if (toEat.Count == 0)
+            {
+                OnCatchFailed?.Invoke();
+            }
+
             ListPool<Fish>.Release(toEat);
             
             

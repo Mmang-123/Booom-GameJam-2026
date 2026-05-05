@@ -70,5 +70,32 @@ namespace Game
             SwimBehaviour.Tracing = false;
         }
 
+        /// <summary>
+        /// 保证传入的都在Map中
+        /// </summary>
+        /// <param name="fishes"></param>
+        /// <returns></returns>
+        public void SortPriorityTarget(List<Fish> fishes)
+        {
+            fishes.Sort((a, b) =>
+            {
+                int p1 = TargetPriorityMap[a.FishTypeTag];
+                int p2 = TargetPriorityMap[b.FishTypeTag];
+
+                if (p1 == p2)
+                {
+                    if (a.IsPlayer)
+                        return -1;
+                    else if (b.IsPlayer)
+                        return 1;
+                    return 0;
+                }
+
+                return p2.CompareTo(p1); // 反过来比较，优先返回大的
+            });
+
+
+        }
+
     }
 }
