@@ -101,7 +101,7 @@ namespace Game
             {
                 EatTimer += Time.deltaTime; 
                 if ((ContinuousCheck && EatTimer >= 0.08f)
-                || EatTimer >= 0.18f)
+                || EatTimer >= 0.12f)
                 {
                     List<Fish> fishInRange = ListPool<Fish>.Get();
                     CheckFishInRange(fishInRange);
