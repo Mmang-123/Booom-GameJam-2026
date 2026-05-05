@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Game
 {
@@ -7,6 +8,7 @@ namespace Game
         [SerializeField] private float m_CD = 2.5f;
         [SerializeField] private float m_DashSpeed = 16f;
         [SerializeField] private float m_DashEndDamping = 32f;
+        [SerializeField] private float m_PreRotateSpeed = 12f;
 
         [Header("残影")]
         [SerializeField] private Color m_AfterimageTint = new Color(0.55f, 0.85f, 1f, 0.75f);
@@ -20,6 +22,8 @@ namespace Game
         public float CD { get; private set; }
         public float Timer { get; private set; }
         public int DashState { get; private set; }
+
+        private Vector2 m_TargetDirection;
 
         private float m_AfterimageTimer;
         private float m_AfterimageSpawnTimer; // > 0 时持续生成残影
@@ -66,6 +70,18 @@ namespace Game
             Timer = 0f;
             m_AfterimageTimer = 0f;
             m_AfterimageSpawnTimer = m_AfterimageSpawnDuration;
+
+            if (Mouse.current != null)
+            {
+                Vector2 screenPos = Mouse.current.position.ReadValue();
+                Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
+                m_TargetDirection = ((Vector2)worldPos - Fish.Position).normalized;
+            }
+            else
+            {
+                m_TargetDirection = Fish.ForwardDirection;
+            }
+
             var swimBehaviour = Fish.GetBehaviour<FB_Swim>();
             var animatorBehaviour = Fish.GetBehaviour<FB_GenericAnimator>();
             swimBehaviour.IsDisable = true;
@@ -83,6 +99,25 @@ namespace Game
         private void DashUpdate()
         {
             var swimBehaviour = Fish.GetBehaviour<FB_Swim>();
+            Timer += Time.deltaTime;
+            // 旋转阶段
+            if (DashState == 0)
+            {
+                Debug.Log(m_TargetDirection);
+                Quaternion targetRotation = Fish.GetRotation(m_TargetDirection);
+                Fish.SetRotation(Quaternion.Lerp(Fish.transform.rotation, targetRotation, Time.deltaTime * m_PreRotateSpeed));
+                
+                if (Timer >= 0.1f
+                || Vector2.Angle(m_TargetDirection, Fish.ForwardDirection) <= 3f)
+                {
+                    DashState = 1;
+                    Timer = 0f;
+                }
+
+                return;
+            }
+            
+            
             Timer += Time.deltaTime;
 
             if (Timer <= 0.2f)

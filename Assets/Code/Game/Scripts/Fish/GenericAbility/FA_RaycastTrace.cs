@@ -18,7 +18,7 @@ namespace Game
 
 
         // Runtime
-        private List<Vector2> m_TurningPoints = new();
+        [System.NonSerialized] private List<Vector2> m_TurningPoints = new();
         private bool m_HasPreTracingPoint;
         private Vector2 m_PreTracingPoint;
 
