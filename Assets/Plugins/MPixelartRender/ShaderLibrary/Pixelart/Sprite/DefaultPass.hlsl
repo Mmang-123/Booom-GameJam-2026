@@ -3,6 +3,8 @@
 #include "Background.hlsl"
 #include "SpriteShading.hlsl"
 
+float4 _DarkSightParams;
+
 Varyings UnlitVert(Attributes v)
 {
     Varyings o = (Varyings)0;
@@ -89,6 +91,16 @@ float4 UnlitFrag(Varyings input) : SV_Target
 
     float3 lightColor = ComputeLighting(positionWS);
     float3 sampledLight = SampleLight(screenUV);
+
+    // Dark Sight
+    float2 scaledUV = screenUV;
+    scaledUV.y = scaledUV.y * _ScreenParams.y / _ScreenParams.x;
+    float2 scaledDarkCenterUV = _DarkSightParams.xy;
+    scaledDarkCenterUV.y = scaledDarkCenterUV.y * _ScreenParams.y / _ScreenParams.x;
+
+    float dis = distance(scaledDarkCenterUV, scaledUV);
+    if (dis <= _DarkSightParams.z && (_DarkSightParams.w < 1 || (sampledLight.r + sampledLight.g + sampledLight.b) < 0.001))
+        clip(-1);
 
     if ((lightColor.r <= 0.001 && lightColor.g <= 0.001 && lightColor.b <= 0.001) || (outputColor.r <= 0.001 && outputColor.g <= 0.001 && outputColor.b <= 0.001))
     {

@@ -4,11 +4,36 @@ using UnityEngine;
 
 namespace Game
 {
+    [ExecuteAlways]
     public class DarkSightManager : SingletonMono<DarkSightManager>
     {
         [SerializeField] private Vector2 m_CenterPosition;
         [SerializeField] private float m_Radius;
+        [SerializeField] private bool m_OverrideByLight;
     
+        static readonly int Property_DarkSightParams = Shader.PropertyToID("_DarkSightParams");
+
+
+        public void SetCenterPosition(Vector2 position)
+        {
+            m_CenterPosition = position;
+        }
+
+        public void SetRadius(float radius)
+        {
+            m_Radius = radius;
+        }
+
+        public void SetOverrideByLight(bool active)
+        {
+            m_OverrideByLight = active;
+        }
+
+        private void Start()
+        {
+            m_Radius = 0f;
+        }
+
         public (Vector2 uv, Vector2 radiusRatio) GetParams()
         {
             var camera = Camera.main;
@@ -37,6 +62,12 @@ namespace Game
             );
 
             return new(uv, radiusRatio);
+        }
+        
+        private void Update()
+        {
+            var param = GetParams();
+            Shader.SetGlobalVector(Property_DarkSightParams, new(param.uv.x, param.uv.y, param.radiusRatio.x, m_OverrideByLight ? 1 : 0));
         }
     }
 }

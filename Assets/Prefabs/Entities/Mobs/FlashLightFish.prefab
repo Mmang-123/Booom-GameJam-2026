@@ -209,6 +209,37 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &3812072039467782588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1005407335511354731}
+  m_Layer: 7
+  m_Name: CheckLightPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1005407335511354731
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3812072039467782588}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.322, y: 0.154, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8671526299243549925}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4408021037114253163
 GameObject:
   m_ObjectHideFlags: 0
@@ -505,6 +536,7 @@ Transform:
   - {fileID: 3476970104418147691}
   - {fileID: 3928821490010108098}
   - {fileID: 6690917711333470975}
+  - {fileID: 1005407335511354731}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2686752995201681050
@@ -736,6 +768,8 @@ MonoBehaviour:
   m_PointLight: {fileID: 3851936974120443783}
   m_SpotLightIntensity: 1
   m_PointLightIntensity: 1
+  m_DarkSightRadius: 2
+  m_CheckLightPoint: {fileID: 1005407335511354731}
 --- !u!1 &8701542722561198074
 GameObject:
   m_ObjectHideFlags: 0

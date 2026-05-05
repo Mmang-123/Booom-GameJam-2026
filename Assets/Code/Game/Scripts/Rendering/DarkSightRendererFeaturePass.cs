@@ -63,7 +63,6 @@ namespace Game
 
         private static void ExecutePass(RasterCommandBuffer cmd, PassData passData)
         {
-            passData.Material.SetVector(Property_DarkSightParams, passData.Params);
             Blitter.BlitTexture(cmd, passData.Source, new Vector4(1, 1, 0, 0), passData.Material, 0);
         }
     }

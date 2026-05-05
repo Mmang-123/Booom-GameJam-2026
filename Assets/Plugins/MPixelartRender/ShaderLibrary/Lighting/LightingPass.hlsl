@@ -15,8 +15,6 @@ struct LightData2D
 StructuredBuffer<LightData2D> _MLightDataBuffer;
 int3 _MLightParams;
 
-float4 _ObstacleChunkParams;
-
 // 3x3的uv在4x4的位置
 inline float2 UV3To4(float2 uv)
 {
@@ -314,7 +312,8 @@ half4 LightingFrag(Varyings input) : SV_Target
     }
 
     // 简易算一下光照强度
-    float s = (totalLight.r + totalLight.g + totalLight.b) / 3.0;
+    //float s = (totalLight.r + totalLight.g + totalLight.b) / 3.0;
+    float s = (outputLight.r + outputLight.g + outputLight.b) / 3.0;
 
     return float4(outputLight, s);
 }

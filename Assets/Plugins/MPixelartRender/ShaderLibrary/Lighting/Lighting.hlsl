@@ -18,8 +18,12 @@ int3 _MLightParams;
 TEXTURE2D(_MLightingTexture);
 SAMPLER(sampler_MLightingTexture);
 
+#ifndef M_OBSTACLE_PARAMS_INCLUDED
+#define M_OBSTACLE_PARAMS_INCLUDED
 float4 _ObstacleParams;
 float4 _ObstacleChunkParams;
+#endif
+
 float4 _Resolution;
 
 

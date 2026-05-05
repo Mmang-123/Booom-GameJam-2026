@@ -15,7 +15,11 @@ TEXTURE2D(_ObstacleSDF_8); SAMPLER(sampler_ObstacleSDF_8);
 
 TEXTURE2D(_ObstacleMask); SAMPLER(sampler_ObstacleMask);
 
+#ifndef M_OBSTACLE_PARAMS_INCLUDED
+#define M_OBSTACLE_PARAMS_INCLUDED
 float4 _ObstacleParams;
+float4 _ObstacleChunkParams;
+#endif
 
 float2 WorldToUV(float2 posWS)
 {
