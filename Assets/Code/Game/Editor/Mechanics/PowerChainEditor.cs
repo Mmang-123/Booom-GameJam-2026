@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Game.Editors
 {
     [CustomEditor(typeof(PowerChain))]
-    public class PowerChainEditor : Editor
+    public class PowerChainEditor : UnityEditor.Editor
     {
         public override VisualElement CreateInspectorGUI()
         {

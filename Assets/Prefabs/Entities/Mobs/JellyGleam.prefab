@@ -309,6 +309,10 @@ MonoBehaviour:
   m_AfterimageInterval: 0.05
   m_AfterimageSpawnDuration: 0.4
   m_AfterimageMaterial: {fileID: 2100000, guid: 8784ce32ca7776a4e8ce240208dd817a, type: 2}
+  m_DashStartClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: 89070ca3b64af4f41874d2439c5ad705, type: 2}
 --- !u!50 &834712693967893020
 Rigidbody2D:
   serializedVersion: 5

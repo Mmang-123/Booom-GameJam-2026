@@ -34,6 +34,7 @@ Transform:
   - {fileID: 3504811448404990955}
   - {fileID: 3356014929866678129}
   - {fileID: 7896905919347702269}
+  - {fileID: 6747781461010279700}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &438071255606428513
@@ -125,6 +126,92 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07f862f5023bae3438bc90c47ed8bace, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.LightingManager
+--- !u!1 &4839974843114041923
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6747781461010279700}
+  - component: {fileID: 6201534757428381226}
+  - component: {fileID: 5504542792374110036}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6747781461010279700
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4839974843114041923}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7082941003205810837}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6201534757428381226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4839974843114041923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cff6c66d9daf2de408f87083b4859ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.AudioManager
+  m_MaxSources: 64
+  m_PanRange: 10
+  m_MaxHearRange: 30
+  m_VolumeFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &5504542792374110036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4839974843114041923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 511d5049098d84248b671914f3b45819, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.HarmonyManager
+  BMP: 120
+  Active: 1
 --- !u!1 &5965427249009968203
 GameObject:
   m_ObjectHideFlags: 0

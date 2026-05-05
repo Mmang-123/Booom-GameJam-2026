@@ -15,6 +15,10 @@ namespace Game
         private readonly Dictionary<GameObject, Coroutine> m_Coroutines = new();
 
         /// <summary>在指定世界坐标播放一个音效（自动回收）。</summary>
+        public static void PlayAtPosition(AudioClipRef clipRef, Vector2 position, float volume = 1f, float pitch = 1f)
+            => PlayAtPosition(clipRef?.GetNextClip(), position, volume, pitch);
+
+        /// <summary>在指定世界坐标播放一个音效（自动回收）。</summary>
         public static void PlayAtPosition(AudioClip clip, Vector2 position, float volume = 1f, float pitch = 1f)
         {
             if (clip == null) return;
@@ -24,7 +28,6 @@ namespace Game
             var go = GlobalGameObjectPool.GetGameObject(k_PoolName, position, Quaternion.identity, Instance.GetSourcePrefab());
             var source = go.GetComponent<AudioSource>();
             source.clip = clip;
-            source.volume = volume;
             source.pitch = pitch;
             Instance.ApplySpatial(source, position);
             source.volume *= volume;
@@ -33,6 +36,10 @@ namespace Game
             Instance.m_ActiveCount++;
             Instance.TrackCoroutine(go, clip.length / Mathf.Abs(pitch));
         }
+
+        /// <summary>播放可手动停止的音效，返回 AudioSource 引用。用 StopManaged 提前停止并回收。</summary>
+        public static AudioSource PlayManaged(AudioClipRef clipRef, Vector2 position, float volume = 1f, float pitch = 1f)
+            => PlayManaged(clipRef?.GetNextClip(), position, volume, pitch);
 
         /// <summary>播放可手动停止的音效，返回 AudioSource 引用。用 StopManaged 提前停止并回收。</summary>
         public static AudioSource PlayManaged(AudioClip clip, Vector2 position, float volume = 1f, float pitch = 1f)
@@ -82,12 +89,64 @@ namespace Game
                 PlayAtPosition(clip, Camera.main.transform.position, volume, pitch);
         }
 
+        /// <summary>
+        /// 播放跟随目标 Transform 的音效。AudioSource 不作为子物体，
+        /// 即使目标被销毁仍会播放完毕后才回收。
+        /// </summary>
+        public static void PlayFollowing(AudioClip clip, Transform target, float volume = 1f, float pitch = 1f)
+        {
+            if (clip == null || target == null) return;
+            if (!InstanceValid) return;
+            if (Instance.m_ActiveCount >= Instance.m_MaxSources) return;
+
+            Vector2 startPos = target.position;
+            var go = GlobalGameObjectPool.GetGameObject(k_PoolName, startPos, Quaternion.identity, Instance.GetSourcePrefab());
+            var source = go.GetComponent<AudioSource>();
+            source.clip = clip;
+            source.volume = volume;
+            source.pitch = pitch;
+            Instance.ApplySpatial(source, startPos);
+            source.volume *= volume;
+            source.Play();
+
+            Instance.m_ActiveCount++;
+            var coroutine = Instance.StartCoroutine(
+                Instance.FollowAndRelease(go, source, target, clip.length / Mathf.Abs(pitch), volume));
+            if (Instance.m_Coroutines.TryGetValue(go, out var old))
+                Instance.StopCoroutine(old);
+            Instance.m_Coroutines[go] = coroutine;
+        }
+
+        /// <summary>PlayFollowing 的 AudioClipRef 重载。</summary>
+        public static void PlayFollowing(AudioClipRef clipRef, Transform target, float volume = 1f, float pitch = 1f)
+            => PlayFollowing(clipRef?.GetNextClip(), target, volume, pitch);
+
         private void TrackCoroutine(GameObject go, float delay)
         {
             // 若 go 有残留协程（被重用），先取消
             if (m_Coroutines.TryGetValue(go, out var old))
                 StopCoroutine(old);
             m_Coroutines[go] = StartCoroutine(ReleaseAfterPlay(go, delay));
+        }
+
+        private IEnumerator FollowAndRelease(GameObject go, AudioSource source, Transform target, float duration, float baseVolume)
+        {
+            float elapsed = 0f;
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                if (target != null)
+                {
+                    Vector2 pos = target.position;
+                    go.transform.position = pos;
+                    ApplySpatial(source, pos);
+                    source.volume *= baseVolume;
+                }
+                yield return null;
+            }
+            m_Coroutines.Remove(go);
+            m_ActiveCount--;
+            GlobalGameObjectPool.Release(go, k_PoolName);
         }
 
         private IEnumerator ReleaseAfterPlay(GameObject go, float delay)

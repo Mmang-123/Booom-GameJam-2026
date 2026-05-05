@@ -16,7 +16,8 @@ namespace Game
         [SerializeField] private float m_AfterimageInterval = 0.05f;
         [SerializeField] private float m_AfterimageSpawnDuration = 0.4f; // 残影生成持续时长，可长于冲刺本身
         [SerializeField] private Material m_AfterimageMaterial;
-
+        [Header("音效")]
+        [SerializeField] private AudioClipRef m_DashStartClip;
         // Runtime
         public bool Active { get; private set; }
         public float CD { get; private set; }
@@ -88,6 +89,8 @@ namespace Game
             swimBehaviour.ClearAdditionalVelocity();
             animatorBehaviour.TriggerDashAnimation();
             DashState = 0;
+
+            AudioManager.PlayFollowing(m_DashStartClip, Fish.transform);
         }
 
         private void SpawnAfterimage()

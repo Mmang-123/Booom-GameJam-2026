@@ -3459,43 +3459,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2310399726575265234, guid: 5038f5e12325f9349b407765eaa2a078, type: 3}
   m_PrefabInstance: {fileID: 155201747}
   m_PrefabAsset: {fileID: 0}
---- !u!84 &155820575
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 480
-  m_Height: 270
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1001 &156484626
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14271,11 +14234,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2939715181917969708, guid: 16daca4f1b71a09448c0ecdc53d5daab, type: 3}
   m_PrefabInstance: {fileID: 567032015}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &573076692 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7082941003205810837, guid: aae1b510ade38e94aa1c5964735cb189, type: 3}
-  m_PrefabInstance: {fileID: 1550600332}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &573202372
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17829,43 +17787,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.25, y: 0.25}
   m_EdgeRadius: 0
---- !u!84 &712732441
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 480
-  m_Height: 270
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 0
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1 &712847797
 GameObject:
   m_ObjectHideFlags: 0
@@ -27074,51 +26995,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!1 &1121962779
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1121962780}
-  - component: {fileID: 1121962781}
-  m_Layer: 0
-  m_Name: AudioManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1121962780
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1121962779}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 573076692}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1121962781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1121962779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cff6c66d9daf2de408f87083b4859ab2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.AudioManager
-  m_MaxSources: 64
 --- !u!1 &1123043293
 GameObject:
   m_ObjectHideFlags: 0
@@ -28873,7 +28749,7 @@ PrefabInstance:
     - target: {fileID: 8344340175939204246, guid: 187b5d9051a9193418881161c2b658cc, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1536491689, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
+      objectReference: {fileID: 9070611, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -36328,6 +36204,43 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.25, y: 0.25}
   m_EdgeRadius: 0
+--- !u!84 &1495869768
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 480
+  m_Height: 270
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1 &1498907342
 GameObject:
   m_ObjectHideFlags: 0
@@ -37426,10 +37339,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 7082941003205810837, guid: aae1b510ade38e94aa1c5964735cb189, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1121962780}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aae1b510ade38e94aa1c5964735cb189, type: 3}
 --- !u!1 &1551963237
@@ -43078,7 +42988,7 @@ PrefabInstance:
     - target: {fileID: 936846824445931431, guid: 0987423758466984aa3c765c093caf7d, type: 3}
       propertyPath: m_TargetTexture
       value: 
-      objectReference: {fileID: 712732441}
+      objectReference: {fileID: 1495869768}
     - target: {fileID: 5625299763618099865, guid: 0987423758466984aa3c765c093caf7d, type: 3}
       propertyPath: m_Name
       value: Camera
@@ -54140,6 +54050,10 @@ PrefabInstance:
       propertyPath: m_CloseStartClip
       value: 
       objectReference: {fileID: 8300000, guid: 992d8f4b8533f4444984edef2bd8fc92, type: 3}
+    - target: {fileID: 7271434745171312301, guid: c75bf7584c467e84c86bd74aac7e167d, type: 3}
+      propertyPath: m_OpenStartClip.m_Source
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7548696107726773175, guid: c75bf7584c467e84c86bd74aac7e167d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 24

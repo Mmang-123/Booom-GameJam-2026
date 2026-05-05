@@ -16,10 +16,10 @@ namespace Game
         [SerializeField] private Color m_InactiveColor = Color.red;
 
         [Header("音效")]
-        [SerializeField] private AudioClip m_OpenStartClip;
-        [SerializeField] private AudioClip m_OpenCompleteClip;
-        [SerializeField] private AudioClip m_CloseStartClip;
-        [SerializeField] private AudioClip m_CloseCompleteClip;
+        [SerializeField] private AudioClipRef m_OpenStartClip;
+        [SerializeField] private AudioClipRef m_OpenCompleteClip;
+        [SerializeField] private AudioClipRef m_CloseStartClip;
+        [SerializeField] private AudioClipRef m_CloseCompleteClip;
 
         private bool m_Active;
         private float m_CurrentDoorLength;
