@@ -32,7 +32,7 @@ namespace Mmang.PixelartRender
                 m_Material = new(m_Shader);
 
             var resourceData = frameData.Get<UniversalResourceData>();
-            UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
+            var cameraData = frameData.Get<UniversalCameraData>();
 
             var camera = cameraData.camera;
             var pixelartCamera = PixelartManager.Instance.GetPixelartCamera(camera, EPixelartCameraType.Cast);

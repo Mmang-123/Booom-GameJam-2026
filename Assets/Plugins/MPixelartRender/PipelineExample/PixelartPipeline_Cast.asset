@@ -21,6 +21,21 @@ MonoBehaviour:
   m_DebugOutput: 0
   m_DebugOutputBuffer: 2
   m_DebugLUT: {fileID: 2800000, guid: 5621ce822426e5340a66586942c57ae8, type: 3}
+--- !u!114 &-474009266295720501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11c8ceac543d6154aa011c7c13d8486c, type: 3}
+  m_Name: DarkSightRendererFeature
+  m_EditorClassIdentifier: Assembly-CSharp::Game.DarkSightRendererFeature
+  m_Active: 1
+  m_Shader: {fileID: 4800000, guid: ef25ec79951b65a48bdbbe018a8dd0f5, type: 3}
+  m_RenderPassEvent: 250
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47,7 +62,8 @@ MonoBehaviour:
     probeVolumeBlendStatesCS: {fileID: 0}
   m_RendererFeatures:
   - {fileID: -9074686452627950976}
-  m_RendererFeatureMap: 80b20f47c03c1082
+  - {fileID: -474009266295720501}
+  m_RendererFeatureMap: 80b20f47c03c1082cb35336e15fb6bf9
   m_UseNativeRenderPass: 0
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}

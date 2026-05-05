@@ -24,8 +24,6 @@
 
             sampler2D _BlitTexture;
             float4 _Resolution;
-            float4 _SubPixelOffset;
-
             float _CameraScale;
 
             half4 Fragment(Varyings input) : SV_Target
@@ -33,12 +31,17 @@
                 GET_BLIT_UV();
                 //return float4(uv, 0, 1);
                 // SubPixel Offset
-                uv += _SubPixelOffset.xy;
+                float aspectRatioTex = 16.0 / 9.0;
+                float aspectRatioScreen = _ScreenParams.x / _ScreenParams.y;
 
                 //
                 //float cameraScale = _CameraScale;
                 // Scale
-                //uv = (uv - 0.5) * cameraScale + 0.5;
+                float2 scale;
+                scale.x = aspectRatioScreen / aspectRatioTex;
+                scale.y = 1.0;
+            
+                uv = (uv - 0.5) * scale + 0.5;
                 
                 if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
                     return half4(0, 0, 0, 1); // Render black if outside bounds

@@ -33,6 +33,7 @@ Transform:
   - {fileID: 1241926612529698266}
   - {fileID: 3504811448404990955}
   - {fileID: 3356014929866678129}
+  - {fileID: 6296023770827828214}
   - {fileID: 7896905919347702269}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -125,6 +126,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07f862f5023bae3438bc90c47ed8bace, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.LightingManager
+--- !u!1 &3765077160020738583
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6296023770827828214}
+  - component: {fileID: 6215114435135318248}
+  m_Layer: 0
+  m_Name: DarkSightManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6296023770827828214
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3765077160020738583}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7082941003205810837}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6215114435135318248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3765077160020738583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96f4930a72bc2be4c9f4e70f7bcc8a06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.DarkSightManager
+  m_CenterPosition: {x: 0, y: 0}
+  m_Radius: 0
 --- !u!1 &5965427249009968203
 GameObject:
   m_ObjectHideFlags: 0
