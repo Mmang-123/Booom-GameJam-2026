@@ -11,7 +11,7 @@ namespace Game
         public string ParticleName => m_ParticleName;
 
         // Runtime
-        public static ParticleSystem System { get; private set; }
+        public ParticleSystem System { get; private set; }
         public bool IsPlaying { get; private set; }
         public bool UseOverrideColor { get; set; }
         public Color OverrideColor { get; set; }
@@ -46,8 +46,11 @@ namespace Game
             
             if (UseOverrideColor)
             {
-                var main = System.main;
-                main.startColor = OverrideColor;
+                foreach (var ps in GetComponentsInChildren<ParticleSystem>(includeInactive: true))
+                {
+                    var main = ps.main;
+                    main.startColor = OverrideColor;
+                }
             }
 
             System.Play();
