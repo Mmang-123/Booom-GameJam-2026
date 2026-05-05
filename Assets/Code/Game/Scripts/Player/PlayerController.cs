@@ -33,6 +33,8 @@ namespace Game
 
         public void ControlFish(Fish fish)
         {
+            m_FishConfig = PlayerConfig.GetConfig(fish.FishTypeTag);
+
             fish.SetController(this);
             SetFish(fish);
 
@@ -41,7 +43,11 @@ namespace Game
                 behaviour.CanAvoidance = false;
             }
 
-            m_FishConfig = PlayerConfig.GetConfig(fish.FishTypeTag);
+            if (fish.TryGetBehaviour<FB_Eat>(out var eatBehaviour))
+            {
+                eatBehaviour.UseOverrideEatDistance = true;
+                eatBehaviour.OverrideEatDistance = m_FishConfig.EatDistance;
+            }
         }
 
         public void LoseControl(IFishController newController)

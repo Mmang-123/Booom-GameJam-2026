@@ -58,7 +58,7 @@ MonoBehaviour:
       - m_Guid: dd157287-33e2-4403-ba4c-cbe22f78f346
     m_OpenMouseDistance: 4.5
     m_OpenMouseAngle: 40
-    m_EatDistance: 1.8
+    m_EatDistance: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
