@@ -221,6 +221,7 @@ MonoBehaviour:
   m_EDirection: 0
   m_AutoFlip: 0
   m_FlipRoot: {fileID: 5428743268945966197}
+  m_InfectedLevel: 0
   m_SporeRenderer1: {fileID: 0}
   m_SporeRenderer2: {fileID: 0}
   m_BodyRenderer: {fileID: 7378699115958009860}
@@ -233,7 +234,9 @@ MonoBehaviour:
   m_InfectedLightColor: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}
   m_InitSaturation: 50
   m_MaxSaturation: 50
-  m_InfectedLevel: 0
+  m_EatenParticle: {fileID: 953416650970146418, guid: 9bf9c33daa71f8748a41f43dd178aa87, type: 3}
+  m_DefaultEatenParticleColor: {r: 0.30588236, g: 1, b: 0.9098039, a: 1}
+  m_InfectedEatenParticleColor: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}
 --- !u!114 &7792305372667502108
 MonoBehaviour:
   m_ObjectHideFlags: 0

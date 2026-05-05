@@ -214,13 +214,30 @@ namespace Game
             CircleCollider2D suckTarget = m_EatRanges.Count > 0 ? m_EatRanges[0] : null;
             foreach (var fish in toEat)
             {
+                if (fish == Target)
+                {
+                    Target = null;
+                }
+
                 if (fish.IsPlayer)
                 {
                     infected = true;
                     Fish.AddInfectedLevel();
                     PlayerController.Instance.DisableControl(1.2f);
                     PlayerController.Instance.ControlFish(Fish);
-                    Target = null;
+                }
+                else if (fish.InfectedLevel >= EInfectedLevel.Mid)
+                {
+                    infected = true;
+                    Fish.AddInfectedLevel();
+                }
+
+                if (fish.EatenParticle != null)
+                {
+                    var particleInstance = ParticleUtils.Create(fish.EatenParticle, fish.Position, Quaternion.LookRotation(Fish.ForwardDirection));
+                    var particleColor = fish.InfectedLevel >= EInfectedLevel.Mid ? fish.InfectedEatenParticleColor : fish.DefaultEatenParticleColor;
+                    particleInstance.SetOverrideColor(particleColor);
+                    particleInstance.StartPlay();
                 }
 
                 if (suckTarget != null)

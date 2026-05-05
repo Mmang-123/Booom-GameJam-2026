@@ -12,3 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
   m_Name: Particle Config
   m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
+  m_Data:
+  - {fileID: 953416650970146418, guid: 9bf9c33daa71f8748a41f43dd178aa87, type: 3}

@@ -40,6 +40,7 @@ namespace Game
         [SerializeField] private Transform m_FlipRoot;
 
         [Header("感染设置")]
+        [SerializeField] private EInfectedLevel m_InfectedLevel = EInfectedLevel.None;
         [SerializeField] private SpriteRenderer m_SporeRenderer1;
         [SerializeField] private SpriteRenderer m_SporeRenderer2;
         [SerializeField] private SpriteRenderer m_BodyRenderer;
@@ -49,12 +50,20 @@ namespace Game
         [SerializeField] private bool m_SetLightColor = false;
         [SerializeField] private Color m_DefaultLightColor;
         [SerializeField] private Color m_InfectedLightColor;
+        
 
         [Header("饱食度")]
         [SerializeField] private float m_InitSaturation = 100f;
         [SerializeField] private float m_MaxSaturation = 100f;
 
-        [SerializeField] private EInfectedLevel m_InfectedLevel = EInfectedLevel.None;
+        [Header("粒子设置")]
+        [SerializeField] private ParticleComponent m_EatenParticle;
+        [SerializeField] private Color m_DefaultEatenParticleColor;
+        [SerializeField] private Color m_InfectedEatenParticleColor;
+        public ParticleComponent EatenParticle => m_EatenParticle;
+        public Color DefaultEatenParticleColor => m_DefaultEatenParticleColor;
+        public Color InfectedEatenParticleColor => m_InfectedEatenParticleColor;
+
 
         // Static
         private static Dictionary<EDirection, Vector2> s_DirectionMap = new()
@@ -81,6 +90,8 @@ namespace Game
 
         public float Saturation { get; private set; }
         public float MaxSaturation => m_MaxSaturation;
+
+        public EInfectedLevel InfectedLevel => m_InfectedLevel;
 
         public EDirection EDirection => m_EDirection;
         public Vector2 ForwardDirection => transform.rotation * s_DirectionMap[m_EDirection];
