@@ -311,6 +311,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
   m_Name: ParticleConfig
   m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
+--- !u!114 &-1517968722863107311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
+  m_Name: ParticleConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -553,6 +565,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
   m_Name: ParticleConfig
   m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
+--- !u!114 &8748170025748500886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
+  m_Name: ParticleConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
 --- !u!114 &8804263847520304272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -566,6 +590,18 @@ MonoBehaviour:
   m_Name: ParticleConfig
   m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
 --- !u!114 &8845170018400680060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba208cc29c5a00e44aa3e68e2d2ee3ee, type: 3}
+  m_Name: ParticleConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ParticleConfig
+--- !u!114 &9166616021114048071
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
