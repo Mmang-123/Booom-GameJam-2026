@@ -83,6 +83,7 @@ namespace Game
         #endregion
 
         // Runtime
+        private bool m_Inited = false;
         private List<PointData> m_PointDataList;
         private float m_PointConductionTime;
         private float m_PointMaintainTime;
@@ -92,6 +93,18 @@ namespace Game
 
         private void Start()
         {
+            Init();
+        }
+
+        public void InitPowerSource()
+            => Init();
+
+        private void Init()
+        {
+            if (m_Inited)
+                return;
+            m_Inited = true;
+
             m_PointDataList = new(m_Points.Count);
             for (int i = MaxPowerPointCount - 1; i >= 0; i--)
             {
@@ -108,6 +121,16 @@ namespace Game
                 PowerSourceHandler.AddPowerSource(m_PowerSource.Value);
             if (m_ChargeObject.Value != null)
                 m_ChargeObject.Value.PowerSourceHandler.AddPowerSource(this);
+
+            if (m_PowerSource.Value != null)
+            {
+                m_PowerSource.Value.InitPowerSource();
+                if (m_PowerSource.Value.PowerOn)
+                {
+                    ChargeAllPoint();
+                    m_ChargeObject.Value?.SetChargeComplete();   
+                }
+            }
         }
 
         private void FixedUpdate()
@@ -169,9 +192,14 @@ namespace Game
             HashSetPool<int>.Release(changed);
         }
 
+        public void SetChargeComplete() => ChargeAllPoint();
         public void ChargeAllPoint()
         {
-            
+            for (int i = 0; i < MaxPowerPointCount; i++)
+            {
+                SetPointActive(i, true);
+            }
+            SetPowerOn(true);
         }
 
         private void SetPointActive(int index, bool active)

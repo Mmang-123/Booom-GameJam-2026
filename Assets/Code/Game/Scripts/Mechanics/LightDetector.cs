@@ -20,16 +20,23 @@ namespace Game
         public Color InactiveColor = Color.red;
 
         // Runtime
+        private bool m_Inited = false;
         private float m_ActiveTimer;
         private bool m_Active;
 
         private void Start()
         {
-            m_Active = m_InitTurnOn;
-            if (m_Active)
-            {
-                
-            }
+            InitPowerSource();
+        }
+
+        public void InitPowerSource()
+        {
+            if (m_Inited)
+                return;
+            m_Inited = true;
+
+            SetActive(m_InitTurnOn);
+            m_EmissionLight.color = m_Active ? ActiveColor : InactiveColor;
         }
 
         private void FixedUpdate()

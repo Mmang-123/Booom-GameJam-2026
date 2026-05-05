@@ -5,5 +5,7 @@ namespace Game
     {
         public bool PowerOn { get; }
         public event System.Action<bool> OnPowerChanged;
+    
+        public void InitPowerSource();
     }
 }

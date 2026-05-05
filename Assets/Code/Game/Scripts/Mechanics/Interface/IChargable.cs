@@ -6,5 +6,7 @@ namespace Game
     {
         public PowerSourceHandler PowerSourceHandler { get; }
         public bool IsPowered { get; }
+
+        public void SetChargeComplete();
     }
 }

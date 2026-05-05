@@ -92,5 +92,11 @@ namespace Game
                 m_BoxCollider.offset = pos;
             }
         }
+
+        public void SetChargeComplete()
+        {
+            SetActive(true);
+            SetDoorLength(0f);
+        }
     }
 }

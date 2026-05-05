@@ -126,5 +126,11 @@ namespace Game
                 m_Box.transform.localPosition = pos;
             }
         }
+
+        public void SetChargeComplete()
+        {
+            SetActive(true);
+            MoveBox(1);
+        }
     }
 }
