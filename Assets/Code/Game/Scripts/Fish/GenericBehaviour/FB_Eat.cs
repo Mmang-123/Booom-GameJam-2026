@@ -225,6 +225,7 @@ namespace Game
                 {
                     infected = true;
                     Fish.AddInfectedLevel();
+                    fish.SetController(null);
                     PlayerController.Instance.DisableControl(0.8f);
                     PlayerController.Instance.ControlFish(Fish);
                 }
@@ -240,6 +241,12 @@ namespace Game
                     var particleColor = fish.InfectedLevel >= EInfectedLevel.Mid ? fish.InfectedEatenParticleColor : fish.DefaultEatenParticleColor;
                     particleInstance.SetOverrideColor(particleColor);
                     particleInstance.StartPlay();
+                }
+
+                if (fish.FishController != null)
+                {
+                    Debug.Log(fish + " " + fish.FishController);
+                    fish.SetController(null);
                 }
 
                 if (suckTarget != null)

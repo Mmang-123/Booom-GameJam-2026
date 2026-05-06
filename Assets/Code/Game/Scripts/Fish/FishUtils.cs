@@ -10,6 +10,8 @@ namespace Game
         public static readonly LayerMask WithoutFishLayer = ~FishLayer;
         private static Collider2D[] s_ColliderCache = new Collider2D[64];
 
+
+        #region Physics
         public static void GetFishInCircle(Vector2 center, float radius, List<Fish> result, bool onlyLiving = true, bool clearResultList = true, Fish ignoreFish = null)
         {
             HashSet<Fish> fishSet = HashSetPool<Fish>.Get();
@@ -84,6 +86,24 @@ namespace Game
             return hitCount > 0 ? s_RaycastHitCache[0] : default;
         }
 
+        public static int OverlapCircleObstacle(Vector2 center, float radius, out Collider2D[] outColliders)
+        {
+            ContactFilter2D filter = new()
+            {
+                useTriggers = false,
+                useLayerMask = true,
+                layerMask = WithoutFishLayer
+            };
+
+            int colliderCount = Physics2D.OverlapCircle(center, radius, filter, s_ColliderCache);
+            outColliders = s_ColliderCache;
+            return colliderCount;
+        }
+
+        #endregion
+
+
+        #region Create
         public static (FishAIComponent ai, Fish fish) Create(FishAIComponent aiPrefab, Fish fishPrefab, Vector2 position, Quaternion rotation)
         {
             (FishAIComponent ai, Fish fish) result = new();
@@ -97,5 +117,8 @@ namespace Game
 
             return result;
         }
+
+
+        #endregion
     }
 }

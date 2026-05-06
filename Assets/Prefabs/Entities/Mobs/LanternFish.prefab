@@ -1,5 +1,73 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3782319066372878177
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5731313133631675711}
+  - component: {fileID: 1567890010333060962}
+  m_Layer: 7
+  m_Name: DieCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5731313133631675711
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3782319066372878177}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.114, y: -0.013, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4800681294185171314}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &1567890010333060962
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3782319066372878177}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.2
 --- !u!1 &4216926380329810113
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,6 +431,7 @@ Transform:
   m_Children:
   - {fileID: 5428743268945966197}
   - {fileID: 2469058782404223549}
+  - {fileID: 5731313133631675711}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2797730967065995784
@@ -382,6 +451,10 @@ MonoBehaviour:
   m_EDirection: 2
   m_AutoFlip: 1
   m_FlipRoot: {fileID: 5428743268945966197}
+  m_DieCollider: {fileID: 1567890010333060962}
+  m_DieCollisionTime: 0.1
+  m_DieCollisionParticle: {fileID: 953416650970146418, guid: 172564a4c83de894d8f2711225b54322, type: 3}
+  m_InfectedLevel: 0
   m_SporeRenderer1: {fileID: 531898999858827687}
   m_SporeRenderer2: {fileID: 7487976368210890969}
   m_BodyRenderer: {fileID: 7378699115958009860}
@@ -394,7 +467,9 @@ MonoBehaviour:
   m_InfectedLightColor: {r: 0, g: 0, b: 0, a: 0}
   m_InitSaturation: 100
   m_MaxSaturation: 100
-  m_InfectedLevel: 0
+  m_EatenParticle: {fileID: 0}
+  m_DefaultEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
+  m_InfectedEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &547956989833178184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -588,11 +663,16 @@ MonoBehaviour:
   m_CD: 0.5
   m_DashSpeed: 16
   m_DashEndDamping: 16
+  m_PreRotateSpeed: 12
   m_AfterimageTint: {r: 1, g: 1, b: 1, a: 0.8}
   m_AfterimageFadeDuration: 0.25
   m_AfterimageInterval: 0.05
   m_AfterimageSpawnDuration: 0.4
   m_AfterimageMaterial: {fileID: 2100000, guid: 8784ce32ca7776a4e8ce240208dd817a, type: 2}
+  m_DashStartClip:
+    m_Source: 0
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 0}
 --- !u!1 &6380261139651368926
 GameObject:
   m_ObjectHideFlags: 0

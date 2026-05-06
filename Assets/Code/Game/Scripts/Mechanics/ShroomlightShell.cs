@@ -30,6 +30,10 @@ namespace Game
         //private float m_ActiveTimer = 0f;
         //public bool Active => m_Active;
 
+        private void Start()
+        {
+            m_IndicatorRenderer.color = m_Active ? Color.green : Color.red;
+        }
 
         private void FixedUpdate()
         {

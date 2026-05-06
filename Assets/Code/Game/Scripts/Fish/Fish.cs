@@ -39,6 +39,12 @@ namespace Game
         [SerializeField] private bool m_AutoFlip = true; // 应该仅对向左向右的朝向有用
         [SerializeField] private Transform m_FlipRoot;
 
+        [Header("挤压死亡设置")]
+        [SerializeField] private CircleCollider2D m_DieCollider;
+        [SerializeField] private float m_DieCollisionTime = 0.1f;
+        [SerializeField] private float m_DieCollisionMaxSpeed = 1f;
+        [SerializeField] private ParticleComponent m_DieCollisionParticle;
+
         [Header("感染设置")]
         [SerializeField] private EInfectedLevel m_InfectedLevel = EInfectedLevel.None;
         [SerializeField] private SpriteRenderer m_SporeRenderer1;
@@ -88,6 +94,9 @@ namespace Game
         private Dictionary<System.Type, FishBehaviour> m_BehaviourMap = new();
         private bool m_FacingLeft = false; // 这里是相机角度的左右
 
+        private float m_DieCollisionTimer;
+        private Vector2 m_CollisionLastFramePosition;
+
         public float Saturation { get; private set; }
         public float MaxSaturation => m_MaxSaturation;
 
@@ -97,7 +106,8 @@ namespace Game
         public Vector2 ForwardDirection => transform.rotation * s_DirectionMap[m_EDirection];
         public Vector2 Position => transform.position;
 
-        public bool IsLiving => Saturation > 0f;
+        private bool m_Dead = false;
+        public bool IsLiving => !m_Dead;
 
         private Vector2 m_TotalMotion;
 
@@ -140,6 +150,9 @@ namespace Game
 
             foreach (var behaviour in m_Behaviours)
             {
+                if (!behaviour.enabled)
+                    continue;
+
                 m_BehaviourMap.Add(behaviour.GetType(), behaviour);
                 behaviour.Init(this);
             }
@@ -156,20 +169,30 @@ namespace Game
 
         private void Update()
         {
+            if (m_Dead)
+                return;
+
             foreach (var behaviour in m_Behaviours)
             {
-                behaviour.BeforeFishUpdate();
+                if (behaviour.enabled)
+                    behaviour.BeforeFishUpdate();
             }
         }
 
         private void FixedUpdate()
         {
+            if (m_Dead)
+                return;
+
             foreach (var behaviour in m_Behaviours)
             {
-                behaviour.BeforeFishFixedUpdate();
+                if (behaviour.enabled)
+                    behaviour.BeforeFishFixedUpdate();
             }
             m_Rigidbody.MovePosition(m_TotalMotion + (Vector2)transform.position);
             m_TotalMotion = Vector2.zero;
+
+            CheckDieCollision(Time.fixedDeltaTime);
         }
 
         #region Behaviour
@@ -270,20 +293,40 @@ namespace Game
             Saturation = Mathf.Min(MaxSaturation, Saturation + value);
         }
 
-        public void Die(EDieType dieType, Vector2 suckPosition = default)
+        public void Die(EDieType dieType)
         {
+            if (m_Dead)
+                return;
+
+            Debug.Log("Die");
+
+            if (FishController != null)
+            {
+                SetController(null);
+            }
+
+            m_Dead = true;
             Saturation = 0f;
             if (dieType == EDieType.Eaten)
             {
                 gameObject.SetActive(false);
                 return;
             }
-            else
+            else if (dieType == EDieType.Hunger)
             {
-                // TODO: 感染扩散
                 if (TryGetBehaviour<FB_GenericAnimator>(out var animatorBehaviour))
                 {
                     animatorBehaviour.TriggerDieAnimation();
+                }
+            }
+            else
+            {
+                gameObject.SetActive(false);
+                if (m_DieCollisionParticle != null)
+                {
+                    var particle = ParticleUtils.Create(m_DieCollisionParticle, Position, Quaternion.Euler(-90f, 0f, 0f));
+                    particle.SetOverrideColor(m_InfectedLevel >= EInfectedLevel.High ? m_InfectedBodyColor : m_DefaultBodyColor);
+                    particle.StartPlay();
                 }
             }
         }
@@ -342,6 +385,37 @@ namespace Game
                 if (m_BodyRenderer != null) m_BodyRenderer.color = m_InfectedBodyColor;
                 if (m_Light.Value != null && m_SetLightColor) m_Light.Value.LightColor = m_InfectedLightColor;
             }
+        }
+
+        #endregion
+
+
+        #region 挤压死亡
+
+        private void CheckDieCollision(float dt)
+        {
+            if (m_DieCollider == null)
+                return;
+            
+            Vector2 center = Position + m_DieCollider.offset;
+            float radius = m_DieCollider.radius;
+
+            int count = FishUtils.OverlapCircleObstacle(center, radius, out var colliders);
+            if (count > 0)
+            {
+                float speed = Vector2.Distance(Position, m_CollisionLastFramePosition) / dt;
+                m_DieCollisionTimer += dt;
+                if (m_DieCollisionTimer >= m_DieCollisionTime && speed <= m_DieCollisionMaxSpeed)
+                {
+                    Die(EDieType.Other);
+                }
+            }
+            else
+            {
+                m_DieCollisionTimer = 0f;
+            }
+
+            m_CollisionLastFramePosition = Position;
         }
 
         #endregion

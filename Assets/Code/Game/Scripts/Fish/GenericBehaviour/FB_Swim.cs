@@ -234,13 +234,11 @@ namespace Game
                 {
                     turnDir = -1;
                     hitNormal = hitLeft.normal;
-                    Debug.Log(hitLeft.collider);
                 }
                 else
                 {
                     turnDir = 1;
                     hitNormal = hitRight.normal;
-                    Debug.Log(hitRight.collider);
                 }
             }
             else if (hitLeft)

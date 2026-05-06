@@ -52,8 +52,6 @@ namespace Game
 
         public void LoseControl(IFishController newController)
         {
-            // 这大概是不会发生的
-            Debug.Log("发生了什么???");
             SetFish(null);
         }
 
@@ -89,6 +87,11 @@ namespace Game
 
         private void Update()
         {
+            if (Fish == null)
+            {
+                return;
+            }
+
             if (!Active)
             {
                 if (DisableTimer > 0f)
@@ -112,6 +115,11 @@ namespace Game
 
         private void FixedUpdate()
         {
+            if (Fish == null)
+            {
+                return;
+            }
+            
             if (m_FishConfig != null && m_FishConfig.CanEatTags.Count > 0)
             {
                 HuntUpdate();
