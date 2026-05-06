@@ -127,9 +127,13 @@ namespace Game
             }
         }
 
-        public void SetChargeComplete()
+        public void SetChargeComplete(bool init)
         {
-            SetActive(true);
+            m_Active = true;
+            if (m_Emission != null)
+            {
+                m_Emission.color = Color.green;
+            }
             MoveBox(1);
         }
     }

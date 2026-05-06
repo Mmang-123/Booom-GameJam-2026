@@ -18,7 +18,6 @@ namespace Game
         
         private float IntensityUpdateRate => 1.0f / 1.0f;
 
-        private bool m_Inited;
         private bool m_Active;
         private float m_IntensityT = 0f; // [0,1] 用于 smoothstep
 
@@ -31,21 +30,6 @@ namespace Game
         //private float m_ActiveTimer = 0f;
         //public bool Active => m_Active;
 
-        private void Start()
-        {
-            Init();
-        }
-
-        private void Init()
-        {
-            if (m_Inited)
-                return;
-            m_Inited = true;
-
-            m_IntensityT = m_Active ? 1f : 0f;
-            m_Light.LightIntensity = m_Active ? m_LightIntensity : 0f;
-            m_IndicatorRenderer.color = m_Active ? Color.green : Color.red;
-        }
 
         private void FixedUpdate()
         {
@@ -85,12 +69,30 @@ namespace Game
             AudioManager.PlayAtPosition(m_Active ? m_LitClip : m_UnlitClip, transform.position);
         }
 
-        public void SetChargeComplete()
+        public void SetChargeComplete(bool init)
         {
-            Init();
-            SetActive(true);
+            if (init)
+            {
+                m_Active = true;
+                if (m_Animator != null)
+                {
+                    m_Animator.SetTrigger("InitLit");
+                }
+
+                if (m_Particle != null)
+                {
+                    m_Particle.Play();
+                }
+            }
+            else
+            {
+                m_Active = false;
+                SetActive(true);
+            }
+
             m_IntensityT = 1f;
-            m_Light.LightIntensity = Mathf.SmoothStep(0f, m_LightIntensity, m_IntensityT);
+            m_Light.LightIntensity = m_LightIntensity;
+            m_IndicatorRenderer.color = Color.green;
         }
 
     }

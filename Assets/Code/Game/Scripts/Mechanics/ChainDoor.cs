@@ -85,13 +85,13 @@ namespace Game
             }
         }
 
-        private void SetActive(bool active)
+        private void SetActive(bool active, bool playSFX = true)
         {
             bool changed = (m_Active != active);
             m_Active = active;
             m_Emission.color = active ? m_ActiveColor : m_InactiveColor;
 
-            if (!m_IsInitializing && changed)
+            if (!m_IsInitializing && playSFX && changed)
             {
                 AudioManager.StopManaged(ref m_CurrentStartSource);
                 AudioManager.StopManaged(ref m_CurrentCompleteSource);
@@ -117,9 +117,9 @@ namespace Game
             }
         }
 
-        public void SetChargeComplete()
+        public void SetChargeComplete(bool init)
         {
-            SetActive(true);
+            SetActive(true, false);
             SetDoorLength(0f);
         }
     }

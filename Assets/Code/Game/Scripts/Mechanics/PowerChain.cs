@@ -128,7 +128,7 @@ namespace Game
                 if (m_PowerSource.Value.PowerOn)
                 {
                     ChargeAllPoint();
-                    m_ChargeObject.Value?.SetChargeComplete();   
+                    m_ChargeObject.Value?.SetChargeComplete(true);   
                 }
             }
         }
@@ -192,7 +192,7 @@ namespace Game
             HashSetPool<int>.Release(changed);
         }
 
-        public void SetChargeComplete() => ChargeAllPoint();
+        public void SetChargeComplete(bool init) => ChargeAllPoint();
         public void ChargeAllPoint()
         {
             for (int i = 0; i < MaxPowerPointCount; i++)
