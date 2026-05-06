@@ -162,7 +162,7 @@ Transform:
   m_GameObject: {fileID: 1821758770603722603}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 2.75, y: 0, z: 0}
+  m_LocalPosition: {x: 2.75, y: 0.09375, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -183,7 +183,7 @@ MonoBehaviour:
   Color: {r: 0.15686275, g: 0.7764706, b: 1, a: 1}
   Radius: 20
   InnerRadius: 6
-  CullRadius: 2.5
+  CullRadius: 3.2
   Intensity: 2
   InnerSpotAngle: 6
   OuterSpotAngle: 14
@@ -462,8 +462,8 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -671510840, guid: 12a0a9f13bcb59444a1373bf6d0ed8c5, type: 3}
-  m_Color: {r: 1, g: 0.62352943, b: 0.30588236, a: 1}
+  m_Sprite: {fileID: 996645787, guid: a0a76536a1430ec46bc847ecfa89a365, type: 3}
+  m_Color: {r: 0.30588236, g: 0.5568628, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -583,7 +583,7 @@ GameObject:
   - component: {fileID: 5510856951906963692}
   - component: {fileID: 6348870181558747593}
   m_Layer: 7
-  m_Name: FlashLightFish
+  m_Name: Flishlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -597,8 +597,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7831748096374912259}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.1, y: -6.42, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -628,6 +628,7 @@ MonoBehaviour:
   m_FlipRoot: {fileID: 3476970104418147691}
   m_DieCollider: {fileID: 4802785153909933892}
   m_DieCollisionTime: 0.1
+  m_DieCollisionMaxSpeed: 1
   m_DieCollisionParticle: {fileID: 953416650970146418, guid: 172564a4c83de894d8f2711225b54322, type: 3}
   m_InfectedLevel: 0
   m_SporeRenderer1: {fileID: 663086709337804699}
@@ -635,7 +636,7 @@ MonoBehaviour:
   m_BodyRenderer: {fileID: 5539121963303674259}
   m_Light:
     m_Object: {fileID: 0}
-  m_DefaultBodyColor: {r: 1, g: 0.62352943, b: 0.30588236, a: 1}
+  m_DefaultBodyColor: {r: 0.30588236, g: 0.5568628, b: 1, a: 1}
   m_InfectedBodyColor: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}
   m_SetLightColor: 0
   m_DefaultLightColor: {r: 0, g: 0, b: 0, a: 0}
@@ -797,7 +798,7 @@ Animator:
   m_GameObject: {fileID: 7831748096374912259}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7cdc82f398caa1b42a787ebebbcdf8d3, type: 2}
+  m_Controller: {fileID: 9100000, guid: e5949147b5e3638469be783b5b2d42ca, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
