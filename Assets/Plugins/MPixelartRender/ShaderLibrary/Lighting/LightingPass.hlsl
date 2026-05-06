@@ -136,6 +136,7 @@ void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
     float2 lightPos = SnapLightPoisition(light.position.xy);
     float innerRadius = light.position.z;
     float radius = light.position.w;
+    float cullRadius = light.lightParams2.x;
     
     half3 lightColor = light.color.rgb;
     half intensity = light.color.w;
@@ -143,9 +144,12 @@ void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
     float2 lightDir = light.lightParams1.xy;
     float2 scaleOffset = light.lightParams1.zw;
 
+    //
+    float height = dot(positionWS - lightPos, lightDir);
+
     // 
     float dist = distance(positionWS.xy, lightPos);
-    if (dist > radius)
+    if (dist > radius || height < cullRadius)
         return;
 
     // 距离衰减

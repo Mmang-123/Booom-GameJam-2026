@@ -94,7 +94,7 @@ Transform:
   m_GameObject: {fileID: 1821758770603722603}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.55, y: 0, z: 0}
+  m_LocalPosition: {x: 2.75, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -113,11 +113,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Mmang.PixelartRender.MSpotPointLight
   Color: {r: 0.15686275, g: 0.7764706, b: 1, a: 1}
-  Radius: 16
-  InnerRadius: 3
+  Radius: 20
+  InnerRadius: 6
+  CullRadius: 2.5
   Intensity: 2
-  InnerSpotAngle: 8
-  OuterSpotAngle: 20
+  InnerSpotAngle: 6
+  OuterSpotAngle: 14
 --- !u!1 &2099505847526325485
 GameObject:
   m_ObjectHideFlags: 0

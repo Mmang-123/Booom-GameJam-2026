@@ -3,7 +3,7 @@
 #include "../../Lighting/Lighting.hlsl"
 #include "../Sprite/Background.hlsl"
 #include "../Sprite/SpriteShading.hlsl"
-
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Packing.hlsl"
 
 VaryingsParticle PixelartVert(PixelartParticleInput input)
 {

@@ -2799,7 +2799,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Mmang.PixelartRender.MSpotPointLight
   Color: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}
   Radius: 10
-  InnerRadius: 0.3
+  InnerRadius: 5.5
+  CullRadius: 0
   Intensity: 1
   InnerSpotAngle: 30
   OuterSpotAngle: 60
@@ -2812,7 +2813,7 @@ Transform:
   m_GameObject: {fileID: 168672532}
   serializedVersion: 2
   m_LocalRotation: {x: 0.008193936, y: -0.0030020403, z: -0.34399882, w: 0.9389296}
-  m_LocalPosition: {x: -2.1, y: -17.8, z: -0.03}
+  m_LocalPosition: {x: 3.4, y: -6.69, z: -0.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3299,6 +3300,43 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.25, y: 0.25}
   m_EdgeRadius: 0
+--- !u!84 &206100220
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 480
+  m_Height: 270
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1 &206456443
 GameObject:
   m_ObjectHideFlags: 0
@@ -9176,43 +9214,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
---- !u!84 &569520065
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 480
-  m_Height: 270
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1 &571071529
 GameObject:
   m_ObjectHideFlags: 0
@@ -17997,7 +17998,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 569520065}
+  m_TargetTexture: {fileID: 206100220}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -34408,6 +34409,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3928821490010108098, guid: 042248a9f88831a4cb67dafd8c45aad3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.22
+      objectReference: {fileID: 0}
     - target: {fileID: 7831748096374912259, guid: 042248a9f88831a4cb67dafd8c45aad3, type: 3}
       propertyPath: m_Name
       value: FlashLightFish

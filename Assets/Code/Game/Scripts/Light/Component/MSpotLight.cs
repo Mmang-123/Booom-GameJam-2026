@@ -13,6 +13,7 @@ namespace Mmang.PixelartRender
         public Color Color = Color.white;
         public float Radius = 1f;
         public float InnerRadius = 0.3f;
+        public float CullRadius = 0.2f;
         public float Intensity = 1f;
         public float InnerSpotAngle;       // 内锥角（度）
         public float OuterSpotAngle;       // 外锥角（度）

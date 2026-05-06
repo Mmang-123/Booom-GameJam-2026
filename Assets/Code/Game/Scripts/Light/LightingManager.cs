@@ -127,6 +127,7 @@ namespace Mmang.PixelartRender
                     color = new Vector4(spotLight.Color.r, spotLight.Color.g, spotLight.Color.b, spotLight.Intensity),
                     position = new Vector4(spotLight.Position.x, spotLight.Position.y, spotLight.InnerRadius * spotLight.ScaleFactor, spotLight.LightRadius),
                     lightParams1 = new(direction.x, direction.y, scaleOffset.x, scaleOffset.y),
+                    lightParams2 = new(spotLight.CullRadius, 0),
                 };
 
                 m_DataArray[i] = data;
