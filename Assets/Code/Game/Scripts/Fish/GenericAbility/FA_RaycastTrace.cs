@@ -163,7 +163,7 @@ namespace Game
                 m_SearchNewTargetTimer += dt;
                 if (m_SearchNewTargetTimer >= m_SearchNewTargetIntervalTime)
                 {
-                    Debug.Log("Find New Target");
+                    // Debug.Log("Find New Target");
                     m_SearchNewTargetTimer = 0f;
                     if (FindTarget(out var newTarget, ignoreCurrentTarget: true))
                     {
