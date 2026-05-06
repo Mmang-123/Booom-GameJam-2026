@@ -30,4 +30,20 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4e604eee178b51b43ba6bbd7bc3022a6, type: 3}
   - {fileID: 8300000, guid: 4e604eee178b51b43ba6bbd7bc3022a6, type: 3}
   - {fileID: 8300000, guid: 4e604eee178b51b43ba6bbd7bc3022a6, type: 3}
-  m_TheHarmony: []
+  m_TheHarmony:
+  - {fileID: 8300000, guid: 30e457b8f55fe564eaa454a70dad80bf, type: 3}
+  - {fileID: 8300000, guid: 30e457b8f55fe564eaa454a70dad80bf, type: 3}
+  - {fileID: 8300000, guid: 30e457b8f55fe564eaa454a70dad80bf, type: 3}
+  - {fileID: 8300000, guid: 30e457b8f55fe564eaa454a70dad80bf, type: 3}
+  - {fileID: 8300000, guid: 0562ca1c6b21b3a4f92c98786c688c24, type: 3}
+  - {fileID: 8300000, guid: 0562ca1c6b21b3a4f92c98786c688c24, type: 3}
+  - {fileID: 8300000, guid: 0562ca1c6b21b3a4f92c98786c688c24, type: 3}
+  - {fileID: 8300000, guid: 0562ca1c6b21b3a4f92c98786c688c24, type: 3}
+  - {fileID: 8300000, guid: cc053fa2b8c5284418fc1b2ddb303369, type: 3}
+  - {fileID: 8300000, guid: cc053fa2b8c5284418fc1b2ddb303369, type: 3}
+  - {fileID: 8300000, guid: cc053fa2b8c5284418fc1b2ddb303369, type: 3}
+  - {fileID: 8300000, guid: cc053fa2b8c5284418fc1b2ddb303369, type: 3}
+  - {fileID: 8300000, guid: 4e604eee178b51b43ba6bbd7bc3022a6, type: 3}
+  - {fileID: 8300000, guid: 4e604eee178b51b43ba6bbd7bc3022a6, type: 3}
+  - {fileID: 8300000, guid: 4e604eee178b51b43ba6bbd7bc3022a6, type: 3}
+  - {fileID: 8300000, guid: 4e604eee178b51b43ba6bbd7bc3022a6, type: 3}
