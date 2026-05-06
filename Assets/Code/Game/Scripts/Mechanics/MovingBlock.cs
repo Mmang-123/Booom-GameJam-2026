@@ -6,16 +6,18 @@ namespace Game
     public class MovingBlock : MonoBehaviour, IChargable
     {
         [SerializeField] private bool m_Reverse;
+        [SerializeField] private Vector2 m_BoxSize = new(3f, 3f);
         [SerializeField] private float m_ChainLength = 6f;
         [SerializeField] private float m_MoveTime = 0.5f;
 
         [SerializeField] private BoxCollider2D m_Box;
+        [SerializeField] private SpriteRenderer m_BoxRenderer;
         [SerializeField] private SpriteRenderer m_ChainRenderer;
         [SerializeField] private SpriteRenderer m_ChainEndRenderer;
         [SerializeField] private SpriteRenderer m_Emission;
 
-        public float StartDistance => 2f;
-        public float EndDistance => StartDistance + m_ChainLength - 3f;
+        public float StartDistance => 0.5f + 0.0625f + m_BoxSize.x / 2f;
+        public float EndDistance => StartDistance + m_ChainLength - m_BoxSize.x - 0.125f;
 
         #region IChargable
         public PowerSourceHandler PowerSourceHandler { get; } = new();
@@ -30,6 +32,7 @@ namespace Game
 
 #if UNITY_EDITOR
         private float m_OldChainLength;
+        private Vector2 m_OldBoxSize;
         private bool m_OldReverse;
 #endif
 
@@ -54,6 +57,20 @@ namespace Game
                     m_OldReverse = m_Reverse;
                     if (m_Box != null)
                     {
+                        Vector2 pos = new(m_Reverse ? EndDistance : StartDistance, 0f);
+                        m_Box.transform.localPosition = pos;   
+                    }
+                }
+                if (m_OldBoxSize != m_BoxSize)
+                {
+                    m_OldBoxSize = m_BoxSize;
+                    if (m_BoxRenderer != null)
+                    {
+                        m_BoxRenderer.size = m_BoxSize + new Vector2(0.125f, 0.125f);
+                    }
+                    if (m_Box != null)
+                    {
+                        m_Box.size = m_BoxSize;
                         Vector2 pos = new(m_Reverse ? EndDistance : StartDistance, 0f);
                         m_Box.transform.localPosition = pos;   
                     }
