@@ -8,6 +8,7 @@ namespace Game
 {
     public class LightingTextureManager : SingletonMono<LightingTextureManager>
     {
+        [SerializeField] private Shader m_ReadLightShader;
         [SerializeField] private uint m_UpdateIntervalFrameCount = 4;
 
         //
@@ -34,7 +35,8 @@ namespace Game
             if (m_ReadShadowMaterial != null)
                 return;
             
-            Shader shader = Shader.Find("Hidden/Mmang/Pixelart/Blit/ReadLighting");
+            //Shader shader = Shader.Find("Hidden/Mmang/Pixelart/Blit/ReadLighting");
+            var shader = m_ReadLightShader;
             m_ReadShadowMaterial = new(shader);
         }
 
