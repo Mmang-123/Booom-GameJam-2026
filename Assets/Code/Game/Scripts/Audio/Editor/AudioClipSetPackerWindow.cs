@@ -233,7 +233,7 @@ namespace Game.Editor
 
             var so = new SerializedObject(set);
             so.FindProperty("m_PlayMode").enumValueIndex = (int)AudioClipSet.EPlayMode.Sequence;
-            var clipsProp = so.FindProperty("m_Clips");
+            var clipsProp = so.FindProperty("m_TheHarmony");
             clipsProp.ClearArray();
             for (int i = 0; i < clips.Count; i++)
             {
