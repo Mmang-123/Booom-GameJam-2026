@@ -64,6 +64,7 @@ namespace Mmang.PixelartRender
                 renderPassEvent = RenderPassEvent.AfterRendering
             };
 
+#if UNITY_EDITOR
             if (m_ObstacleDebug == EObstacleDebug.Off && m_DebugOutput)
             {
                 m_BufferOutputPass = new()
@@ -81,6 +82,7 @@ namespace Mmang.PixelartRender
                     renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing
                 };
             }
+#endif
         }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)

@@ -282,6 +282,6 @@ namespace Sloane
             
             return rects;
         }
+#endif
     }
-    #endif
 }

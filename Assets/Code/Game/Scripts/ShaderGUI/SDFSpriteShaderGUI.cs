@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace Sloane
 {
     public class SDFSpriteShaderGUI : ShaderGUI
@@ -41,3 +42,4 @@ namespace Sloane
         }
     }
 }
+#endif

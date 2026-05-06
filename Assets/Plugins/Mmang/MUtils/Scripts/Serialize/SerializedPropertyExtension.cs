@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 
+#if UNITY_EDITOR
 namespace Mmang.Util
 {
     public static class SerializedPropertyExtension
@@ -285,3 +286,4 @@ namespace Mmang.Util
         }
     }
 }
+#endif
