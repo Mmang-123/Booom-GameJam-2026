@@ -11,7 +11,7 @@
 float2 GetBoiledUV (float2 uv, float2 noiseUV, float strength, float duration) {
     float currentSeed = floor(_Time.y / duration);
     float2 noiseUVOffset = hash21(currentSeed) + noiseUV;
-	float noiseSample = tex2D(_NoiseTexture, noiseUVOffset).r * 2.0 * PI;
+	float noiseSample = tex2D(_NoiseTexture, noiseUVOffset).r * 4.0 * PI;
 	float2 direction = float2(cos(noiseSample), sin(noiseSample));
 	
     return uv + direction * strength;
