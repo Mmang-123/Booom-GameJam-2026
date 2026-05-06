@@ -41,6 +41,7 @@ namespace Game
 
             SetActive(m_InitTurnOn);
             m_EmissionLight.color = m_Active ? ActiveColor : InactiveColor;
+            m_ActiveTimer = m_Active ? MaxActiveTime : 0f;
         }
 
         private void FixedUpdate()
