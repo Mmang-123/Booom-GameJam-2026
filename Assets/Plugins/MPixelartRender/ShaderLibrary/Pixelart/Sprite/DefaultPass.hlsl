@@ -102,6 +102,11 @@ float4 UnlitFrag(Varyings input) : SV_Target
     if (dis <= _DarkSightParams.z && (_DarkSightParams.w < 1 || (sampledLight.r + sampledLight.g + sampledLight.b) < 0.001))
         clip(-1);
 
+    if (_ObstacleMaskValue > 0.01 && _ObstacleMaskValue < 0.5)
+    {
+        lightColor = sampledLight;
+    }
+
     if ((lightColor.r <= 0.001 && lightColor.g <= 0.001 && lightColor.b <= 0.001) || (outputColor.r <= 0.001 && outputColor.g <= 0.001 && outputColor.b <= 0.001))
     {
         // Background
