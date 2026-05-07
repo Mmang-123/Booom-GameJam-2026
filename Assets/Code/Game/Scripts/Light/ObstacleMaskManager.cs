@@ -11,6 +11,7 @@ namespace Mmang.PixelartRender
     public class ObstacleMaskManager : SingletonMono<ObstacleMaskManager>
     {
         [SerializeField] GenerateDFRendererFeature m_DFFeature;
+        [SerializeField] int m_NearestPointSearchRange = 16;
 
         private RenderTexture m_Mask;
         private RTHandle m_MaskHandle;
@@ -75,7 +76,7 @@ namespace Mmang.PixelartRender
                 Vector2Int offset = new(i % 3 * Resolution, i / 3 * Resolution);
                 m_SDFThreadIDs[i] = m_DFFeature.Pending(
                     null, m_SDFs[i], offset,
-                    extendPixels: 128, nearestPointSearchRange: 16, boundaryDistance: false, shaderPropertyID: Shader.PropertyToID($"_ObstacleSDF_{i}"));
+                    extendPixels: 128, nearestPointSearchRange: m_NearestPointSearchRange, boundaryDistance: false, shaderPropertyID: Shader.PropertyToID($"_ObstacleSDF_{i}"));
             }
         }
 

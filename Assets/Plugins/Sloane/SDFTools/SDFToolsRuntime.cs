@@ -178,8 +178,8 @@ namespace Sloane
                 cmd.SetComputeIntParam(sdfComputeShader, PropertyExtendPixels, extendPixels);
                 cmd.SetComputeTextureParam(sdfComputeShader, kernelGetNearest, PropertyPreviousBuffer, currentBuffer);
                 cmd.SetComputeTextureParam(sdfComputeShader, kernelGetNearest, PropertyCurrentBuffer, new RenderTargetIdentifier(TempID_Nearest));
-                cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, width);
-                cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, height);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyWidth, iterationWidth);
+                cmd.SetComputeIntParam(sdfComputeShader, PropertyHeight, iterationHeight);
                 cmd.SetComputeIntParam(sdfComputeShader, PropertyNearestPointSearchRange, nearestPointSearchRange);
                 cmd.DispatchCompute(sdfComputeShader, kernelGetNearest, threadGroupsX, threadGroupsY, 1);
                 // currentBuffer 在下面不再使用，延迟到 Execute 后释放

@@ -60,7 +60,7 @@ void InitializeSeedSingleChannel(uint3 id : SV_DispatchThreadID)
     else
     {
         // 非种子像素：RG 设为无效坐标, B: 0.0 表示非种子点
-        _CurrentBuffer[coord] = float4(float(coord.x) / width, float(coord.y) / height, 0.0, 1.0);
+        _CurrentBuffer[coord] = float4(float(coord.x) / width, float(coord.y) / height, 0.0, 0.0);
     }
 }
 
@@ -84,7 +84,7 @@ void InitializeSeed(uint3 id : SV_DispatchThreadID)
     else
     {
         // 非种子像素：RG 设为无效坐标, B: 0.0 表示非种子点
-        _CurrentBuffer[coord] = float4(float(coord.x) / width, float(coord.y) / height, 0.0, 1.0);
+        _CurrentBuffer[coord] = float4(float(coord.x) / width, float(coord.y) / height, 0.0, 0.0);
     }
 }
 
@@ -141,7 +141,7 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
 {
     uint2 currentCoord = id.xy + uint2(_ExtendPixels, _ExtendPixels);
 
-    if (_PreviousBuffer[currentCoord].z > 0.5)
+    if (_PreviousBuffer[currentCoord].a > 0.5)
     {
         // 已经是种子点了，直接复制坐标
         _CurrentBuffer[currentCoord] = _PreviousBuffer[currentCoord];
@@ -171,7 +171,7 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
             if (neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
 
             uint2 neighborCoord = uint2(neighborCoordSigned);
-            if (_PreviousBuffer[neighborCoord].z < 0.5) continue;
+            if (_PreviousBuffer[neighborCoord].a < 0.5) continue;
 
             int distance = DistanceSquared(neighborCoord, originalCoord);
             if (distance < minDistance)
@@ -189,7 +189,7 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
             if (neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
 
             uint2 neighborCoord = uint2(neighborCoordSigned);
-            if (_PreviousBuffer[neighborCoord].z < 0.5) continue;
+            if (_PreviousBuffer[neighborCoord].a < 0.5) continue;
 
             int distance = DistanceSquared(neighborCoord, originalCoord);
             if (distance < minDistance)
@@ -207,7 +207,7 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
             if (neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
 
             uint2 neighborCoord = uint2(neighborCoordSigned);
-            if (_PreviousBuffer[neighborCoord].z < 0.5) continue;
+            if (_PreviousBuffer[neighborCoord].a < 0.5) continue;
 
             int distance = DistanceSquared(neighborCoord, originalCoord);
             if (distance < minDistance)
@@ -225,7 +225,7 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
             if (neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) || neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
 
             uint2 neighborCoord = uint2(neighborCoordSigned);
-            if (_PreviousBuffer[neighborCoord].z < 0.5) continue;
+            if (_PreviousBuffer[neighborCoord].a < 0.5) continue;
 
             int distance = DistanceSquared(neighborCoord, originalCoord);
             if (distance < minDistance)
@@ -237,7 +237,7 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
         }
     }
     
-    _CurrentBuffer[originalCoord] = float4(float(currentSeed.x) / _Width, float(currentSeed.y) / _Height, _PreviousBuffer[originalCoord].z, 1.0);
+    _CurrentBuffer[originalCoord] = float4(float(currentSeed.x) / width, float(currentSeed.y) / height, _PreviousBuffer[originalCoord].z, 1.0);
 }
 
 // 像素 coord 到最近纹理边界的距离（像素单位）

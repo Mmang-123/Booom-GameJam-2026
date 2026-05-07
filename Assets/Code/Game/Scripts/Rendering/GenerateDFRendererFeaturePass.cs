@@ -309,8 +309,8 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
 
             cmd.SetComputeIntParam    (s_SdfCS, ID_ExtendPixels,  ext);
             cmd.SetComputeIntParam    (s_SdfCS, ID_NearestRange,  t.nearestPointSearchRange);
-            cmd.SetComputeIntParam    (s_SdfCS, ID_Width,         w);
-            cmd.SetComputeIntParam    (s_SdfCS, ID_Height,        h);
+            cmd.SetComputeIntParam    (s_SdfCS, ID_Width,         iterW);
+            cmd.SetComputeIntParam    (s_SdfCS, ID_Height,        iterH);
             cmd.SetComputeTextureParam(s_SdfCS, s_KernelGetNearest, ID_PrevBuf, curId);
             cmd.SetComputeTextureParam(s_SdfCS, s_KernelGetNearest, ID_CurBuf,  nearestId);
             cmd.DispatchCompute(s_SdfCS, s_KernelGetNearest, tgX, tgY, 1);
