@@ -88,10 +88,9 @@ namespace Game
             for (int i = 0; i < m_RequirePowerSourceCount; i++)
             {
                 bool slotActive = PowerSourceHandler.GetSlotActive(i);
-                var indicator = m_Indicators[i];
-                if (indicator != null)
+                if (i < m_Indicators.Count)
                 {
-                    indicator.color = slotActive ? m_ActiveColor : m_InactiveColor;
+                    m_Indicators[i].color = slotActive ? m_ActiveColor : m_InactiveColor;
                 }
 
                 powerOn &= slotActive;
