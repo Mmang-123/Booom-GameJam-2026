@@ -2,7 +2,7 @@
 
 namespace Game
 {
-    public class FB_GenericAnimator : FishBehaviour
+    public class FB_GenericAnimator : FishBehaviour, IGolemBehaviour
     {
         [SerializeField] private Animator m_Animator;
         [SerializeField] private bool m_CanEat = true;
@@ -50,6 +50,11 @@ namespace Game
         public void TriggerCustomAnimation(string animName)
         {
             m_Animator.SetTrigger(animName);
+        }
+
+        public void SetGolemActive(bool active)
+        {
+            m_Animator.enabled = !active;
         }
     }
 }

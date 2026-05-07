@@ -841,7 +841,7 @@ MonoBehaviour:
   m_SpotLight: {fileID: 654916103336363567}
   m_PointLight: {fileID: 3851936974120443783}
   m_SpotLightIntensity: 1
-  m_PointLightIntensity: 1
+  m_PointLightIntensity: 0.8
   m_DarkSightRadius: 2
   m_CheckLightPoint: {fileID: 1005407335511354731}
 --- !u!1 &8701542722561198074

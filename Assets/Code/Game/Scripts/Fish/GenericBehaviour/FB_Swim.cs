@@ -301,7 +301,7 @@ namespace Game
             GolemActive = active;
             if (GolemActive)
             {
-                var velocity = AdditionalVelocity.Create(CurrentSpeed * Fish.ForwardDirection, m_Acceleration * 2f);
+                var velocity = AdditionalVelocity.Create(Mathf.Min(MaxSpeed * 0.3f, CurrentSpeed) * Fish.ForwardDirection, 30f);
                 AddAdditionalVelocity(velocity);
                 CurrentSpeed = 0f;
             }

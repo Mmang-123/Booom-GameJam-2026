@@ -19,8 +19,8 @@ namespace Game
         private List<IGolemBehaviour> m_GolemBehaviours = new();
         private float m_ActiveTimer = 0f;
 
-        private float ActiveTime => 0.1f;
-        private float MaxActiveTime => 0.8f;
+        private float ActiveTime => 0.05f;
+        private float MaxActiveTime => 2.0f;
 
         public bool Active => m_Active;
 
