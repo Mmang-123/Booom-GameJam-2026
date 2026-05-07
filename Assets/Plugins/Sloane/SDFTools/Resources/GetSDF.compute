@@ -237,7 +237,7 @@ void GetNearest(uint3 id : SV_DispatchThreadID)
         }
     }
     
-    _CurrentBuffer[originalCoord] = float4(float(currentSeed.x) / _Width, float(currentSeed.y) / _Height, 1.0, 1.0);
+    _CurrentBuffer[originalCoord] = float4(float(currentSeed.x) / _Width, float(currentSeed.y) / _Height, _PreviousBuffer[originalCoord].z, 1.0);
 }
 
 // 像素 coord 到最近纹理边界的距离（像素单位）
