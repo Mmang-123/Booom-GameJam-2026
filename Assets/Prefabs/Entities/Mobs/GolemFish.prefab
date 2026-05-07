@@ -297,6 +297,7 @@ GameObject:
   - component: {fileID: 2034007165832799525}
   - component: {fileID: 3847771821859563341}
   - component: {fileID: 1887551245505646083}
+  - component: {fileID: 199218572785017560}
   m_Layer: 7
   m_Name: GolemFish
   m_TagString: Untagged
@@ -445,7 +446,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6172189210337702716}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fecaf8b6a5985b4588b9464c35d7717, type: 3}
   m_Name: 
@@ -460,7 +461,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6172189210337702716}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 275ce4bc0e095d04bacffc5b4b9e0775, type: 2}
   m_CullingMode: 0
@@ -474,6 +475,35 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &199218572785017560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6172189210337702716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74fcf1db195c45f43be49637954d825b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Eat
+  m_OpenDistance: 6
+  m_ShutDistance: 9
+  m_EatDistance: 2.5
+  m_ReduceSaturationPerBite: 65535
+  m_EatDashAdditionalSpeed: 3
+  m_EatDashAdditionalRotateSpeed: 3
+  m_EatRanges:
+  - {fileID: 794866812417395033}
+  - {fileID: 2176805684744246595}
+  m_WaitTimeAfterEat: 1
+  m_EatAnimationDuration: 0.2
+  m_MaxEatRangeOffset: 0.4
+  m_MaxEatRangeOffsetRequireSpeed: 1.8
+  m_CanEatTags:
+    m_Tags:
+    - m_Guid: 832afeb0-35ee-4ecb-a3f0-9571693e253b
+    - m_Guid: f4f9d2fc-de97-4d70-8292-e5cdc4e5cddc
 --- !u!1 &6262011534964240369
 GameObject:
   m_ObjectHideFlags: 0

@@ -52,6 +52,17 @@ namespace Game
                 m_ActiveTimer = Mathf.Clamp(m_ActiveTimer + Time.fixedDeltaTime * (lightExist ? 1 : -1), 0f, MaxActiveTime);
                 SetActive(m_ActiveTimer >= ActiveTime);
             }
+
+            if (Fish.IsPlayer)
+            {
+                var darkSightManager = DarkSightManager.Instance;
+                darkSightManager.SetOverrideByLight(false);
+                darkSightManager.SetCenterPosition(Fish.Position);
+                if (darkSightManager.Radius <= 24f)
+                {
+                    darkSightManager.SetRadius(darkSightManager.Radius + Time.fixedDeltaTime * 64f);
+                }
+            }
         }
 
         private void SetActive(bool active)
@@ -77,7 +88,7 @@ namespace Game
                 strength += LightingTextureManager.Instance.GetLightStrength(point.position);
             }
 
-            return strength >= 0.0625f;
+            return strength >= 0.0625 * 5f;
         }
     }
 }

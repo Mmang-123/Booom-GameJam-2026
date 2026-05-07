@@ -6,7 +6,7 @@ using UnityEngine.Pool;
 
 namespace Game
 {
-    public class FB_Eat : FishBehaviour
+    public class FB_Eat : FishBehaviour, IGolemBehaviour
     {
         public enum EState
         {
@@ -36,6 +36,7 @@ namespace Game
         public float EatTimer { get; private set; }
         public float WaitTimer { get; private set; }
         public bool ContinuousCheck { get; set; } = false;
+        public bool GolemActive { get; private set; }
 
         public bool UseOverrideEatDistance { get; set; }
         public float OverrideEatDistance { get; set; }
@@ -44,6 +45,9 @@ namespace Game
 
         private void Update()
         {
+            if (GolemActive)
+                return;
+
             switch (State)
             {
                 case EState.Shut:
@@ -281,6 +285,11 @@ namespace Game
             var swimBehaviour = Fish.GetBehaviour<FB_Swim>();
             swimBehaviour.AdditionalSpeed -= m_EatDashAdditionalSpeed;
             swimBehaviour.AdditionalRotateSpeed -= m_EatDashAdditionalRotateSpeed;
+        }
+
+        public void SetGolemActive(bool active)
+        {
+            GolemActive = active;
         }
 
         private void StartSuckAnimation(Fish fish, CircleCollider2D collider)

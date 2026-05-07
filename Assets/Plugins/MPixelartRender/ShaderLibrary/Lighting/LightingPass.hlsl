@@ -318,6 +318,7 @@ half4 LightingFrag(Varyings input) : SV_Target
     // 简易算一下光照强度
     //float s = (totalLight.r + totalLight.g + totalLight.b) / 3.0;
     float s = (outputLight.r + outputLight.g + outputLight.b) / 3.0;
+    //float s = max(outputLight.r, max(outputLight.g, outputLight.b));
 
     return float4(outputLight, s);
 }
