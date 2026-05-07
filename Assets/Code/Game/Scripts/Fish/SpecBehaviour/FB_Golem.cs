@@ -88,7 +88,7 @@ namespace Game
                 strength += LightingTextureManager.Instance.GetLightStrength(point.position);
             }
 
-            return strength >= 0.0625 * 5f;
+            return strength >= 0.0625 * 3.0;
         }
     }
 }
