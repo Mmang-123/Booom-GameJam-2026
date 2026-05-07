@@ -21,7 +21,7 @@ namespace Game
         {
             m_Animator.SetBool("IsMoving", m_SwimBehaviour.CurrentSpeed > 0.1f);
 
-            if (m_CanEat)
+            if (m_CanEat && m_EatBehaviour != null)
             {
                 m_Animator.SetBool("IsOpen", m_EatBehaviour.State == FB_Eat.EState.Open);
             }
