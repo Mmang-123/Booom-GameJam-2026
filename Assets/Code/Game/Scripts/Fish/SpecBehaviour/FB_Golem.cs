@@ -20,10 +20,10 @@ namespace Game
         private float m_ActiveTimer = 0f;
 
         private float ActiveTime => 0.1f;
-        private float MaxActiveTime => ActiveTime * 2f;
+        private float MaxActiveTime => 0.8f;
 
         public bool Active => m_Active;
-        
+
 
         private void Start()
         {
@@ -58,6 +58,10 @@ namespace Game
         {
             if (m_Active == active)
                 return;
+
+            m_Active = active;
+            if (m_Active)
+                m_ActiveTimer = MaxActiveTime;
             
             foreach (var behaviour in m_GolemBehaviours)
             {

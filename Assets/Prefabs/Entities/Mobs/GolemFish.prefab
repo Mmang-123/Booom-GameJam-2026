@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2191640252317067177
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8466924730141673177}
+  m_Layer: 7
+  m_Name: CheckPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8466924730141673177
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2191640252317067177}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.123, y: -0.014, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4800681294185171314}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5554110311380033062
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,6 +159,8 @@ GameObject:
   - component: {fileID: 2039827837968094968}
   - component: {fileID: 834712693967893020}
   - component: {fileID: 5141295183322557257}
+  - component: {fileID: 8672546694478925972}
+  - component: {fileID: 2034007165832799525}
   m_Layer: 7
   m_Name: GolemFish
   m_TagString: Untagged
@@ -149,6 +182,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5428743268945966197}
+  - {fileID: 8466924730141673177}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2797730967065995784
@@ -168,6 +202,11 @@ MonoBehaviour:
   m_EDirection: 2
   m_AutoFlip: 1
   m_FlipRoot: {fileID: 5428743268945966197}
+  m_DieCollider: {fileID: 0}
+  m_DieCollisionTime: 0.1
+  m_DieCollisionMaxSpeed: 1
+  m_DieCollisionParticle: {fileID: 0}
+  m_InfectedLevel: 0
   m_SporeRenderer1: {fileID: 0}
   m_SporeRenderer2: {fileID: 0}
   m_BodyRenderer: {fileID: 0}
@@ -180,7 +219,9 @@ MonoBehaviour:
   m_InfectedLightColor: {r: 0, g: 0, b: 0, a: 0}
   m_InitSaturation: 100
   m_MaxSaturation: 100
-  m_InfectedLevel: 0
+  m_EatenParticle: {fileID: 0}
+  m_DefaultEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
+  m_InfectedEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &7792305372667502108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,5 +320,56 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.20965838, y: -0.085769415}
-  m_Radius: 1.2
+  m_Offset: {x: -0.9128721, y: -0.19793785}
+  m_Radius: 1.0058621
+--- !u!58 &8672546694478925972
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6172189210337702716}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.23728085, y: 0.086283684}
+  m_Radius: 0.6941385
+--- !u!114 &2034007165832799525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6172189210337702716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05fcd05e10bc7884a8af693775d1aa10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Golem
+  m_InitActive: 0
+  m_CheckPoints:
+  - {fileID: 8466924730141673177}

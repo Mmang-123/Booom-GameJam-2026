@@ -303,6 +303,7 @@ namespace Game
             {
                 var velocity = AdditionalVelocity.Create(CurrentSpeed * Fish.ForwardDirection, m_Acceleration * 2f);
                 AddAdditionalVelocity(velocity);
+                CurrentSpeed = 0f;
             }
         }
 

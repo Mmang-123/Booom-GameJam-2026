@@ -182,7 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Mmang.PixelartRender.MSpotPointLight
   Color: {r: 0.15686275, g: 0.7764706, b: 1, a: 1}
   Radius: 20
-  InnerRadius: 6
+  InnerRadius: 6.5
   CullRadius: 3.2
   Intensity: 2
   InnerSpotAngle: 6
@@ -891,4 +891,4 @@ MonoBehaviour:
   Color: {r: 0.15566039, g: 0.7780197, b: 1, a: 1}
   Radius: 3.5
   InnerRadius: 2.8
-  Intensity: 1
+  Intensity: 0.8
