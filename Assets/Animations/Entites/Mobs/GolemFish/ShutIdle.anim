@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Regular_Shut_Move
+  m_Name: ShutIdle
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,15 +21,27 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 1429980963, guid: bf0b36410162db84e82d6f73cec13765, type: 3}
-    - time: 0.1
-      value: {fileID: -1763728349, guid: bf0b36410162db84e82d6f73cec13765, type: 3}
-    - time: 0.2
-      value: {fileID: -1831322472, guid: bf0b36410162db84e82d6f73cec13765, type: 3}
-    - time: 0.3
-      value: {fileID: 1369394750, guid: bf0b36410162db84e82d6f73cec13765, type: 3}
+      value: {fileID: -1047924387, guid: 63bf9196c519ca247b973180f9bc6d1c, type: 3}
     attribute: m_Sprite
-    path: 
+    path: Main
+    classID: 212
+    script: {fileID: 0}
+    flags: 2
+  - serializedVersion: 2
+    curve:
+    - time: 0
+      value: {fileID: -634397936, guid: 8210c4c77736b7246b95a00d1ee8677c, type: 3}
+    attribute: m_Sprite
+    path: Main/Spore_0
+    classID: 212
+    script: {fileID: 0}
+    flags: 2
+  - serializedVersion: 2
+    curve:
+    - time: 0
+      value: {fileID: 721498969, guid: 15631d71632f14c4bba686f6c1c2f8fa, type: 3}
+    attribute: m_Sprite
+    path: Main/Spore_1
     classID: 212
     script: {fileID: 0}
     flags: 2
@@ -41,7 +53,25 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 0
+      path: 521822810
+      attribute: 0
+      script: {fileID: 0}
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
+    - serializedVersion: 2
+      path: 1273705059
+      attribute: 0
+      script: {fileID: 0}
+      typeID: 212
+      customType: 23
+      isPPtrCurve: 1
+      isIntCurve: 0
+      isSerializeReferenceCurve: 0
+    - serializedVersion: 2
+      path: 1022100213
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -50,16 +80,15 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 1429980963, guid: bf0b36410162db84e82d6f73cec13765, type: 3}
-    - {fileID: -1763728349, guid: bf0b36410162db84e82d6f73cec13765, type: 3}
-    - {fileID: -1831322472, guid: bf0b36410162db84e82d6f73cec13765, type: 3}
-    - {fileID: 1369394750, guid: bf0b36410162db84e82d6f73cec13765, type: 3}
+    - {fileID: -1047924387, guid: 63bf9196c519ca247b973180f9bc6d1c, type: 3}
+    - {fileID: -634397936, guid: 8210c4c77736b7246b95a00d1ee8677c, type: 3}
+    - {fileID: 721498969, guid: 15631d71632f14c4bba686f6c1c2f8fa, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.4
+    m_StopTime: 0.1
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
