@@ -108,6 +108,8 @@ namespace Game
         public Vector2 ForwardDirection => transform.rotation * s_DirectionMap[m_EDirection];
         public Vector2 Position => transform.position;
 
+        public bool Eaten { get; set; }
+
         private bool m_Dead = false;
         public bool IsLiving => !m_Dead;
 
@@ -253,6 +255,25 @@ namespace Game
                     }
                 }
             }
+        }
+
+        public float GetRotationEulerAngle(Vector2 direction, float offset = 0f)
+        {
+            float offsetAngle = 0f;
+            switch (EDirection)
+            {
+                case EDirection.Up:
+                    offsetAngle = -90f;
+                    break;
+                case EDirection.Down:
+                    offsetAngle = 90f;
+                    break;
+                case EDirection.Left:
+                    offsetAngle = 180f;
+                    break;
+            }
+            float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + offsetAngle;
+            return targetAngle + offset;
         }
 
         public Quaternion GetRotation(Vector2 direction, float offset = 0f)

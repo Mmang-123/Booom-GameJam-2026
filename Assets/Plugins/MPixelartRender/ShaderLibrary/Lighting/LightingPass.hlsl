@@ -34,14 +34,14 @@ inline float2 SnapLightPoisition(float2 rawPosition)
     //return round(rawPosition / UNIT_SIZE) * UNIT_SIZE;
 }
 
-half GetShadow(float2 screenUV, float2 lightUV, float innerRadius)
+half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThreshold)
 {
     float2 direction = normalize(lightUV - screenUV);
 
     const int MAX_STEPS = 128;
     
     float2 current = screenUV;
-    float unitSize = 1 / _ObstacleChunkParams.z;
+    float unitSize = 1.0 / _ObstacleChunkParams.z;
     half shadowMask = 1.0;
 
     [loop]
@@ -55,7 +55,7 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius)
         }
 
         half obstacleMask = GetObstacleMask_RawCamera(current);
-        if (obstacleMask > 0.1)
+        if (obstacleMask > maskThreshold)
         {
             shadowMask = 0.0;
             break;
@@ -65,12 +65,12 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius)
         float nextStep = UnpackSDFToRaw(sdf) * 0.9;
         if (nextStep <= 4.0 * unitSize)
         {
-            nextStep = min(unitSize, nextStep);
+            nextStep = unitSize;
 
             // 采样两个分量
             half obstacleMaskX = GetObstacleMask_RawCamera(current + float2(sign(direction.x) * unitSize, 0.0));
             half obstacleMaskY = GetObstacleMask_RawCamera(current + float2(0.0, sign(direction.y) * unitSize));
-            if (obstacleMaskX + obstacleMaskY > 0.1)
+            if (obstacleMaskX + obstacleMaskY > maskThreshold)
             {
                 shadowMask = 0.0;
                 break;
@@ -89,7 +89,7 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius)
     return shadowMask;
 }
 
-void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, out half3 outColor, out half outShadow)
+void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, float mask, out half3 outColor, out half outShadow)
 {
     const float UNIT_SIZE = 1.0 / 256.0 * 3.0;
     outShadow = 0.0;
@@ -115,7 +115,13 @@ void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, out half3 o
     // 阴影
     float2 lightUV = UV4To3(WorldToUV(lightPos));
 
-    float shadow = GetShadow(uv, lightUV, innerRadius * UNIT_SIZE);
+    float shadowThreshold;
+    if (mask > 0.01 && mask < 0.6)
+        shadowThreshold = 0.6;
+    else
+        shadowThreshold = 0.01;
+    float shadow = GetShadow(uv, lightUV, innerRadius * UNIT_SIZE, shadowThreshold);
+
 
     // Step
     float3 s = saturate(intensity * distanceAttenuation);
@@ -126,7 +132,7 @@ void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, out half3 o
     outColor = lightColor * s;
 }
 
-void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 outColor, out half outShadow)
+void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, float mask, out half3 outColor, out half outShadow)
 {
     const float UNIT_SIZE = 1.0 / 256.0 * 3.0;
     outShadow = 0.0;
@@ -169,17 +175,13 @@ void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
     }
 
     // 阴影
-    float shadow = GetShadow(uv, lightUV, innerRadius * UNIT_SIZE);
-    /*
-    if (GetObstacleMask_RawCamera(lightUV) > 0.1 && dist > innerRadius)
-    {
-        shadow = 0.0;
-    }
+    float shadowThreshold;
+    if (mask > 0.01 && mask < 0.6)
+        shadowThreshold = 0.6;
     else
-    {
-        shadow = GetShadow(uv, lightUV, innerRadius);
-    }
-    */
+        shadowThreshold = 0.01;
+    float shadow = GetShadow(uv, lightUV, innerRadius * UNIT_SIZE, shadowThreshold);
+
 
     // Step
     float s = angleAttenuation;
@@ -190,7 +192,7 @@ void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
     outColor = intensity * distanceAttenuation * s * lightColor;
 }
 
-void ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv, out half3 outColor, out half outShadow)
+void ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv, float mask, out half3 outColor, out half outShadow)
 {
     outShadow = 0.0;
     outColor = 0.0;
@@ -225,16 +227,22 @@ void ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv, out half3 ou
     }
 
     // 阴影
+    float shadowThreshold;
+    if (mask > 0.01 && mask < 0.6)
+        shadowThreshold = 0.6;
+    else
+        shadowThreshold = 0.01;
+
     float2 targetPoint = lerp(point1, point2, t);
     float2 lightUV = UV4To3(WorldToUV(targetPoint));
     float shadow = 1.0;
-    if (GetObstacleMask_RawCamera(lightUV) > 0.1)
+    if (GetObstacleMask_RawCamera(lightUV) > shadowThreshold)
     {
         shadow = 0.0;
     }
     else
     {
-        shadow = GetShadow(uv, lightUV, 0.01);
+        shadow = GetShadow(uv, lightUV, 0.01, shadowThreshold);
     }
 
     // 距离衰减
@@ -276,9 +284,10 @@ half4 LightingFrag(Varyings input) : SV_Target
 
     half3 lightColor = 0.0;
     half lightShadow = 0.0;
+    half lightShadow2 = 0.0;
     for(int i = start; i < end; i++)
     {
-        ComputePointLight(i, positionWS, uv, lightColor, lightShadow);
+        ComputePointLight(i, positionWS, uv, mask, lightColor, lightShadow);
         half3 litPoint = lightColor * lightShadow;
         totalLight = SCREEN_BLEND(totalLight, litPoint);
         if (mask >= 0.9)
@@ -292,7 +301,7 @@ half4 LightingFrag(Varyings input) : SV_Target
     end += spotLightCount;
     for(int i = start; i < end; i++)
     {
-        ComputeSpotLight(i, positionWS, uv, lightColor, lightShadow);
+        ComputeSpotLight(i, positionWS, uv, mask, lightColor, lightShadow);
         half3 litSpot = lightColor * lightShadow;
         totalLight = SCREEN_BLEND(totalLight, litSpot);
         if (mask >= 0.9)
@@ -306,7 +315,7 @@ half4 LightingFrag(Varyings input) : SV_Target
     end = lightCount;
     for(int i = start; i < end; i++)
     {
-        ComputeAreaLight(i, positionWS, uv, lightColor, lightShadow);
+        ComputeAreaLight(i, positionWS, uv, mask, lightColor, lightShadow);
         half3 litArea = lightColor * lightShadow;
         totalLight = SCREEN_BLEND(totalLight, litArea);
         if (mask >= 0.9)
@@ -319,6 +328,9 @@ half4 LightingFrag(Varyings input) : SV_Target
     //float s = (totalLight.r + totalLight.g + totalLight.b) / 3.0;
     float s = (outputLight.r + outputLight.g + outputLight.b) / 3.0;
     //float s = max(outputLight.r, max(outputLight.g, outputLight.b));
+
+    //if (mask > 0.01 && mask < 0.6)
+    //    return half4(1, 0, 0, 1);
 
     return float4(outputLight, s);
 }

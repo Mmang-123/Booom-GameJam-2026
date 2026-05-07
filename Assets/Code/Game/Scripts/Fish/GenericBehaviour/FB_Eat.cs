@@ -200,7 +200,8 @@ namespace Game
             
             foreach (var fish in fishInRange)
             {
-                if (!m_CanEatTags.Contains(fish.FishTypeTag))
+                if (!m_CanEatTags.Contains(fish.FishTypeTag)
+                || !fish.IsLiving || fish.Eaten)
                 {
                     continue;
                 }
@@ -249,7 +250,6 @@ namespace Game
 
                 if (fish.FishController != null)
                 {
-                    Debug.Log(fish + " " + fish.FishController);
                     fish.SetController(null);
                 }
 
@@ -294,6 +294,7 @@ namespace Game
 
         private void StartSuckAnimation(Fish fish, CircleCollider2D collider)
         {
+            fish.Eaten = true;
             // 停止被吃鱼的一切行为
             foreach (var behaviour in fish.GetComponents<FishBehaviour>())
                 behaviour.enabled = false;
