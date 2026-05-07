@@ -11,7 +11,7 @@ namespace Game
 
         [SerializeField] private BoxCollider2D m_BoxCollider;
         [SerializeField] private SpriteRenderer m_DoorRenderer;
-        [SerializeField] private SpriteRenderer m_Emission;
+        [SerializeField] private List<SpriteRenderer> m_Indicators;
         [SerializeField] private Color m_ActiveColor = Color.green;
         [SerializeField] private Color m_InactiveColor = Color.red;
 
@@ -45,10 +45,7 @@ namespace Game
 
         private void FixedUpdate()
         {
-            if (IsPowered != m_Active)
-            {
-                SetActive(IsPowered);
-            }
+            CheckSlots();
         }
 
         private void Update()
@@ -85,11 +82,30 @@ namespace Game
             }
         }
 
+        private void CheckSlots()
+        {
+            bool powerOn = true;
+            for (int i = 0; i < m_RequirePowerSourceCount; i++)
+            {
+                bool slotActive = PowerSourceHandler.GetSlotActive(i);
+                var indicator = m_Indicators[i];
+                if (indicator != null)
+                {
+                    indicator.color = slotActive ? m_ActiveColor : m_InactiveColor;
+                }
+
+                powerOn &= slotActive;
+            }
+
+            if (powerOn != m_Active)
+                SetActive(powerOn);
+        }
+
         private void SetActive(bool active, bool playSFX = true)
         {
             bool changed = (m_Active != active);
             m_Active = active;
-            m_Emission.color = active ? m_ActiveColor : m_InactiveColor;
+            //m_Emission.color = active ? m_ActiveColor : m_InactiveColor;
 
             if (!m_IsInitializing && playSFX && changed)
             {

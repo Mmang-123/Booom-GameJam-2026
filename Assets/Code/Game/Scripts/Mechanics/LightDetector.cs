@@ -18,7 +18,7 @@ namespace Game
 
         public bool Active => m_Active;
         public bool PowerOn => Active;
-        public event System.Action<bool> OnPowerChanged;
+        public event System.Action<IPowerSource, bool> OnPowerChanged;
 
         public Color ActiveColor = Color.green;
         public Color InactiveColor = Color.red;
@@ -72,7 +72,7 @@ namespace Game
         private void OnActiveChanged()
         {
             m_EmissionLight.color = m_Active ? ActiveColor : InactiveColor;
-            OnPowerChanged?.Invoke(m_Active);
+            OnPowerChanged?.Invoke(this, m_Active);
 
             var clip = m_Active ? m_ActivateClip : m_DeactivateClip;
             AudioManager.PlayAtPosition(clip, transform.position);

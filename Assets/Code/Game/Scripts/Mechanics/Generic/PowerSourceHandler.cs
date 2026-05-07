@@ -5,7 +5,8 @@ namespace Game
 {
     public class PowerSourceHandler
     {
-        private HashSet<IPowerSource> m_Set = new();
+        private Dictionary<IPowerSource, int> m_PowerSlotMap = new();
+        private Dictionary<int, int> m_SlotPowerCounts = new();
         private int m_ActivePowerCount = 0;
 
         public bool IsPowered(int requirePowerSourceCount = 1)
@@ -13,34 +14,71 @@ namespace Game
             return m_ActivePowerCount >= requirePowerSourceCount;
         }
 
-        public void AddPowerSource(IPowerSource source)
+        public bool IsPowered(List<int> targetSlots)
         {
-            if (!m_Set.Contains(source))
+            foreach (var slot in targetSlots)
             {
-                m_Set.Add(source);
+                if (!GetSlotActive(slot))
+                    return false;
+            }
+            return true;
+        }
+
+        public bool GetSlotActive(int slot)
+        {
+            if (m_SlotPowerCounts.TryGetValue(slot, out var count)
+            && count > 0)
+                return true;
+            return false;
+        }
+
+        public void AddPowerSource(IPowerSource source, int slot = 0)
+        {
+            if (!m_PowerSlotMap.ContainsKey(source))
+            {
+                m_PowerSlotMap.Add(source, slot);
                 if (source.PowerOn)
-                    m_ActivePowerCount++;
+                    AddPowerCount(source);
                 source.OnPowerChanged += OnPowerChanged;
             }
         }
 
         public void RemovePowerSource(IPowerSource source)
         {
-            if (m_Set.Contains(source))
+            if (m_PowerSlotMap.ContainsKey(source))
             {
-                m_Set.Remove(source);
                 if (source.PowerOn)
-                    m_ActivePowerCount--;
+                    RemovePowerCount(source);
+                m_PowerSlotMap.Remove(source);
                 source.OnPowerChanged -= OnPowerChanged;   
             }
         }
 
-        private void OnPowerChanged(bool isOn)
+        private void AddPowerCount(IPowerSource source)
+        {
+            m_ActivePowerCount++;
+            int slot = m_PowerSlotMap[source];
+            if (!m_SlotPowerCounts.ContainsKey(slot))
+                m_SlotPowerCounts.Add(slot, 0);
+            m_SlotPowerCounts[slot]++;
+        }
+
+        private void RemovePowerCount(IPowerSource source)
+        {
+            m_ActivePowerCount--;
+            int slot = m_PowerSlotMap[source];
+            if (m_SlotPowerCounts.ContainsKey(slot))
+            {
+                m_SlotPowerCounts[slot]--;
+            }
+        }
+
+        private void OnPowerChanged(IPowerSource source, bool isOn)
         {
             if (isOn)
-                m_ActivePowerCount++;
+                AddPowerCount(source);
             else
-                m_ActivePowerCount--;
+                RemovePowerCount(source);
         }
     }
 }

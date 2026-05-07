@@ -47,6 +47,7 @@ namespace Game
 
         [SerializeField] private InterfaceObject<IPowerSource> m_PowerSource;
         [SerializeField] private InterfaceObject<IChargable> m_ChargeObject;
+        [SerializeField] private int m_ChargeSlot = 0;
         [SerializeField] private float m_ConductionTime = 1f;
         [SerializeField] private float m_MaintainTime = 1f;
 
@@ -78,7 +79,7 @@ namespace Game
 
         #region IPowerSource
         public bool PowerOn { get; private set; }
-        public event System.Action<bool> OnPowerChanged;
+        public event System.Action<IPowerSource, bool> OnPowerChanged;
 
         #endregion
 
@@ -120,7 +121,7 @@ namespace Game
             if (m_PowerSource.Value != null)
                 PowerSourceHandler.AddPowerSource(m_PowerSource.Value);
             if (m_ChargeObject.Value != null)
-                m_ChargeObject.Value.PowerSourceHandler.AddPowerSource(this);
+                m_ChargeObject.Value.PowerSourceHandler.AddPowerSource(this, m_ChargeSlot);
 
             if (m_PowerSource.Value != null)
             {
@@ -242,7 +243,7 @@ namespace Game
                 return;
             
             PowerOn = on;
-            OnPowerChanged?.Invoke(on);
+            OnPowerChanged?.Invoke(this, on);
         }
         #endregion
 
