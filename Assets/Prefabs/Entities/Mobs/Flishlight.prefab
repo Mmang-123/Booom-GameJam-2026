@@ -183,10 +183,10 @@ MonoBehaviour:
   Color: {r: 0.15686275, g: 0.7764706, b: 1, a: 1}
   Radius: 20
   InnerRadius: 6.5
-  CullRadius: 3.2
+  CullRadius: 2
   Intensity: 2
-  InnerSpotAngle: 6
-  OuterSpotAngle: 14
+  InnerSpotAngle: 10
+  OuterSpotAngle: 25
 --- !u!1 &2099505847526325485
 GameObject:
   m_ObjectHideFlags: 0
