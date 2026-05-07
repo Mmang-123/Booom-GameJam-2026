@@ -108,6 +108,8 @@ namespace Game
         public Vector2 ForwardDirection => transform.rotation * s_DirectionMap[m_EDirection];
         public Vector2 Position => transform.position;
 
+        public bool Eaten { get; set; }
+
         private bool m_Dead = false;
         public bool IsLiving => !m_Dead;
 
