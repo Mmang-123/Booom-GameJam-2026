@@ -200,7 +200,8 @@ namespace Game
             
             foreach (var fish in fishInRange)
             {
-                if (!m_CanEatTags.Contains(fish.FishTypeTag))
+                if (!m_CanEatTags.Contains(fish.FishTypeTag)
+                || !fish.IsLiving)
                 {
                     continue;
                 }
@@ -249,7 +250,6 @@ namespace Game
 
                 if (fish.FishController != null)
                 {
-                    Debug.Log(fish + " " + fish.FishController);
                     fish.SetController(null);
                 }
 

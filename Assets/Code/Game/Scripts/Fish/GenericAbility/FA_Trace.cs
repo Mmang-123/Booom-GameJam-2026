@@ -68,6 +68,9 @@ namespace Game
             Debug.Log("Trace_End");
 
             SwimBehaviour.Tracing = false;
+            EatBehaviour = Fish.GetBehaviour<FB_Eat>();
+            if (EatBehaviour != null)
+                EatBehaviour.Target = null;
         }
 
         /// <summary>
