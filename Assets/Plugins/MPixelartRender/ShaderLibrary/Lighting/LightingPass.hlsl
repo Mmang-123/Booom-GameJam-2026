@@ -38,10 +38,10 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
 {
     float2 direction = normalize(lightUV - screenUV);
 
-    const int MAX_STEPS = 1024;
+    const int MAX_STEPS = 128;
     
     float2 current = screenUV;
-    float unitSize = 1 / _ObstacleChunkParams.z;
+    float unitSize = 1.0 / _ObstacleChunkParams.z;
     half shadowMask = 1.0;
 
     [loop]
@@ -65,7 +65,7 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
         float nextStep = UnpackSDFToRaw(sdf) * 0.9;
         if (nextStep <= 4.0 * unitSize)
         {
-            nextStep = min(unitSize, nextStep);
+            nextStep = unitSize;
 
             // 采样两个分量
             half obstacleMaskX = GetObstacleMask_RawCamera(current + float2(sign(direction.x) * unitSize, 0.0));
