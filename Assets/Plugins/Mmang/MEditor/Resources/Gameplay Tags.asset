@@ -23,6 +23,8 @@ MonoBehaviour:
     m_Children:
     - rid: 7953988145858740321
     - rid: 7953988145858740322
+    - rid: 7953988212185890883
+    - rid: 7953988212185890884
   references:
     version: 2
     RefIds:
@@ -49,4 +51,16 @@ MonoBehaviour:
       data:
         m_Guid: 832afeb0-35ee-4ecb-a3f0-9571693e253b
         NodeName: LanternFish
+        m_Children: []
+    - rid: 7953988212185890883
+      type: {class: SerializableGameplayTagNode, ns: Mmang.Game, asm: MGame.Runtime}
+      data:
+        m_Guid: f4f9d2fc-de97-4d70-8292-e5cdc4e5cddc
+        NodeName: FlashLightFish
+        m_Children: []
+    - rid: 7953988212185890884
+      type: {class: SerializableGameplayTagNode, ns: Mmang.Game, asm: MGame.Runtime}
+      data:
+        m_Guid: 51809826-1abd-450a-bffd-b8617fb2da14
+        NodeName: GolemFish
         m_Children: []

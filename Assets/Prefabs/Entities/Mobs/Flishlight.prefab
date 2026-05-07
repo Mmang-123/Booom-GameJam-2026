@@ -622,7 +622,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Fish
   m_FishTypeTag:
-    m_Guid: 832afeb0-35ee-4ecb-a3f0-9571693e253b
+    m_Guid: f4f9d2fc-de97-4d70-8292-e5cdc4e5cddc
   m_EDirection: 2
   m_AutoFlip: 1
   m_FlipRoot: {fileID: 3476970104418147691}

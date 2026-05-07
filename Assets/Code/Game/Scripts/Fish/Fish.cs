@@ -92,6 +92,8 @@ namespace Game
 
         private List<FishBehaviour> m_Behaviours;
         private Dictionary<System.Type, FishBehaviour> m_BehaviourMap = new();
+        public IReadOnlyList<FishBehaviour> Behaviours => m_Behaviours;
+
         private bool m_FacingLeft = false; // 这里是相机角度的左右
 
         private float m_DieCollisionTimer;

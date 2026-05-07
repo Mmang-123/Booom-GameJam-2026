@@ -25,9 +25,9 @@ namespace Game
         }
     }
 
-    public class FB_Swim : FishBehaviour
+    public class FB_Swim : FishBehaviour, IGolemBehaviour
     {
-        public enum State { Normal, Trace, Disable }
+        public enum State { Normal, Trace, Golem, Disable }
 
         [Header("基础设置")]
         [SerializeField] private float m_RotateSpeed = 3f;
@@ -52,6 +52,7 @@ namespace Game
         public Vector2 TargetDirection { get; set; }
         public float CurrentSpeed { get; set; }
         public bool RotateToTargetPoint { get; set; }
+        public bool GolemActive { get; set; }
         public bool IsDisable { get; set; }
 
         //
@@ -85,7 +86,7 @@ namespace Game
                 }
             }
 
-            if (!IsDisable)
+            if (!IsDisable && !GolemActive)
             {
                 RotateToTarget();
             }
@@ -101,6 +102,8 @@ namespace Game
                 case State.Trace:
                     TraceUpdate(Time.fixedDeltaTime);
                     break;
+                case State.Golem:
+                    break;
                 default:
                     DefaultUpdate(Time.fixedDeltaTime);
                     break;
@@ -115,6 +118,8 @@ namespace Game
             // 大概是管理当前帧的状态机
             if (IsDisable)
                 CurrentState = State.Disable;
+            else if (GolemActive)
+                CurrentState = State.Golem;
             else
                 CurrentState = Tracing ? State.Trace : State.Normal;
         }
@@ -285,6 +290,20 @@ namespace Game
 
             avoidanceDirection = Vector2.zero;
             return false;
+        }
+
+        #endregion
+
+        #region 石像
+
+        public void SetGolemActive(bool active)
+        {
+            GolemActive = active;
+            if (GolemActive)
+            {
+                var velocity = AdditionalVelocity.Create(CurrentSpeed * Fish.ForwardDirection, m_Acceleration * 2f);
+                AddAdditionalVelocity(velocity);
+            }
         }
 
         #endregion
