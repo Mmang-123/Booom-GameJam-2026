@@ -119,7 +119,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!84 &181299261
+--- !u!84 &183947886
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -200,7 +200,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &842797187
+--- !u!84 &1185377747
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -364,7 +364,7 @@ PrefabInstance:
     - target: {fileID: 936846824445931431, guid: 0987423758466984aa3c765c093caf7d, type: 3}
       propertyPath: m_TargetTexture
       value: 
-      objectReference: {fileID: 842797187}
+      objectReference: {fileID: 1185377747}
     - target: {fileID: 5625299763618099865, guid: 0987423758466984aa3c765c093caf7d, type: 3}
       propertyPath: m_Name
       value: Camera
@@ -403,7 +403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ad2683ebc02e2448b1fd2d78738731a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Test_GameManager
-  m_LoadLevelName: Midnight-Bottom
+  m_LoadLevelName: MidnightBottom
 --- !u!4 &1921418636
 Transform:
   m_ObjectHideFlags: 0

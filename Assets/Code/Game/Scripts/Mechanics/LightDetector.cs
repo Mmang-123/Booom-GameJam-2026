@@ -4,7 +4,14 @@ using UnityEngine;
 
 namespace Game
 {
-    public class LightDetector : MonoBehaviour, IPowerSource
+
+    [System.Serializable]
+    public struct LightDetectorSaveData
+    {
+        public bool Active;
+    }
+
+    public class LightDetector : MonoBehaviour, IPowerSource, ILevelSavable
     {
         [SerializeField] private SpriteRenderer m_EmissionLight;
         [SerializeField] private bool m_InitTurnOn = false;
@@ -39,7 +46,13 @@ namespace Game
                 return;
             m_Inited = true;
 
-            SetActive(m_InitTurnOn);
+            // 加载
+            if (!GameManager.Instance.TryLoadSavedData(this))
+            {
+                // 加载失败按原值
+                SetActive(m_InitTurnOn);
+            }
+
             m_EmissionLight.color = m_Active ? ActiveColor : InactiveColor;
             m_ActiveTimer = m_Active ? MaxActiveTime : 0f;
         }
@@ -77,5 +90,33 @@ namespace Game
             var clip = m_Active ? m_ActivateClip : m_DeactivateClip;
             AudioManager.PlayAtPosition(clip, transform.position);
         }
+
+
+        #region 保存和加载
+
+        [SerializeField, HideInInspector] private string m_GUID = System.Guid.NewGuid().ToString();
+        public string GUID => m_GUID;
+
+        public virtual string SaveJson()
+        {
+            var saveData = new LightDetectorSaveData()
+            {
+                Active = m_Active
+            };
+
+            string json = JsonUtility.ToJson(saveData);
+            return json;
+        }
+
+        public virtual void LoadJson(string json)
+        {
+            if (string.IsNullOrEmpty(json))
+                return;
+
+            var saveData = JsonUtility.FromJson<LightDetectorSaveData>(json);
+            SetActive(saveData.Active);
+        }
+
+        #endregion
     }
 }

@@ -30,7 +30,7 @@ namespace Game
         public void LoseControl(IFishController newController);
     }
 
-    public class Fish : MonoBehaviour
+    public class Fish : MonoBehaviour, ILevelSavable
     {
         [SerializeField] private GameplayTag m_FishTypeTag;
 
@@ -117,7 +117,10 @@ namespace Game
 
         private void Start()
         {
-            Init();
+            GameManager.Instance.TryLoadSavedData(this);
+
+            if (gameObject.activeSelf)
+                Init();
         }
 
         public void Init()
@@ -464,6 +467,37 @@ namespace Game
         }
 
         #endregion
-    
+
+        #region 保存和加载
+
+        [SerializeField, HideInInspector] private string m_GUID = System.Guid.NewGuid().ToString();
+        public string GUID => m_GUID;
+
+        public virtual string SaveJson()
+        {
+            var saveData = new FishSaveData()
+            {
+                Exist = !m_Dead && !IsPlayer && !Eaten
+            };
+
+            string json = JsonUtility.ToJson(saveData);
+            return json;
+        }
+
+        public virtual void LoadJson(string json)
+        {
+            if (string.IsNullOrEmpty(json))
+                return;
+
+            var saveData = JsonUtility.FromJson<FishSaveData>(json);
+
+            if (!saveData.Exist)
+            {
+                gameObject.SetActive(false);
+                m_Dead = true;
+            }
+        }
+
+        #endregion
     }
 }

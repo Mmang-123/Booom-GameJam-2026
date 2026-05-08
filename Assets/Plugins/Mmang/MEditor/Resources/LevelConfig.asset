@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: LevelConfig
   m_EditorClassIdentifier: Assembly-CSharp::Game.LevelConfig
   m_DataList:
-  - LevelName: Midnight-Bottom
-    Prefab: {fileID: 4890463886242813451, guid: c661ab865d658eb40be82b68be6f5fdf, type: 3}
+  - {fileID: 4890463886242813451, guid: c661ab865d658eb40be82b68be6f5fdf, type: 3}

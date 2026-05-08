@@ -4,23 +4,15 @@ using System.Collections.Generic;
 
 namespace Game
 {
-    [System.Serializable]
-    public class LevelData
-    {
-        public string LevelName;
-        public LevelRoot Prefab;   
-    }
-
-
     [MGlobalConfig]
     [CreateAssetMenu(menuName = "Create Level Config")]
     public class LevelConfig : ScriptableObject
     {
-        [SerializeField] private List<LevelData> m_DataList = new();
+        [SerializeField] private List<LevelRoot> m_DataList = new();
 
         // Runtime
         [System.NonSerialized] private bool m_Inited = false;               
-        [System.NonSerialized] private Dictionary<string, LevelData> m_Map;
+        [System.NonSerialized] private Dictionary<string, LevelRoot> m_Map;
 
         private void Init()
         {
@@ -37,7 +29,7 @@ namespace Game
             }
         }
 
-        public static LevelData GetLevel(string levelName)
+        public static LevelRoot GetLevel(string levelName)
         {
             var instance = GlobalConfigAssets.GetConfigInstance<LevelConfig>();
             instance.Init();

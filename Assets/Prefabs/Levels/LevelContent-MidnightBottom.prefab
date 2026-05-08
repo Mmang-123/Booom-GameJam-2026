@@ -134285,6 +134285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885f50e996422f84084ceac55c99a6e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.LevelRoot
+  m_LevelName: MidnightBottom
 --- !u!1 &3584094532708276330
 GameObject:
   m_ObjectHideFlags: 0
@@ -259981,6 +259982,7 @@ MonoBehaviour:
   m_EatenParticle: {fileID: 953416650970146418, guid: 9bf9c33daa71f8748a41f43dd178aa87, type: 3}
   m_DefaultEatenParticleColor: {r: 0.30588236, g: 1, b: 0.9098039, a: 1}
   m_InfectedEatenParticleColor: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}
+  m_GUID: 75ecff2b-675d-449a-9e45-ab44f7ada86f
 --- !u!114 &8105903468637117251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269115,6 +269117,7 @@ MonoBehaviour:
   m_EatenParticle: {fileID: 953416650970146418, guid: 9bf9c33daa71f8748a41f43dd178aa87, type: 3}
   m_DefaultEatenParticleColor: {r: 0.30588236, g: 1, b: 0.9098039, a: 1}
   m_InfectedEatenParticleColor: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}
+  m_GUID: bcbe1040-609d-4619-86b3-4f2551295274
 --- !u!114 &465488339937453734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318124,6 +318127,7 @@ MonoBehaviour:
   m_EatenParticle: {fileID: 0}
   m_DefaultEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
   m_InfectedEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
+  m_GUID: 7a7c168a-56de-40f9-8870-29e7892afbca
 --- !u!114 &6832850621134728133
 MonoBehaviour:
   m_ObjectHideFlags: 0
