@@ -19,6 +19,9 @@ namespace Game
 
         public void Save(ILevelSavable savable)
         {
+            if (savable == null)
+                return;
+
             if (!m_Map.ContainsKey(savable.GUID))
                 m_Map.Add(savable.GUID, string.Empty);
             

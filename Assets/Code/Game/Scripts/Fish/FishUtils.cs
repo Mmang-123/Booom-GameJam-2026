@@ -120,6 +120,7 @@ namespace Game
             
             result.ai = Object.Instantiate(aiPrefab, position, rotation);
             result.fish = Object.Instantiate(fishPrefab, position, rotation);
+            result.fish.DontSave = true;
             if (inLevelRoot)
             {
                 var root = GameManager.Instance.CurrentLevelRoot.transform;

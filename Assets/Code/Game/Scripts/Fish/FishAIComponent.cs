@@ -65,7 +65,8 @@ namespace Game
         public void LoseControl(IFishController otherController)
         {
             m_Fish = null;
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
+            Destroy(gameObject);
         }
 
         public void Init(Fish fish)

@@ -111,6 +111,7 @@ namespace Game
         private Vector2 m_TransferPosition;
 
         public bool Eaten { get; set; }
+        public bool DontSave { get; set; } = false;
 
         private bool m_Dead = false;
         public bool IsLiving => !m_Dead;
@@ -353,8 +354,12 @@ namespace Game
             m_Dead = true;
             Saturation = 0f;
             
-            int dieEffect;
+            if (!DontSave)
+            {
+                GameManager.Instance.Save(this);
+            }
 
+            int dieEffect;
             if (dieType == EDieType.Eaten)
             {
                 dieEffect = 0;
@@ -377,7 +382,8 @@ namespace Game
 
             if (dieEffect == 0)
             {
-                gameObject.SetActive(false);
+                //gameObject.SetActive(false);
+                Destroy(gameObject);
             }
             else if (dieEffect == 1)
             {
@@ -388,13 +394,14 @@ namespace Game
             }
             else
             {
-                gameObject.SetActive(false);
+                //gameObject.SetActive(false);
                 if (m_DieCollisionParticle != null)
                 {
                     var particle = ParticleUtils.Create(m_DieCollisionParticle, Position, Quaternion.Euler(-90f, 0f, 0f));
                     particle.SetOverrideColor(m_InfectedLevel >= EInfectedLevel.High ? m_InfectedBodyColor : m_DefaultBodyColor);
                     particle.StartPlay();
                 }
+                Destroy(gameObject);
             }
         }
 

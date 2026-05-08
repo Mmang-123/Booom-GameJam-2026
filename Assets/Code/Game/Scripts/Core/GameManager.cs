@@ -119,6 +119,15 @@ namespace Game
             return newData;
         }
 
+        public void Save(ILevelSavable savable)
+        {
+            if (!LevelValid)
+                return;
+
+            var savedData = GetSavedData(m_LevelRoot.LevelName);
+            savedData.Save(savable);
+        }
+
         #endregion
     }
 }
