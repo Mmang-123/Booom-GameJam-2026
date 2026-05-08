@@ -8,6 +8,9 @@ namespace Game
         public string GUID { get; }
         public string SaveJson();
         public void LoadJson(string json);
+#if UNITY_EDITOR
+        public void Editor_SetGUID(string newGUID);
+#endif
     }
 
     public class LevelSaveData

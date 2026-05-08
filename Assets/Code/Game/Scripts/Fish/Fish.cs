@@ -498,6 +498,10 @@ namespace Game
             }
         }
 
+#if UNITY_EDITOR
+        public void Editor_SetGUID(string newGUID) => m_GUID = newGUID;
+#endif
+
         #endregion
     }
 }
