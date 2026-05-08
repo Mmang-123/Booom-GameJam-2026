@@ -330,12 +330,34 @@ namespace Game
 
             m_Dead = true;
             Saturation = 0f;
+            
+            int dieEffect;
+
             if (dieType == EDieType.Eaten)
             {
-                gameObject.SetActive(false);
-                return;
+                dieEffect = 0;
             }
             else if (dieType == EDieType.Hunger)
+            {
+                if (FishTypeTag.Equals(FishUtils.JellyGleamTag))
+                {
+                    dieEffect = 2;
+                }
+                else
+                {
+                    dieEffect = 1;
+                }
+            }
+            else
+            {
+                dieEffect = 2;
+            }
+
+            if (dieEffect == 0)
+            {
+                gameObject.SetActive(false);
+            }
+            else if (dieEffect == 1)
             {
                 if (TryGetBehaviour<FB_GenericAnimator>(out var animatorBehaviour))
                 {

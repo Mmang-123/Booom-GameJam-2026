@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mmang.Game;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -9,6 +10,11 @@ namespace Game
         public static readonly LayerMask FishLayer = LayerMask.GetMask("Fish");
         public static readonly LayerMask WithoutFishLayer = ~FishLayer;
         private static Collider2D[] s_ColliderCache = new Collider2D[64];
+
+        public static GameplayTag JellyGleamTag => GameplayTag.CreateByName("FishType.JellyGleam");
+        public static GameplayTag LanternFishTag => GameplayTag.CreateByName("FishType.LanternFish");
+        public static GameplayTag FlashLightFishTag => GameplayTag.CreateByName("FishType.FlashLightFish");
+        public static GameplayTag GolemFishTag => GameplayTag.CreateByName("FishType.GolemFish");
 
 
         #region Physics

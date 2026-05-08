@@ -13,14 +13,22 @@ namespace Game
         [SerializeField] private float m_LookAtOffset = 0.5f;
         [SerializeField] private float m_LookAtOffsetMouseRadius = 2f; // 根据鼠标到中心的距离/半径 作为偏移的强度
 
+        [SerializeField] private float m_SuicideTime = 2f;
+
         public Fish Fish { get; private set; }
 
         public bool Active { get; private set; } = true;
         public float DisableTimer { get; set; }
 
+        private float MinMBPressedTime => 0.5f;
+
         // Runtime
         private Transform m_PlayerDirectionPoint; // 根据朝向实时更新的点
         private bool m_MouseRBPressedLastFrame = false;
+        private bool m_MBPressed = false;
+        private float m_MBPressedTimer = 0f;
+
+
         private ControlFishConfig m_FishConfig;
 
         protected override void OnAwake()
@@ -105,11 +113,17 @@ namespace Game
                 return;
             }
 
-            TraceMousePoint();
-
-            if (Mouse.current.rightButton.isPressed && !m_MouseRBPressedLastFrame)
+            var mouse = Mouse.current;
+            if (mouse != null)
             {
-                UseSkill();
+                TraceMousePoint();
+
+                if (mouse.rightButton.isPressed && !m_MouseRBPressedLastFrame)
+                {
+                    UseSkill();
+                }
+
+                MBUpdate();
             }
         }
 
@@ -151,14 +165,15 @@ namespace Game
 
         private void TraceMousePoint()
         {
-            Vector2 screenPos = Mouse.current.position.ReadValue();
+            var mouse = Mouse.current;
+            Vector2 screenPos = mouse.position.ReadValue();
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
 
             if (m_CurrentFish != null)
             {
                 var swimBehaviour = m_CurrentFish.GetBehaviour<FB_Swim>();
                 swimBehaviour.TargetPoint = worldPos;
-                swimBehaviour.Tracing = Mouse.current.leftButton.isPressed;
+                swimBehaviour.Tracing = mouse.leftButton.isPressed;
 
                 // 相机偏移
                 float distance = Vector2.Distance(worldPos, m_CurrentFish.Position);
@@ -179,6 +194,45 @@ namespace Game
             }
         }
 
+        private void MBUpdate()
+        {
+            var mouse = Mouse.current;
+
+            if (Fish == null || !Fish.IsLiving)
+            {
+                if (m_MBPressed)
+                {
+                    m_MBPressed = false;
+                    m_MBPressedTimer = 0f;
+                    UpdateSuicide();
+                }
+
+                return;
+            }
+
+            if (!m_MBPressed && mouse.middleButton.isPressed)
+            {
+                m_MBPressed = true;
+                m_MBPressedTimer = 0f;
+            }
+            else
+            {
+                m_MBPressedTimer += Time.deltaTime;
+                if (m_MBPressedTimer > MinMBPressedTime && !m_MBPressed)
+                {
+                    m_MBPressed = false;
+                }
+                else
+                {
+                    UpdateSuicide();
+                    if (m_MBPressedTimer > m_SuicideTime)
+                    {
+                        CommitSuicide();
+                    }
+                }
+            }
+        }
+
         private void UseSkill()
         {
             if (m_CurrentFish != null
@@ -191,6 +245,18 @@ namespace Game
             }
         }
 
+        private void UpdateSuicide()
+        {
+            
+        }
+
+        private void CommitSuicide()
+        {
+            if (Fish == null)
+                return;
+
+            Fish.Die(EDieType.Hunger);
+        }
 
         #region 捕食
 
