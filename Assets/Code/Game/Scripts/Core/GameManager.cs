@@ -45,7 +45,7 @@ namespace Game
 
         }
 
-        public void LoadLevel(LoadLevelParams loadLevelParams)
+        public void LoadLevel(LoadLevelParams loadLevelParams, System.Action completedCallback = null)
         {
             var levelData = LevelConfig.GetLevel(loadLevelParams.LevelName);
             if (levelData == null)
@@ -57,7 +57,11 @@ namespace Game
             UnloadCurrentLevel();
             m_Loading = true;
             var operation = InstantiateAsync<LevelRoot>(levelData);
-            operation.completed += (op) => OnLoadLevelCompleted(operation.Result[0]);
+            operation.completed += (op) =>
+            {
+                OnLoadLevelCompleted(operation.Result[0]);
+                completedCallback?.Invoke();
+            };
         }
 
         private void UnloadCurrentLevel()

@@ -36099,6 +36099,7 @@ MonoBehaviour:
     m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_GUID: d688c24a-11eb-4224-b623-83c140781728
 --- !u!1 &927253424840297423
 GameObject:
   m_ObjectHideFlags: 0
@@ -65242,6 +65243,7 @@ MonoBehaviour:
     m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_GUID: cc148f52-1915-475a-8789-05b31ad6db14
 --- !u!1 &1678094717304417637
 GameObject:
   m_ObjectHideFlags: 0
@@ -84345,6 +84347,7 @@ MonoBehaviour:
     m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_GUID: 60982000-b263-4605-bc9c-7ced5ae61b26
 --- !u!1 &2217125736102183062
 GameObject:
   m_ObjectHideFlags: 0
@@ -87318,6 +87321,7 @@ MonoBehaviour:
     m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_GUID: ecc8392a-f442-4f70-b733-c19d4e349525
 --- !u!1 &2304869431975707763
 GameObject:
   m_ObjectHideFlags: 0
@@ -89204,6 +89208,7 @@ MonoBehaviour:
     m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_GUID: d81df401-7f9a-46a6-9f7d-03787e704fce
 --- !u!1 &2338266065056547364
 GameObject:
   m_ObjectHideFlags: 0
@@ -134285,7 +134290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885f50e996422f84084ceac55c99a6e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.LevelRoot
-  m_LevelName: MidnightBottom
+  m_LevelName: Lab
 --- !u!1 &3584094532708276330
 GameObject:
   m_ObjectHideFlags: 0
@@ -141330,6 +141335,7 @@ MonoBehaviour:
     m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_GUID: 29b4f2f9-6be2-4e50-b755-18ff7c410ced
 --- !u!1 &3803415496760238220
 GameObject:
   m_ObjectHideFlags: 0
@@ -241183,6 +241189,7 @@ MonoBehaviour:
     m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_GUID: 8627dc16-3a5c-42d5-81cd-1f407db5f7cc
 --- !u!1 &6618045866153916496
 GameObject:
   m_ObjectHideFlags: 0
@@ -241943,6 +241950,7 @@ MonoBehaviour:
     m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_GUID: 1a8fb81e-78a3-46de-b019-d56f8cddb81b
 --- !u!1 &6640385567076990358
 GameObject:
   m_ObjectHideFlags: 0
@@ -249135,6 +249143,7 @@ MonoBehaviour:
     m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_GUID: 2877382d-46fe-4f77-9cb4-6efa019bdadc
 --- !u!1 &6850921649452384610
 GameObject:
   m_ObjectHideFlags: 0
@@ -287384,6 +287393,7 @@ MonoBehaviour:
     m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_GUID: 7054f205-4a92-4fcd-a010-6a0dd532b56f
 --- !u!1 &7729956079192408902
 GameObject:
   m_ObjectHideFlags: 0
@@ -313775,6 +313785,7 @@ MonoBehaviour:
     m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_GUID: 4be0cc63-3e1d-4a9b-88bf-810e08f9ccfb
 --- !u!1 &8482970340476599520
 GameObject:
   m_ObjectHideFlags: 0
@@ -328730,6 +328741,7 @@ MonoBehaviour:
     m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_GUID: b08ee177-262b-481b-87e5-771400cc852a
 --- !u!1 &8892448465564610454
 GameObject:
   m_ObjectHideFlags: 0
@@ -341096,6 +341108,7 @@ MonoBehaviour:
     m_Set: {fileID: 11400000, guid: 90ad32ce141564640a3b3b2b0c08a3ff, type: 2}
   ActiveColor: {r: 0, g: 1, b: 0, a: 1}
   InactiveColor: {r: 1, g: 0, b: 0, a: 1}
+  m_GUID: 55217b7c-a0f1-497b-b2a8-b2e60ef3914b
 --- !u!1 &9210562729299400218
 GameObject:
   m_ObjectHideFlags: 0
