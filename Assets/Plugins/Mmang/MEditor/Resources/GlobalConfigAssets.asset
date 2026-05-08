@@ -23,3 +23,5 @@ MonoBehaviour:
     SO: {fileID: 11400000, guid: 500712f3b25b4944c826fe6fa6d3470f, type: 2}
   - Name: Particle Config
     SO: {fileID: 11400000, guid: 6be6f6091ceabae42965da7bcc179052, type: 2}
+  - Name: Level Config
+    SO: {fileID: 11400000, guid: 56525de9b8813164ba9f301131c1fc64, type: 2}

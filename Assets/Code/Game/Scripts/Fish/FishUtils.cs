@@ -11,11 +11,13 @@ namespace Game
         public static readonly LayerMask WithoutFishLayer = ~FishLayer;
         private static Collider2D[] s_ColliderCache = new Collider2D[64];
 
+
+        #region Tags
         public static GameplayTag JellyGleamTag => GameplayTag.CreateByName("FishType.JellyGleam");
         public static GameplayTag LanternFishTag => GameplayTag.CreateByName("FishType.LanternFish");
         public static GameplayTag FlashLightFishTag => GameplayTag.CreateByName("FishType.FlashLightFish");
         public static GameplayTag GolemFishTag => GameplayTag.CreateByName("FishType.GolemFish");
-
+        #endregion
 
         #region Physics
         public static void GetFishInCircle(Vector2 center, float radius, List<Fish> result, bool onlyLiving = true, bool clearResultList = true, Fish ignoreFish = null)
