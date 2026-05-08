@@ -451,6 +451,7 @@ MonoBehaviour:
   m_EatenParticle: {fileID: 0}
   m_DefaultEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
   m_InfectedEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
+  m_GUID: b0ac052a-a726-4b71-8630-18bf67a27474
 --- !u!114 &7792305372667502108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -513,7 +514,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &2034007165832799525
 MonoBehaviour:

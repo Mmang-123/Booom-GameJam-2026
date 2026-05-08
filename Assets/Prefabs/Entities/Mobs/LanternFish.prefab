@@ -453,6 +453,7 @@ MonoBehaviour:
   m_FlipRoot: {fileID: 5428743268945966197}
   m_DieCollider: {fileID: 1567890010333060962}
   m_DieCollisionTime: 0.1
+  m_DieCollisionMaxSpeed: 1
   m_DieCollisionParticle: {fileID: 953416650970146418, guid: 172564a4c83de894d8f2711225b54322, type: 3}
   m_InfectedLevel: 0
   m_SporeRenderer1: {fileID: 531898999858827687}
@@ -470,6 +471,7 @@ MonoBehaviour:
   m_EatenParticle: {fileID: 0}
   m_DefaultEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
   m_InfectedEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
+  m_GUID: 92f36b3e-8ec7-4135-87cc-48590d8bf2c8
 --- !u!114 &547956989833178184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -560,7 +562,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!58 &5141295183322557257
 CircleCollider2D:
