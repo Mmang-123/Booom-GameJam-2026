@@ -15,6 +15,11 @@ namespace Game
         private Vector2 m_UpDirection;
         private Vector2 m_ZoneSize;
 
+        public delegate bool CheckDelegate((EState horizontalState, EState verticalState) states);
+        public CheckDelegate CheckFunc;
+
+        public bool Active => m_Active;
+
         private void Start()
         {
             m_Center = (Vector2)transform.position + m_Zone.offset;
@@ -31,15 +36,7 @@ namespace Game
             if (fish == null)
                 return;
 
-            if (!m_Active)
-            {
-                var states = CheckPosition(fish.Position);
-                if (states.horizontalState == EState.Include && states.verticalState == EState.Include)
-                {
-                    SetActive(true);
-                }
-            }
-            else
+            if (m_Active)
             {
                 Vector2 offset = fish.Position - m_Center;
                 float xLength = Vector2.Dot(offset, m_RightDirection);
@@ -48,40 +45,49 @@ namespace Game
                 Vector2 newPosition = fish.Position;
                 bool changed = false;
 
+                (EState horizontalState, EState verticalState) states = new()
+                {
+                    horizontalState = EState.Include,
+                    verticalState = EState.Include
+                };
+
                 if (xLength > m_ZoneSize.x * 0.5f)
                 {
                     newPosition -= m_RightDirection * m_ZoneSize.x;
                     changed = true;
+                    states.horizontalState = EState.Positive;
                 }
                 else if (xLength < -m_ZoneSize.x * 0.5f)
                 {
                     newPosition += m_RightDirection * m_ZoneSize.x;
                     changed = true;
+                    states.horizontalState = EState.Negative;
                 }
 
                 if (yLength > m_ZoneSize.y * 0.5f)
                 {
                     newPosition -= m_UpDirection * m_ZoneSize.y;
                     changed = true;
+                    states.verticalState = EState.Positive;
                 }
                 else if (yLength < -m_ZoneSize.y * 0.5f)
                 {
                     newPosition += m_UpDirection * m_ZoneSize.y;
                     changed = true;
+                    states.verticalState = EState.Negative;
                 }
 
-                if (changed)
+                if (changed && (CheckFunc == null || CheckFunc(states)))
                     player.Transfer(newPosition);
             }
         }
 
-        private void SetActive(bool active)
+        public void SetActive(bool active)
         {
             m_Active = active;
-            Debug.Log("Loop: " + active);
         }
 
-        private (EState horizontalState, EState verticalState) CheckPosition(Vector2 position)
+        public (EState horizontalState, EState verticalState) CheckPosition(Vector2 position)
         {
             (EState horizontalState, EState verticalState) result = new();
 

@@ -150,13 +150,9 @@ namespace Game
             {
                 return;
             }
-            //Debug.Log("Target: " + TargetPoint);
+
             m_FollowDamper.UpdateAttribute(m_FollowSetting);
             Vector2 finalPos = m_FollowDamper.Update(dt, TargetPoint);
-
-            //Debug.Log(offset);
-            
-            //finalPos = TargetPoint;
             transform.position = new(finalPos.x, finalPos.y, transform.position.z);
         }
 

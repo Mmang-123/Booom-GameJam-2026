@@ -7,7 +7,6 @@ using UnityEngine.Pool;
 
 namespace Game
 {
-
     public enum EDirection
     {
         Up, Down, Left, Right
@@ -108,6 +107,9 @@ namespace Game
         public Vector2 ForwardDirection => transform.rotation * s_DirectionMap[m_EDirection];
         public Vector2 Position => transform.position;
 
+        private bool m_Transfered = false;
+        private Vector2 m_TransferPosition;
+
         public bool Eaten { get; set; }
 
         private bool m_Dead = false;
@@ -186,8 +188,6 @@ namespace Game
             }
         }
 
-        private bool m_Transfered = false;
-        private Vector2 m_TransferPosition;
         private void FixedUpdate()
         {
             if (m_Dead)
