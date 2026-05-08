@@ -80,6 +80,10 @@ namespace Game
             }
             else
             {
+                // 放到场景根下
+                m_CurrentFish.transform.SetParent(null, true);
+
+                //
                 m_CurrentFish.Init();
                 m_CurrentFish.GetBehaviour<FB_Swim>().RotateToTargetPoint = Active;
                 cameraController.AddFollowPoint(m_PlayerDirectionPoint, m_LookAtOffset);
