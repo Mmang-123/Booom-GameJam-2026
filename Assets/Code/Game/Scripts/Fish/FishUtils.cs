@@ -112,7 +112,7 @@ namespace Game
 
 
         #region Create
-        public static (FishAIComponent ai, Fish fish) Create(FishAIComponent aiPrefab, Fish fishPrefab, Vector2 position, Quaternion rotation)
+        public static (FishAIComponent ai, Fish fish) Create(FishAIComponent aiPrefab, Fish fishPrefab, Vector2 position, Quaternion rotation, bool inLevelRoot = true)
         {
             (FishAIComponent ai, Fish fish) result = new();
             if (aiPrefab == null || fishPrefab == null)
@@ -120,6 +120,12 @@ namespace Game
             
             result.ai = Object.Instantiate(aiPrefab, position, rotation);
             result.fish = Object.Instantiate(fishPrefab, position, rotation);
+            if (inLevelRoot)
+            {
+                var root = GameManager.Instance.CurrentLevelRoot.transform;
+                result.ai.transform.SetParent(root, true);
+                result.fish.transform.SetParent(root, true);
+            }
 
             result.ai.SetFishBeforeInit(result.fish);
 

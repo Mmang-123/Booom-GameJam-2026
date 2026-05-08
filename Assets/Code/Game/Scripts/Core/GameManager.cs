@@ -24,6 +24,8 @@ namespace Game
         [SerializeField] private EMode m_Mode;
         [SerializeField] private LevelRoot m_LevelRoot;
 
+        public LevelRoot CurrentLevelRoot => m_LevelRoot;
+        public bool LevelValid => CurrentLevelRoot != null;
 
         //
         private bool m_Loading = false;
