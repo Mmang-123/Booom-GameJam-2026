@@ -92,6 +92,11 @@ namespace Game
 
         public bool TryLoadSavedData(ILevelSavable savable)
         {
+            if (m_LevelRoot == null)
+            {
+                return false;
+            }
+
             if (m_CurrentSavables.Contains(savable))
             {
                 Debug.Log("重复加载: " + savable);
