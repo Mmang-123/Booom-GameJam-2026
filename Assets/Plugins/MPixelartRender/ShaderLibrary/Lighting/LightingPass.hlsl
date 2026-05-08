@@ -65,16 +65,86 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
         float nextStep = UnpackSDFToRaw(sdf) * 0.9;
         if (nextStep <= 4.0 * unitSize)
         {
-            nextStep = unitSize;
+            // 切换到DDA精确网格遍历
+            float2 invAbsDir = 1.0 / max(abs(direction), 1e-6);
+            float2 tDelta = unitSize * invAbsDir;
+            int2 cellPos = int2(floor(current / unitSize));
+            int2 stepDirDDA = int2(sign(direction));
+            float2 tMax;
+            tMax.x = direction.x >= 0
+                ? ((cellPos.x + 1) * unitSize - current.x) * invAbsDir.x
+                : (current.x - cellPos.x * unitSize) * invAbsDir.x;
+            tMax.y = direction.y >= 0
+                ? ((cellPos.y + 1) * unitSize - current.y) * invAbsDir.y
+                : (current.y - cellPos.y * unitSize) * invAbsDir.y;
 
-            // 采样两个分量
-            half obstacleMaskX = GetObstacleMask_RawCamera(current + float2(sign(direction.x) * unitSize, 0.0));
-            half obstacleMaskY = GetObstacleMask_RawCamera(current + float2(0.0, sign(direction.y) * unitSize));
-            if (obstacleMaskX + obstacleMaskY > maskThreshold)
+            float ddaMaxDist = dist - innerRadius;
+            float cornerEps = min(tDelta.x, tDelta.y) * 0.01;
+
+            // ddaStatus: 0=未决（步数耗尽），1=到达光源，-1=被遮挡
+            int ddaStatus = 0;
+            float ddaLastT = 0.0;
+
+            [loop]
+            for (int j = 0; j < 64; j++)
             {
-                shadowMask = 0.0;
+                float t;
+                if (abs(tMax.x - tMax.y) <= cornerEps)
+                {
+                    // 射线过网格角点：同时步进两轴
+                    t = tMax.x;
+                    if (t >= ddaMaxDist) { ddaStatus = 1; break; }
+
+                    int2 cellX = int2(cellPos.x + stepDirDDA.x, cellPos.y);
+                    int2 cellY = int2(cellPos.x, cellPos.y + stepDirDDA.y);
+                    cellPos += stepDirDDA;
+                    tMax += tDelta;
+
+                    // 只有两侧格子都是障碍才遮挡（90度实心夹角）
+                    half maskX = GetObstacleMask_RawCamera((float2(cellX) + 0.5) * unitSize);
+                    half maskY = GetObstacleMask_RawCamera((float2(cellY) + 0.5) * unitSize);
+                    if (maskX > maskThreshold && maskY > maskThreshold)
+                        { shadowMask = 0.0; ddaStatus = -1; break; }
+
+                    half ddaMask = GetObstacleMask_RawCamera((float2(cellPos) + 0.5) * unitSize);
+                    if (ddaMask > maskThreshold)
+                        { shadowMask = 0.0; ddaStatus = -1; break; }
+                }
+                else if (tMax.x < tMax.y)
+                {
+                    t = tMax.x;
+                    if (t >= ddaMaxDist) { ddaStatus = 1; break; }
+                    cellPos.x += stepDirDDA.x;
+                    tMax.x += tDelta.x;
+
+                    half ddaMask = GetObstacleMask_RawCamera((float2(cellPos) + 0.5) * unitSize);
+                    if (ddaMask > maskThreshold)
+                        { shadowMask = 0.0; ddaStatus = -1; break; }
+                }
+                else
+                {
+                    t = tMax.y;
+                    if (t >= ddaMaxDist) { ddaStatus = 1; break; }
+                    cellPos.y += stepDirDDA.y;
+                    tMax.y += tDelta.y;
+
+                    half ddaMask = GetObstacleMask_RawCamera((float2(cellPos) + 0.5) * unitSize);
+                    if (ddaMask > maskThreshold)
+                        { shadowMask = 0.0; ddaStatus = -1; break; }
+                }
+
+                ddaLastT = t;
+            }
+
+            if (ddaStatus != 0)
+            {
+                // DDA已得出结论（到达光源或被遮挡），退出外层循环
                 break;
             }
+
+            // 步数耗尽但未得出结论：推进current，继续SDF march
+            current += direction * max(ddaLastT, unitSize);
+            continue;
         }
 
         if (dist <= nextStep)

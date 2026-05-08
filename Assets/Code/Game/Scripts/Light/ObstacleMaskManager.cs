@@ -76,7 +76,7 @@ namespace Mmang.PixelartRender
                 Vector2Int offset = new(i % 3 * Resolution, i / 3 * Resolution);
                 m_SDFThreadIDs[i] = m_DFFeature.Pending(
                     null, m_SDFs[i], offset,
-                    extendPixels: 128, nearestPointSearchRange: m_NearestPointSearchRange, boundaryDistance: false, shaderPropertyID: Shader.PropertyToID($"_ObstacleSDF_{i}"));
+                    extendPixels: 128, nearestPointSearchRange: m_NearestPointSearchRange, boundaryDistance: false, alphaThreshold: 0.05f, shaderPropertyID: Shader.PropertyToID($"_ObstacleSDF_{i}"));
             }
         }
 
