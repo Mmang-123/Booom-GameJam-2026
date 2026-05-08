@@ -67,10 +67,13 @@ namespace Game
             base.OnEnd(endType);
             Debug.Log("Trace_End");
 
-            SwimBehaviour.Tracing = false;
-            EatBehaviour = Fish.GetBehaviour<FB_Eat>();
-            if (EatBehaviour != null)
-                EatBehaviour.Target = null;
+            if (Fish != null)
+            {
+                SwimBehaviour.Tracing = false;
+                EatBehaviour = Fish.GetBehaviour<FB_Eat>();
+                if (EatBehaviour != null)
+                    EatBehaviour.Target = null;   
+            }
         }
 
         /// <summary>
