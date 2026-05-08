@@ -59,6 +59,7 @@ namespace Game
             {
                 ComputeTargetPoint();
                 FollowTargetPoint(m_FDT);
+                m_FDT = 0f;
             }
             //ComputeTargetPoint();
             //FollowTargetPoint(Time.deltaTime);
@@ -67,7 +68,7 @@ namespace Game
         private void FixedUpdate()
         {
             m_FixedUpdateThisFrame = true;
-            m_FDT = Time.fixedDeltaTime;
+            m_FDT += Time.fixedDeltaTime;
             //ComputeTargetPoint();
             //FollowTargetPoint(Time.fixedDeltaTime);
         }

@@ -9,7 +9,7 @@ namespace Game
         [SerializeField] private BoxCollider2D m_Zone;
     
         // Runtime
-        private bool m_Active;
+        [SerializeField] private bool m_Active;
         private Vector2 m_Center;
         private Vector2 m_RightDirection;
         private Vector2 m_UpDirection;

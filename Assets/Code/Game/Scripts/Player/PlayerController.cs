@@ -222,7 +222,7 @@ namespace Game
             else
             {
                 m_MBPressedTimer += Time.deltaTime;
-                if (m_MBPressedTimer > MinMBPressedTime && !m_MBPressed)
+                if (m_MBPressedTimer > MinMBPressedTime && !mouse.middleButton.isPressed)
                 {
                     m_MBPressed = false;
                 }
