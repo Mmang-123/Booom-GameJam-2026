@@ -10,6 +10,7 @@ namespace Game
         [SerializeField] private float m_ChainLength = 6f;
         [SerializeField] private float m_MoveTime = 0.5f;
 
+        [SerializeField] private LayerMask m_ObstacleLayer = ~0;
         [SerializeField] private BoxCollider2D m_Box;
         [SerializeField] private SpriteRenderer m_BoxRenderer;
         [SerializeField] private SpriteRenderer m_ChainRenderer;
@@ -89,8 +90,20 @@ namespace Game
             {
                 if (m_T < 1f)
                 {
-                    m_T = Mathf.Clamp01(m_T + Time.deltaTime / m_MoveTime);
-                    MoveBox(m_T);
+                    //m_T = Mathf.Clamp01(m_T + Time.deltaTime / m_MoveTime);
+                    //MoveBox(m_T);
+                    float nextT = Mathf.Clamp01(m_T + Time.deltaTime / m_MoveTime);
+                    
+                    // 只有在没有物理阻挡的情况下才实际更新 m_T 和位置
+                    if (CanMove(m_T, nextT))
+                    {
+                        m_T = nextT;
+                        MoveBox(m_T);
+                    }
+                    else if (!IsPowered)
+                    {
+                        SetActive(false);
+                    }
                 }
                 else if (!IsPowered)
                 {
@@ -99,8 +112,19 @@ namespace Game
             }
             else if (m_T > 0f)
             {
-                m_T = Mathf.Clamp01(m_T - Time.deltaTime / m_MoveTime);
-                MoveBox(m_T);
+                // 预测回退时的下一步 T 值
+                float nextT = Mathf.Clamp01(m_T - Time.deltaTime / m_MoveTime);
+                
+                // 回退时同样检测物理阻挡（如果确定回退时不会有障碍物，可以把这个检测去掉）
+                if (CanMove(m_T, nextT))
+                {
+                    m_T = nextT;
+                    MoveBox(m_T);
+                }
+                else if (IsPowered)
+                {
+                    SetActive(true);
+                }
             }
         }
 
@@ -111,6 +135,53 @@ namespace Game
             {
                 m_Emission.color = active ? Color.green : Color.red;
             }
+        }
+
+        /// <summary>
+        /// 检测从当前的 T 移动到下一个 T 是否会撞到障碍物
+        /// </summary>
+        private bool CanMove(float currentT, float nextT)
+        {
+            // 按照原逻辑计算当前的实际距离和下一步的实际距离
+            float currentEased = Mathf.SmoothStep(0f, 1f, currentT);
+            float nextEased = Mathf.SmoothStep(0f, 1f, nextT);
+
+            float currentDist = Mathf.Lerp(StartDistance, EndDistance, m_Reverse ? (1 - currentEased) : currentEased);
+            float nextDist = Mathf.Lerp(StartDistance, EndDistance, m_Reverse ? (1 - nextEased) : nextEased);
+
+            // 计算这一帧将会移动的距离量
+            float deltaDist = nextDist - currentDist;
+
+            // 如果这一帧几乎不移动，直接允许
+            if (Mathf.Abs(deltaDist) <= 0.0001f) return true;
+
+            // 确定检测的方向
+            Vector2 direction = deltaDist > 0 ? transform.right : -transform.right;
+            float distance = Mathf.Abs(deltaDist);
+            Vector2 castSize = m_BoxSize * 0.95f;
+
+            // ================= 新增：使用 ContactFilter2D 忽略 Trigger =================
+            ContactFilter2D filter = new ContactFilter2D();
+            filter.useTriggers = false;          // 核心：强制忽略 isTrigger = true 的碰撞体
+            filter.SetLayerMask(m_ObstacleLayer); // 设置需要检测的 Layer
+            filter.useLayerMask = true;          // 启用 LayerMask 过滤
+
+            // 准备一个数组来接收检测结果（长度为 1 即可，因为我们只需要知道有没有碰到）
+            RaycastHit2D[] results = new RaycastHit2D[1];
+
+            // 发射 BoxCast，使用 filter 进行过滤
+            int hitCount = Physics2D.BoxCast(
+                m_Box.transform.position, 
+                castSize, 
+                m_Box.transform.eulerAngles.z, 
+                direction, 
+                filter, 
+                results, 
+                distance
+            );
+
+            // 如果 hitCount 为 0，说明前方没有 非Trigger 的障碍物，可以继续移动
+            return hitCount == 0;
         }
 
         private void MoveBox(float t)

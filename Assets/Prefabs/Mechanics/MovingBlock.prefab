@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 4847480061308786624}
   - component: {fileID: 1501282208901376991}
   - component: {fileID: 8011341138848247075}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -464,6 +464,9 @@ MonoBehaviour:
   m_BoxSize: {x: 3, y: 3}
   m_ChainLength: 12
   m_MoveTime: 0.5
+  m_ObstacleLayer:
+    serializedVersion: 2
+    m_Bits: 119
   m_Box: {fileID: 8011341138848247075}
   m_BoxRenderer: {fileID: 1501282208901376991}
   m_ChainRenderer: {fileID: 1857488053332976869}
