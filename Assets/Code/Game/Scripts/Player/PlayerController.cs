@@ -86,7 +86,7 @@ namespace Game
                 //
                 m_CurrentFish.Init();
                 m_CurrentFish.GetBehaviour<FB_Swim>().RotateToTargetPoint = Active;
-                cameraController.AddFollowPoint(m_PlayerDirectionPoint, m_LookAtOffset);
+                //cameraController.AddFollowPoint(m_PlayerDirectionPoint, m_LookAtOffset);
                 cameraController.SetMainTarget(fish.transform);
 
                 // 水母感染等级直接设置为2
@@ -260,6 +260,16 @@ namespace Game
                 return;
 
             Fish.Die(EDieType.Hunger);
+        }
+
+        public void Transfer(Vector2 newPosition)
+        {
+            if (Fish == null)
+                return;
+            Vector2 offset = newPosition - Fish.Position;
+            Fish.SetPosition(newPosition);
+            m_PlayerDirectionPoint.transform.position += (Vector3)offset;
+            CameraController.Instance.TransferOffset(offset);
         }
 
         #region 捕食

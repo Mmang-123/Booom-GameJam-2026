@@ -12,6 +12,7 @@ namespace Game
         [SerializeField] private string m_LevelName1;
         [SerializeField] private string m_LevelName2;
         [SerializeField] private List<Collider2D> m_BlockColliders = new();
+        
 
         public string PassageName => m_PassageName;
         public string LevelName1 => m_LevelName1;

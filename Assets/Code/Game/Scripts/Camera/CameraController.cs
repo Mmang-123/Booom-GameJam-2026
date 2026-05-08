@@ -43,6 +43,10 @@ namespace Game
 
         public Transform MainTarget => m_MainTarget;
 
+        private bool m_FixedUpdateThisFrame = false;
+        private Vector2 m_Offset;
+        private float m_FDT;
+
         protected override void OnAwake()
         {
             TargetPoint = transform.position;
@@ -51,17 +55,37 @@ namespace Game
 
         private void Update()
         {
-            
+            if (m_FixedUpdateThisFrame)
+            {
+                ComputeTargetPoint();
+                FollowTargetPoint(m_FDT);
+            }
+            //ComputeTargetPoint();
+            //FollowTargetPoint(Time.deltaTime);
         }
 
         private void FixedUpdate()
         {
-            ComputeTargetPoint();
-            FollowTargetPoint(Time.fixedDeltaTime);
+            m_FixedUpdateThisFrame = true;
+            m_FDT = Time.fixedDeltaTime;
+            //ComputeTargetPoint();
+            //FollowTargetPoint(Time.fixedDeltaTime);
         }
 
         private void LateUpdate()
         {
+            /*
+            if (m_FixedUpdateThisFrame)
+            {
+                if (m_Offset != Vector2.zero)
+                {
+                    m_FollowDamper.Offset(m_Offset);
+                    m_Offset = Vector2.zero;   
+                }
+            }
+            */
+            m_Test = false;
+            m_FixedUpdateThisFrame = false;
             ObstacleMaskManager.Instance.UpdatePosition(transform.position);
         }
 
@@ -84,6 +108,15 @@ namespace Game
             }
 
             return 1.0f - (Mathf.Clamp(dis, mixRange.x, mixRange.y) - mixRange.x) / (mixRange.y - mixRange.x);
+        }
+
+        bool m_Test;
+        public void TransferOffset(Vector2 offset)
+        {
+            m_Test = true;
+            //m_Offset += offset;
+            m_FollowDamper.Offset(offset);
+            //transform.position += (Vector3)offset;
         }
 
         #region 追踪计算
@@ -117,8 +150,13 @@ namespace Game
             {
                 return;
             }
+            //Debug.Log("Target: " + TargetPoint);
             m_FollowDamper.UpdateAttribute(m_FollowSetting);
             Vector2 finalPos = m_FollowDamper.Update(dt, TargetPoint);
+
+            //Debug.Log(offset);
+            
+            //finalPos = TargetPoint;
             transform.position = new(finalPos.x, finalPos.y, transform.position.z);
         }
 

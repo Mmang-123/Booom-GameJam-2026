@@ -186,6 +186,8 @@ namespace Game
             }
         }
 
+        private bool m_Transfered = false;
+        private Vector2 m_TransferPosition;
         private void FixedUpdate()
         {
             if (m_Dead)
@@ -196,10 +198,27 @@ namespace Game
                 if (behaviour.enabled)
                     behaviour.BeforeFishFixedUpdate();
             }
-            m_Rigidbody.MovePosition(m_TotalMotion + (Vector2)transform.position);
+            if (m_Transfered)
+            {
+                m_Transfered = false;
+                Vector2 newPos = m_TotalMotion + m_TransferPosition;
+                m_Rigidbody.position = newPos;
+            }
+            else
+            {
+                m_Rigidbody.MovePosition(m_TotalMotion + (Vector2)transform.position);    
+            }
+            
             m_TotalMotion = Vector2.zero;
 
             CheckDieCollision(Time.fixedDeltaTime);
+        }
+
+        public void SetPosition(Vector2 position)
+        {
+            m_Transfered = true;
+            m_TransferPosition = position;
+            //m_Rigidbody.position = position;
         }
 
         #region Behaviour
