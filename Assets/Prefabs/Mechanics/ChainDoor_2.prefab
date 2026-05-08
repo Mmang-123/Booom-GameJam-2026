@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24464941bdac951478f930713f423538, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.ChainDoor
-  m_DoorLength: 3
+  m_DoorLength: 5
   m_RequirePowerSourceCount: 2
   m_BoxCollider: {fileID: 1244605782517939737}
   m_DoorRenderer: {fileID: 7929921629348919250}
