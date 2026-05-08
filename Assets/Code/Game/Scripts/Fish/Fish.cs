@@ -7,7 +7,6 @@ using UnityEngine.Pool;
 
 namespace Game
 {
-
     public enum EDirection
     {
         Up, Down, Left, Right
@@ -108,6 +107,9 @@ namespace Game
         public Vector2 ForwardDirection => transform.rotation * s_DirectionMap[m_EDirection];
         public Vector2 Position => transform.position;
 
+        private bool m_Transfered = false;
+        private Vector2 m_TransferPosition;
+
         public bool Eaten { get; set; }
 
         private bool m_Dead = false;
@@ -196,10 +198,27 @@ namespace Game
                 if (behaviour.enabled)
                     behaviour.BeforeFishFixedUpdate();
             }
-            m_Rigidbody.MovePosition(m_TotalMotion + (Vector2)transform.position);
+            if (m_Transfered)
+            {
+                m_Transfered = false;
+                Vector2 newPos = m_TotalMotion + m_TransferPosition;
+                m_Rigidbody.position = newPos;
+            }
+            else
+            {
+                m_Rigidbody.MovePosition(m_TotalMotion + (Vector2)transform.position);    
+            }
+            
             m_TotalMotion = Vector2.zero;
 
             CheckDieCollision(Time.fixedDeltaTime);
+        }
+
+        public void SetPosition(Vector2 position)
+        {
+            m_Transfered = true;
+            m_TransferPosition = position;
+            //m_Rigidbody.position = position;
         }
 
         #region Behaviour

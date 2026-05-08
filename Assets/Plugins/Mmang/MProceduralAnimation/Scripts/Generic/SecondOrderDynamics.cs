@@ -19,6 +19,7 @@ namespace Mmang.ProceduralAnimation
         protected T m_XP; // 上一帧记录
         protected T m_Y, m_YD;
         protected float m_K1, m_K2, m_K3;
+        public T XP => m_XP;
 
         public SecondOrderDynamics(float f, float z, float r, T x0)
         {
@@ -85,6 +86,12 @@ namespace Mmang.ProceduralAnimation
             m_Y += dt * m_YD;
             m_YD += dt * (x + m_K3 * xd - m_Y - m_K1 * m_YD) / k2_stable;
             return m_Y;
+        }
+
+        public void Offset(Vector2 offset)
+        {
+            m_XP += offset;
+            m_Y += offset;
         }
     }
 
