@@ -76,13 +76,10 @@ namespace Game
         [ContextMenu("Create New Jelly")]
         private void CreateNewJelly()
         {
-            if (!GameManager.Instance.LevelValid)
-                return;
-
             Vector2 position = GetGeneratePoint();
             Quaternion rotation = m_FishPrefab.GetRotation(m_InitDirection.normalized, RandomUtil.GetRandomValueInRange(m_InitDirectionRandomAngleRange));
 
-            var pair = FishUtils.Create(m_AIPrefab, m_FishPrefab, position, rotation);
+            var pair = FishUtils.Create(m_AIPrefab, m_FishPrefab, position, rotation, inLevelRoot: GameManager.Instance.LevelValid);
             m_LivingList.Add(pair.fish);
 
             // 设置范围
