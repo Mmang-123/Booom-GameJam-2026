@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b71243d4c4807804b99f27a197e30d1c, type: 3}
   m_Name: LevelConfig
   m_EditorClassIdentifier: Assembly-CSharp::Game.LevelConfig
-  m_DataList:
+  m_LevelRootList:
   - {fileID: 4890463886242813451, guid: c661ab865d658eb40be82b68be6f5fdf, type: 3}
+  m_PassageList: []
