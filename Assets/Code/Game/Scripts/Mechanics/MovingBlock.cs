@@ -9,6 +9,7 @@ namespace Game
         [SerializeField] private Vector2 m_BoxSize = new(3f, 3f);
         [SerializeField] private float m_ChainLength = 6f;
         [SerializeField] private float m_MoveTime = 0.5f;
+        [SerializeField] private float m_MoveBackTime = 0.5f;
 
         [SerializeField] private LayerMask m_ObstacleLayer = ~0;
         [SerializeField] private BoxCollider2D m_Box;
@@ -113,7 +114,7 @@ namespace Game
             else if (m_T > 0f)
             {
                 // 预测回退时的下一步 T 值
-                float nextT = Mathf.Clamp01(m_T - Time.deltaTime / m_MoveTime);
+                float nextT = Mathf.Clamp01(m_T - Time.deltaTime / m_MoveBackTime);
                 
                 // 回退时同样检测物理阻挡（如果确定回退时不会有障碍物，可以把这个检测去掉）
                 if (CanMove(m_T, nextT))
@@ -182,7 +183,6 @@ namespace Game
             {
                 if (s_Results[i].collider == m_Box)
                     continue;
-                Debug.Log("?");
                 return false;
             }
 

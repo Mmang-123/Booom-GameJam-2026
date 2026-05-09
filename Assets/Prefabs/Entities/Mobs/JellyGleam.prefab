@@ -222,7 +222,7 @@ MonoBehaviour:
   m_EDirection: 0
   m_AutoFlip: 0
   m_FlipRoot: {fileID: 5428743268945966197}
-  m_DieCollider: {fileID: 0}
+  m_DieCollider: {fileID: 2332964164045217950}
   m_DieCollisionTime: 0.1
   m_DieCollisionMaxSpeed: 1
   m_DieCollisionParticle: {fileID: 953416650970146418, guid: 216d067fec2434c42a4766b878599435, type: 3}
