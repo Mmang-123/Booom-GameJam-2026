@@ -49,14 +49,16 @@ MonoBehaviour:
     m_Object: {fileID: 0}
   m_ChargeObject:
     m_Object: {fileID: 0}
-  m_ConductionTime: 0.125
-  m_MaintainTime: 0.125
+  m_ChargeSlot: 0
+  m_ConductionTime: 0.34375
+  m_MaintainTime: 0.34375
   m_PointPrefab_Big: {fileID: 5269184669066008097, guid: a3384093ef3f4e2439f34ccd53ba6caf, type: 3}
   m_PointPrefab_Small: {fileID: 6040145401005625939, guid: 6fa8200095b374a4a991a32ba452f8bb, type: 3}
   m_BigPoint_Sprite_On: {fileID: -320358638, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
   m_BigPoint_Sprite_Off: {fileID: -737230656, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
   m_SmallPoint_Sprite_On: {fileID: -1685350942, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
   m_SmallPoint_Sprite_Off: {fileID: 1180154085, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
+  m_DynamicSpeed: 1
   m_PointDistance: 0.3
   m_ControlPoints:
   - Position1: {x: -1, y: 0}
