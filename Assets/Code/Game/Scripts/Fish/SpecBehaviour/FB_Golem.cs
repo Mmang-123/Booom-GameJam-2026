@@ -45,6 +45,8 @@ namespace Game
                 SetActive(true);
                 m_ActiveTimer = MaxActiveTime;
             }
+
+            SetEyeStrength(m_Active ? 1f : 0f);
         }
 
         private void FixedUpdate()

@@ -435,6 +435,7 @@ MonoBehaviour:
   m_DieCollisionTime: 0.1
   m_DieCollisionMaxSpeed: 1
   m_DieCollisionParticle: {fileID: 0}
+  m_RiseUpAfterDie: 1
   m_InfectedLevel: 0
   m_SporeRenderer1: {fileID: 4477740915531479559}
   m_SporeRenderer2: {fileID: 204541279398013065}
@@ -466,7 +467,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Swim
   m_RotateSpeed: 5
   m_FastRotateSpeed: 10
-  m_MoveSpeed: 8
+  m_MoveSpeed: 11
   m_Acceleration: 5
   m_FastAcceleration: 16
   m_StopDistance: 0.8
@@ -663,7 +664,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 062df16de4df9ad4796fdc908877d1eb, type: 2}
+  - {fileID: 2100000, guid: 4fbe7bbd9bba9564694fd6fad73b35d8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

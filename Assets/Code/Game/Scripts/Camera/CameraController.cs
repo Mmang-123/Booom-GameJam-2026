@@ -29,6 +29,7 @@ namespace Game
     public class CameraController : SingletonMono<CameraController>
     {
         [Header("跟随设置")]
+        [SerializeField] private bool m_Active = true;
         [SerializeField] private SecondOrderDynamicsSetting m_FollowSetting;
         [SerializeField] private Vector2 m_CameraViewSize = new(30f, 16.875f);
 
@@ -54,11 +55,10 @@ namespace Game
 
         private void Update()
         {
-            if (m_FixedUpdateThisFrame)
+            if (m_FixedUpdateThisFrame && m_Active)
             {
                 ComputeTargetPoint();
                 FollowTargetPoint(m_FDT);
-                m_FDT = 0f;
             }
             //ComputeTargetPoint();
             //FollowTargetPoint(Time.deltaTime);
@@ -84,8 +84,8 @@ namespace Game
                 }
             }
             */
-            m_Test = false;
             m_FixedUpdateThisFrame = false;
+            m_FDT = 0f;
             ObstacleMaskManager.Instance.UpdatePosition(transform.position);
         }
 
@@ -110,10 +110,8 @@ namespace Game
             return 1.0f - (Mathf.Clamp(dis, mixRange.x, mixRange.y) - mixRange.x) / (mixRange.y - mixRange.x);
         }
 
-        bool m_Test;
         public void TransferOffset(Vector2 offset)
         {
-            m_Test = true;
             //m_Offset += offset;
             m_FollowDamper.Offset(offset);
             //transform.position += (Vector3)offset;

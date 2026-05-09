@@ -673,8 +673,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 790c478d073579945bf59ef756c541bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Swim
-  m_RotateSpeed: 3
-  m_FastRotateSpeed: 6
+  m_RotateSpeed: 4
+  m_FastRotateSpeed: 7
   m_MoveSpeed: 10
   m_Acceleration: 8
   m_FastAcceleration: 16
