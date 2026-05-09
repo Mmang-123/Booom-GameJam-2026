@@ -663,8 +663,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Dash
   m_CD: 0.5
-  m_DashSpeed: 16
-  m_DashEndDamping: 16
+  m_DashSpeed: 20
+  m_DashEndDamping: 20
   m_PreRotateSpeed: 12
   m_AfterimageTint: {r: 1, g: 1, b: 1, a: 0.8}
   m_AfterimageFadeDuration: 0.25
