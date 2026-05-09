@@ -74,6 +74,10 @@ namespace Game
         [SerializeField] private Sprite m_SmallPoint_Sprite_On;
         [SerializeField] private Sprite m_SmallPoint_Sprite_Off;
 
+        [Header("传导设置")]
+        [SerializeField] private bool m_DynamicSpeed = false;
+        private const float PointsPerUnit = 16f;
+
         [Header("生成设置")]
         [SerializeField] private float m_PointDistance = 0.8f;
         [SerializeField] private List<BezierControlPoint> m_ControlPoints = new()
@@ -168,8 +172,10 @@ namespace Game
             float dt = Time.fixedDeltaTime;
             
             // 计算脉冲头部和尾部的移动速度 (单位：个节点/秒)
-            float speed = m_ConductionTime > 0f ? MaxPowerPointCount / m_ConductionTime : 9999f;
-            float tailSpeed = m_MaintainTime > 0f ? MaxPowerPointCount / m_MaintainTime : speed;
+            // m_DynamicSpeed=true 时速度固定（按实际距离），链越长耗时越长；否则时间固定
+            float baseCount = m_DynamicSpeed ? PointsPerUnit : MaxPowerPointCount;
+            float speed = m_ConductionTime > 0f ? baseCount / m_ConductionTime : 9999f;
+            float tailSpeed = m_MaintainTime > 0f ? baseCount / m_MaintainTime : speed;
 
             bool isCurrentlyPowered = IsPowered;
 
