@@ -34,6 +34,13 @@ namespace Game
 
         //
         private bool m_Loading = false;
+        private bool m_Restarting = false;
+        private bool m_CantRestart = false;
+        private bool m_RestartLoading = false;
+
+        public bool Restarting => m_Restarting;
+        public bool CanLoad => !m_Loading && !m_Restarting;
+        public bool CantSave { get; private set; }
 
         protected override void OnAwake()
         {
@@ -42,7 +49,55 @@ namespace Game
 
         private void Update()
         {
+            ScreenFadeUpdate(Time.deltaTime);
+            if (m_Restarting)
+            {
+                if (m_CurrentScreenFadeT >= 0.5f && !m_RestartLoading && !m_Loading)
+                {
+                    StartRestartLoad();
+                }
+            }
+        }
 
+        public void Restart()
+        {
+            if (m_Restarting || m_CantRestart)
+                return;
+            Debug.Log("Restart!");
+            m_Restarting = true;
+            CantSave = true;
+            m_CurrentScreenFadeT = 0f;
+            m_ScreenFadeState = EScreenFadeState.FadeIn;
+        
+            // Clear
+            m_NameToSaveDataMap.Clear();
+            m_CurrentSavables.Clear();
+        }
+
+        private void StartRestartLoad()
+        {
+            m_RestartLoading = true;
+            var loadLevelParams = new LoadLevelParams(LevelConfig.GetInitLevelName());
+            UnloadCurrentLevel(immediate: true);
+            LoadLevel(loadLevelParams);
+        }
+
+        private void RestartLoadComplete()
+        {
+            CantSave = false;
+            m_Restarting = false;
+            m_RestartLoading = false;
+            m_ScreenFadeState = EScreenFadeState.FadeOut;
+
+            if (m_LevelRoot.InitFish != null)
+            {
+                PlayerController.Instance.ControlFish(m_LevelRoot.InitFish);
+                //m_LevelRoot.InitFish.SetController(PlayerController.Instance);
+            }
+            else
+            {
+                m_CantRestart = true;
+            }
         }
 
         public void LoadLevel(LoadLevelParams loadLevelParams, System.Action completedCallback = null)
@@ -64,20 +119,26 @@ namespace Game
             };
         }
 
-        private void UnloadCurrentLevel()
+        private void UnloadCurrentLevel(bool immediate = false)
         {
             if (m_LevelRoot != null)
             {
                 Debug.Log("Unloading: " + m_LevelRoot.gameObject);
 
-                var savedData = GetSavedData(m_LevelRoot.LevelName);
-                foreach (var savable in m_CurrentSavables)
+                if (!CantSave)
                 {
-                    savedData.Save(savable);
+                    var savedData = GetSavedData(m_LevelRoot.LevelName);
+                    foreach (var savable in m_CurrentSavables)
+                    {
+                        savedData.Save(savable);
+                    }   
                 }
 
                 //
-                Destroy(m_LevelRoot.gameObject);
+                if (!immediate)
+                    Destroy(m_LevelRoot.gameObject);
+                else
+                    DestroyImmediate(m_LevelRoot.gameObject);
             }
             m_LevelRoot = null;
         }
@@ -88,6 +149,11 @@ namespace Game
             m_Loading = false;
             m_LevelRoot = levelRoot;
             m_CurrentSavables.Clear();
+
+            if (m_RestartLoading)
+            {
+                RestartLoadComplete();
+            }
         }
 
         public bool TryLoadSavedData(ILevelSavable savable)
@@ -108,6 +174,31 @@ namespace Game
             return savedData.Load(savable);
         }
 
+        #region 转换过场
+
+        public enum EScreenFadeState { None, FadeIn, FadeOut }
+        private EScreenFadeState m_ScreenFadeState;
+        [SerializeField] private float m_CurrentScreenFadeT;
+        public float ScreenFadeT => m_CurrentScreenFadeT;
+
+        private void ScreenFadeUpdate(float dt)
+        {
+            if (m_ScreenFadeState == EScreenFadeState.FadeIn && m_CurrentScreenFadeT < 0.5f)
+            {
+                m_CurrentScreenFadeT = Mathf.Clamp(m_CurrentScreenFadeT + dt * 2f, 0f, 0.5f);
+            }
+            else if (m_ScreenFadeState == EScreenFadeState.FadeOut && m_CurrentScreenFadeT < 1.0f)
+            {
+                m_CurrentScreenFadeT = Mathf.Clamp(m_CurrentScreenFadeT + dt * 2f, 0.5f, 1f);
+            }
+            //Shader.SetGlobalFloat("_SceneTransition", m_CurrentScreenFadeT);
+        }
+
+
+        #endregion
+
+
+
         #region 保存和加载
 
         private LevelSaveData GetSavedData(string levelName)
@@ -121,7 +212,7 @@ namespace Game
 
         public void Save(ILevelSavable savable)
         {
-            if (!LevelValid)
+            if (!LevelValid || CantSave)
                 return;
 
             var savedData = GetSavedData(m_LevelRoot.LevelName);

@@ -8,6 +8,7 @@ namespace Game
     [CreateAssetMenu(menuName = "Create Level Config")]
     public class LevelConfig : ScriptableObject
     {
+        [SerializeField] private string m_InitLevelName;
         [SerializeField] private List<LevelRoot> m_LevelRootList = new();
         [SerializeField] private List<Passage> m_PassageList = new();
 
@@ -45,6 +46,12 @@ namespace Game
             if (instance.m_LevelRootMap.TryGetValue(levelName, out var result))
                 return result;
             return null;
+        }
+
+        public static string GetInitLevelName()
+        {
+            var instance = GlobalConfigAssets.GetConfigInstance<LevelConfig>();
+            return instance.m_InitLevelName;
         }
 
         public static Passage GetPassage(string passageName)

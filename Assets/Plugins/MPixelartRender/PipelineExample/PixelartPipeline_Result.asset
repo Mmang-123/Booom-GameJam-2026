@@ -27,7 +27,8 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: 4931594896178174925}
   - {fileID: 3475793187851912450}
-  m_RendererFeatureMap: cd5bd4ea6d8b704402c5a2227d7f3c30
+  - {fileID: 6817917388926823629}
+  m_RendererFeatureMap: cd5bd4ea6d8b704402c5a2227d7f3c30cd2cf10abe1b9e5e
   m_UseNativeRenderPass: 0
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -88,3 +89,18 @@ MonoBehaviour:
   m_Active: 1
   m_BlitShader: {fileID: 4800000, guid: af9c836bed5f80f46a8a78f91cf643f9, type: 3}
   m_RenderPassEvent: 250
+--- !u!114 &6817917388926823629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0206862e7c05fc146ae9ec7a690debb7, type: 3}
+  m_Name: ScreenTransitionRendererFeature
+  m_EditorClassIdentifier: Assembly-CSharp::Game.ScreenTransitionRendererFeature
+  m_Active: 1
+  m_Shader: {fileID: 4800000, guid: adbab78093285f844a617f740b319424, type: 3}
+  m_RenderPassEvent: 600

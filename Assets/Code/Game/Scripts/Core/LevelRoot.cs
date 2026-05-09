@@ -7,7 +7,9 @@ namespace Game
     public class LevelRoot : MonoBehaviour
     {
         [SerializeField] private string m_LevelName;
+        [SerializeField] private Fish m_InitFish;
         public string LevelName => m_LevelName;
+        public Fish InitFish => m_InitFish;
 
 #if UNITY_EDITOR
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b71243d4c4807804b99f27a197e30d1c, type: 3}
   m_Name: LevelConfig
   m_EditorClassIdentifier: Assembly-CSharp::Game.LevelConfig
+  m_InitLevelName: Level_0
   m_LevelRootList:
-  - {fileID: 4890463886242813451, guid: c661ab865d658eb40be82b68be6f5fdf, type: 3}
-  - {fileID: 8171844326861822051, guid: 435127b7aa0819240af3711cfa4a17b1, type: 3}
+  - {fileID: 1740528935740803336, guid: a88e89740685125488e8955584f2d274, type: 3}
   m_PassageList: []

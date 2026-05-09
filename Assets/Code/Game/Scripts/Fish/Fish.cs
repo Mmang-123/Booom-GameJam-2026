@@ -391,6 +391,8 @@ namespace Game
                 {
                     animatorBehaviour.TriggerDieAnimation();
                 }
+                // temp
+                Destroy(gameObject);
             }
             else
             {

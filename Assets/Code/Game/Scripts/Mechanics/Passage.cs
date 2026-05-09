@@ -64,7 +64,7 @@ namespace Game
 
         public void OnTrigger(Fish fish)
         {
-            if (m_Loading || m_LoopZone.Active)
+            if (m_Loading || m_LoopZone.Active || !GameManager.Instance.CanLoad)
                 return;
             
             var currentLevelName = GameManager.Instance.CurrentLevelRoot.LevelName;
@@ -96,6 +96,8 @@ namespace Game
 
             if (flag)
             {
+                if (!GameManager.Instance.CanLoad)
+                    return false;
                 // 重新加载反方向房间
                 Load(m_LoadFlag == ELoadFlag.LeftLevel ? ELoadFlag.RightLevel : ELoadFlag.LeftLevel);   
                 return true;

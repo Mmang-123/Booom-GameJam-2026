@@ -31,6 +31,8 @@ namespace Game
 
         private ControlFishConfig m_FishConfig;
 
+        private float m_RestartTimer = 0f;
+
         protected override void OnAwake()
         {
             GameObject pointGO = new("Player Direction Point");
@@ -65,6 +67,7 @@ namespace Game
 
         private void SetFish(Fish fish)
         {
+            Debug.Log("Control: " + fish);
             Fish = fish;
             var cameraController = CameraController.Instance;
             if (m_CurrentFish != null)
@@ -99,6 +102,21 @@ namespace Game
 
         private void Update()
         {
+            if ((Fish == null)
+            && !GameManager.Instance.Restarting)
+            {
+                m_RestartTimer += Time.deltaTime;
+                if (m_RestartTimer > 0.5f)
+                {
+                    GameManager.Instance.Restart();
+                    m_RestartTimer = 0f;
+                }
+            }
+            else
+            {
+                m_RestartTimer = 0f;
+            }
+
             if (Fish == null)
             {
                 return;
