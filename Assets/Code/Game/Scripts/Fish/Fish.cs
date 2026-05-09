@@ -26,7 +26,7 @@ namespace Game
     {
         public Fish Fish { get; }
         public void ControlFish(Fish fish);
-        public void LoseControl(IFishController newController);
+        public void LoseControl(Fish fish);
     }
 
     public class Fish : MonoBehaviour, ILevelSavable
@@ -38,11 +38,12 @@ namespace Game
         [SerializeField] private bool m_AutoFlip = true; // 应该仅对向左向右的朝向有用
         [SerializeField] private Transform m_FlipRoot;
 
-        [Header("挤压死亡设置")]
+        [Header("死亡设置")]
         [SerializeField] private CircleCollider2D m_DieCollider;
         [SerializeField] private float m_DieCollisionTime = 0.1f;
         [SerializeField] private float m_DieCollisionMaxSpeed = 1f;
         [SerializeField] private ParticleComponent m_DieCollisionParticle;
+        [SerializeField] private bool m_RiseUpAfterDie = true;
 
         [Header("感染设置")]
         [SerializeField] private EInfectedLevel m_InfectedLevel = EInfectedLevel.None;
@@ -116,6 +117,7 @@ namespace Game
         private bool m_Dead = false;
         public bool IsLiving => !m_Dead;
 
+        private float m_RiseUpSpeed;
         private Vector2 m_TotalMotion;
 
         private void Start()
@@ -172,7 +174,7 @@ namespace Game
         {
             if (FishController != null)
             {
-                FishController.LoseControl(fishController);
+                FishController.LoseControl(this);
             }
             FishController = fishController;
         }
@@ -192,7 +194,21 @@ namespace Game
         private void FixedUpdate()
         {
             if (m_Dead)
+            {
+                m_RiseUpSpeed = Mathf.Min(m_RiseUpSpeed + Time.fixedDeltaTime, 3f);
+                m_Rigidbody.MovePosition((Vector2)transform.position + m_RiseUpSpeed * Time.fixedDeltaTime * Vector2.up);
+                
+                if (m_Light.Value != null)
+                {
+                    var light = m_Light.Value;
+                    if (light.LightIntensity > 0f)
+                    {
+                        light.LightIntensity -= Time.deltaTime * 5f;
+                    }
+                }
+                
                 return;
+            }
 
             foreach (var behaviour in m_Behaviours)
             {
@@ -346,9 +362,25 @@ namespace Game
 
             Debug.Log("Die");
 
+            bool explode = false;
+            float explodeRadius = 0f;
+            // 扩散
+            if (IsPlayer && m_InfectedLevel >= EInfectedLevel.High
+            && FishController is PlayerController playerController)
+            {
+                explode = true;
+                explodeRadius = playerController.FishConfig.InfectRadius;
+                PlayerController.Instance.DisableControl(1f);
+            }
+
             if (FishController != null)
             {
                 SetController(null);
+            }
+
+            if (explode && explodeRadius > 0f)
+            {
+                Explode(explodeRadius);
             }
 
             m_Dead = true;
@@ -389,10 +421,19 @@ namespace Game
             {
                 if (TryGetBehaviour<FB_GenericAnimator>(out var animatorBehaviour))
                 {
-                    animatorBehaviour.TriggerDieAnimation();
+                    if (m_InfectedLevel >= EInfectedLevel.High)
+                        animatorBehaviour.TriggerExplodeAnimation();
+                    else
+                        animatorBehaviour.TriggerDieAnimation();
                 }
-                // temp
-                Destroy(gameObject);
+                foreach (var behaviour in m_Behaviours)
+                {
+                    behaviour.enabled = false;
+                }
+                if (GameManager.Instance.LevelValid)
+                {
+                    transform.SetParent(GameManager.Instance.CurrentLevelRoot.transform, true);
+                }
             }
             else
             {
@@ -405,6 +446,39 @@ namespace Game
                 }
                 Destroy(gameObject);
             }
+        }
+
+        public void Explode(float radius)
+        {
+            Debug.Log("扩散感染");
+            var target = GetNearestInfectTarget(radius);
+
+            if (target != null)
+            {
+                PlayerController.Instance.ControlFish(target);
+            }
+        }
+
+        private Fish GetNearestInfectTarget(float radius)
+        {
+            List<Fish> fishList = ListPool<Fish>.Get();
+            FishUtils.GetFishInCircle(transform.position, radius, fishList, ignoreFish: this);
+
+            Fish nearest = null;
+            float nearestDistance = float.MaxValue;
+
+            foreach (var fish in fishList)
+            {
+                float distance = Vector2.Distance(Position, fish.Position);
+                if (distance < nearestDistance)
+                {
+                    nearestDistance = distance;
+                    nearest = fish;
+                }
+            }
+
+            ListPool<Fish>.Release(fishList);
+            return nearest;
         }
 
         public bool Eat(Fish otherFish, float reduceSaturation)

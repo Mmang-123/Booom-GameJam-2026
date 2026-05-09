@@ -52,7 +52,7 @@ namespace Game
         public override void OnActivate()
         {
             base.OnActivate();
-            Debug.Log("Trace_Start");
+            // Debug.Log("Trace_Start");
 
             SwimBehaviour = Fish.GetBehaviour<FB_Swim>();
             SwimBehaviour.Tracing = true;
@@ -65,7 +65,7 @@ namespace Game
         public override void OnEnd(EEndAbilityType endType)
         {
             base.OnEnd(endType);
-            Debug.Log("Trace_End");
+            // Debug.Log("Trace_End");
 
             if (Fish != null)
             {

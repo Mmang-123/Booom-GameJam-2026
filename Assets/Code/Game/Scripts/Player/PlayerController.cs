@@ -30,6 +30,7 @@ namespace Game
 
 
         private ControlFishConfig m_FishConfig;
+        public ControlFishConfig FishConfig => m_FishConfig;
 
         private float m_RestartTimer = 0f;
 
@@ -60,9 +61,10 @@ namespace Game
             }
         }
 
-        public void LoseControl(IFishController newController)
+        public void LoseControl(Fish fish)
         {
-            SetFish(null);
+            if (fish == Fish)
+                SetFish(null);
         }
 
         private void SetFish(Fish fish)
@@ -106,7 +108,7 @@ namespace Game
             && !GameManager.Instance.Restarting)
             {
                 m_RestartTimer += Time.deltaTime;
-                if (m_RestartTimer > 0.5f)
+                if (m_RestartTimer > 1.0f)
                 {
                     GameManager.Instance.Restart();
                     m_RestartTimer = 0f;
@@ -250,6 +252,7 @@ namespace Game
                     if (m_MBPressedTimer > m_SuicideTime)
                     {
                         CommitSuicide();
+                        m_MBPressedTimer = 0f;
                     }
                 }
             }

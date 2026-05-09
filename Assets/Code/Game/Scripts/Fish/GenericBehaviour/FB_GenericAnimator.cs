@@ -47,6 +47,11 @@ namespace Game
             m_Animator.SetTrigger("Die");
         }
 
+        public void TriggerExplodeAnimation()
+        {
+            m_Animator.SetTrigger("Explode");
+        }
+
         public void TriggerCustomAnimation(string animName)
         {
             m_Animator.SetTrigger(animName);

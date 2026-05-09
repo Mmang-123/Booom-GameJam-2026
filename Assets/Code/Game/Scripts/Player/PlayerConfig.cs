@@ -19,12 +19,16 @@ namespace Game
         [SerializeField] private float m_OpenMouseAngle = 40f;
         [SerializeField] private float m_EatDistance = 1.8f;
 
+        [Header("扩散感染")]
+        [SerializeField] private float m_InfectRadius = 3.5f;
+
         public GameplayTag FishTypeTag => m_FishTypeTag;
         public float ReduceSaturationRate => m_ReduceSaturationRate;
         public IReadOnlyGameplayTagContainer CanEatTags => m_CanEatTags.AsReadOnly();
         public float OpenMouseDistance => m_OpenMouseDistance;
         public float OpenMouseAngle => m_OpenMouseAngle;
         public float EatDistance => m_EatDistance;
+        public float InfectRadius => m_InfectRadius;
     }
 
     [MGlobalConfig(configName = "Player Config")]

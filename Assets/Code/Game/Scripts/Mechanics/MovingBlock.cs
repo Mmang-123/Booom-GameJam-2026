@@ -160,7 +160,7 @@ namespace Game
             // 确定检测的方向
             Vector2 direction = deltaDist > 0 ? transform.right : -transform.right;
             float distance = Mathf.Abs(deltaDist);
-            Vector2 castSize = m_BoxSize * 0.95f;
+            Vector2 castSize = m_BoxSize * 0.9f;
 
             // ================= 新增：使用 ContactFilter2D 忽略 Trigger =================
             ContactFilter2D filter = new ContactFilter2D();

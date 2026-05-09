@@ -62,7 +62,7 @@ namespace Game
             }
         }
 
-        public void LoseControl(IFishController otherController)
+        public void LoseControl(Fish fish)
         {
             m_Fish = null;
             //gameObject.SetActive(false);
