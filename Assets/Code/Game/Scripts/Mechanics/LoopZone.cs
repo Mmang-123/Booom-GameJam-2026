@@ -14,9 +14,13 @@ namespace Game
         private Vector2 m_RightDirection;
         private Vector2 m_UpDirection;
         private Vector2 m_ZoneSize;
+        
 
         public delegate bool CheckDelegate((EState horizontalState, EState verticalState) states);
+        public delegate Vector2 BeforeApplyDelegate((EState horizontalState, EState verticalState) states, Vector2 newPosition, Vector2 rawPosition);
+
         public CheckDelegate CheckFunc;
+        public BeforeApplyDelegate BeforeApplyFunc;
 
         public bool Active => m_Active;
 
@@ -78,7 +82,11 @@ namespace Game
                 }
 
                 if (changed && (CheckFunc == null || CheckFunc(states)))
-                    player.Transfer(newPosition);
+                {
+                    if (BeforeApplyFunc != null)
+                        newPosition = BeforeApplyFunc(states, newPosition, fish.Position);
+                    player.Transfer(newPosition);   
+                }
             }
         }
 
