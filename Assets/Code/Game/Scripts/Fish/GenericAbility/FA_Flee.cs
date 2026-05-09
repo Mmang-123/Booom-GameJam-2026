@@ -62,7 +62,7 @@ namespace Game
         public override void OnEnd(EEndAbilityType endType)
         {
             base.OnEnd(endType);
-
+            
         }
 
         public override void OnUpdate(float dt)

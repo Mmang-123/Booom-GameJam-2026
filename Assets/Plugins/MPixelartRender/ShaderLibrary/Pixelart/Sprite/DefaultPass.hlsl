@@ -122,3 +122,16 @@ float4 UnlitFrag(Varyings input) : SV_Target
     // return float4(lightColor, outputColor.a);
     return outputColor;
 }
+
+float4 UnlitEmissionFrag(Varyings input) : SV_Target
+{
+#ifdef TEXTURE_BASED
+    float4 outputColor = tex2D(_MainTex, input.uv) * input.color;
+#else
+    float4 outputColor = input.color;
+#endif
+
+    clip(outputColor.a - 0.05);
+
+    return outputColor;
+}
