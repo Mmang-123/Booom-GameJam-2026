@@ -122231,11 +122231,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5161660380949998133, guid: 1e5731be93634564d9f09a568da67640, type: 3}
       propertyPath: m_MaintainTime
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5161660380949998133, guid: 1e5731be93634564d9f09a568da67640, type: 3}
       propertyPath: m_ConductionTime
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5161660380949998133, guid: 1e5731be93634564d9f09a568da67640, type: 3}
       propertyPath: m_Points.Array.size
@@ -130905,11 +130905,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5332912566480582352, guid: 9834fa3ab7f27974a8c16d439588ae3f, type: 3}
       propertyPath: m_MaintainTime
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5332912566480582352, guid: 9834fa3ab7f27974a8c16d439588ae3f, type: 3}
       propertyPath: m_ConductionTime
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5332912566480582352, guid: 9834fa3ab7f27974a8c16d439588ae3f, type: 3}
       propertyPath: m_Points.Array.size
