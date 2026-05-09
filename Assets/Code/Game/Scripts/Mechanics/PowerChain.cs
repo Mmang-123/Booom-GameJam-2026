@@ -43,6 +43,21 @@ namespace Game
             public float ConductionTimer;
             public float OffTimer;
         }
+
+        public class EnergyPulse : IReference
+        {
+            public float HeadIndex; // 脉冲头部的位置 (0 ~ MaxPowerPointCount)
+            public float TailIndex; // 脉冲尾部的位置
+            public bool IsReceivingPower; // 是否正在持续接收能量
+        
+            public void Clear()
+            {
+                HeadIndex = 0;
+                TailIndex = 0;
+                IsReceivingPower = false;
+            }
+        }
+
         [SerializeField] private Color m_ActiveColor = Color.green;
 
         [SerializeField] private InterfaceObject<IPowerSource> m_PowerSource;
@@ -85,6 +100,8 @@ namespace Game
 
         // Runtime
         private bool m_Inited = false;
+        private List<EnergyPulse> m_Pulses; // 当前链条上移动的所有脉冲段
+        private bool[] m_PointStates;       // 记录每个点的当前激活状态，避免重复赋值
         private List<PointData> m_PointDataList;
         private float m_PointConductionTime;
         private float m_PointMaintainTime;
@@ -114,6 +131,9 @@ namespace Game
                 m_PointDataList.Add(newData);
             }
 
+            m_Pulses = new List<EnergyPulse>();
+            m_PointStates = new bool[MaxPowerPointCount];
+
             //
             m_PointConductionTime = m_ConductionTime / MaxPowerPointCount;
             m_PointMaintainTime = m_MaintainTime / MaxPowerPointCount;
@@ -137,6 +157,97 @@ namespace Game
 
         private void FixedUpdate()
         {
+            if (MaxPowerPointCount == 0) return;
+
+            float dt = Time.fixedDeltaTime;
+            
+            // 计算脉冲头部和尾部的移动速度 (单位：个节点/秒)
+            float speed = m_ConductionTime > 0f ? MaxPowerPointCount / m_ConductionTime : 9999f;
+            float tailSpeed = m_MaintainTime > 0f ? MaxPowerPointCount / m_MaintainTime : speed;
+
+            bool isCurrentlyPowered = IsPowered;
+
+            // 1. 处理能量源状态，生成或断开脉冲
+            if (isCurrentlyPowered)
+            {
+                // 如果当前没有脉冲，或者最后一个脉冲已经断开了连接，则生成一个新的脉冲段
+                if (m_Pulses.Count == 0 || !m_Pulses[^1].IsReceivingPower)
+                {
+                    var newPulse = ReferencePool.Acquire<EnergyPulse>();
+                    newPulse.HeadIndex = 0; newPulse.TailIndex = 0; newPulse.IsReceivingPower = true;
+                    m_Pulses.Add(newPulse);
+                }
+            }
+            else
+            {
+                // 如果断电了，让最后一个接收能量的脉冲段断开连接（尾部开始收缩移动）
+                if (m_Pulses.Count > 0 && m_Pulses[^1].IsReceivingPower)
+                {
+                    m_Pulses[^1].IsReceivingPower = false;
+                }
+            }
+
+            // 2. 更新所有脉冲段的位置
+            for (int i = m_Pulses.Count - 1; i >= 0; i--)
+            {
+                var pulse = m_Pulses[i];
+                
+                // 头部始终向前推进
+                pulse.HeadIndex += speed * dt;
+
+                // 只有断开能量源的脉冲，尾部才会向前收缩
+                if (!pulse.IsReceivingPower)
+                {
+                    pulse.TailIndex += tailSpeed * dt;
+                }
+
+                // 限制头部不超过最大节点数
+                if (pulse.HeadIndex > MaxPowerPointCount)
+                {
+                    pulse.HeadIndex = MaxPowerPointCount;
+                }
+
+                // 如果脉冲完全离开了链条，或者首尾闭合（能量耗尽），则移除该脉冲
+                if (pulse.TailIndex >= MaxPowerPointCount || pulse.TailIndex >= pulse.HeadIndex)
+                {
+                    ReferencePool.Release(m_Pulses[i]);
+                    m_Pulses.RemoveAt(i);
+                }
+            }
+
+            // 3. 将脉冲映射到具体的渲染节点上
+            int currentActiveCount = 0;
+            for (int i = 0; i < MaxPowerPointCount; i++)
+            {
+                bool shouldBeActive = false;
+                
+                // 判断当前节点是否位于任意一个脉冲段内部
+                foreach (var pulse in m_Pulses)
+                {
+                    if (pulse.HeadIndex >= i && pulse.TailIndex < i + 1)
+                    {
+                        shouldBeActive = true;
+                        break;
+                    }
+                }
+
+                // 状态发生改变时更新表现
+                if (m_PointStates[i] != shouldBeActive)
+                {
+                    m_PointStates[i] = shouldBeActive;
+                    SetPointSprite(i, shouldBeActive);
+                }
+
+                if (shouldBeActive) 
+                    currentActiveCount++;
+            }
+
+            m_ActivePointCount = currentActiveCount;
+
+            // 4. 更新对下游物体的供电状态 (如果链条最后一个点是激活的，就传导能量)
+            SetPowerOn(m_PointStates[MaxPowerPointCount - 1]);
+
+            /*
             HashSet<int> toTurnOff = HashSetPool<int>.Get();
             HashSet<int> toTurnOn = HashSetPool<int>.Get();
             HashSet<int> changed = HashSetPool<int>.Get();
@@ -198,6 +309,7 @@ namespace Game
             HashSetPool<int>.Release(toTurnOff);
             HashSetPool<int>.Release(toTurnOn);
             HashSetPool<int>.Release(changed);
+            */
         }
 
         public void SetChargeComplete(bool init) => ChargeAllPoint();
