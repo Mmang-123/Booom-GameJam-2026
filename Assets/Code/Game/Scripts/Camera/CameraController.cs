@@ -123,6 +123,9 @@ namespace Game
         #region 追踪计算
         private void ComputeTargetPoint()
         {
+            if (m_MainTarget == null)
+                return;
+
             Vector2 targetPoint = Vector2.zero;
             float totalWeight = 0f;
 

@@ -178,7 +178,7 @@ namespace Game
 
         public enum EScreenFadeState { None, FadeIn, FadeOut }
         private EScreenFadeState m_ScreenFadeState;
-        [SerializeField] private float m_CurrentScreenFadeT;
+        private float m_CurrentScreenFadeT;
         public float ScreenFadeT => m_CurrentScreenFadeT;
 
         private void ScreenFadeUpdate(float dt)
