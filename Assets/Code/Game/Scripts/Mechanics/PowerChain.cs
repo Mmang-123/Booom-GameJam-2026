@@ -102,9 +102,11 @@ namespace Game
         private bool m_Inited = false;
         private List<EnergyPulse> m_Pulses; // 当前链条上移动的所有脉冲段
         private bool[] m_PointStates;       // 记录每个点的当前激活状态，避免重复赋值
+        /*
         private List<PointData> m_PointDataList;
         private float m_PointConductionTime;
         private float m_PointMaintainTime;
+        */
         private int m_ActivePointCount;
 
         public int MaxPowerPointCount => m_Points.Count;
@@ -124,20 +126,24 @@ namespace Game
                 return;
             m_Inited = true;
 
+            /*
             m_PointDataList = new(m_Points.Count);
             for (int i = MaxPowerPointCount - 1; i >= 0; i--)
             {
                 var newData = new PointData();
                 m_PointDataList.Add(newData);
             }
+            */
 
             m_Pulses = new List<EnergyPulse>();
             m_PointStates = new bool[MaxPowerPointCount];
 
             //
+            /*
             m_PointConductionTime = m_ConductionTime / MaxPowerPointCount;
             m_PointMaintainTime = m_MaintainTime / MaxPowerPointCount;
-        
+            */
+
             //
             if (m_PowerSource.Value != null)
                 PowerSourceHandler.AddPowerSource(m_PowerSource.Value);
@@ -315,15 +321,35 @@ namespace Game
         public void SetChargeComplete(bool init) => ChargeAllPoint();
         public void ChargeAllPoint()
         {
+            if (MaxPowerPointCount == 0) return;
+
+            m_Pulses.Clear();
+            
+            // 直接生成一段覆盖全链条的脉冲
+            var newPulse = ReferencePool.Acquire<EnergyPulse>();
+            newPulse.HeadIndex = MaxPowerPointCount; newPulse.TailIndex = 0; newPulse.IsReceivingPower = true;
+            m_Pulses.Add(newPulse);
+
+            for (int i = 0; i < MaxPowerPointCount; i++)
+            {
+                m_PointStates[i] = true;
+                SetPointSprite(i, true);
+            }
+            m_ActivePointCount = MaxPowerPointCount;
+            SetPowerOn(true);
+
+            /*
             for (int i = 0; i < MaxPowerPointCount; i++)
             {
                 SetPointActive(i, true);
             }
             SetPowerOn(true);
+            */
         }
 
         private void SetPointActive(int index, bool active)
         {
+            /*
             var data = m_PointDataList[index];
 
             if (data.Active != active)
@@ -343,6 +369,7 @@ namespace Game
             {
                 data.ConductionTimer = 0f;
             }
+            */
 
             SetPointSprite(index, active);
         }
