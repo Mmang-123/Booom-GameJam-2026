@@ -88,6 +88,7 @@ namespace Game
         private List<PointData> m_PointDataList;
         private float m_PointConductionTime;
         private float m_PointMaintainTime;
+        private int m_ActivePointCount;
 
         public int MaxPowerPointCount => m_Points.Count;
 
@@ -148,11 +149,17 @@ namespace Game
                 changed.Add(0);
             }
 
+            int curCount = 0;
             for (int i = 0; i < MaxPowerPointCount; i++)
             {
+                if (curCount >= m_ActivePointCount)
+                    break;
+                    
                 var data = m_PointDataList[i];
                 if (!data.Active)
                     continue;
+                
+                curCount++;
 
                 data.OffTimer += dt;
                 data.ConductionTimer += dt;
@@ -206,6 +213,15 @@ namespace Game
         private void SetPointActive(int index, bool active)
         {
             var data = m_PointDataList[index];
+
+            if (data.Active != active)
+            {
+                if (active)
+                    m_ActivePointCount++;
+                else
+                    m_ActivePointCount--;
+            }
+
             data.Active = active;
             if (active)
             {
@@ -216,7 +232,6 @@ namespace Game
                 data.ConductionTimer = 0f;
             }
 
-            //
             SetPointSprite(index, active);
         }
 
