@@ -1,4 +1,5 @@
 ﻿
+using UnityEditor;
 using UnityEngine;
 
 namespace Game
@@ -21,7 +22,8 @@ namespace Game
                 if (component is ILevelSavable savable)
                 {
                     string newGUID = System.Guid.NewGuid().ToString();
-                    savable.Editor_SetGUID(newGUID);   
+                    savable.Editor_SetGUID(newGUID);
+                    EditorUtility.SetDirty(component);
                 }
             }
         }
