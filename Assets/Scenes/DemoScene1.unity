@@ -10841,43 +10841,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.25}
   m_EdgeRadius: 0
---- !u!84 &519305509
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 480
-  m_Height: 270
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1001 &520423027
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18821,6 +18784,43 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2016100442}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.047}
+--- !u!84 &911234065
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 480
+  m_Height: 270
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1 &911981341
 GameObject:
   m_ObjectHideFlags: 0
@@ -23122,7 +23122,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 519305509}
+  m_TargetTexture: {fileID: 911234065}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -42371,6 +42371,10 @@ PrefabInstance:
     - target: {fileID: 7722642582166905868, guid: 46f7b41aeb495824c8ad98df1bd16526, type: 3}
       propertyPath: m_Reverse
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7722642582166905868, guid: 46f7b41aeb495824c8ad98df1bd16526, type: 3}
+      propertyPath: m_ObstacleLayer.m_Bits
+      value: 119
       objectReference: {fileID: 0}
     - target: {fileID: 8751364628963125394, guid: 46f7b41aeb495824c8ad98df1bd16526, type: 3}
       propertyPath: m_Name

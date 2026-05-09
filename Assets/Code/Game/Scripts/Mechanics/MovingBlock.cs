@@ -140,6 +140,7 @@ namespace Game
         /// <summary>
         /// 检测从当前的 T 移动到下一个 T 是否会撞到障碍物
         /// </summary>
+        private static RaycastHit2D[] s_Results = new RaycastHit2D[16];
         private bool CanMove(float currentT, float nextT)
         {
             // 按照原逻辑计算当前的实际距离和下一步的实际距离
@@ -166,9 +167,6 @@ namespace Game
             filter.SetLayerMask(m_ObstacleLayer); // 设置需要检测的 Layer
             filter.useLayerMask = true;          // 启用 LayerMask 过滤
 
-            // 准备一个数组来接收检测结果（长度为 1 即可，因为我们只需要知道有没有碰到）
-            RaycastHit2D[] results = new RaycastHit2D[1];
-
             // 发射 BoxCast，使用 filter 进行过滤
             int hitCount = Physics2D.BoxCast(
                 m_Box.transform.position, 
@@ -176,12 +174,21 @@ namespace Game
                 m_Box.transform.eulerAngles.z, 
                 direction, 
                 filter, 
-                results, 
+                s_Results, 
                 distance
             );
 
+            for (int i = 0; i < hitCount; i++)
+            {
+                if (s_Results[i].collider == m_Box)
+                    continue;
+                Debug.Log("?");
+                return false;
+            }
+
+            return true;
             // 如果 hitCount 为 0，说明前方没有 非Trigger 的障碍物，可以继续移动
-            return hitCount == 0;
+            //return hitCount == 0;
         }
 
         private void MoveBox(float t)
