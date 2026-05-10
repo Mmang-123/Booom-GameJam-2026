@@ -356,8 +356,12 @@ namespace Game
             Saturation = Mathf.Max(0f, Saturation - value);
             if (IsPlayer)
             {
-                Debug.Log(Saturation);
                 CameraController.Instance.HealthBar.SetT(Saturation / MaxSaturation);
+            }
+
+            if (Saturation <= 0f)
+            {
+                Die(EDieType.Hunger);
             }
         }
 
