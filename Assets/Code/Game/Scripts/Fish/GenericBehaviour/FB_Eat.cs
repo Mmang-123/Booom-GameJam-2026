@@ -226,6 +226,11 @@ namespace Game
                     Target = null;
                 }
 
+                if (Fish.IsPlayer)
+                {
+                    Fish.AddSaturation(fish.EatenRegainSaturation);
+                }
+
                 if (fish.IsPlayer)
                 {
                     infected = true;

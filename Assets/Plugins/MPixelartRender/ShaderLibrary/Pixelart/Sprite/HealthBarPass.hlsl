@@ -10,10 +10,11 @@ float4 HealthBarFrag(Varyings input) : SV_Target
 
     int iu = floor(u * pixelCount);
 
-    float fu = iu * 1.0 / pixelCount;
+    float cu = ceil(u * pixelCount) * 1.0 / pixelCount;
     
-    if (input.color.a < 1)
-        clip(input.color.a - fu - 0.01);
+    if (input.color.a == 0)
+        clip(-1);
+    clip(input.color.a - cu + 0.01);
 
     if (iu == 48 || iu == 97 || iu == 146)
         clip(-1);

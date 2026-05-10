@@ -61,6 +61,7 @@ namespace Game
         [Header("饱食度")]
         [SerializeField] private float m_InitSaturation = 100f;
         [SerializeField] private float m_MaxSaturation = 100f;
+        [SerializeField] private float m_EatenRegainSaturation = 100f;
 
         [Header("粒子设置")]
         [SerializeField] private ParticleComponent m_EatenParticle;
@@ -101,6 +102,7 @@ namespace Game
 
         public float Saturation { get; private set; }
         public float MaxSaturation => m_MaxSaturation;
+        public float EatenRegainSaturation => m_EatenRegainSaturation;
 
         public EInfectedLevel InfectedLevel => m_InfectedLevel;
 
@@ -387,8 +389,6 @@ namespace Game
             if (m_Dead)
                 return;
 
-            Debug.Log("Die");
-
             bool explode = false;
             float explodeRadius = 0f;
             // 扩散
@@ -506,20 +506,6 @@ namespace Game
 
             ListPool<Fish>.Release(fishList);
             return nearest;
-        }
-
-        public bool Eat(Fish otherFish, float reduceSaturation)
-        {
-            if (otherFish.Saturation > reduceSaturation)
-            {
-                otherFish.RemoveSaturation(reduceSaturation);
-                return false;
-            }
-            else
-            {
-                otherFish.Die(EDieType.Eaten);
-                return true;
-            }
         }
 
         #endregion
