@@ -464,6 +464,7 @@ MonoBehaviour:
   m_BoxSize: {x: 3, y: 3}
   m_ChainLength: 12
   m_MoveTime: 0.5
+  m_MoveBackTime: 0.5
   m_ObstacleLayer:
     serializedVersion: 2
     m_Bits: 119
@@ -530,7 +531,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a554b7b92596eb5419ac873f6780b3b4, type: 2}
+  - {fileID: 2100000, guid: e5ef0bf36c7eb1a42837579a3ae688e7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
