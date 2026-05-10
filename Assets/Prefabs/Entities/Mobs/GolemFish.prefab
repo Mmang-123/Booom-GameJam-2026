@@ -449,6 +449,7 @@ MonoBehaviour:
   m_InfectedLightColor: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}
   m_InitSaturation: 100
   m_MaxSaturation: 100
+  m_EatenRegainSaturation: 100
   m_EatenParticle: {fileID: 0}
   m_DefaultEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
   m_InfectedEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
@@ -468,7 +469,7 @@ MonoBehaviour:
   m_RotateSpeed: 5
   m_FastRotateSpeed: 10
   m_MoveSpeed: 11
-  m_Acceleration: 5
+  m_Acceleration: 8
   m_FastAcceleration: 16
   m_StopDistance: 0.8
   m_CanAvoidance: 0

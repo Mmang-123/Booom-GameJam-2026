@@ -271,9 +271,9 @@ MonoBehaviour:
   m_TracingRayLength: 18
   m_MaxTurningPointCount: 5
   m_Patience: 100
-  m_LosePatienceSpeed: 15
-  m_RegainPatienceSpeed: 20
-  m_LosePatienceOnCatchFailed: 30
+  m_LosePatienceSpeed: 5
+  m_RegainPatienceSpeed: 10
+  m_LosePatienceOnCatchFailed: 10
   m_ChangeTargetPatienceTheshold: 50
   m_SearchNewTargetIntervalTime: 0.2
   m_CurrentPatience: 0

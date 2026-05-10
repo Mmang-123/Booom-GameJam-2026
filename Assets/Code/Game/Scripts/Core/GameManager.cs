@@ -151,6 +151,8 @@ namespace Game
             m_LevelRoot = levelRoot;
             m_CurrentSavables.Clear();
 
+            LightingTextureManager.Instance.Clear();
+
             if (m_RestartLoading)
             {
                 RestartLoadComplete();

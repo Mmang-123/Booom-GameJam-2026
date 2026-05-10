@@ -30,6 +30,11 @@ namespace Game
             }
         }
 
+        public void Clear()
+        {
+            m_UpdatedSet.Clear();
+        }
+
         private void InitMaterial()
         {
             if (m_ReadShadowMaterial != null)
