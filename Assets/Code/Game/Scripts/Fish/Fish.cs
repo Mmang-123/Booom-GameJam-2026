@@ -197,8 +197,11 @@ namespace Game
         {
             if (m_Dead)
             {
+                Vector2 direction = Vector2.up;
+                if (FishTypeTag.Equals(FishUtils.GolemFishTag))
+                    direction = Vector2.down;
                 m_RiseUpSpeed = Mathf.Min(m_RiseUpSpeed + Time.fixedDeltaTime, 3f);
-                m_Rigidbody.MovePosition((Vector2)transform.position + m_RiseUpSpeed * Time.fixedDeltaTime * Vector2.up);
+                m_Rigidbody.MovePosition((Vector2)transform.position + m_RiseUpSpeed * Time.fixedDeltaTime * direction);
                 
                 if (m_Light.Value != null)
                 {

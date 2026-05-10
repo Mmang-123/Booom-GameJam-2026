@@ -90,6 +90,12 @@ namespace Game
                 m_CurrentFish.transform.SetParent(null, true);
 
                 //
+                if (!m_CurrentFish.Equals(FishUtils.GolemFishTag))
+                {
+                    DarkSightManager.Instance.SetRadius(0f);
+                }
+
+                //
                 m_CurrentFish.Init();
                 m_CurrentFish.GetBehaviour<FB_Swim>().RotateToTargetPoint = Active;
                 //cameraController.AddFollowPoint(m_PlayerDirectionPoint, m_LookAtOffset);
