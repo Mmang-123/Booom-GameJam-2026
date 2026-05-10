@@ -101,6 +101,10 @@ float GetObstacleSDF_RawCamera(float2 uv)
     int2 offsetIndex = int2(floor(uv.x * 3), floor(uv.y * 3));
     float2 sampleUV = (uv - offsetIndex * float2(0.333333, 0.333333)) / float2(0.333333, 0.333333);
     */
+
+    if (uv.x < 0.0 || uv.y < 0.0 || uv.x > 1.0 || uv.y > 1.0)
+        return 0.0;
+
     int2 offsetIndex = int2(floor(uv.x * 3), floor(uv.y * 3));
     float2 sampleUV = (uv - offsetIndex * float2(0.333333, 0.333333)) / float2(0.333333, 0.333333);
 
