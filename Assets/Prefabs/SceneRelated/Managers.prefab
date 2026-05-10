@@ -512,6 +512,8 @@ MonoBehaviour:
   m_Renderer: {fileID: 8219195451467169911}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_T: 0
+  m_AnimateOutDuration: 0.375
+  m_ScaleMultiplier: 1.3
 --- !u!1 &9082756112100886917
 GameObject:
   m_ObjectHideFlags: 0

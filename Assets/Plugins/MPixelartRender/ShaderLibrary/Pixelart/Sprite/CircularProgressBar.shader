@@ -11,6 +11,8 @@
         _PreviewColor ("Preview Color", Color) = (1,1,1,1)
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
+        [HideInInspector] _Fade ("Fade", Range(0,1)) = 1
+        [HideInInspector] _Progress ("Progress", Range(0,1)) = 0
         [HideInInspector] _Color ("Tint", Color) = (1,1,1,1)
         [HideInInspector] PixelSnap ("Pixel snap", Float) = 0
         [HideInInspector] _RendererColor ("RendererColor", Color) = (1,1,1,1)

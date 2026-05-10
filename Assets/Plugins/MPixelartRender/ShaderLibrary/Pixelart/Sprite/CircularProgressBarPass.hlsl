@@ -1,5 +1,23 @@
 ﻿
 
+#include "Background.hlsl"
+#include "../../Lighting/Lighting.hlsl"
+#include "SpriteShading.hlsl"
+#include "../Generic/PixelartShared.hlsl"
+
+float _Fade;     // 0=透明 1=不透明，由 MaterialPropertyBlock 设置
+float _Progress; // 进度 0~1，由 MaterialPropertyBlock 设置
+
+float _FilledAt(float2 n, float outerR, float innerR)
+{
+    float d = length(n);
+    float rm = step(d, outerR) * step(innerR, d);
+    float na = frac(atan2(n.x, n.y) / 6.28318530718 + 1.0);
+    float nf = frac(na * 5.0);
+    float dash = step(0.05, nf) * (1.0 - step(0.95, nf));
+    return rm * step(na, _Progress) * dash;
+}
+
 float4 BarFrag(Varyings input) : SV_Target
 {
     // 1. 将UV坐标从 [0, 1] 映射到 [-0.5, 0.5]，将原点移动到中心点
@@ -8,40 +26,52 @@ float4 BarFrag(Varyings input) : SV_Target
     // 2. 计算当前像素到中心点的距离 (用于生成圆环遮罩)
     float dist = length(uv);
 
-    float outerRadius = 0.5;
-    float innerRadius = 0.45;
+    // _UnitSize 是世界空间1像素大小，除以Sprite世界宽度得到UV空间1像素偏移
+    float spriteWorldSize = length(unity_ObjectToWorld._m00_m10_m20);
+    float pixelSize = _UnitSize / spriteWorldSize;
 
-    float outerMask = step(dist, outerRadius); // 距离 <= 外半径时为1
-    float innerMask = step(innerRadius, dist); // 距离 >= 内半径时为1
-    
-    // 环形遮罩：内圈和外圈相交的部分
+    // 环内缩1像素，留出外侧描边空间
+    float outerRadius = 0.5 - pixelSize;
+    float innerRadius = 0.45 - pixelSize;
+
+    float outerMask = step(dist, outerRadius);
+    float innerMask = step(innerRadius, dist);
     float ringMask = outerMask * innerMask;
 
-    // 3. 计算当前像素的角度 (用于生成进度遮罩)
-    // atan2(x, y) 可以让 0 度朝向正上方（Y轴正方向），且右侧为正，左侧为负
-    // 结果范围是 [-PI, PI]
-    float angle = atan2(uv.x, uv.y);
-
-    // 将角度从 [-PI, PI] 映射到 [0, 1] 的范围
-    // 使用 frac() 函数完美避免了着色器中的 if 分支（处理负数角度）
+    // 3. 计算当前像素的角度
     #define PI 3.14159265359
+    float angle = atan2(uv.x, uv.y);
     float normalizedAngle = frac(angle / (2.0 * PI) + 1.0);
 
-    // 4. 根据外部参数 _CircleT 裁剪进度
-    // 如果当前角度小于进度值，保留；否则丢弃（透明度设为0）
-    float progressMask = step(normalizedAngle, input.color.a);
+    // 4. 进度遮罩
+    float progressMask = step(normalizedAngle, _Progress);
 
-    // 5. 【新增】生成虚线遮罩
-    // 将 0~1 的角度乘以分段数，这样数值就变成了 0 ~ _SegmentCount
-    float dashCoord = normalizedAngle * 6;
-    // 取小数部分，让每一段都在 0~1 之间循环。
-    // 如果当前处于 0 ~ _DashFill 之间，显示实体(1)；否则显示间隙(0)
-    float dashMask = step(frac(dashCoord), 0.9);
+    // 5. 虚线遮罩（间隙居中于段边界，保证左右对称）
+    float dashCoord = normalizedAngle * 5;
+    float dashFrac = frac(dashCoord);
+    float dashMask = step(0.05, dashFrac) * (1.0 - step(0.95, dashFrac));
 
-    // 6. 组合遮罩并输出颜色
-    float4 col = float4(input.color.rgb, 1);
-    // 最终的 Alpha 值是 环形遮罩 和 进度遮罩 的乘积
-    col.a *= ringMask * progressMask * dashMask;
+    float ringFinal = ringMask * progressMask * dashMask;
 
+    // 6. 4邻域描边：当前像素未填充，但上/下/左/右任一邻域像素有填充
+    float neighborFilled = max(
+        max(_FilledAt(uv + float2( pixelSize, 0), outerRadius, innerRadius),
+            _FilledAt(uv + float2(-pixelSize, 0), outerRadius, innerRadius)),
+        max(_FilledAt(uv + float2(0,  pixelSize), outerRadius, innerRadius),
+            _FilledAt(uv + float2(0, -pixelSize), outerRadius, innerRadius))
+    );
+    float outlineMask = (1.0 - ringFinal) * neighborFilled;
+
+    // 7. 描边颜色：与 BackgroundSpritePass 相同（背景色 + 光照混合）
+    float2 screenUV = input.positionCS.xy / _ScreenParams.xy;
+    float3 bgColor = SampleBackground(screenUV);
+    float3 bgLight = SampleLight(screenUV);
+    float3 outlineColor = LightenBlend(bgColor, bgLight);
+
+    // 8. 组合输出：描边优先级低于环形主体
+    float4 col = float4(0.0, 0.0, 0.0, 0.0);
+    col = lerp(col, float4(outlineColor, 1.0), outlineMask);
+    col = lerp(col, float4(input.color.rgb, 1.0), ringFinal);
+    col.a *= _Fade;
     return col;
 }

@@ -21,7 +21,7 @@ namespace Game
         public bool Active { get; private set; } = true;
         public float DisableTimer { get; set; }
 
-        private float MinMBPressedTime => 0.5f;
+        private float MinMBPressedTime => 0.25f;
 
         // Runtime
         private Transform m_PlayerDirectionPoint; // 根据朝向实时更新的点
@@ -267,7 +267,7 @@ namespace Game
                 UpdateSuicide();
                 if (!m_MBPressed && m_MBPressedTimer <= 0f)
                 {
-                    m_CircularProgressBar.gameObject.SetActive(false);
+                    m_CircularProgressBar.AnimateOut();
                 }
                 else if (m_MBPressedTimer > m_SuicideTime)
                 {
@@ -291,9 +291,9 @@ namespace Game
         private void InitSuicide()
         {
             m_CircularProgressBar.transform.position = m_CurrentFish.Position;
-            m_CircularProgressBar.gameObject.SetActive(true);
             m_CircularProgressBar.SetT(0f);
             m_CircularProgressBar.SetFish(m_CurrentFish);
+            m_CircularProgressBar.AnimateIn();
             m_MBPressed = true;
             m_MBPressedTimer = 0f;
         }
@@ -309,7 +309,7 @@ namespace Game
         {
             m_MBPressedTimer = 0f;
             m_MBPressed = false;
-            m_CircularProgressBar.gameObject.SetActive(false);
+            m_CircularProgressBar.AnimateOut();
             if (Fish == null)
                 return;
 
