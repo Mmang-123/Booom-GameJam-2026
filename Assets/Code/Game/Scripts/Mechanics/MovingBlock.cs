@@ -82,7 +82,7 @@ namespace Game
             }
 #endif
 
-            if (!m_Active && m_T <= 0f && IsPowered)
+            if (!m_Active && IsPowered)
             {
                 SetActive(true);
             }
