@@ -18,6 +18,7 @@
             
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
+            #include "Assets/Plugins/MPixelartRender/ShaderLibrary/Pixelart/Sprite/Background.hlsl"
 
             #include "BlitInput.hlsl"
 
@@ -37,16 +38,12 @@
             half4 Fragment(Varyings input) : SV_Target
             {
                 GET_BLIT_UV();
-                //return float4(_SceneTransition.xxx, 1);
-                float left = lerp(0, 1, clampRemap(_SceneTransition, 0.5, 1, 0, 1));
-                float right = lerp(0, 1, clampRemap(_SceneTransition, 0, 0.5, 0, 1));
+                // 0~0.5: 淡入黑幕, 0.5~1: 淡出黑幕
+                float fade = clampRemap(_SceneTransition, 0.0, 0.5, 0.0, 1.0)
+                           - clampRemap(_SceneTransition, 0.5, 1.0, 0.0, 1.0);
 
-                if (uv.x >= left && uv.x <= right)
-                    return float4(0, 0, 0, 1);
-
-                //return float4(0.5, 0.5, 0.5, 1);
                 float3 rawColor = tex2D(_BlitTexture, uv);
-                return float4(rawColor, 1.0);
+                return half4(lerp(rawColor, SampleBackground(uv), fade), 1.0);
             }
             ENDHLSL
         }

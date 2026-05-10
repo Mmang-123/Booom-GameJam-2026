@@ -91,6 +91,7 @@ namespace Game
 
             if (m_LevelRoot.InitFish != null)
             {
+                CameraController.Instance.Teleport(m_LevelRoot.InitFish.transform.position);
                 PlayerController.Instance.ControlFish(m_LevelRoot.InitFish);
                 //m_LevelRoot.InitFish.SetController(PlayerController.Instance);
             }
@@ -178,18 +179,18 @@ namespace Game
 
         public enum EScreenFadeState { None, FadeIn, FadeOut }
         private EScreenFadeState m_ScreenFadeState;
-        private float m_CurrentScreenFadeT;
+        [SerializeField] private float m_CurrentScreenFadeT;
         public float ScreenFadeT => m_CurrentScreenFadeT;
 
         private void ScreenFadeUpdate(float dt)
         {
             if (m_ScreenFadeState == EScreenFadeState.FadeIn && m_CurrentScreenFadeT < 0.5f)
             {
-                m_CurrentScreenFadeT = Mathf.Clamp(m_CurrentScreenFadeT + dt * 2f, 0f, 0.5f);
+                m_CurrentScreenFadeT = Mathf.Clamp(m_CurrentScreenFadeT + dt * 0.5f, 0f, 0.5f);
             }
             else if (m_ScreenFadeState == EScreenFadeState.FadeOut && m_CurrentScreenFadeT < 1.0f)
             {
-                m_CurrentScreenFadeT = Mathf.Clamp(m_CurrentScreenFadeT + dt * 2f, 0.5f, 1f);
+                m_CurrentScreenFadeT = Mathf.Clamp(m_CurrentScreenFadeT + dt * 0.5f, 0.5f, 1f);
             }
             //Shader.SetGlobalFloat("_SceneTransition", m_CurrentScreenFadeT);
         }
