@@ -62,7 +62,7 @@ namespace Mmang.PixelartRender
                 if (rt != null) rt.Release();
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             RenderMask();
             Shader.SetGlobalTexture(PShaderPropertyID.MLightingTexture, m_LightingHandle);
