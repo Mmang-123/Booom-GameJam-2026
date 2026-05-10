@@ -108,7 +108,7 @@ namespace Game
 
         private void SetEyeStrength(float t)
         {
-            m_EyeRenderer.color = new Color(1, 1, 1, Mathf.SmoothStep(0f, 1f, t));
+            m_EyeRenderer.color = new Color(1, 1, 1, Mathf.SmoothStep(0f, 1f, 1f - t));
         }
 
         private bool CheckLightStrength()
