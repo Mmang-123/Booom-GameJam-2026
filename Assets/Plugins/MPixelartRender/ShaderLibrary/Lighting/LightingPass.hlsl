@@ -18,12 +18,12 @@ int3 _MLightParams;
 // 3x3的uv在4x4的位置
 inline float2 UV3To4(float2 uv)
 {
-    return uv * 3 / 4 + 0.125;
+    return uv * 3.0 / 4.0 + 0.125;
 }
 
 inline float2 UV4To3(float2 uv)
 {
-    return (uv - 0.5) * 4 / 3 + 0.5;
+    return (uv - 0.5) * 4.0 / 3.0 + 0.5;
     //return clamp(uv - float2(0.125, 0.125), 0.0, 0.75) * 4.0 / 3.0;
 }
 
@@ -306,14 +306,9 @@ void ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv, float mask, 
     float2 targetPoint = lerp(point1, point2, t);
     float2 lightUV = UV4To3(WorldToUV(targetPoint));
     float shadow = 1.0;
-    if (GetObstacleMask_RawCamera(lightUV) > shadowThreshold)
-    {
-        shadow = 0.0;
-    }
-    else
-    {
+
         shadow = GetShadow(uv, lightUV, 0.01, shadowThreshold);
-    }
+    
 
     // 距离衰减
     float distanceAttenuation = saturate(1.0 - (dist / radius));
