@@ -117,6 +117,13 @@ namespace Game
             //transform.position += (Vector3)offset;
         }
 
+        public void Teleport(Vector2 position)
+        {
+            TargetPoint = position;
+            m_FollowDamper = new(m_FollowSetting, position);
+            transform.position = new(position.x, position.y, transform.position.z);
+        }
+
         #region 追踪计算
         private void ComputeTargetPoint()
         {
