@@ -8,14 +8,21 @@
 float _Fade;     // 0=透明 1=不透明，由 MaterialPropertyBlock 设置
 float _Progress; // 进度 0~1，由 MaterialPropertyBlock 设置
 
+#define SEGMENT_COUNT   5       // 进度条段数
+#define GAP_RATIO       0.1     // 每段中间隙所占比例（两侧各一半）
+
 float _FilledAt(float2 n, float outerR, float innerR)
 {
     float d = length(n);
     float rm = step(d, outerR) * step(innerR, d);
     float na = frac(atan2(n.x, n.y) / 6.28318530718 + 1.0);
-    float nf = frac(na * 5.0);
-    float dash = step(0.05, nf) * (1.0 - step(0.95, nf));
-    return rm * step(na, _Progress) * dash;
+    float nf = frac(na * SEGMENT_COUNT);
+    float halfGap = GAP_RATIO * 0.5;
+    float dash = step(halfGap, nf) * (1.0 - step(1.0 - halfGap, nf));
+    float nSegIdx = floor(na * SEGMENT_COUNT);
+    float effectiveNf = saturate((nf - halfGap) / (1.0 - GAP_RATIO));
+    float effectiveNa = (nSegIdx + effectiveNf) / SEGMENT_COUNT;
+    return rm * step(effectiveNa, _Progress) * dash;
 }
 
 float4 BarFrag(Varyings input) : SV_Target
@@ -43,13 +50,17 @@ float4 BarFrag(Varyings input) : SV_Target
     float angle = atan2(uv.x, uv.y);
     float normalizedAngle = frac(angle / (2.0 * PI) + 1.0);
 
-    // 4. 进度遮罩
-    float progressMask = step(normalizedAngle, _Progress);
-
     // 5. 虚线遮罩（间隙居中于段边界，保证左右对称）
-    float dashCoord = normalizedAngle * 5;
+    float dashCoord = normalizedAngle * SEGMENT_COUNT;
     float dashFrac = frac(dashCoord);
-    float dashMask = step(0.05, dashFrac) * (1.0 - step(0.95, dashFrac));
+    float halfGap = GAP_RATIO * 0.5;
+    float dashMask = step(halfGap, dashFrac) * (1.0 - step(1.0 - halfGap, dashFrac));
+
+    // 4. 进度遮罩（将 normalizedAngle 重映射到有效弧度，排除间隙，使间隙不占用进度值）
+    float segIndex = floor(dashCoord);
+    float effectiveDashFrac = saturate((dashFrac - halfGap) / (1.0 - GAP_RATIO));
+    float effectiveAngle = (segIndex + effectiveDashFrac) / SEGMENT_COUNT;
+    float progressMask = step(effectiveAngle, _Progress);
 
     float ringFinal = ringMask * progressMask * dashMask;
 

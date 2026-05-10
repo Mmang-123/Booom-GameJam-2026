@@ -63,7 +63,7 @@ namespace Game
         private void FlushBlock()
         {
             PropBlock.SetFloat(s_FadeID, m_Fade);
-            PropBlock.SetFloat(s_ProgressID, m_T);
+            PropBlock.SetFloat(s_ProgressID, Mathf.SmoothStep(0f, 1f, m_T));
             m_Renderer.SetPropertyBlock(PropBlock);
         }
 
