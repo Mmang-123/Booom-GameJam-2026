@@ -33,6 +33,9 @@ namespace Game
         [SerializeField] private SecondOrderDynamicsSetting m_FollowSetting;
         [SerializeField] private Vector2 m_CameraViewSize = new(30f, 16.875f);
 
+        [Header("UI")]
+        [SerializeField] private HealthBar m_HealthBar;
+
         // Runtime
         private Transform m_MainTarget;
         private List<CameraTarget> m_Targets = new();
@@ -46,6 +49,8 @@ namespace Game
         private bool m_FixedUpdateThisFrame = false;
         private Vector2 m_Offset;
         private float m_FDT;
+
+        public HealthBar HealthBar => m_HealthBar;
 
         protected override void OnAwake()
         {
