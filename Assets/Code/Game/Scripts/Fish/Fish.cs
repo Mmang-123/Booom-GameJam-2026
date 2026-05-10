@@ -233,6 +233,7 @@ namespace Game
             
             m_TotalMotion = Vector2.zero;
 
+            HungerUpdate(Time.fixedDeltaTime);
             CheckDieCollision(Time.fixedDeltaTime);
         }
 
@@ -353,11 +354,28 @@ namespace Game
         public void RemoveSaturation(float value)
         {
             Saturation = Mathf.Max(0f, Saturation - value);
+            if (IsPlayer)
+            {
+                Debug.Log(Saturation);
+                CameraController.Instance.HealthBar.SetT(Saturation / MaxSaturation);
+            }
         }
 
         public void AddSaturation(float value)
         {
             Saturation = Mathf.Min(MaxSaturation, Saturation + value);
+            if (IsPlayer)
+            {
+                CameraController.Instance.HealthBar.SetT(Saturation / MaxSaturation);
+            }
+        }
+
+        private void HungerUpdate(float dt)
+        {
+            if (FishController is PlayerController playerController)
+            {
+                RemoveSaturation(playerController.FishConfig.ReduceSaturationRate * dt);
+            }
         }
 
         public void Die(EDieType dieType)
@@ -539,6 +557,11 @@ namespace Game
                 if (m_SporeRenderer2 != null) m_SporeRenderer2.gameObject.SetActive(true);
                 if (m_BodyRenderer != null) m_BodyRenderer.color = m_InfectedBodyColor;
                 if (m_Light.Value != null && m_SetLightColor) m_Light.Value.LightColor = m_InfectedLightColor;
+            }
+
+            if (IsPlayer)
+            {
+                CameraController.Instance.HealthBar.SetColor(BodyColor);
             }
         }
 

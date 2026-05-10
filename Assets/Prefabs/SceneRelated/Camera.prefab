@@ -362,6 +362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.HealthBar
   m_Renderer: {fileID: 6324254785683101122}
+  m_FrameRenderer: {fileID: 6375807397904072675}
 --- !u!1 &6351382011706310953
 GameObject:
   m_ObjectHideFlags: 0

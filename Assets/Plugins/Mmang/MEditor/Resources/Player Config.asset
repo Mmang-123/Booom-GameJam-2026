@@ -15,7 +15,7 @@ MonoBehaviour:
   m_ControlFishConfigs:
   - m_FishTypeTag:
       m_Guid: dd157287-33e2-4403-ba4c-cbe22f78f346
-    m_ReduceSaturationRate: 1
+    m_ReduceSaturationRate: 0
     m_CanEatTags:
       m_Tags: []
     m_OpenMouseDistance: 4.5

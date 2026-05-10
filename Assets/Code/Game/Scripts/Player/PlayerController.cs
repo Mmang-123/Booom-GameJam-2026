@@ -96,6 +96,9 @@ namespace Game
                 }
 
                 //
+                CameraController.Instance.HealthBar.SetColor(m_CurrentFish.BodyColor);
+
+                //
                 m_CurrentFish.Init();
                 m_CurrentFish.GetBehaviour<FB_Swim>().RotateToTargetPoint = Active;
                 //cameraController.AddFollowPoint(m_PlayerDirectionPoint, m_LookAtOffset);
