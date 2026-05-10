@@ -120,6 +120,8 @@ namespace Game
         private float m_RiseUpSpeed;
         private Vector2 m_TotalMotion;
 
+        public Color BodyColor => m_InfectedLevel >= EInfectedLevel.High ? m_InfectedBodyColor : m_DefaultBodyColor;
+
         private void Start()
         {
             GameManager.Instance.TryLoadSavedData(this);

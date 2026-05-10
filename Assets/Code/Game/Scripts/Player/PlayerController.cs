@@ -14,6 +14,7 @@ namespace Game
         [SerializeField] private float m_LookAtOffsetMouseRadius = 2f; // 根据鼠标到中心的距离/半径 作为偏移的强度
 
         [SerializeField] private float m_SuicideTime = 2f;
+        [SerializeField] private CircularProgressBar m_CircularProgressBar;
 
         public Fish Fish { get; private set; }
 
@@ -234,26 +235,34 @@ namespace Game
                 return;
             }
 
-            if (!m_MBPressed && mouse.middleButton.isPressed)
+            if (!m_MBPressed && m_MBPressedTimer <= 0f && mouse.middleButton.isPressed)
             {
-                m_MBPressed = true;
-                m_MBPressedTimer = 0f;
+                InitSuicide();
             }
             else
             {
-                m_MBPressedTimer += Time.deltaTime;
+                if (m_MBPressed)
+                    m_MBPressedTimer += Time.deltaTime;
+                else
+                    m_MBPressedTimer -= Time.deltaTime;
+                
                 if (m_MBPressedTimer > MinMBPressedTime && !mouse.middleButton.isPressed)
                 {
                     m_MBPressed = false;
                 }
-                else
+                else if (mouse.middleButton.isPressed)
                 {
-                    UpdateSuicide();
-                    if (m_MBPressedTimer > m_SuicideTime)
-                    {
-                        CommitSuicide();
-                        m_MBPressedTimer = 0f;
-                    }
+                    m_MBPressed = true;
+                }
+
+                UpdateSuicide();
+                if (!m_MBPressed && m_MBPressedTimer <= 0f)
+                {
+                    m_CircularProgressBar.gameObject.SetActive(false);
+                }
+                else if (m_MBPressedTimer > m_SuicideTime)
+                {
+                    CommitSuicide();
                 }
             }
         }
@@ -270,13 +279,28 @@ namespace Game
             }
         }
 
+        private void InitSuicide()
+        {
+            m_CircularProgressBar.transform.position = m_CurrentFish.Position;
+            m_CircularProgressBar.gameObject.SetActive(true);
+            m_CircularProgressBar.SetT(0f);
+            m_CircularProgressBar.SetFish(m_CurrentFish);
+            m_MBPressed = true;
+            m_MBPressedTimer = 0f;
+        }
+
         private void UpdateSuicide()
         {
-            
+            m_CircularProgressBar.transform.position = m_CurrentFish.Position;
+            float t = Mathf.Clamp01(m_MBPressedTimer / m_SuicideTime);
+            m_CircularProgressBar.SetT(t);
         }
 
         private void CommitSuicide()
         {
+            m_MBPressedTimer = 0f;
+            m_MBPressed = false;
+            m_CircularProgressBar.gameObject.SetActive(false);
             if (Fish == null)
                 return;
 
