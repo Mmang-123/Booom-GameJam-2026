@@ -37,12 +37,12 @@ inline int GetChunkIndex(int2 positionIndex)
     return positionIndex.y * _ChunkRange.x + positionIndex.x;
 }
 
-//
+// _ObstacleParams.yz = origin in chunk units, may be fractional for even N
+// origin = CenterIndex - (N-1)/2.0  (float division)
 inline float2 GetChunkCenterScreenUV()
 {
-    int2 chunkIndex = _ObstacleParams.yz;
-    float2 positionWS = chunkIndex * 16;
-    return WorldToUV(positionWS);
+    float2 originWS = _ObstacleParams.yz * 16.0;
+    return WorldToUV(originWS);
 }
 
 inline float2 GetChunkScreenUVSize()
@@ -57,15 +57,14 @@ float SampleObstacleSDF(int index, float2 uv)
 
 float GetObstacleSDF(float2 screenUV)
 {
-    float2 centerUV = GetChunkCenterScreenUV();
+    float2 originUV = GetChunkCenterScreenUV();
     float2 chunkSize = GetChunkScreenUVSize();
     
-    float2 offset = screenUV - centerUV;
+    float2 offset = screenUV - originUV;
     int2 offsetIndex = int2(floor(offset.x / chunkSize.x), floor(offset.y / chunkSize.y));
 
     float2 sampleUV = (offset - offsetIndex * chunkSize) / chunkSize;
 
-    offsetIndex += int2((_ChunkRange.x - 1) / 2, (_ChunkRange.y - 1) / 2);
     return SampleObstacleSDF(GetChunkIndex(offsetIndex), sampleUV);
 }
 
@@ -109,12 +108,12 @@ float UnpackSDFToRaw(float rawSDF)
 
 float GetObstacleMask(float2 screenUV)
 {
-    float2 centerUV = GetChunkCenterScreenUV();
+    float2 originUV = GetChunkCenterScreenUV();
     float2 chunkSize = GetChunkScreenUVSize();
     float2 totalChunkSize = chunkSize * (_ChunkRange + float2(1, 1));
 
-    float2 offset = screenUV - centerUV;
-    offset += chunkSize * float2((_ChunkRange.x - 1.0) / 2.0 + 0.5, (_ChunkRange.y - 1.0) / 2.0 + 0.5);
+    float2 offset = screenUV - originUV;
+    offset += chunkSize * float2(0.5, 0.5);
 
     float2 sampleUV = offset / totalChunkSize;
     return SAMPLE_TEXTURE2D(_ObstacleMask, sampler_ObstacleMask, sampleUV).r;

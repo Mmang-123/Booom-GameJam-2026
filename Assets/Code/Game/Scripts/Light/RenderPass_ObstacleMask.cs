@@ -51,11 +51,17 @@ namespace Mmang.PixelartRender
                 DrawingSettings drawingSettings = RenderingUtils.CreateDrawingSettings(TargetShaderTag, renderingData, cameraData, lightData, sortingCriteria);
                 var param = new RendererListParams(renderingData.cullResults, drawingSettings, m_FilteringSettings);
                 passData.RendererList = renderGraph.CreateRendererList(param);
+
+                // Origin = CenterIndex - (N-1)/2.0  (float division so even N aligns correctly)
+                // For N=3: origin = CenterIndex - 1.0 (chunk boundary)
+                // For N=4: origin = CenterIndex - 1.5 (half-chunk offset, matches camera layout)
+                float ox = manager.CenterIndex.x - (manager.ChunkRange.x - 1) / 2.0f;
+                float oy = manager.CenterIndex.y - (manager.ChunkRange.y - 1) / 2.0f;
                 passData.Params = new Vector4
                 (
                     manager.UnitSize,
-                    manager.CenterIndex.x,
-                    manager.CenterIndex.y,
+                    ox,
+                    oy,
                     0.0f
                 );
                 passData.ChunkRange = manager.ChunkRange;

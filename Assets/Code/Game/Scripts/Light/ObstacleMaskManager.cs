@@ -85,17 +85,8 @@ namespace Mmang.PixelartRender
 
         private void InitChunkRange()
         {
-            int x = m_ChunkRange.x;
-            int y = m_ChunkRange.y;
-            if (x < 1)
-                x = 1;
-            else if (x % 2 == 0)
-                x -= 1;
-            
-            if (y < 1)
-                y = 1;
-            else if (y % 2 == 0)
-                y -= 1;
+            int x = Mathf.Max(1, m_ChunkRange.x);
+            int y = Mathf.Max(1, m_ChunkRange.y);
             
             m_RealChunkRange = new(x, y);
             Debug.Log(m_RealChunkRange);

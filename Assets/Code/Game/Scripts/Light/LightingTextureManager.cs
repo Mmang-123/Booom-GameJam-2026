@@ -66,9 +66,10 @@ namespace Game
             var maskManager = ObstacleMaskManager.Instance;
 
             //
-            //Vector2Int chunkIndex = chunk - maskManager.CenterIndex + Vector2Int.one;
-            Vector2Int chunkIndex = maskManager.GetLocalChunkIndex(chunk);
-            m_ReadShadowMaterial.SetVector(Shader.PropertyToID("_ChunkIndex"), new(chunkIndex.x, chunkIndex.y));
+            // Float division so even N (fractional origin) aligns correctly with _MLightingTexture
+            float fx = chunk.x - maskManager.CenterIndex.x + (maskManager.ChunkRange.x - 1) / 2.0f;
+            float fy = chunk.y - maskManager.CenterIndex.y + (maskManager.ChunkRange.y - 1) / 2.0f;
+            m_ReadShadowMaterial.SetVector(Shader.PropertyToID("_ChunkIndex"), new Vector4(fx, fy, 0, 0));
 
             //
             int resolution = maskManager.Resolution / 4;

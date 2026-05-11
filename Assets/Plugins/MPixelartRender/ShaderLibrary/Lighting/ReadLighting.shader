@@ -28,7 +28,7 @@
 
             TEXTURE2D(_MLightingTexture);
             SAMPLER(sampler_MLightingTexture);
-            int2 _ChunkIndex;
+            float2 _ChunkIndex;  // float so even N (fractional origin) is handled correctly
             float2 _ChunkRange;
 
             inline float GetStrength(float3 color)

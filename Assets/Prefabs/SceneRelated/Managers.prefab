@@ -190,7 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.ObstacleMaskManager
   m_DFFeature: {fileID: 6044077792858546253, guid: aa37554afa80361428f58352f2ed16b2, type: 2}
   m_NearestPointSearchRange: 8
-  m_ChunkRange: {x: 5, y: 5}
+  m_ChunkRange: {x: 4, y: 4}
 --- !u!1 &1289267146449355019
 GameObject:
   m_ObjectHideFlags: 0

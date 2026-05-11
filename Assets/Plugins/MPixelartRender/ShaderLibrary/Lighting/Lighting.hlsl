@@ -30,9 +30,8 @@ float4 _Resolution;
 
 float3 SampleLight(float2 screenUV)
 {
-    // _ObstacleParams.yz 是CenterChunk的左下角
-    int2 chunkIndex = _ObstacleParams.yz - ((_ChunkRange - 1) / 2);
-    float2 positionWS = chunkIndex * 16;
+    // _ObstacleParams.yz = origin in chunk units (may be fractional for even N)
+    float2 positionWS = _ObstacleParams.yz * 16.0;
     float4 posCS = TransformWorldToHClip(float3(positionWS, 0.0));
     float4 scrPos = ComputeScreenPos(posCS);
     float2 originUV = scrPos.xy / scrPos.w;

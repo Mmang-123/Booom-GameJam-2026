@@ -182,7 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Mmang.PixelartRender.MSpotPointLight
   Color: {r: 0.15686275, g: 0.7764706, b: 1, a: 1}
   Radius: 20
-  InnerRadius: 3.67
+  InnerRadius: 2
   CullRadius: 1.6
   Intensity: 2
   InnerSpotAngle: 14
@@ -674,11 +674,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 790c478d073579945bf59ef756c541bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Swim
-  m_RotateSpeed: 4
-  m_FastRotateSpeed: 7
-  m_MoveSpeed: 10
-  m_Acceleration: 8
-  m_FastAcceleration: 16
+  m_RotateSpeed: 6
+  m_FastRotateSpeed: 10
+  m_MoveSpeed: 11
+  m_Acceleration: 9
+  m_FastAcceleration: 18
   m_StopDistance: 0.8
   m_CanAvoidance: 1
   m_RayDistance: 1.8
