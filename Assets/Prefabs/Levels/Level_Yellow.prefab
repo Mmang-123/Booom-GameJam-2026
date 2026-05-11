@@ -24361,7 +24361,7 @@ GameObject:
   - component: {fileID: 204652191936199592}
   - component: {fileID: 5333452981710660643}
   m_Layer: 0
-  m_Name: Level_1
+  m_Name: Level_Yellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24399,7 +24399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885f50e996422f84084ceac55c99a6e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.LevelRoot
-  m_LevelName: Level_1
+  m_LevelName: Level_Yellow
   m_InitFish: {fileID: 0}
 --- !u!1 &8021256362354536989
 GameObject:
