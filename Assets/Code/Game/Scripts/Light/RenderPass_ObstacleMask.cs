@@ -19,7 +19,7 @@ namespace Mmang.PixelartRender
         {
             internal RendererListHandle RendererList;
             internal Vector4 Params;
-
+            internal Vector2Int ChunkRange;
         }
 
         public RenderPass_ObstacleMask(LayerMask layerMask, ShaderTagId shaderTag)
@@ -58,6 +58,7 @@ namespace Mmang.PixelartRender
                     manager.CenterIndex.y,
                     0.0f
                 );
+                passData.ChunkRange = manager.ChunkRange;
 
                 builder.UseRendererList(passData.RendererList);
 
@@ -74,6 +75,7 @@ namespace Mmang.PixelartRender
             using (new ProfilingScope(cmd, new ProfilingSampler(s_PassTag)))
             {
                 cmd.SetGlobalVector(Shader.PropertyToID("_ObstacleParams"), passData.Params);
+                cmd.SetGlobalVector(Shader.PropertyToID("_ChunkRange"), new(passData.ChunkRange.x, passData.ChunkRange.y));
                 cmd.SetGlobalFloat(PShaderPropertyID.UnitSize, passData.Params.x);
                 cmd.ClearRenderTarget(true, true, Color.clear);
                 cmd.DrawRendererList(passData.RendererList);

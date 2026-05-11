@@ -18,13 +18,14 @@ int3 _MLightParams;
 // 3x3的uv在4x4的位置
 inline float2 UV3To4(float2 uv)
 {
-    return uv * 3.0 / 4.0 + 0.125;
+    //return uv * 3.0 / 4.0 + 0.125;
+    return (uv - 0.5) * _ChunkRange / (_ChunkRange + 1.0) + 0.5;
 }
 
 inline float2 UV4To3(float2 uv)
 {
-    return (uv - 0.5) * 4.0 / 3.0 + 0.5;
-    //return clamp(uv - float2(0.125, 0.125), 0.0, 0.75) * 4.0 / 3.0;
+    //return (uv - 0.5) * 4.0 / 3.0 + 0.5;
+    return (uv - 0.5) * (_ChunkRange + 1.0) / _ChunkRange + 0.5;
 }
 
 inline float2 SnapLightPoisition(float2 rawPosition)
@@ -34,6 +35,20 @@ inline float2 SnapLightPoisition(float2 rawPosition)
     //return round(rawPosition / UNIT_SIZE) * UNIT_SIZE;
 }
 
+inline float2 ScaleUV(float2 screenUV)
+{
+    //return screenUV;
+    screenUV.y *= _ChunkRange.y / _ChunkRange.x;
+    return screenUV;
+}
+
+inline float2 UnscaleUV(float2 screenUV)
+{
+    //return screenUV;
+    screenUV.y *= _ChunkRange.x / _ChunkRange.y;
+    return screenUV;
+}
+
 half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThreshold)
 {
     float2 direction = normalize(lightUV - screenUV);
@@ -41,7 +56,8 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
     const int MAX_STEPS = 128;
     
     float2 current = screenUV;
-    float unitSize = 1.0 / _ObstacleChunkParams.z;
+    //float unitSize = 1.0 / _ObstacleChunkParams.z;
+    float unitSize = 1.0 / (_ObstacleChunkParams.x * (_ChunkRange.x + 1));
     half shadowMask = 1.0;
 
     [loop]
@@ -54,14 +70,14 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
             break;
         }
 
-        half obstacleMask = GetObstacleMask_RawCamera(current);
+        half obstacleMask = GetObstacleMask_RawCamera(UnscaleUV(current));
         if (obstacleMask > maskThreshold)
         {
             shadowMask = 0.0;
             break;
         }
 
-        float sdf = GetObstacleSDF_RawCamera(current);
+        float sdf = GetObstacleSDF_RawCamera(UnscaleUV(current));
         float nextStep = UnpackSDFToRaw(sdf) * 0.9;
         if (nextStep <= 4.0 * unitSize)
         {
@@ -101,12 +117,12 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
                     tMax += tDelta;
 
                     // 只有两侧格子都是障碍才遮挡（90度实心夹角）
-                    half maskX = GetObstacleMask_RawCamera((float2(cellX) + 0.5) * unitSize);
-                    half maskY = GetObstacleMask_RawCamera((float2(cellY) + 0.5) * unitSize);
+                    half maskX = GetObstacleMask_RawCamera(UnscaleUV((float2(cellX) + 0.5) * unitSize));
+                    half maskY = GetObstacleMask_RawCamera(UnscaleUV((float2(cellY) + 0.5) * unitSize));
                     if (maskX > maskThreshold && maskY > maskThreshold)
                         { shadowMask = 0.0; ddaStatus = -1; break; }
 
-                    half ddaMask = GetObstacleMask_RawCamera((float2(cellPos) + 0.5) * unitSize);
+                    half ddaMask = GetObstacleMask_RawCamera(UnscaleUV((float2(cellPos) + 0.5) * unitSize));
                     if (ddaMask > maskThreshold)
                         { shadowMask = 0.0; ddaStatus = -1; break; }
                 }
@@ -117,7 +133,7 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
                     cellPos.x += stepDirDDA.x;
                     tMax.x += tDelta.x;
 
-                    half ddaMask = GetObstacleMask_RawCamera((float2(cellPos) + 0.5) * unitSize);
+                    half ddaMask = GetObstacleMask_RawCamera(UnscaleUV((float2(cellPos) + 0.5) * unitSize));
                     if (ddaMask > maskThreshold)
                         { shadowMask = 0.0; ddaStatus = -1; break; }
                 }
@@ -128,7 +144,7 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
                     cellPos.y += stepDirDDA.y;
                     tMax.y += tDelta.y;
 
-                    half ddaMask = GetObstacleMask_RawCamera((float2(cellPos) + 0.5) * unitSize);
+                    half ddaMask = GetObstacleMask_RawCamera(UnscaleUV((float2(cellPos) + 0.5) * unitSize));
                     if (ddaMask > maskThreshold)
                         { shadowMask = 0.0; ddaStatus = -1; break; }
                 }
@@ -161,7 +177,7 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
 
 void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, float mask, out half3 outColor, out half outShadow)
 {
-    const float UNIT_SIZE = 1.0 / 256.0 * 3.0;
+    const float UNIT_SIZE = 16.0 / (256.0 * _ChunkRange.x);
     outShadow = 0.0;
     outColor = 0.0;
     LightData2D light = _MLightDataBuffer[lightIndex];
@@ -183,7 +199,7 @@ void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, float mask,
     distanceAttenuation *= distanceAttenuation;
 
     // 阴影
-    float2 lightUV = UV4To3(WorldToUV(lightPos));
+    float2 lightUV = ScaleUV(UV4To3(WorldToUV(lightPos)));
 
     float shadowThreshold;
     if (mask > 0.01 && mask < 0.6)
@@ -204,7 +220,7 @@ void ComputePointLight(int lightIndex, float2 positionWS, float2 uv, float mask,
 
 void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, float mask, out half3 outColor, out half outShadow)
 {
-    const float UNIT_SIZE = 1.0 / 256.0 * 3.0;
+    const float UNIT_SIZE = 16.0 / (256.0 * _ChunkRange.x);
     outShadow = 0.0;
     outColor = 0.0;
     LightData2D light = _MLightDataBuffer[lightIndex];
@@ -233,7 +249,7 @@ void ComputeSpotLight(int lightIndex, float2 positionWS, float2 uv, float mask, 
     distanceAttenuation *= distanceAttenuation * (3.0 - 2.0 * distanceAttenuation);
 
     // 角度衰减
-    float2 lightUV = UV4To3(WorldToUV(lightPos));
+    float2 lightUV = ScaleUV(UV4To3(WorldToUV(lightPos)));
     float2 direction = normalize(uv - lightUV);
     float SdotL = dot(lightDir, direction); 
     float angleAttenuation = saturate(SdotL * scaleOffset.x + scaleOffset.y);
@@ -304,10 +320,10 @@ void ComputeAreaLight(int lightIndex, float2 positionWS, float2 uv, float mask, 
         shadowThreshold = 0.01;
 
     float2 targetPoint = lerp(point1, point2, t);
-    float2 lightUV = UV4To3(WorldToUV(targetPoint));
+    float2 lightUV = ScaleUV(UV4To3(WorldToUV(targetPoint)));
     float shadow = 1.0;
 
-        shadow = GetShadow(uv, lightUV, 0.01, shadowThreshold);
+    shadow = GetShadow(uv, lightUV, 0.01, shadowThreshold);
     
 
     // 距离衰减
@@ -332,6 +348,10 @@ half4 LightingFrag(Varyings input) : SV_Target
 
     float2 positionWS = UVToWorld(UV3To4(uv));
     uv = UV4To3(WorldToUV(positionWS));
+    uv = ScaleUV(uv);
+
+    //return half4(UVToWorld(0.5).xxx, 1);
+    //return half4(positionWS.xxx, 1);
 
     half3 totalLight = half3(0.0, 0.0, 0.0);
     half3 outputLight = half3(0.0, 0.0, 0.0);
@@ -341,7 +361,8 @@ half4 LightingFrag(Varyings input) : SV_Target
     int spotLightCount = _MLightParams.z;
 
     //
-    float mask = GetObstacleMask_RawCamera(uv);
+    float mask = GetObstacleMask_RawCamera(UnscaleUV(uv));
+    //return half4(mask.xxx, 1);
 
     // Point Light
     int start = 0;

@@ -13,6 +13,11 @@ namespace Mmang.PixelartRender
         [SerializeField] GenerateDFRendererFeature m_DFFeature;
         [SerializeField] int m_NearestPointSearchRange = 16;
 
+        [SerializeField] private Vector2Int m_ChunkRange = new(3, 3);
+
+
+        private Vector2Int m_RealChunkRange;
+
         private RenderTexture m_Mask;
         private RTHandle m_MaskHandle;
         private RenderTexture m_Lighting;
@@ -21,14 +26,15 @@ namespace Mmang.PixelartRender
         public RTHandle MaskHandle => m_MaskHandle;
         public RTHandle LightingHandle => m_LightingHandle;
 
-        private RenderTexture[] m_SDFs = new RenderTexture[9];
-        private RTHandle[] m_SDFHandles = new RTHandle[9];
-        private int[] m_SDFThreadIDs = new int[9];
+        private RenderTexture[] m_SDFs;
+        private RTHandle[] m_SDFHandles;
+        private int[] m_SDFThreadIDs;
 
         public int Resolution => 256;
         public float TileSize => 16f;
         public float HalfTileSize => TileSize / 2f;
         public float UnitSize => TileSize / Resolution;
+        public Vector2Int ChunkRange => m_RealChunkRange;
 
         private Camera m_Camera;
 
@@ -37,6 +43,7 @@ namespace Mmang.PixelartRender
 
         private void OnEnable()
         {
+            InitChunkRange();
             InitCamera();
             CreateTextures();
             RegisterSDFThreads();
@@ -68,9 +75,42 @@ namespace Mmang.PixelartRender
             Shader.SetGlobalTexture(PShaderPropertyID.MLightingTexture, m_LightingHandle);
         }
 
+        private void InitChunkRange()
+        {
+            int x = m_ChunkRange.x;
+            int y = m_ChunkRange.y;
+            if (x < 1)
+                x = 1;
+            else if (x % 2 == 0)
+                x -= 1;
+            
+            if (y < 1)
+                y = 1;
+            else if (y % 2 == 0)
+                y -= 1;
+            
+            m_RealChunkRange = new(x, y);
+            Debug.Log(m_RealChunkRange);
+        }
+
         private void RegisterSDFThreads()
         {
             if (m_DFFeature == null) return;
+
+            m_SDFThreadIDs = new int[m_RealChunkRange.x * m_RealChunkRange.y];
+            for (int y = 0; y < m_RealChunkRange.y; y++)
+            {
+                for (int x = 0; x < m_RealChunkRange.x; x++)
+                {
+                    int i = x + y * m_RealChunkRange.x;
+                    Vector2Int offset = new(x * Resolution, y * Resolution);
+                    m_SDFThreadIDs[i] = m_DFFeature.Pending(
+                        null, m_SDFs[i], offset,
+                        extendPixels: 128, nearestPointSearchRange: m_NearestPointSearchRange, boundaryDistance: false, alphaThreshold: 0.05f, shaderPropertyID: Shader.PropertyToID($"_ObstacleSDF_{i}"));
+                }
+            }
+
+            /*
             for (int i = 0; i < 9; i++)
             {
                 Vector2Int offset = new(i % 3 * Resolution, i / 3 * Resolution);
@@ -78,12 +118,13 @@ namespace Mmang.PixelartRender
                     null, m_SDFs[i], offset,
                     extendPixels: 128, nearestPointSearchRange: m_NearestPointSearchRange, boundaryDistance: false, alphaThreshold: 0.05f, shaderPropertyID: Shader.PropertyToID($"_ObstacleSDF_{i}"));
             }
+            */
         }
 
         private void ReleaseSDFThreads()
         {
             if (m_DFFeature == null) return;
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < m_SDFThreadIDs.Length; i++)
             {
                 if (m_SDFThreadIDs[i] > 0)
                 {
@@ -95,7 +136,7 @@ namespace Mmang.PixelartRender
 
         private void CreateTextures()
         {
-            var maskDescriptor = new RenderTextureDescriptor(Resolution * 4, Resolution * 4)
+            var maskDescriptor = new RenderTextureDescriptor(Resolution * (m_RealChunkRange.x + 1), Resolution * (m_RealChunkRange.y + 1))
             {
                 depthBufferBits = 32,
                 enableRandomWrite = true,
@@ -106,7 +147,7 @@ namespace Mmang.PixelartRender
                 dimension = TextureDimension.Tex2D,
             };
 
-            var lightingDescriptor = new RenderTextureDescriptor(Resolution * 3, Resolution * 3)
+            var lightingDescriptor = new RenderTextureDescriptor(Resolution * m_RealChunkRange.x, Resolution * m_RealChunkRange.y)
             {
                 depthBufferBits = 0,
                 enableRandomWrite = true,
@@ -135,6 +176,36 @@ namespace Mmang.PixelartRender
             m_Lighting.Create();
             m_LightingHandle = RTHandles.Alloc(m_Lighting);
 
+
+            m_SDFs = new RenderTexture[m_RealChunkRange.x * m_RealChunkRange.y];
+            m_SDFHandles = new RTHandle[m_RealChunkRange.x * m_RealChunkRange.y];
+            var descriptor = new RenderTextureDescriptor(Resolution, Resolution)
+            {
+                depthBufferBits = 0,
+                enableRandomWrite = true,
+                graphicsFormat = GraphicsFormat.R16_UNorm,
+                volumeDepth = 1,
+                msaaSamples = 1,
+                sRGB = true,
+                dimension = TextureDimension.Tex2D,
+            };
+            for (int y = 0; y < m_RealChunkRange.y; y++)
+            {
+                for (int x = 0; x < m_RealChunkRange.x; x++)
+                {
+                    int i = x + y * m_RealChunkRange.x;
+                    m_SDFs[i] = new(descriptor)
+                    {
+                        name = $"_ObstacleSDF_{i}",
+                        filterMode = FilterMode.Point,
+                        wrapMode = TextureWrapMode.Clamp
+                    };
+                    m_SDFs[i].Create();
+                    m_SDFHandles[i] = RTHandles.Alloc(m_SDFs[i]);
+                }
+            }
+
+            /*
             for (int i = 0; i < 9; i++)
             {
                 var descriptor = new RenderTextureDescriptor(Resolution, Resolution)
@@ -157,6 +228,7 @@ namespace Mmang.PixelartRender
                 m_SDFs[i].Create();
                 m_SDFHandles[i] = RTHandles.Alloc(m_SDFs[i]);
             }
+            */
         }
 
 
@@ -195,25 +267,35 @@ namespace Mmang.PixelartRender
 
         public bool IsVaildChunk(Vector2Int chunkIndex)
         {
+            // 3X3的判定
+            /*
             chunkIndex -= CenterIndex;
             if (Mathf.Abs(chunkIndex.x) > 1 || Mathf.Abs(chunkIndex.y) > 1)
+                return false;
+            return true;
+            */
+
+            chunkIndex -= CenterIndex;
+            if (Mathf.Abs(chunkIndex.x) > ((m_RealChunkRange.x - 1) / 2)
+            || Mathf.Abs(chunkIndex.y) > ((m_RealChunkRange.y - 1) / 2))
                 return false;
             return true;
         }
 
-        public bool IsLastValidChunk(Vector2Int chunkIndex)
+        public Vector2Int GetLocalChunkIndex(Vector2Int worldChunkIndex)
         {
-            chunkIndex -= CenterIndex;
-            if (Mathf.Abs(chunkIndex.x) > 1 || Mathf.Abs(chunkIndex.y) > 1)
-                return false;
-            return true;
+            worldChunkIndex -= CenterIndex;
+            //worldChunkIndex += Vector2Int.one;
+            worldChunkIndex += new Vector2Int((m_RealChunkRange.x - 1) / 2, (m_RealChunkRange.y - 1) / 2);
+            return worldChunkIndex;
         }
 
         public int GetChunkTextureIndex(Vector2Int chunkIndex)
         {
             chunkIndex -= CenterIndex;
-            chunkIndex += Vector2Int.one;
-            return chunkIndex.x + chunkIndex.y * 3;
+            //chunkIndex += Vector2Int.one;
+            chunkIndex += new Vector2Int((m_RealChunkRange.x - 1) / 2, (m_RealChunkRange.y - 1) / 2);
+            return chunkIndex.x + chunkIndex.y * m_RealChunkRange.x;
         }
 
         #endregion
@@ -235,7 +317,8 @@ namespace Mmang.PixelartRender
             cameraGO.hideFlags = HideFlags.HideAndDontSave;
 
             camera.orthographic = true;
-            camera.orthographicSize = TileSize * 4f / 2f;
+            //camera.orthographicSize = TileSize * 4f / 2f;
+            camera.orthographicSize = TileSize * (m_RealChunkRange.y + 1f) / 2f;
 
             camera.clearFlags = CameraClearFlags.Color;
             camera.backgroundColor = Color.clear;

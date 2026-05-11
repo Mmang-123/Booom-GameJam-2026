@@ -66,7 +66,8 @@ namespace Game
             var maskManager = ObstacleMaskManager.Instance;
 
             //
-            Vector2Int chunkIndex = chunk - maskManager.CenterIndex + Vector2Int.one;
+            //Vector2Int chunkIndex = chunk - maskManager.CenterIndex + Vector2Int.one;
+            Vector2Int chunkIndex = maskManager.GetLocalChunkIndex(chunk);
             m_ReadShadowMaterial.SetVector(Shader.PropertyToID("_ChunkIndex"), new(chunkIndex.x, chunkIndex.y));
 
             //

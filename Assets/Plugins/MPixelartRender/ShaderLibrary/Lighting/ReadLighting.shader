@@ -29,6 +29,7 @@
             TEXTURE2D(_MLightingTexture);
             SAMPLER(sampler_MLightingTexture);
             int2 _ChunkIndex;
+            float2 _ChunkRange;
 
             inline float GetStrength(float3 color)
             {
@@ -39,13 +40,13 @@
             {
                 GET_BLIT_UV();
 
-                float2 sampleUV = (uv + _ChunkIndex) / 3.0;
-                float unitSize = 1.0 / (256 * 3.0);
+                float2 sampleUV = (uv + _ChunkIndex) / _ChunkRange;
+                float2 unitSize = 1.0 / (256.0 * _ChunkRange);
 
                 float s1 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(0, 0)).a;
-                float s2 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(unitSize, 0)).a;
-                float s3 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(0, unitSize)).a;
-                float s4 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(unitSize, unitSize)).a;
+                float s2 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(unitSize.x, 0)).a;
+                float s3 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(0, unitSize.y)).a;
+                float s4 = SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV + float2(unitSize.x, unitSize.y)).a;
                 
                 return (s1 + s2 + s3 + s4) / 4.0;
 

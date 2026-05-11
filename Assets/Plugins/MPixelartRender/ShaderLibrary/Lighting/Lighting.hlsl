@@ -22,6 +22,7 @@ SAMPLER(sampler_MLightingTexture);
 #define M_OBSTACLE_PARAMS_INCLUDED
 float4 _ObstacleParams;
 float4 _ObstacleChunkParams;
+float2 _ChunkRange;
 #endif
 
 float4 _Resolution;
@@ -29,14 +30,15 @@ float4 _Resolution;
 
 float3 SampleLight(float2 screenUV)
 {
-    int2 chunkIndex = _ObstacleParams.yz - int2(1, 1);
+    // _ObstacleParams.yz 是CenterChunk的左下角
+    int2 chunkIndex = _ObstacleParams.yz - ((_ChunkRange - 1) / 2);
     float2 positionWS = chunkIndex * 16;
     float4 posCS = TransformWorldToHClip(float3(positionWS, 0.0));
     float4 scrPos = ComputeScreenPos(posCS);
     float2 originUV = scrPos.xy / scrPos.w;
 
-    // TODO: 这里写死了
-    float2 chunkSize = _ObstacleChunkParams.xy * 3.0 / _Resolution.zw;
+
+    float2 chunkSize = _ObstacleChunkParams.xy * _ChunkRange.xy / _Resolution.zw;
     float2 sampleUV = (screenUV - originUV) / chunkSize;
 
     //return float3(sampleUV, 0);
