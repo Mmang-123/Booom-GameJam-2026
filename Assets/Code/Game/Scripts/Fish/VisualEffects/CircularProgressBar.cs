@@ -79,12 +79,21 @@ namespace Game
             m_Renderer.color = new(color.r, color.g, color.b, 1f);
         }
 
-        public void SetFish(Fish fish)
+        public void SetFish(Fish fish, ControlFishConfig config)
         {
             SetColor(fish.BodyColor);
+
+            if (fish.FishTypeTag.Equals(FishUtils.JellyGleamTag))
+                m_TargetScale = new Vector3(4, 4, 4);
+            else
+                m_TargetScale = config.InfectRadius * Vector3.one;
+            
+
+            /*
             m_TargetScale = fish.FishTypeTag.Equals(FishUtils.GolemFishTag)
                 ? new Vector3(7, 7, 7)
                 : new Vector3(4, 4, 4);
+            */
         }
     }
 }

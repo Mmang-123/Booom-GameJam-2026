@@ -39,7 +39,8 @@ float4 BarFrag(Varyings input) : SV_Target
 
     // 环内缩1像素，留出外侧描边空间
     float outerRadius = 0.5 - pixelSize;
-    float innerRadius = 0.45 - pixelSize;
+    //float innerRadius = 0.45 - pixelSize;
+    float innerRadius = outerRadius - pixelSize * 3;
 
     float outerMask = step(dist, outerRadius);
     float innerMask = step(innerRadius, dist);

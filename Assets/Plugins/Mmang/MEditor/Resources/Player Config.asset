@@ -31,7 +31,7 @@ MonoBehaviour:
     m_OpenMouseDistance: 4.5
     m_OpenMouseAngle: 40
     m_EatDistance: 1.5
-    m_InfectRadius: 3.5
+    m_InfectRadius: 6
   - m_FishTypeTag:
       m_Guid: f4f9d2fc-de97-4d70-8292-e5cdc4e5cddc
     m_ReduceSaturationRate: 1
@@ -41,7 +41,7 @@ MonoBehaviour:
     m_OpenMouseDistance: 4.5
     m_OpenMouseAngle: 40
     m_EatDistance: 1.5
-    m_InfectRadius: 3.5
+    m_InfectRadius: 6
   - m_FishTypeTag:
       m_Guid: 51809826-1abd-450a-bffd-b8617fb2da14
     m_ReduceSaturationRate: 1
@@ -53,4 +53,4 @@ MonoBehaviour:
     m_OpenMouseDistance: 6
     m_OpenMouseAngle: 40
     m_EatDistance: 2.5
-    m_InfectRadius: 3.5
+    m_InfectRadius: 16

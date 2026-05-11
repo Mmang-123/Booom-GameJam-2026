@@ -15,6 +15,7 @@ namespace Game
 
         [SerializeField] private float m_SuicideTime = 2f;
         [SerializeField] private CircularProgressBar m_CircularProgressBar;
+        [SerializeField] private CircleRange m_CircleRange;
 
         public Fish Fish { get; private set; }
 
@@ -238,6 +239,7 @@ namespace Game
             {
                 if (m_MBPressed)
                 {
+                    //m_CircleRange.FadeOut();
                     m_MBPressed = false;
                     m_MBPressedTimer = 0f;
                     UpdateSuicide();
@@ -249,6 +251,7 @@ namespace Game
             if (!m_MBPressed && m_MBPressedTimer <= 0f && mouse.middleButton.isPressed)
             {
                 InitSuicide();
+                //m_CircleRange.FadeIn(Fish, m_FishConfig);
             }
             else
             {
@@ -260,10 +263,12 @@ namespace Game
                 if (m_MBPressedTimer > MinMBPressedTime && !mouse.middleButton.isPressed)
                 {
                     m_MBPressed = false;
+                    //m_CircleRange.FadeOut();
                 }
                 else if (mouse.middleButton.isPressed)
                 {
                     m_MBPressed = true;
+                    //m_CircleRange.FadeIn(Fish, m_FishConfig);
                 }
 
                 UpdateSuicide();
@@ -294,7 +299,7 @@ namespace Game
         {
             m_CircularProgressBar.transform.position = m_CurrentFish.Position;
             m_CircularProgressBar.SetT(0f);
-            m_CircularProgressBar.SetFish(m_CurrentFish);
+            m_CircularProgressBar.SetFish(m_CurrentFish, m_FishConfig);
             m_CircularProgressBar.AnimateIn();
             m_MBPressed = true;
             m_MBPressedTimer = 0f;
@@ -303,6 +308,7 @@ namespace Game
         private void UpdateSuicide()
         {
             m_CircularProgressBar.transform.position = m_CurrentFish.Position;
+            m_CircleRange.transform.position = m_CurrentFish.Position;
             float t = Mathf.Clamp01(m_MBPressedTimer / m_SuicideTime);
             m_CircularProgressBar.SetT(t);
         }

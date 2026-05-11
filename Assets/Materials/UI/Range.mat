@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HealthBar
-  m_Shader: {fileID: 4800000, guid: 5a7b9a8601599604fb60692ce61d2a7f, type: 3}
+  m_Name: Range
+  m_Shader: {fileID: 4800000, guid: d014d50c680867b4eb8075561bbc9507, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -103,18 +103,18 @@ Material:
     - _DstBlendAlpha: 0
     - _EnableExternalAlpha: 0
     - _EnvironmentReflections: 1
+    - _Fade: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _LightenBlend: 0.16
     - _Metallic: 0
-    - _ObstacleMask: 0
     - _ObstacleMaskValue: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _Progress: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _SegmentCount: 1
     - _ShadingBlend: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
@@ -128,15 +128,15 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Emission: {r: 0.6603774, g: 0, b: 0, a: 1}
+    - _Emission: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _Flip: {r: 1, g: 1, b: 0, a: 0}
     - _PreviewColor: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &4322185164981493213
+--- !u!114 &6769939159631176187
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
