@@ -15,6 +15,10 @@
 #pragma kernel FillBoundingDistanceSingleChannel
 #pragma kernel CombineInnerOuterSingle
 #pragma kernel PackSDFToRGB
+#pragma kernel InitializeSeedSC_Batch
+#pragma kernel JumpFlooding_Batch
+#pragma kernel GetNearest_Batch
+#pragma kernel CalculateDistanceSC_Batch
 
 Texture2D<float> _SingleChannelSourceTexture;  // 用于单通道输入的纹理
 Texture2D<float4> _SourceTexture;
@@ -23,6 +27,13 @@ RWTexture2D<float4> _CurrentBuffer;
 Texture2D<float> _PreviousBufferSingle;
 RWTexture2D<float> _CurrentBufferSingle;
 RWStructuredBuffer<int> _MinMaxBuffer;  // [0]=max absolute distance
+
+// Batch (Texture2DArray) resources
+RWTexture2DArray<float4> _CurrentBufferArray;
+Texture2DArray<float4> _PreviousBufferArray;
+RWTexture2DArray<float> _CurrentBufferSCArray;
+uint _BatchChunkRangeX;
+uint _BatchChunkResolution;
 
 uint _Width;
 uint _Height;
@@ -471,4 +482,163 @@ void PackSDFToRGB(uint3 id : SV_DispatchThreadID)
     float distance = _PreviousBufferSingle[coord].r;
     float3 packedSDF = PackSDF(distance, _MaxDistance);
     _CurrentBuffer[coord] = float4(packedSDF, 1.0);
+}
+
+// ---------------------------------------------------------------------------
+// Batch kernels: process all chunks in a single dispatch using Z = chunk index
+// ---------------------------------------------------------------------------
+
+[numthreads(8,8,1)]
+void InitializeSeedSC_Batch(uint3 id : SV_DispatchThreadID)
+{
+    uint2 coord = id.xy;
+    uint sliceIndex = id.z;
+    float width  = float(_Width);
+    float height = float(_Height);
+    uint chunkX = sliceIndex % _BatchChunkRangeX;
+    uint chunkY = sliceIndex / _BatchChunkRangeX;
+    uint2 srcOffset = uint2(chunkX * _BatchChunkResolution, chunkY * _BatchChunkResolution);
+    float color = _SingleChannelSourceTexture[coord + srcOffset];
+    bool isSeed = _InvertSelection ? (color <= _AlphaThreshold) : (color > _AlphaThreshold);
+    if (isSeed)
+        _CurrentBufferArray[uint3(coord, sliceIndex)] = float4(float(coord.x) / width, float(coord.y) / height, 1.0, 1.0);
+    else
+        _CurrentBufferArray[uint3(coord, sliceIndex)] = float4(float(coord.x) / width, float(coord.y) / height, 0.0, 0.0);
+}
+
+[numthreads(8,8,1)]
+void JumpFlooding_Batch(uint3 id : SV_DispatchThreadID)
+{
+    uint2 currentCoord = id.xy;
+    uint sliceIndex = id.z;
+    uint step = (uint)pow(2.0, float(_IterationTime - _Iteration - 1));
+    float width  = float(_Width);
+    float height = float(_Height);
+
+    float4 selfData = _PreviousBufferArray[uint3(currentCoord, sliceIndex)];
+    uint2 bestSeed = uint2(uint(round(selfData.x * width)), uint(round(selfData.y * height)));
+    int minDist = selfData.z > 0.5 ? DistanceSquared(currentCoord, bestSeed) : 2147483647;
+
+    for (int i = -1; i <= 1; i++)
+    {
+        for (int j = -1; j <= 1; j++)
+        {
+            if (i == 0 && j == 0) continue;
+            int2 neighborCoordSigned = int2(currentCoord) + int2(i, j) * int(step);
+            if (neighborCoordSigned.x < 0 || neighborCoordSigned.x >= int(_Width) ||
+                neighborCoordSigned.y < 0 || neighborCoordSigned.y >= int(_Height)) continue;
+            uint2 neighborCoord = uint2(neighborCoordSigned);
+            float4 neighborData = _PreviousBufferArray[uint3(neighborCoord, sliceIndex)];
+            if (neighborData.z < 0.5) continue;
+            uint2 neighborSeed = uint2(uint(round(neighborData.x * width)), uint(round(neighborData.y * height)));
+            int dist = DistanceSquared(currentCoord, neighborSeed);
+            if (dist < minDist) { minDist = dist; bestSeed = neighborSeed; }
+        }
+    }
+
+    if (minDist < 2147483647)
+        _CurrentBufferArray[uint3(currentCoord, sliceIndex)] = float4(float(bestSeed.x) / width, float(bestSeed.y) / height, 1.0, selfData.a);
+    else
+        _CurrentBufferArray[uint3(currentCoord, sliceIndex)] = float4(selfData.xy, 0.0, selfData.a);
+}
+
+[numthreads(8,8,1)]
+void GetNearest_Batch(uint3 id : SV_DispatchThreadID)
+{
+    uint2 currentCoord = id.xy + uint2(_ExtendPixels, _ExtendPixels);
+    uint sliceIndex = id.z;
+
+    float4 selfData = _PreviousBufferArray[uint3(currentCoord, sliceIndex)];
+    if (selfData.a > 0.5)
+    {
+        _CurrentBufferArray[uint3(currentCoord, sliceIndex)] = selfData;
+        return;
+    }
+
+    float width  = float(_Width);
+    float height = float(_Height);
+    uint2 currentSeed = uint2(uint(selfData.x * width), uint(selfData.y * height));
+    int minDistance = DistanceSquared(currentCoord, currentSeed);
+    int originalDistance = minDistance;
+    uint2 originalCoord = currentCoord;
+    currentCoord = currentSeed;
+
+    int maxRadius = min(max(max(int(_Width  - currentSeed.x - 1), int(currentSeed.x)),
+                            max(int(_Height - currentSeed.y - 1), int(currentSeed.y))),
+                        _NearestPointSearchRange);
+    for (int radius = 1; radius <= maxRadius; radius++)
+    {
+        if (originalDistance < radius * radius) break;
+        for (int i = -radius; i <= radius; i++)
+        {
+            int2 c = int2(currentCoord) + int2(i, -radius);
+            if (c.x < 0 || c.x >= int(_Width) || c.y < 0 || c.y >= int(_Height)) continue;
+            uint2 nc = uint2(c);
+            if (_PreviousBufferArray[uint3(nc, sliceIndex)].a < 0.5) continue;
+            int d = DistanceSquared(nc, originalCoord);
+            if (d < minDistance) { minDistance = d; currentSeed = nc; }
+        }
+        for (int j = -radius; j <= radius; j++)
+        {
+            int2 c = int2(currentCoord) + int2(j, radius);
+            if (c.x < 0 || c.x >= int(_Width) || c.y < 0 || c.y >= int(_Height)) continue;
+            uint2 nc = uint2(c);
+            if (_PreviousBufferArray[uint3(nc, sliceIndex)].a < 0.5) continue;
+            int d = DistanceSquared(nc, originalCoord);
+            if (d < minDistance) { minDistance = d; currentSeed = nc; }
+        }
+        for (int k = -radius + 1; k <= radius - 1; k++)
+        {
+            int2 c = int2(currentCoord) + int2(-radius, k);
+            if (c.x < 0 || c.x >= int(_Width) || c.y < 0 || c.y >= int(_Height)) continue;
+            uint2 nc = uint2(c);
+            if (_PreviousBufferArray[uint3(nc, sliceIndex)].a < 0.5) continue;
+            int d = DistanceSquared(nc, originalCoord);
+            if (d < minDistance) { minDistance = d; currentSeed = nc; }
+        }
+        for (int l = -radius + 1; l <= radius - 1; l++)
+        {
+            int2 c = int2(currentCoord) + int2(radius, l);
+            if (c.x < 0 || c.x >= int(_Width) || c.y < 0 || c.y >= int(_Height)) continue;
+            uint2 nc = uint2(c);
+            if (_PreviousBufferArray[uint3(nc, sliceIndex)].a < 0.5) continue;
+            int d = DistanceSquared(nc, originalCoord);
+            if (d < minDistance) { minDistance = d; currentSeed = nc; }
+        }
+    }
+    _CurrentBufferArray[uint3(originalCoord, sliceIndex)] = float4(
+        float(currentSeed.x) / width, float(currentSeed.y) / height, selfData.z, 1.0);
+}
+
+[numthreads(8,8,1)]
+void CalculateDistanceSC_Batch(uint3 id : SV_DispatchThreadID)
+{
+    uint2 currentCoord  = id.xy;
+    uint  sliceIndex    = id.z;
+    uint2 extendedCoord = currentCoord + uint2(_ExtendPixels, _ExtendPixels);
+    float4 sdfData = _PreviousBufferArray[uint3(extendedCoord, sliceIndex)];
+    float width  = float(_Width);
+    float height = float(_Height);
+    float nearestX = sdfData.r * width;
+    float nearestY = sdfData.g * height;
+    float distance = 0.0;
+    if (sdfData.b < 0.5)
+    {
+        distance = _ExtendPixels == 0 ? min(width, height) : float(_ExtendPixels);
+    }
+    else
+    {
+        float dx = float(extendedCoord.x) - nearestX;
+        float dy = float(extendedCoord.y) - nearestY;
+        if (_AccurateDistance)
+        {
+            float absDx = abs(dx); float absDy = abs(dy);
+            if      (absDx > absDy) dx = dx - sign(dx) * 0.5;
+            else if (absDy > absDx) dy = dy - sign(dy) * 0.5;
+            else if (absDx == absDy && absDx > 0) { dx = dx - sign(dx) * 0.5; dy = dy - sign(dy) * 0.5; }
+        }
+        distance = sqrt(dx * dx + dy * dy);
+    }
+    if (_BoundaryDistance) distance = min(distance, BoundaryDist(extendedCoord));
+    _CurrentBufferSCArray[uint3(currentCoord, sliceIndex)] = _Normalize ? saturate(distance / _MaxDistance) : distance;
 }

@@ -3,25 +3,7 @@
 
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-TEXTURE2D(_ObstacleSDF_0); SAMPLER(sampler_ObstacleSDF_0);
-TEXTURE2D(_ObstacleSDF_1); SAMPLER(sampler_ObstacleSDF_1);
-TEXTURE2D(_ObstacleSDF_2); SAMPLER(sampler_ObstacleSDF_2);
-TEXTURE2D(_ObstacleSDF_3); SAMPLER(sampler_ObstacleSDF_3);
-TEXTURE2D(_ObstacleSDF_4); SAMPLER(sampler_ObstacleSDF_4);
-TEXTURE2D(_ObstacleSDF_5); SAMPLER(sampler_ObstacleSDF_5);
-TEXTURE2D(_ObstacleSDF_6); SAMPLER(sampler_ObstacleSDF_6);
-TEXTURE2D(_ObstacleSDF_7); SAMPLER(sampler_ObstacleSDF_7);
-TEXTURE2D(_ObstacleSDF_8); SAMPLER(sampler_ObstacleSDF_8);
-TEXTURE2D(_ObstacleSDF_9); SAMPLER(sampler_ObstacleSDF_9);
-
-#ifdef CHUNKRANGE_15
-TEXTURE2D(_ObstacleSDF_10); SAMPLER(sampler_ObstacleSDF_10);
-TEXTURE2D(_ObstacleSDF_11); SAMPLER(sampler_ObstacleSDF_11);
-TEXTURE2D(_ObstacleSDF_12); SAMPLER(sampler_ObstacleSDF_12);
-TEXTURE2D(_ObstacleSDF_13); SAMPLER(sampler_ObstacleSDF_13);
-TEXTURE2D(_ObstacleSDF_14); SAMPLER(sampler_ObstacleSDF_14);
-TEXTURE2D(_ObstacleSDF_15); SAMPLER(sampler_ObstacleSDF_15);
-#endif
+TEXTURE2D_ARRAY(_ObstacleSDF); SAMPLER(sampler_ObstacleSDF);
 
 TEXTURE2D(_ObstacleMask); SAMPLER(sampler_ObstacleMask);
 
@@ -70,40 +52,7 @@ inline float2 GetChunkScreenUVSize()
 
 float SampleObstacleSDF(int index, float2 uv)
 {
-    if (index == 0)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_0, sampler_ObstacleSDF_0, uv).r;
-    if (index == 1)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_1, sampler_ObstacleSDF_1, uv).r;
-    if (index == 2)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_2, sampler_ObstacleSDF_2, uv).r;
-    if (index == 3)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_3, sampler_ObstacleSDF_3, uv).r;
-    if (index == 4)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_4, sampler_ObstacleSDF_4, uv).r;
-    if (index == 5)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_5, sampler_ObstacleSDF_5, uv).r;
-    if (index == 6)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_6, sampler_ObstacleSDF_6, uv).r;
-    if (index == 7)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_7, sampler_ObstacleSDF_7, uv).r;
-    if (index == 8)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_8, sampler_ObstacleSDF_8, uv).r;
-
-    #ifdef CHUNKRANGE_15
-    if (index == 9)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_4, sampler_ObstacleSDF_9, uv).r;
-    if (index == 10)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_5, sampler_ObstacleSDF_10, uv).r;
-    if (index == 11)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_6, sampler_ObstacleSDF_11, uv).r;
-    if (index == 12)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_7, sampler_ObstacleSDF_12, uv).r;
-    if (index == 13)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_8, sampler_ObstacleSDF_13, uv).r;
-    if (index == 14)
-        return SAMPLE_TEXTURE2D(_ObstacleSDF_8, sampler_ObstacleSDF_14, uv).r;
-    #endif
-    return 0;
+    return SAMPLE_TEXTURE2D_ARRAY(_ObstacleSDF, sampler_ObstacleSDF, uv, (float)index).r;
 }
 
 float GetObstacleSDF(float2 screenUV)

@@ -25,6 +25,16 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
     Stack<int> m_AvailableThreadIDs = new Stack<int>();
     Dictionary<int, DFProcessingThread> m_ProcessingThreads = new Dictionary<int, DFProcessingThread>();
 
+    // ---------- batch mode ----------
+    bool m_HasBatch;
+    GenerateDFRendererFeature.DFBatchParams m_BatchParams;
+
+    public void SetBatchParams(GenerateDFRendererFeature.DFBatchParams batch, bool enabled)
+    {
+        m_BatchParams = batch;
+        m_HasBatch    = enabled;
+    }
+
     // ---------- static compute shader cache ----------
     static ComputeShader s_SdfCS;
     static int s_KernelInitSeedSC;
@@ -33,6 +43,10 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
     static int s_KernelGetNearest;
     static int s_KernelCalcDist;
     static int s_KernelCalcDistSC;
+    static int s_KernelInitSeedSC_Batch;
+    static int s_KernelJFA_Batch;
+    static int s_KernelGetNearest_Batch;
+    static int s_KernelCalcDistSC_Batch;
     static bool s_Initialized;
 
     static readonly int ID_SourceTex        = Shader.PropertyToID("_SourceTexture");
@@ -55,6 +69,13 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
     static readonly int ID_OffsetX          = Shader.PropertyToID("_OffsetX");
     static readonly int ID_OffsetY          = Shader.PropertyToID("_OffsetY");
 
+    // Batch kernel params
+    static readonly int ID_CurBufArray          = Shader.PropertyToID("_CurrentBufferArray");
+    static readonly int ID_PrevBufArray         = Shader.PropertyToID("_PreviousBufferArray");
+    static readonly int ID_CurBufSCArray        = Shader.PropertyToID("_CurrentBufferSCArray");
+    static readonly int ID_BatchChunkRangeX     = Shader.PropertyToID("_BatchChunkRangeX");
+    static readonly int ID_BatchChunkResolution = Shader.PropertyToID("_BatchChunkResolution");
+
     // Temp RT IDs – reused sequentially per thread (safe because each thread's block is fully flushed before the next)
     static readonly int TempID_Current      = Shader.PropertyToID("_GDFP_RT_Current");
     static readonly int TempID_Previous     = Shader.PropertyToID("_GDFP_RT_Previous");
@@ -72,6 +93,10 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
         s_KernelGetNearest = s_SdfCS.FindKernel("GetNearest");
         s_KernelCalcDist   = s_SdfCS.FindKernel("CalculateDistance");
         s_KernelCalcDistSC = s_SdfCS.FindKernel("CalculateDistanceSingleChannel");
+        s_KernelInitSeedSC_Batch  = s_SdfCS.FindKernel("InitializeSeedSC_Batch");
+        s_KernelJFA_Batch         = s_SdfCS.FindKernel("JumpFlooding_Batch");
+        s_KernelGetNearest_Batch  = s_SdfCS.FindKernel("GetNearest_Batch");
+        s_KernelCalcDistSC_Batch  = s_SdfCS.FindKernel("CalculateDistanceSC_Batch");
         s_Initialized = true;
     }
 
@@ -174,19 +199,24 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
     class PassData
     {
         public List<DFProcessingThread> threads = new List<DFProcessingThread>();
+        public bool hasBatch;
+        public GenerateDFRendererFeature.DFBatchParams batchParams;
         public TextureHandle cameraColorHandle;
     }
 
     public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
     {
-        if (m_ProcessingThreads.Count == 0) return;
+        if (m_ProcessingThreads.Count == 0 && !m_HasBatch) return;
         EnsureInitialized();
         if (!s_Initialized) return;
 
         using (var builder = renderGraph.AddUnsafePass<PassData>("Generate Distance Fields", out var passData))
         {
             passData.threads.Clear();
-            bool needsCameraColor = false;
+            passData.hasBatch  = m_HasBatch;
+            passData.batchParams = m_BatchParams;
+
+            bool needsCameraColor = m_HasBatch && m_BatchParams.sourceTexture == null;
             foreach (var kvp in m_ProcessingThreads)
             {
                 passData.threads.Add(kvp.Value);
@@ -207,6 +237,8 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
                 RTHandle cameraColorRT = data.cameraColorHandle.IsValid()
                     ? data.cameraColorHandle
                     : null;
+                if (data.hasBatch)
+                    RecordGenerateDF_Batch(cmd, data.batchParams, cameraColorRT);
                 foreach (var thread in data.threads)
                     RecordGenerateDF(cmd, thread, cameraColorRT);
             });
@@ -278,23 +310,28 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
         }
 
         // ── Jump Flooding ───────────────────────────────────────────────
+        // Ping-pong between two buffers to avoid Blit on every iteration.
         cmd.GetTemporaryRT(TempID_Previous, descARGB);
         var prevId = new RenderTargetIdentifier(TempID_Previous);
 
-        int maxDim     = Mathf.Max(iterW, iterH);
-        int iterCount  = Mathf.CeilToInt(Mathf.Log(maxDim, 2)) + 1;
+        int maxDim    = Mathf.Max(iterW, iterH);
+        int iterCount = Mathf.CeilToInt(Mathf.Log(maxDim, 2)) + 1;
+        // After InitSeed, data lives in curId.  On even iters read curId→write prevId; on odd iters swap.
         for (int i = 0; i < iterCount; i++)
         {
-            cmd.Blit(curId, prevId);
-            cmd.SetComputeTextureParam(s_SdfCS, s_KernelJFA, ID_PrevBuf,   prevId);
-            cmd.SetComputeTextureParam(s_SdfCS, s_KernelJFA, ID_CurBuf,    curId);
-            cmd.SetComputeIntParam    (s_SdfCS, ID_Width,     iterW);
-            cmd.SetComputeIntParam    (s_SdfCS, ID_Height,    iterH);
-            cmd.SetComputeIntParam    (s_SdfCS, ID_IterTime,  iterCount);
-            cmd.SetComputeIntParam    (s_SdfCS, ID_Iter,      i);
+            var readBuf  = (i % 2 == 0) ? curId  : prevId;
+            var writeBuf = (i % 2 == 0) ? prevId : curId;
+            cmd.SetComputeTextureParam(s_SdfCS, s_KernelJFA, ID_PrevBuf,  readBuf);
+            cmd.SetComputeTextureParam(s_SdfCS, s_KernelJFA, ID_CurBuf,   writeBuf);
+            cmd.SetComputeIntParam    (s_SdfCS, ID_Width,    iterW);
+            cmd.SetComputeIntParam    (s_SdfCS, ID_Height,   iterH);
+            cmd.SetComputeIntParam    (s_SdfCS, ID_IterTime, iterCount);
+            cmd.SetComputeIntParam    (s_SdfCS, ID_Iter,     i);
             cmd.DispatchCompute(s_SdfCS, s_KernelJFA, tgX, tgY, 1);
         }
-        cmd.ReleaseTemporaryRT(TempID_Previous);
+        // Final JFA result is in whichever buffer was last written.
+        var jfaResult = (iterCount % 2 == 0) ? curId : prevId;
+        var jfaFree   = (iterCount % 2 == 0) ? prevId : curId;
 
         // ── GetNearest (optional) ───────────────────────────────────────
         tgX = Mathf.CeilToInt(w / 8.0f);
@@ -304,20 +341,19 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
         RenderTargetIdentifier nearestId;
         if (useNearest)
         {
-            cmd.GetTemporaryRT(TempID_Nearest, descARGB);
-            nearestId = new RenderTargetIdentifier(TempID_Nearest);
+            nearestId = jfaFree;  // reuse the now-free ping-pong buffer
 
             cmd.SetComputeIntParam    (s_SdfCS, ID_ExtendPixels,  ext);
             cmd.SetComputeIntParam    (s_SdfCS, ID_NearestRange,  t.nearestPointSearchRange);
             cmd.SetComputeIntParam    (s_SdfCS, ID_Width,         iterW);
             cmd.SetComputeIntParam    (s_SdfCS, ID_Height,        iterH);
-            cmd.SetComputeTextureParam(s_SdfCS, s_KernelGetNearest, ID_PrevBuf, curId);
+            cmd.SetComputeTextureParam(s_SdfCS, s_KernelGetNearest, ID_PrevBuf, jfaResult);
             cmd.SetComputeTextureParam(s_SdfCS, s_KernelGetNearest, ID_CurBuf,  nearestId);
             cmd.DispatchCompute(s_SdfCS, s_KernelGetNearest, tgX, tgY, 1);
         }
         else
         {
-            nearestId = curId;
+            nearestId = jfaResult;
         }
 
         // ── CalculateDistance ───────────────────────────────────────────
@@ -343,12 +379,94 @@ public class GenerateDFRendererFeaturePass : ScriptableRenderPass
             cmd.DispatchCompute(s_SdfCS, s_KernelCalcDist, tgX, tgY, 1);
         }
 
-        if (useNearest)
-            cmd.ReleaseTemporaryRT(TempID_Nearest);
-
         cmd.ReleaseTemporaryRT(TempID_Current);
+        cmd.ReleaseTemporaryRT(TempID_Previous);
 
         if (t.shaderPropertyID != -1)
             cmd.SetGlobalTexture(t.shaderPropertyID, resultRT);
+    }
+
+    // ---------- batch per-frame DF generation (all chunks in one set of dispatches) ----------
+    static void RecordGenerateDF_Batch(CommandBuffer cmd, in GenerateDFRendererFeature.DFBatchParams p, RTHandle cameraColorRT)
+    {
+        int N     = p.chunkRangeX * p.chunkRangeY;
+        int ext   = p.extendPixels;
+        int iterW = p.resolution + ext * 2;
+        int iterH = p.resolution + ext * 2;
+        int w     = p.resolution;
+        int h     = p.resolution;
+
+        int tgX = Mathf.CeilToInt(iterW / 8.0f);
+        int tgY = Mathf.CeilToInt(iterH / 8.0f);
+        int tgZ = N;
+
+        // ── InitializeSeed ─────────────────────────────────────────────
+        Texture srcTex = p.sourceTexture ?? (Texture)(cameraColorRT?.rt ?? (Texture)cameraColorRT);
+        if (srcTex == null) return;
+
+        cmd.SetComputeIntParam  (s_SdfCS, ID_Width,               iterW);
+        cmd.SetComputeIntParam  (s_SdfCS, ID_Height,              iterH);
+        cmd.SetComputeFloatParam(s_SdfCS, ID_AlphaThreshold,      p.alphaThreshold);
+        cmd.SetComputeIntParam  (s_SdfCS, ID_InvertSelection,     0);
+        cmd.SetComputeIntParam  (s_SdfCS, ID_ExtendPixels,        ext);
+        cmd.SetComputeIntParam  (s_SdfCS, ID_BatchChunkRangeX,    p.chunkRangeX);
+        cmd.SetComputeIntParam  (s_SdfCS, ID_BatchChunkResolution, p.resolution);
+
+        cmd.SetComputeTextureParam(s_SdfCS, s_KernelInitSeedSC_Batch, ID_SingleChannelSrc, srcTex);
+        cmd.SetComputeTextureParam(s_SdfCS, s_KernelInitSeedSC_Batch, ID_CurBufArray,      p.intermA);
+        cmd.DispatchCompute(s_SdfCS, s_KernelInitSeedSC_Batch, tgX, tgY, tgZ);
+
+        // ── Jump Flooding (ping-pong, no blit) ─────────────────────────
+        int maxDim    = Mathf.Max(iterW, iterH);
+        int iterCount = Mathf.CeilToInt(Mathf.Log(maxDim, 2)) + 1;
+        for (int i = 0; i < iterCount; i++)
+        {
+            var readBuf  = (i % 2 == 0) ? p.intermA : p.intermB;
+            var writeBuf = (i % 2 == 0) ? p.intermB : p.intermA;
+            cmd.SetComputeTextureParam(s_SdfCS, s_KernelJFA_Batch, ID_PrevBufArray, readBuf);
+            cmd.SetComputeTextureParam(s_SdfCS, s_KernelJFA_Batch, ID_CurBufArray,  writeBuf);
+            cmd.SetComputeIntParam    (s_SdfCS, ID_Width,    iterW);
+            cmd.SetComputeIntParam    (s_SdfCS, ID_Height,   iterH);
+            cmd.SetComputeIntParam    (s_SdfCS, ID_IterTime, iterCount);
+            cmd.SetComputeIntParam    (s_SdfCS, ID_Iter,     i);
+            cmd.DispatchCompute(s_SdfCS, s_KernelJFA_Batch, tgX, tgY, tgZ);
+        }
+        // jfaResult = last written buffer; jfaFree = the other (reused for GetNearest output)
+        var jfaResult = (iterCount % 2 == 0) ? p.intermA : p.intermB;
+        var jfaFree   = (iterCount % 2 == 0) ? p.intermB : p.intermA;
+
+        // ── GetNearest ─────────────────────────────────────────────────
+        tgX = Mathf.CeilToInt(w / 8.0f);
+        tgY = Mathf.CeilToInt(h / 8.0f);
+
+        RenderTexture nearestInput;
+        if (p.nearestPointSearchRange > 0)
+        {
+            cmd.SetComputeIntParam    (s_SdfCS, ID_ExtendPixels, ext);
+            cmd.SetComputeIntParam    (s_SdfCS, ID_NearestRange, p.nearestPointSearchRange);
+            cmd.SetComputeIntParam    (s_SdfCS, ID_Width,        iterW);
+            cmd.SetComputeIntParam    (s_SdfCS, ID_Height,       iterH);
+            cmd.SetComputeTextureParam(s_SdfCS, s_KernelGetNearest_Batch, ID_PrevBufArray, jfaResult);
+            cmd.SetComputeTextureParam(s_SdfCS, s_KernelGetNearest_Batch, ID_CurBufArray,  jfaFree);
+            cmd.DispatchCompute(s_SdfCS, s_KernelGetNearest_Batch, tgX, tgY, tgZ);
+            nearestInput = jfaFree;
+        }
+        else
+        {
+            nearestInput = jfaResult;
+        }
+
+        // ── CalculateDistance → target array ───────────────────────────
+        float maxDist = Mathf.Sqrt(w * w + h * h);
+        cmd.SetComputeIntParam  (s_SdfCS, ID_BoundaryDist, 0);
+        cmd.SetComputeIntParam  (s_SdfCS, ID_Normalize,    1);
+        cmd.SetComputeFloatParam(s_SdfCS, ID_MaxDistance,  maxDist);
+        cmd.SetComputeIntParam  (s_SdfCS, ID_ExtendPixels, ext);
+        cmd.SetComputeIntParam  (s_SdfCS, ID_AccurateDist, 0);
+        cmd.SetComputeIntParam  (s_SdfCS, ID_Width,        iterW);
+        cmd.SetComputeIntParam  (s_SdfCS, ID_Height,       iterH);
+        cmd.SetComputeTextureParam(s_SdfCS, s_KernelCalcDistSC_Batch, ID_PrevBufArray,  nearestInput);
+        cmd.SetComputeTextureParam(s_SdfCS, s_KernelCalcDistSC_Batch, ID_CurBufSCArray, p.targetArray);
+        cmd.DispatchCompute(s_SdfCS, s_KernelCalcDistSC_Batch, tgX, tgY, tgZ);
     }
 }

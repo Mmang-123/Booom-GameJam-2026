@@ -29,6 +29,9 @@ namespace Mmang.PixelartRender
         private RenderTexture[] m_SDFs;
         private RTHandle[] m_SDFHandles;
         private int[] m_SDFThreadIDs;
+        private RenderTexture m_SDFArray;
+        private RenderTexture m_SDFIntermA;
+        private RenderTexture m_SDFIntermB;
 
         public int Resolution => 256;
         public float TileSize => 16f;
@@ -67,12 +70,17 @@ namespace Mmang.PixelartRender
 
             foreach (var rt in m_SDFHandles)
                 if (rt != null) rt.Release();
+
+            if (m_SDFArray != null)  { m_SDFArray.Release();  m_SDFArray  = null; }
+            if (m_SDFIntermA != null) { m_SDFIntermA.Release(); m_SDFIntermA = null; }
+            if (m_SDFIntermB != null) { m_SDFIntermB.Release(); m_SDFIntermB = null; }
         }
 
         private void LateUpdate()
         {
             RenderMask();
             Shader.SetGlobalTexture(PShaderPropertyID.MLightingTexture, m_LightingHandle);
+            Shader.SetGlobalTexture("_ObstacleSDF", m_SDFArray);
         }
 
         private void InitChunkRange()
@@ -97,41 +105,24 @@ namespace Mmang.PixelartRender
         {
             if (m_DFFeature == null) return;
 
-            m_SDFThreadIDs = new int[m_RealChunkRange.x * m_RealChunkRange.y];
-            for (int y = 0; y < m_RealChunkRange.y; y++)
+            m_DFFeature.PendingBatch(new GenerateDFRendererFeature.DFBatchParams
             {
-                for (int x = 0; x < m_RealChunkRange.x; x++)
-                {
-                    int i = x + y * m_RealChunkRange.x;
-                    Vector2Int offset = new(x * Resolution, y * Resolution);
-                    m_SDFThreadIDs[i] = m_DFFeature.Pending(
-                        null, m_SDFs[i], offset,
-                        extendPixels: 128, nearestPointSearchRange: m_NearestPointSearchRange, boundaryDistance: false, alphaThreshold: 0.05f, shaderPropertyID: Shader.PropertyToID($"_ObstacleSDF_{i}"));
-                }
-            }
-
-            /*
-            for (int i = 0; i < 9; i++)
-            {
-                Vector2Int offset = new(i % 3 * Resolution, i / 3 * Resolution);
-                m_SDFThreadIDs[i] = m_DFFeature.Pending(
-                    null, m_SDFs[i], offset,
-                    extendPixels: 128, nearestPointSearchRange: m_NearestPointSearchRange, boundaryDistance: false, alphaThreshold: 0.05f, shaderPropertyID: Shader.PropertyToID($"_ObstacleSDF_{i}"));
-            }
-            */
+                sourceTexture          = null,   // use obstacle camera color buffer
+                intermA                = m_SDFIntermA,
+                intermB                = m_SDFIntermB,
+                targetArray            = m_SDFArray,
+                chunkRangeX            = m_RealChunkRange.x,
+                chunkRangeY            = m_RealChunkRange.y,
+                resolution             = Resolution,
+                extendPixels           = 128,
+                alphaThreshold         = 0.05f,
+                nearestPointSearchRange = m_NearestPointSearchRange,
+            });
         }
 
         private void ReleaseSDFThreads()
         {
-            if (m_DFFeature == null) return;
-            for (int i = 0; i < m_SDFThreadIDs.Length; i++)
-            {
-                if (m_SDFThreadIDs[i] > 0)
-                {
-                    m_DFFeature.Release(m_SDFThreadIDs[i]);
-                    m_SDFThreadIDs[i] = 0;
-                }
-            }
+            m_DFFeature?.ReleaseBatch();
         }
 
         private void CreateTextures()
@@ -177,58 +168,48 @@ namespace Mmang.PixelartRender
             m_LightingHandle = RTHandles.Alloc(m_Lighting);
 
 
-            m_SDFs = new RenderTexture[m_RealChunkRange.x * m_RealChunkRange.y];
-            m_SDFHandles = new RTHandle[m_RealChunkRange.x * m_RealChunkRange.y];
-            var descriptor = new RenderTextureDescriptor(Resolution, Resolution)
+            int totalChunks = m_RealChunkRange.x * m_RealChunkRange.y;
+            int iterSize    = Resolution + 2 * 128; // Resolution + 2 * extendPixels
+
+            // Output SDF array (written directly by batch compute kernel)
+            var arrayDescriptor = new RenderTextureDescriptor(Resolution, Resolution)
             {
                 depthBufferBits = 0,
                 enableRandomWrite = true,
                 graphicsFormat = GraphicsFormat.R16_UNorm,
-                volumeDepth = 1,
+                volumeDepth = totalChunks,
                 msaaSamples = 1,
-                sRGB = true,
-                dimension = TextureDimension.Tex2D,
+                sRGB = false,
+                dimension = TextureDimension.Tex2DArray,
             };
-            for (int y = 0; y < m_RealChunkRange.y; y++)
+            m_SDFArray = new RenderTexture(arrayDescriptor)
             {
-                for (int x = 0; x < m_RealChunkRange.x; x++)
-                {
-                    int i = x + y * m_RealChunkRange.x;
-                    m_SDFs[i] = new(descriptor)
-                    {
-                        name = $"_ObstacleSDF_{i}",
-                        filterMode = FilterMode.Point,
-                        wrapMode = TextureWrapMode.Clamp
-                    };
-                    m_SDFs[i].Create();
-                    m_SDFHandles[i] = RTHandles.Alloc(m_SDFs[i]);
-                }
-            }
+                name = "_ObstacleSDF",
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp
+            };
+            m_SDFArray.Create();
 
-            /*
-            for (int i = 0; i < 9; i++)
+            // Intermediate ping/pong buffers for batch JFA (ARGBHalf = 8 bytes/pixel)
+            var intermDescriptor = new RenderTextureDescriptor(iterSize, iterSize)
             {
-                var descriptor = new RenderTextureDescriptor(Resolution, Resolution)
-                {
-                    depthBufferBits = 0,
-                    enableRandomWrite = true,
-                    graphicsFormat = GraphicsFormat.R16_UNorm,
-                    volumeDepth = 1,
-                    msaaSamples = 1,
-                    sRGB = true,
-                    dimension = TextureDimension.Tex2D,
-                };
+                depthBufferBits = 0,
+                enableRandomWrite = true,
+                graphicsFormat = GraphicsFormat.R16G16B16A16_SFloat,
+                volumeDepth = totalChunks,
+                msaaSamples = 1,
+                sRGB = false,
+                dimension = TextureDimension.Tex2DArray,
+            };
+            m_SDFIntermA = new RenderTexture(intermDescriptor) { name = "_SDFIntermA", filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp };
+            m_SDFIntermA.Create();
+            m_SDFIntermB = new RenderTexture(intermDescriptor) { name = "_SDFIntermB", filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp };
+            m_SDFIntermB.Create();
 
-                m_SDFs[i] = new(descriptor)
-                {
-                    name = $"_ObstacleSDF_{i}",
-                    filterMode = FilterMode.Point,
-                    wrapMode = TextureWrapMode.Clamp
-                };
-                m_SDFs[i].Create();
-                m_SDFHandles[i] = RTHandles.Alloc(m_SDFs[i]);
-            }
-            */
+            // Keep legacy individual RT arrays as empty stubs so existing code that reads
+            // m_SDFs/m_SDFHandles doesn't null-ref (they're no longer used for SDF generation).
+            m_SDFs      = System.Array.Empty<RenderTexture>();
+            m_SDFHandles = System.Array.Empty<RTHandle>();
         }
 
 

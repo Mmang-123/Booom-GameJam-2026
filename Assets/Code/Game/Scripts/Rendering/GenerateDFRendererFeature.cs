@@ -5,6 +5,31 @@ using ThreadData = GenerateDFRendererFeaturePass.DFProcessingThread;
 
 public class GenerateDFRendererFeature : ScriptableRendererFeature
 {
+    /// <summary>
+    /// Parameters for batch SDF generation: all chunks processed in a single set of dispatches
+    /// using the Z dimension.  intermA/intermB must be pre-allocated Texture2DArray RTs with
+    /// enableRandomWrite=true and the same Width/Height (= resolution + 2*extendPixels) and
+    /// volumeDepth = chunkRangeX * chunkRangeY.
+    /// </summary>
+    public struct DFBatchParams
+    {
+        /// <summary>null = use camera color buffer (must be single-channel)</summary>
+        public Texture sourceTexture;
+        /// <summary>Tex2DArray ping buffer, [iterW, iterH, N], ARGBHalf, RW</summary>
+        public RenderTexture intermA;
+        /// <summary>Tex2DArray pong buffer (also reused as GetNearest output), same spec as intermA</summary>
+        public RenderTexture intermB;
+        /// <summary>Tex2DArray output, [resolution, resolution, N], R16_UNorm, RW</summary>
+        public RenderTexture targetArray;
+        public int chunkRangeX;
+        public int chunkRangeY;
+        /// <summary>Per-chunk resolution before extension (e.g. 256)</summary>
+        public int resolution;
+        public int extendPixels;
+        public float alphaThreshold;
+        public int nearestPointSearchRange;
+    }
+
     [System.Serializable]
     public class Settings
     {
@@ -19,6 +44,9 @@ public class GenerateDFRendererFeature : ScriptableRendererFeature
     // ---------- Feature 自身的缓存（Pass 的 source of truth）----------
     int m_NextID = 0;
     readonly Dictionary<int, ThreadData> m_Cache = new Dictionary<int, ThreadData>();
+
+    bool m_HasBatch;
+    DFBatchParams m_BatchCache;
 
     // ---------- 直接传结构体 ----------
     public int Pending(ThreadData thread)
@@ -107,6 +135,20 @@ public class GenerateDFRendererFeature : ScriptableRendererFeature
         m_Pass?.ReleaseDFProcessingThread(id);
     }
 
+    // ---------- 批量SDF（单次dispatch处理所有chunk）----------
+    public void PendingBatch(DFBatchParams batch)
+    {
+        m_HasBatch = true;
+        m_BatchCache = batch;
+        m_Pass?.SetBatchParams(batch, true);
+    }
+
+    public void ReleaseBatch()
+    {
+        m_HasBatch = false;
+        m_Pass?.SetBatchParams(default, false);
+    }
+
     // ---------- ScriptableRendererFeature ----------
     public override void Create()
     {
@@ -118,6 +160,9 @@ public class GenerateDFRendererFeature : ScriptableRendererFeature
         // 将缓存中的所有 thread 刷入新建的 Pass
         foreach (var kvp in m_Cache)
             m_Pass.PendingDFProcessingThread(kvp.Key, kvp.Value);
+
+        if (m_HasBatch)
+            m_Pass.SetBatchParams(m_BatchCache, true);
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
