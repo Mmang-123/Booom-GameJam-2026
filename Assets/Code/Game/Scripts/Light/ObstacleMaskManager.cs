@@ -98,7 +98,6 @@ namespace Mmang.PixelartRender
                 y -= 1;
             
             m_RealChunkRange = new(x, y);
-            Debug.Log(m_RealChunkRange);
         }
 
         private void RegisterSDFThreads()

@@ -7,6 +7,8 @@ namespace Game
 {
     public class FA_Flee : FishAIAbility
     {
+        public enum EFleeType { Entity, Position }
+
         [SerializeField] private GameplayTagContainer m_FleeFromTags = new();
         [SerializeField] private float m_StartRadius = 8f;
         [SerializeField] private float m_EndRadius = 16f;
@@ -18,6 +20,8 @@ namespace Game
         [SerializeField] private float m_LoseTargetTime = 2f;
 
         // Runtime
+        private EFleeType m_FleeType;
+        private Vector2 FleePosition { get; set; }
         private Fish FleeTarget { get; set; }
         private Vector2 FleeDirection { get; set; }
 
@@ -27,8 +31,22 @@ namespace Game
         private float ChangeDirectionCD { get; set; }
         private float LoseTargetTimer { get; set; }
 
+
+        public void FleeFromPoint(Vector2 position)
+        {
+            FleePosition = position;
+            m_FleeType = EFleeType.Position;
+        }
+
         public override bool CanActivateAbility()
         {
+            if (m_FleeType == EFleeType.Position
+            && Vector2.Distance(Fish.Position, FleePosition) < m_EndRadius)
+            {
+                Debug.Log("!");
+                return true;
+            }
+
             List<Fish> fishList = ListPool<Fish>.Get();
             FishUtils.GetFishInCircle(Fish.Position, m_StartRadius, fishList, ignoreFish: Fish, clearResultList: true);
 
@@ -62,19 +80,28 @@ namespace Game
         public override void OnEnd(EEndAbilityType endType)
         {
             base.OnEnd(endType);
-            
+            m_FleeType = EFleeType.Entity;
+            Debug.Log("逃离结束");
         }
 
         public override void OnUpdate(float dt)
         {
-            float distance = Vector2.Distance(Fish.Position, FleeTarget.Position);
+            if (m_FleeType == EFleeType.Entity && (FleeTarget == null || !FleeTarget.IsLiving))
+            {
+                FishAI.PendingEndAbility(this, EEndAbilityType.End);
+                return;
+            }
+
+            Vector2 fleePosition = m_FleeType == EFleeType.Position ? FleePosition : FleeTarget.Position;
+            float distance = Vector2.Distance(Fish.Position, fleePosition);
             if (distance > m_EndRadius)
             {
                 FishAI.PendingEndAbility(this, EEndAbilityType.End);
                 return;
             }
 
-            if (FishUtils.RaycastObstacle(Fish.Position, FleeTarget.Position))
+            if (m_FleeType == EFleeType.Position
+            || FishUtils.RaycastObstacle(Fish.Position, fleePosition))
             {
                 LoseTargetTimer += dt;
                 if (LoseTargetTimer > m_LoseTargetTime)
@@ -114,7 +141,8 @@ namespace Game
 
         private void GetFleeDirection()
         {
-            Vector2 baseDirection = (Fish.Position - FleeTarget.Position).normalized;
+            Vector2 fleePosition = m_FleeType == EFleeType.Position ? FleePosition : FleeTarget.Position;
+            Vector2 baseDirection = (Fish.Position - fleePosition).normalized;
             float offsetAngle = Random.Range(m_RandomRange.x, m_RandomRange.y);
             float baseAngle = Mathf.Atan2(baseDirection.y, baseDirection.x) * Mathf.Rad2Deg;
 

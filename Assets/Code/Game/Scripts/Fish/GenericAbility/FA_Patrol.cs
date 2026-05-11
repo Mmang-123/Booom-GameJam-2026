@@ -68,7 +68,7 @@ namespace Game
 
         private void StartMoveToPoint(int index, bool immediate = false)
         {
-            SwimBehaviour.Tracing = false;
+            //SwimBehaviour.Tracing = false;
             if (CurrentIndex != -1 && !immediate)
             {
                 WaitTimer = m_PatrolPoints[CurrentIndex].WaitTime;

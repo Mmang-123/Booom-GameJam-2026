@@ -43,7 +43,6 @@ namespace Game
         [SerializeField] private float m_DieCollisionTime = 0.1f;
         [SerializeField] private float m_DieCollisionMaxSpeed = 1f;
         [SerializeField] private ParticleComponent m_DieCollisionParticle;
-        [SerializeField] private bool m_RiseUpAfterDie = true;
 
         [Header("感染设置")]
         [SerializeField] private EInfectedLevel m_InfectedLevel = EInfectedLevel.None;

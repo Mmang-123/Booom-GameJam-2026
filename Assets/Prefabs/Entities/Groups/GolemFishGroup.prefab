@@ -189,6 +189,7 @@ Transform:
   m_Children:
   - {fileID: 2531877772561320975}
   - {fileID: 8882307878387200428}
+  - {fileID: 795116383149819547}
   m_Father: {fileID: 6913578345669187936}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8052302352202045528
@@ -207,6 +208,7 @@ MonoBehaviour:
   m_Abilities:
   - {fileID: 8445380566340391538}
   - {fileID: 6437109868253232043}
+  - {fileID: 728224511480520638}
   m_OwnedTags:
     m_Tags: []
 --- !u!1 &6393904652445649969
@@ -277,6 +279,66 @@ MonoBehaviour:
   m_ChangeTargetPatienceTheshold: 50
   m_SearchNewTargetIntervalTime: 0.2
   m_CurrentPatience: 0
+--- !u!1 &6804320553933859330
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 795116383149819547}
+  - component: {fileID: 728224511480520638}
+  m_Layer: 0
+  m_Name: FA_Flee
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &795116383149819547
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6804320553933859330}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7541251217173135118}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &728224511480520638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6804320553933859330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9332385d013e21946a6e5b526190e369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.FA_Flee
+  m_Tags:
+    m_Tags: []
+  m_SingletonTag:
+    m_Guid: 0143efe5-7db0-4920-8d62-82cec5e1310e
+  m_CancelTags:
+    m_Tags: []
+  m_Priority: 20
+  m_FleeFromTags:
+    m_Tags: []
+  m_StartRadius: 0
+  m_EndRadius: 10
+  m_RandomRange: {x: -30, y: 30}
+  m_ChangeDirectionDistance: 4
+  m_RandomChangeDirectionTime: {x: 1, y: 4}
+  m_ChangeDirectionCD: 1.5
+  m_LoseTargetTime: 2
 --- !u!1 &8623448993973178240
 GameObject:
   m_ObjectHideFlags: 0
