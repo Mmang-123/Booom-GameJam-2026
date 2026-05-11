@@ -913,7 +913,7 @@ GameObject:
   - component: {fileID: 6606034853435783502}
   - component: {fileID: 1236858303149063744}
   m_Layer: 0
-  m_Name: 0010_square_32x_1
+  m_Name: 000a_square_32x_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
