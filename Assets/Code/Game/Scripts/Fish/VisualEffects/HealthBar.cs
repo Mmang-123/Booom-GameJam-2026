@@ -10,6 +10,9 @@ namespace Game
         private Color m_Color;
         private float m_T;
 
+        private MaterialPropertyBlock m_PropBlock;
+        private MaterialPropertyBlock PropBlock => m_PropBlock ??= new MaterialPropertyBlock();
+
         private int SegmentPixelCount => 48;
 
         public void SetT(float t)
@@ -45,11 +48,16 @@ namespace Game
             m_FrameRenderer.size = new(framePixelCount / 16.0f, m_FrameRenderer.size.y);
             m_Renderer.transform.localScale = new(segmentTotalPixelCount / 16.0f / 3.0f, 1f, 1f);
 
+            PropBlock.SetInt("_SegmentCount", m_SegmentCount);
+            m_Renderer.SetPropertyBlock(PropBlock);
+
+            /*
             var material = m_Renderer.sharedMaterial;
             if (material != null)
             {
                 material.SetInt("_SegmentCount", m_SegmentCount);
             }
+            */
         }
 
     }
