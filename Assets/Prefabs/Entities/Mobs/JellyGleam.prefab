@@ -226,6 +226,7 @@ MonoBehaviour:
   m_DieCollisionTime: 0.1
   m_DieCollisionMaxSpeed: 1
   m_DieCollisionParticle: {fileID: 953416650970146418, guid: 216d067fec2434c42a4766b878599435, type: 3}
+  m_RiseUpAfterDie: 1
   m_InfectedLevel: 0
   m_SporeRenderer1: {fileID: 0}
   m_SporeRenderer2: {fileID: 0}
@@ -237,8 +238,9 @@ MonoBehaviour:
   m_SetLightColor: 1
   m_DefaultLightColor: {r: 0.30588236, g: 1, b: 0.9098039, a: 1}
   m_InfectedLightColor: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}
-  m_InitSaturation: 50
-  m_MaxSaturation: 50
+  m_InitSaturation: 100
+  m_MaxSaturation: 100
+  m_EatenRegainSaturation: 100
   m_EatenParticle: {fileID: 953416650970146418, guid: 9bf9c33daa71f8748a41f43dd178aa87, type: 3}
   m_DefaultEatenParticleColor: {r: 0.30588236, g: 1, b: 0.9098039, a: 1}
   m_InfectedEatenParticleColor: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}

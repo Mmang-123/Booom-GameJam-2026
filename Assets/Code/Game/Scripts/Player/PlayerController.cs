@@ -96,7 +96,9 @@ namespace Game
                 }
 
                 //
-                CameraController.Instance.HealthBar.SetColor(m_CurrentFish.BodyColor);
+                var healthBar = CameraController.Instance.HealthBar;
+                healthBar.SetColor(m_CurrentFish.BodyColor);
+                healthBar.SetSegmentCount(Mathf.RoundToInt(m_CurrentFish.MaxSaturation / 100));
 
                 //
                 m_CurrentFish.Init();

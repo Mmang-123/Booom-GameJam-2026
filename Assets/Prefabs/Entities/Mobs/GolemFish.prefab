@@ -447,8 +447,8 @@ MonoBehaviour:
   m_SetLightColor: 0
   m_DefaultLightColor: {r: 1, g: 1, b: 1, a: 1}
   m_InfectedLightColor: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}
-  m_InitSaturation: 100
-  m_MaxSaturation: 100
+  m_InitSaturation: 500
+  m_MaxSaturation: 500
   m_EatenRegainSaturation: 100
   m_EatenParticle: {fileID: 0}
   m_DefaultEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}

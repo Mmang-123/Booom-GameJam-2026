@@ -3,6 +3,7 @@
     Properties
     {
         _MainTex ("Sprite Texture", 2D) = "white" {}
+        _SegmentCount ("Segment Count", Int) = 3
 
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
         [HideInInspector] _Color ("Tint", Color) = (1,1,1,1)
@@ -39,8 +40,7 @@
 
             // -------------------------------------
             // Includes
-            #include "DefaultInput.hlsl"
-            #include "DefaultPass.hlsl"
+            #include "HealthBarInput.hlsl"
             #include "HealthBarPass.hlsl"
             ENDHLSL
         }
@@ -66,8 +66,7 @@
 
             // -------------------------------------
             // Includes
-            #include "PreviewInput.hlsl"
-            #include "PreviewPass.hlsl"
+            #include "HealthBarInput.hlsl"
             #include "HealthBarPass.hlsl"
             ENDHLSL
         }
