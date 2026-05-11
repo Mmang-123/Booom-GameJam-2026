@@ -20,7 +20,7 @@ namespace Sloane
 
         private void OnValidate()
         {
-            if (Application.isPlaying || PrefabUtility.IsPartOfPrefabAsset(gameObject)) return;
+            if (Application.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode) return;
             // 仅在从未锁定 -> 锁定的瞬间捕获方向，之后不再覆盖
             if (m_LockDirection && !m_WasLocked) 
                 m_LockedDirection = GetDirectionToNearestTerrain();
