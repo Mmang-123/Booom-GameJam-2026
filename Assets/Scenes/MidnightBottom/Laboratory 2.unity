@@ -174,7 +174,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &695175197
+--- !u!84 &455670850
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -450,6 +450,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1375843321483966498, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1658909876, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
+    - target: {fileID: 1431261522353342340, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -386713202, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
     - target: {fileID: 1747876122492313756, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
       propertyPath: m_PassageName
       value: '[1]-[2]'
@@ -466,6 +474,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Passage
       objectReference: {fileID: 0}
+    - target: {fileID: 2720549795667564537, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1440221096, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
     - target: {fileID: 5223669212076637089, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
       propertyPath: m_LocalPosition.x
       value: 148.99384
@@ -506,6 +518,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5452818089469638447, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -29763772, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
