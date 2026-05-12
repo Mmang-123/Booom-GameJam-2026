@@ -96,9 +96,14 @@ namespace Game
             ObstacleMaskManager.Instance.UpdatePosition(transform.position);
         }
 
+        public Transform GetMixCenter()
+        {
+            return m_MainTarget == null ? transform : m_MainTarget;
+        }
+
         public float GetMixWeight(Vector2 position, Vector2 mixRange)
         {
-            Transform trans = m_MainTarget == null ? transform : m_MainTarget;
+            Transform trans = GetMixCenter();
 
             float xDis = Mathf.Abs(position.x - trans.position.x);
             float yDis = Mathf.Abs(position.y - trans.position.y);
@@ -111,7 +116,7 @@ namespace Game
 
             if (mixRange.x == mixRange.y)
             {
-                return dis <= mixRange.x ? 1f : 0f;
+                return dis <= mixRange.x ? 0f : 1f;
             }
 
             return 1.0f - (Mathf.Clamp(dis, mixRange.x, mixRange.y) - mixRange.x) / (mixRange.y - mixRange.x);
