@@ -49,7 +49,7 @@ namespace Game
         [SerializeField] private SpriteRenderer m_SporeRenderer1;
         [SerializeField] private SpriteRenderer m_SporeRenderer2;
         [SerializeField] private SpriteRenderer m_BodyRenderer;
-        [SerializeField] private InterfaceObject<IMLight> m_Light;
+        [SerializeField] private List<InterfaceObject<IMLight>> m_Light;
         [SerializeField] private Color m_DefaultBodyColor;
         [SerializeField] private Color m_InfectedBodyColor;
         [SerializeField] private bool m_SetLightColor = false;
@@ -204,13 +204,16 @@ namespace Game
                 m_RiseUpSpeed = Mathf.Min(m_RiseUpSpeed + Time.fixedDeltaTime, 3f);
                 m_Rigidbody.MovePosition((Vector2)transform.position + m_RiseUpSpeed * Time.fixedDeltaTime * direction);
                 
-                if (m_Light.Value != null)
+                foreach (var lightObject in m_Light)
                 {
-                    var light = m_Light.Value;
-                    if (light.LightIntensity > 0f)
+                    if (lightObject.Value != null)
                     {
-                        light.LightIntensity -= Time.deltaTime * 5f;
-                    }
+                        var light = lightObject.Value;
+                        if (light.LightIntensity > 0f)
+                        {
+                            light.LightIntensity -= Time.deltaTime * 5f;
+                        }
+                    }   
                 }
                 
                 return;
@@ -531,21 +534,42 @@ namespace Game
                 if (m_SporeRenderer1 != null) m_SporeRenderer1.gameObject.SetActive(false);
                 if (m_SporeRenderer2 != null) m_SporeRenderer2.gameObject.SetActive(false);
                 if (m_BodyRenderer != null) m_BodyRenderer.color = m_DefaultBodyColor;
-                if (m_Light.Value != null && m_SetLightColor) m_Light.Value.LightColor = m_DefaultLightColor;
+                if (m_SetLightColor)
+                {
+                    foreach (var lightObject in m_Light)
+                    {
+                        if (lightObject.Value != null)
+                            lightObject.Value.LightColor = m_DefaultLightColor;
+                    }    
+                }
             }
             else if (m_InfectedLevel == EInfectedLevel.Mid)
             {
                 if (m_SporeRenderer1 != null) m_SporeRenderer1.gameObject.SetActive(true);
                 if (m_SporeRenderer2 != null) m_SporeRenderer2.gameObject.SetActive(false);
                 if (m_BodyRenderer != null) m_BodyRenderer.color = m_DefaultBodyColor;
-                if (m_Light.Value != null && m_SetLightColor) m_Light.Value.LightColor = m_DefaultLightColor;
+                if (m_SetLightColor)
+                {
+                    foreach (var lightObject in m_Light)
+                    {
+                        if (lightObject.Value != null)
+                            lightObject.Value.LightColor = m_DefaultLightColor;
+                    }    
+                }
             }
             else if (m_InfectedLevel == EInfectedLevel.High)
             {
                 if (m_SporeRenderer1 != null) m_SporeRenderer1.gameObject.SetActive(false);
                 if (m_SporeRenderer2 != null) m_SporeRenderer2.gameObject.SetActive(true);
                 if (m_BodyRenderer != null) m_BodyRenderer.color = m_InfectedBodyColor;
-                if (m_Light.Value != null && m_SetLightColor) m_Light.Value.LightColor = m_InfectedLightColor;
+                if (m_SetLightColor)
+                {
+                    foreach (var lightObject in m_Light)
+                    {
+                        if (lightObject.Value != null)
+                            lightObject.Value.LightColor = m_InfectedLightColor;
+                    }    
+                }
             }
 
             if (IsPlayer)

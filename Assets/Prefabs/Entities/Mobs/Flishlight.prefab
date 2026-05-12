@@ -630,13 +630,13 @@ MonoBehaviour:
   m_DieCollisionTime: 0.1
   m_DieCollisionMaxSpeed: 1
   m_DieCollisionParticle: {fileID: 953416650970146418, guid: 172564a4c83de894d8f2711225b54322, type: 3}
-  m_RiseUpAfterDie: 1
   m_InfectedLevel: 0
   m_SporeRenderer1: {fileID: 663086709337804699}
   m_SporeRenderer2: {fileID: 8877619053748020961}
   m_BodyRenderer: {fileID: 5539121963303674259}
   m_Light:
-    m_Object: {fileID: 654916103336363567}
+  - m_Object: {fileID: 654916103336363567}
+  - m_Object: {fileID: 3851936974120443783}
   m_DefaultBodyColor: {r: 0.30588236, g: 0.5568628, b: 1, a: 1}
   m_InfectedBodyColor: {r: 1, g: 0.30588236, b: 0.52156866, a: 1}
   m_SetLightColor: 1
