@@ -61547,6 +61547,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 480750445101184408}
     m_Modifications:
+    - target: {fileID: 545416681795957510, guid: 9fcae0bbd378b714e83c8d5f0a22b7ba, type: 3}
+      propertyPath: m_GUID
+      value: ecffe9c6-eea7-4de9-88f0-6ab6b0dc5932
+      objectReference: {fileID: 0}
     - target: {fileID: 4800047175929269652, guid: 9fcae0bbd378b714e83c8d5f0a22b7ba, type: 3}
       propertyPath: m_LocalPosition.x
       value: -15
@@ -61590,6 +61594,10 @@ PrefabInstance:
     - target: {fileID: 5824508330090039192, guid: 9fcae0bbd378b714e83c8d5f0a22b7ba, type: 3}
       propertyPath: m_Name
       value: LoopGroup
+      objectReference: {fileID: 0}
+    - target: {fileID: 8660361108359203164, guid: 9fcae0bbd378b714e83c8d5f0a22b7ba, type: 3}
+      propertyPath: m_GUID
+      value: f5627c94-43ff-49f5-9c91-718d3735541f
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -65168,6 +65176,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1489647033008713208}
     m_Modifications:
+    - target: {fileID: 701018143478955409, guid: dde1d40e97a388848913e409cefa53e3, type: 3}
+      propertyPath: m_GUID
+      value: 28584f12-dbc3-4165-8974-0076c0037be8
+      objectReference: {fileID: 0}
     - target: {fileID: 3635289779381747532, guid: dde1d40e97a388848913e409cefa53e3, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4
@@ -68050,6 +68062,10 @@ PrefabInstance:
       value: P2
       objectReference: {fileID: 0}
     - target: {fileID: 1185426136947600427, guid: bbca710fdcf3aaa40a52db03fef7ea12, type: 3}
+      propertyPath: m_GUID
+      value: 72e822c5-9953-41d4-8e99-0df53d5f83e6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1185426136947600427, guid: bbca710fdcf3aaa40a52db03fef7ea12, type: 3}
       propertyPath: m_InfectedLevel
       value: 1
       objectReference: {fileID: 0}
@@ -70861,6 +70877,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8604801336838246624}
     m_Modifications:
+    - target: {fileID: 11687656746076327, guid: 279720d75f7713b47867f9e63a327b2b, type: 3}
+      propertyPath: m_GUID
+      value: 97a4bbb9-7e88-4fed-a74d-a77e2141e92d
+      objectReference: {fileID: 0}
     - target: {fileID: 970184813819263525, guid: 279720d75f7713b47867f9e63a327b2b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 13
@@ -74447,6 +74467,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3231573577706929605}
     m_Modifications:
+    - target: {fileID: 1185426136947600427, guid: bbca710fdcf3aaa40a52db03fef7ea12, type: 3}
+      propertyPath: m_GUID
+      value: 1637fb86-4459-46ea-9c7b-ec80e611cc84
+      objectReference: {fileID: 0}
     - target: {fileID: 1256365632032425534, guid: bbca710fdcf3aaa40a52db03fef7ea12, type: 3}
       propertyPath: m_Name
       value: FlishlightGroup
@@ -76397,6 +76421,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 7913441014316476202}
     m_Modifications:
     - target: {fileID: 11687656746076327, guid: 279720d75f7713b47867f9e63a327b2b, type: 3}
+      propertyPath: m_GUID
+      value: b6400013-2e37-4bbc-a34a-769f784cc0e2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11687656746076327, guid: 279720d75f7713b47867f9e63a327b2b, type: 3}
       propertyPath: m_InitTurnOn
       value: 1
       objectReference: {fileID: 0}
@@ -76715,6 +76743,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3231573577706929605}
     m_Modifications:
+    - target: {fileID: 1185426136947600427, guid: bbca710fdcf3aaa40a52db03fef7ea12, type: 3}
+      propertyPath: m_GUID
+      value: 297e14af-89a4-452f-a578-6db6e6980dd0
+      objectReference: {fileID: 0}
     - target: {fileID: 1256365632032425534, guid: bbca710fdcf3aaa40a52db03fef7ea12, type: 3}
       propertyPath: m_Name
       value: FlishlightGroup (1)
@@ -78326,6 +78358,10 @@ PrefabInstance:
     - target: {fileID: 7548696107726773175, guid: c75bf7584c467e84c86bd74aac7e167d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 7992905838635039496, guid: c75bf7584c467e84c86bd74aac7e167d, type: 3}
+      propertyPath: m_GUID
+      value: f6c92fdc-0264-4ae3-a35e-5ca8419f5386
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -82116,6 +82152,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7913441014316476202}
     m_Modifications:
+    - target: {fileID: 11687656746076327, guid: 279720d75f7713b47867f9e63a327b2b, type: 3}
+      propertyPath: m_GUID
+      value: bb31fd9f-6cec-45d9-947d-ee315e7a718d
+      objectReference: {fileID: 0}
     - target: {fileID: 970184813819263525, guid: 279720d75f7713b47867f9e63a327b2b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -15.5
@@ -86583,6 +86623,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GolemFishGroup
       objectReference: {fileID: 0}
+    - target: {fileID: 881953263240511222, guid: 5cc06a7f67617cc4fa952f1d00b7c5ea, type: 3}
+      propertyPath: m_GUID
+      value: 72531111-f154-431d-9157-fdeaef6ecb02
+      objectReference: {fileID: 0}
     - target: {fileID: 2129706758158609313, guid: 5cc06a7f67617cc4fa952f1d00b7c5ea, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.16
@@ -87060,6 +87104,10 @@ PrefabInstance:
     - target: {fileID: 3140156430102042846, guid: bdeea217d4ba85942a389923ea4d5fc6, type: 3}
       propertyPath: m_ControlPoints.Array.data[1].Position2.y
       value: -1.8295288
+      objectReference: {fileID: 0}
+    - target: {fileID: 4274086175808328258, guid: bdeea217d4ba85942a389923ea4d5fc6, type: 3}
+      propertyPath: m_GUID
+      value: cd71651a-1c93-495f-aa5a-ffbe05eba9a8
       objectReference: {fileID: 0}
     - target: {fileID: 4274086175808328258, guid: bdeea217d4ba85942a389923ea4d5fc6, type: 3}
       propertyPath: m_InitTurnOn
@@ -88096,6 +88144,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6325064197955968059}
     m_Modifications:
+    - target: {fileID: 2989157321802834902, guid: 9f02a62c07b5a38498529c3c85eef19b, type: 3}
+      propertyPath: m_GUID
+      value: 5cfabc76-da5e-4511-9bbb-90131204f1b1
+      objectReference: {fileID: 0}
     - target: {fileID: 5981026278029107106, guid: 9f02a62c07b5a38498529c3c85eef19b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -24
@@ -88999,6 +89051,10 @@ PrefabInstance:
     - target: {fileID: 3714332889449681366, guid: c0cd35fa65e94b74882844e0fad71cb9, type: 3}
       propertyPath: m_Name
       value: PlaneShroomlightGroup
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250265350781300930, guid: c0cd35fa65e94b74882844e0fad71cb9, type: 3}
+      propertyPath: m_GUID
+      value: 4470baa2-85b2-4861-bf82-3ba5dadd624c
       objectReference: {fileID: 0}
     - target: {fileID: 4250265350781300930, guid: c0cd35fa65e94b74882844e0fad71cb9, type: 3}
       propertyPath: m_InitTurnOn
@@ -89920,7 +89976,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2797730967065995784, guid: a7f4295396ae9534ebd7dcc9f610ac23, type: 3}
       propertyPath: m_GUID
-      value: d7896804-51da-46be-8603-33d9cb6574d9
+      value: cd039e01-3e81-4729-8211-cfdae1497bfd
       objectReference: {fileID: 0}
     - target: {fileID: 4800681294185171314, guid: a7f4295396ae9534ebd7dcc9f610ac23, type: 3}
       propertyPath: m_LocalPosition.x
@@ -90954,6 +91010,10 @@ PrefabInstance:
     - target: {fileID: 3714332889449681366, guid: c0cd35fa65e94b74882844e0fad71cb9, type: 3}
       propertyPath: m_Name
       value: PlaneShroomlightGroup
+      objectReference: {fileID: 0}
+    - target: {fileID: 4250265350781300930, guid: c0cd35fa65e94b74882844e0fad71cb9, type: 3}
+      propertyPath: m_GUID
+      value: d9cfbbff-bcee-45a2-ad52-5e7825a6a6b8
       objectReference: {fileID: 0}
     - target: {fileID: 4250265350781300930, guid: c0cd35fa65e94b74882844e0fad71cb9, type: 3}
       propertyPath: m_InitTurnOn
@@ -96512,6 +96572,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1489647033008713208}
     m_Modifications:
+    - target: {fileID: 701018143478955409, guid: dde1d40e97a388848913e409cefa53e3, type: 3}
+      propertyPath: m_GUID
+      value: 0a230f7a-e9ff-4c83-9478-efc5b97d80ce
+      objectReference: {fileID: 0}
     - target: {fileID: 3635289779381747532, guid: dde1d40e97a388848913e409cefa53e3, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9
@@ -97605,6 +97669,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3231573577706929605}
     m_Modifications:
+    - target: {fileID: 1185426136947600427, guid: bbca710fdcf3aaa40a52db03fef7ea12, type: 3}
+      propertyPath: m_GUID
+      value: b84d493a-6dcb-4ad9-aeb1-bdf308352aaf
+      objectReference: {fileID: 0}
     - target: {fileID: 1256365632032425534, guid: bbca710fdcf3aaa40a52db03fef7ea12, type: 3}
       propertyPath: m_Name
       value: FlishlightGroup (2)
@@ -99266,6 +99334,10 @@ PrefabInstance:
       value: -1.8295288
       objectReference: {fileID: 0}
     - target: {fileID: 4274086175808328258, guid: bdeea217d4ba85942a389923ea4d5fc6, type: 3}
+      propertyPath: m_GUID
+      value: 80565f48-c05f-4b1a-bca0-7242675a21c1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4274086175808328258, guid: bdeea217d4ba85942a389923ea4d5fc6, type: 3}
       propertyPath: m_InitTurnOn
       value: 1
       objectReference: {fileID: 0}
@@ -99853,6 +99925,10 @@ PrefabInstance:
     - target: {fileID: 7548696107726773175, guid: c75bf7584c467e84c86bd74aac7e167d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7992905838635039496, guid: c75bf7584c467e84c86bd74aac7e167d, type: 3}
+      propertyPath: m_GUID
+      value: 93c07e1b-31c4-4a5f-bdc8-e05a5e0fe381
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
