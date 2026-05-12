@@ -33,7 +33,10 @@ namespace Game
                     var fleeAbility = fishAI.GetAbility<FA_Flee>();
                     if (fleeAbility != null)
                     {
-                        fleeAbility.FleeFromPoint(transform.position);
+                        if (m_SetDirection)
+                            fleeAbility.FleeFromPoint(transform.position, m_Direction);
+                        else
+                            fleeAbility.FleeFromPoint(transform.position);
                     }
                 }
             }

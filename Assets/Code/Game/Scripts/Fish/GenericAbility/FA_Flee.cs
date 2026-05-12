@@ -31,11 +31,23 @@ namespace Game
         private float ChangeDirectionCD { get; set; }
         private float LoseTargetTimer { get; set; }
 
+        private bool m_UseOverrideDirection;
+        private Vector2 m_OverrideDirection;
+
 
         public void FleeFromPoint(Vector2 position)
         {
             FleePosition = position;
             m_FleeType = EFleeType.Position;
+            m_UseOverrideDirection = false;
+        }
+
+        public void FleeFromPoint(Vector2 position, Vector2 direction)
+        {
+            FleePosition = position;
+            m_FleeType = EFleeType.Position;
+            m_UseOverrideDirection = true;
+            m_OverrideDirection = direction;
         }
 
         public override bool CanActivateAbility()
@@ -43,7 +55,6 @@ namespace Game
             if (m_FleeType == EFleeType.Position
             && Vector2.Distance(Fish.Position, FleePosition) < m_EndRadius)
             {
-                Debug.Log("!");
                 return true;
             }
 
@@ -143,6 +154,9 @@ namespace Game
         {
             Vector2 fleePosition = m_FleeType == EFleeType.Position ? FleePosition : FleeTarget.Position;
             Vector2 baseDirection = (Fish.Position - fleePosition).normalized;
+            if (m_FleeType == EFleeType.Position && m_UseOverrideDirection)
+                baseDirection = m_OverrideDirection;
+            
             float offsetAngle = Random.Range(m_RandomRange.x, m_RandomRange.y);
             float baseAngle = Mathf.Atan2(baseDirection.y, baseDirection.x) * Mathf.Rad2Deg;
 
