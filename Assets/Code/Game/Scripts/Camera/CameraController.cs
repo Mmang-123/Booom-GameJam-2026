@@ -35,6 +35,7 @@ namespace Game
 
         [Header("UI")]
         [SerializeField] private HealthBar m_HealthBar;
+        [SerializeField] private UI_Settlement m_SettlementUI;
 
         // Runtime
         private Transform m_MainTarget;
@@ -51,6 +52,7 @@ namespace Game
         private float m_FDT;
 
         public HealthBar HealthBar => m_HealthBar;
+        public UI_Settlement SettlementUI => m_SettlementUI;
 
         protected override void OnAwake()
         {

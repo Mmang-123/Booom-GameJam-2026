@@ -122,6 +122,13 @@ namespace Game
             {
                 particle.Stop();
             }
+
+            var player = PlayerController.Instance;
+            var fish = player.Fish;
+            if (fish != null && fish.IsLiving)
+            {
+                GameManager.Instance.Settle();
+            }
         }
     }
 }

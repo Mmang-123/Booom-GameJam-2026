@@ -39,8 +39,11 @@ namespace Game
         private bool m_RestartLoading = false;
 
         public bool Restarting => m_Restarting;
+        public bool CanRestart => !Restarting && m_SettlementState == ESettlementState.None;
         public bool CanLoad => !m_Loading && !m_Restarting;
         public bool CantSave { get; private set; }
+
+        public int InfectionSourceCount { get; set; } = 2;
 
         protected override void OnAwake()
         {
@@ -50,6 +53,7 @@ namespace Game
         private void Update()
         {
             ScreenFadeUpdate(Time.deltaTime);
+            SettleUpdate(Time.deltaTime);
             if (m_Restarting)
             {
                 if (m_CurrentScreenFadeT >= 0.5f && !m_RestartLoading && !m_Loading)
@@ -59,15 +63,18 @@ namespace Game
             }
         }
 
-        public void Restart()
+        public void Restart(bool requireFadeIn = true)
         {
             if (m_Restarting || m_CantRestart)
                 return;
             Debug.Log("Restart!");
             m_Restarting = true;
             CantSave = true;
-            m_CurrentScreenFadeT = 0f;
-            m_ScreenFadeState = EScreenFadeState.FadeIn;
+            if (requireFadeIn)
+            {
+                m_CurrentScreenFadeT = 0f;
+                m_ScreenFadeState = EScreenFadeState.FadeIn;   
+            }
         
             // Clear
             m_NameToSaveDataMap.Clear();
@@ -180,9 +187,13 @@ namespace Game
         #region 转换过场和结算
 
         public enum EScreenFadeState { None, FadeIn, FadeOut }
+        public enum ESettlementState { None, Wait, WaitFadeIn, ShowPoints, HidePoints }
         private EScreenFadeState m_ScreenFadeState;
+        private ESettlementState m_SettlementState;
         [SerializeField, Range(0, 1)] private float m_CurrentScreenFadeT;
         public float ScreenFadeT => m_CurrentScreenFadeT;
+
+        private float m_SettleWaitTimer;
 
         private void ScreenFadeUpdate(float dt)
         {
@@ -199,12 +210,49 @@ namespace Game
 
         public void Settle()
         {
-            m_ScreenFadeState = EScreenFadeState.FadeIn;
+            m_SettlementState = ESettlementState.Wait;
+            m_SettleWaitTimer = 0f;
         }
 
-        private void SettleUpdate()
+        private void SettleUpdate(float dt)
         {
-            
+            if (m_SettlementState == ESettlementState.Wait)
+            {
+                m_SettleWaitTimer += dt;
+                if (m_SettleWaitTimer >= 5f)
+                {
+                    m_SettlementState = ESettlementState.WaitFadeIn;
+                    m_ScreenFadeState = EScreenFadeState.FadeIn;
+                }
+            }
+            else if (m_SettlementState == ESettlementState.WaitFadeIn)
+            {
+                if (m_CurrentScreenFadeT >= 0.5f)
+                {
+                    m_SettleWaitTimer = 0f;
+                    m_SettlementState = ESettlementState.ShowPoints;
+                    CameraController.Instance.SettlementUI.Show(InfectionSourceCount);
+                }   
+            }
+            else if (m_SettlementState == ESettlementState.ShowPoints)
+            {
+                m_SettleWaitTimer += dt;
+                if (m_SettleWaitTimer >= 5f)
+                {
+                    m_SettlementState = ESettlementState.HidePoints;
+                    CameraController.Instance.SettlementUI.Hide();
+                    m_SettleWaitTimer = 0f;
+                }
+            }
+            else if (m_SettlementState == ESettlementState.HidePoints)
+            {
+                m_SettleWaitTimer += dt;
+                if (m_SettleWaitTimer >= 1.5f)
+                {
+                    m_SettlementState = ESettlementState.None;
+                    Restart(false);
+                }
+            }
         }
 
         #endregion

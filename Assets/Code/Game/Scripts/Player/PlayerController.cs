@@ -118,7 +118,7 @@ namespace Game
         private void Update()
         {
             if ((Fish == null)
-            && !GameManager.Instance.Restarting)
+            && GameManager.Instance.CanRestart)
             {
                 m_RestartTimer += Time.deltaTime;
                 if (m_RestartTimer > 1.0f)
@@ -235,7 +235,7 @@ namespace Game
         {
             var mouse = Mouse.current;
 
-            if (Fish == null || !Fish.IsLiving)
+            if (Fish == null || !Fish.IsLiving || !GameManager.Instance.CanRestart)
             {
                 if (m_MBPressed)
                 {

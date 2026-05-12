@@ -589,7 +589,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5824508330090039192, guid: 9fcae0bbd378b714e83c8d5f0a22b7ba, type: 3}
       propertyPath: m_Name
-      value: LoopGround
+      value: LoopGroup
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
