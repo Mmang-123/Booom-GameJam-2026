@@ -103,6 +103,7 @@ namespace Game
             UpdateAbility(Time.fixedDeltaTime);
 
             // 如果是水母, Idle时自动回正
+            /*
             if (Fish.FishTypeTag.Equals(FishUtils.JellyGleamTag))
             {
                 var swimBehaviour = Fish.GetBehaviour<FB_Swim>();
@@ -113,6 +114,7 @@ namespace Game
                     swimBehaviour.TargetPoint = Fish.Position + Vector2.up;
                 }
             }
+            */
         }
 
         private void UpdateAbility(float dt)
