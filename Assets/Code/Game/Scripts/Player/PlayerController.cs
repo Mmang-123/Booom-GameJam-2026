@@ -104,6 +104,7 @@ namespace Game
                 //
                 m_CurrentFish.Init();
                 m_CurrentFish.GetBehaviour<FB_Swim>().RotateToTargetPoint = Active;
+                m_PlayerDirectionPoint.position = m_CurrentFish.Position;
                 cameraController.AddFollowPoint(m_PlayerDirectionPoint, m_LookAtOffset);
                 cameraController.SetMainTarget(fish.transform);
 
@@ -209,7 +210,11 @@ namespace Game
             if (m_CurrentFish != null)
             {
                 var swimBehaviour = m_CurrentFish.GetBehaviour<FB_Swim>();
-                swimBehaviour.TargetPoint = worldPos;
+                if (!m_CurrentFish.FishTypeTag.Equals(GameplayTag.CreateByName("FishType.JellyGleam"))
+                || mouse.leftButton.isPressed || swimBehaviour.CurrentSpeed > 0.1f)
+                {
+                    swimBehaviour.TargetPoint = worldPos;
+                }
                 swimBehaviour.Tracing = mouse.leftButton.isPressed;
 
                 // 相机偏移
@@ -217,10 +222,11 @@ namespace Game
                 float t = Mathf.Min(1f, distance / m_LookAtOffsetMouseRadius);
 
                 m_PlayerDirectionPoint.transform.position = m_CurrentFish.Position
-                    + m_CurrentFish.ForwardDirection * t;
+                    + ((Vector2)worldPos - m_CurrentFish.Position).normalized * t;
 
 
                 // 如果是水母, Idle时自动回正
+                /*
                 if (m_CurrentFish.FishTypeTag.Equals(GameplayTag.CreateByName("FishType.JellyGleam")))
                 {
                     if (!swimBehaviour.Tracing && swimBehaviour.CurrentSpeed <= 0.1f)
@@ -228,6 +234,7 @@ namespace Game
                         swimBehaviour.TargetPoint = m_CurrentFish.Position + Vector2.up;
                     }
                 }
+                */
             }
         }
 

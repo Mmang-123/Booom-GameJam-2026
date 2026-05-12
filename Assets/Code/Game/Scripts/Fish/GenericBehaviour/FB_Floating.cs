@@ -26,6 +26,15 @@ namespace Game
             m_SwimBehaviour = Fish.GetBehaviour<FB_Swim>();
         }
 
+        private void Update()
+        {
+            if (CanFloating)
+            {
+                m_SwimBehaviour.TargetPoint = Fish.Position + Vector2.up;
+                m_SwimBehaviour.RotateToTargetPoint = true;
+            }
+        }
+
         public override void BeforeFishFixedUpdate()
         {
             float GetLength(float t)
@@ -37,6 +46,7 @@ namespace Game
             {
                 float totalTime = m_FallTime + m_RiseTime;
                 float newTime = m_Timer + Time.fixedDeltaTime;
+                
 
                 if (m_Timer < m_FallTime)
                 {

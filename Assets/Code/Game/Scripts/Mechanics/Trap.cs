@@ -58,11 +58,7 @@ namespace Game
                 if (distance <= 0.2f)
                 {
                     swim.Tracing = false;
-                }
-                else
-                {
-                    swim.Tracing = true;
-                    swim.TargetPoint = m_TrapPoint.position;
+                    swim.CurrentSpeed = 0f;
                 }
 
                 if (m_WaitTimer < m_WaitTime)
