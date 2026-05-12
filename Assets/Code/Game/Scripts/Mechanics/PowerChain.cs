@@ -422,6 +422,17 @@ namespace Game
             return instance;
         }
 
+        public void Editor_ReverseControlPoints()
+        {
+            int count = m_ControlPoints.Count;
+            for (int i = 0; i < count / 2; i++)
+            {
+                int j = count - i - 1;
+                (m_ControlPoints[j], m_ControlPoints[i]) = (m_ControlPoints[i], m_ControlPoints[j]);
+            }
+            Editor_GeneratePoints();
+        }
+
         public void Editor_ClearPoints()
         {
             foreach (var point in m_Points)

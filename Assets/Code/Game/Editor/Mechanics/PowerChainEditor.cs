@@ -18,10 +18,14 @@ namespace Game.Editors
             var generateButton = new Button() { text = "Generate Points" };
             generateButton.clicked += () => pc.Editor_GeneratePoints();
 
+            var reverseButton = new Button() { text = "Reverse Control Points" };
+            reverseButton.clicked += () => pc.Editor_ReverseControlPoints();
+
             var clearButton = new Button() { text = "Clear Points" };
             clearButton.clicked += () => pc.Editor_ClearPoints();
 
             root.Add(generateButton);
+            root.Add(reverseButton);
             root.Add(clearButton);
 
             UIElementHelper.DrawDefaultInspector(root, serializedObject);
