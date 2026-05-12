@@ -177,11 +177,11 @@ namespace Game
             return savedData.Load(savable);
         }
 
-        #region 转换过场
+        #region 转换过场和结算
 
         public enum EScreenFadeState { None, FadeIn, FadeOut }
         private EScreenFadeState m_ScreenFadeState;
-        [SerializeField] private float m_CurrentScreenFadeT;
+        [SerializeField, Range(0, 1)] private float m_CurrentScreenFadeT;
         public float ScreenFadeT => m_CurrentScreenFadeT;
 
         private void ScreenFadeUpdate(float dt)
@@ -197,6 +197,15 @@ namespace Game
             //Shader.SetGlobalFloat("_SceneTransition", m_CurrentScreenFadeT);
         }
 
+        public void Settle()
+        {
+            m_ScreenFadeState = EScreenFadeState.FadeIn;
+        }
+
+        private void SettleUpdate()
+        {
+            
+        }
 
         #endregion
 

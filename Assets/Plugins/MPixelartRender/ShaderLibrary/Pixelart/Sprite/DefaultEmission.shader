@@ -9,6 +9,8 @@
         _Emission ("Emission", Color) = (0,0,0,0)
         _PreviewColor ("Preview Color", Color) = (1,1,1,1)
 
+        _StencilRef ("Stencil Reference", Int) = 0
+
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
         [HideInInspector] _Color ("Tint", Color) = (1,1,1,1)
         [HideInInspector] PixelSnap ("Pixel snap", Float) = 0
@@ -25,6 +27,13 @@
         Blend SrcAlpha OneMinusSrcAlpha
         Cull Off
         ZWrite Off
+
+        Stencil
+        {
+            Ref [_StencilRef]    // 参考值，比如 1
+            Comp Always          // 总是通过测试
+            Pass Replace         // 测试通过时，将模板缓冲区的值替换为 Ref (即 1)
+        }
 
         Pass
         {

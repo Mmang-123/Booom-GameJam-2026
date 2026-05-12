@@ -7,6 +7,7 @@ namespace Game
     public class ScreenTransitionRendererFeature : ScriptableRendererFeature
     {
         [SerializeField] private Shader m_Shader;
+        [SerializeField] private Shader m_BlitBackShader;
         [SerializeField] private RenderPassEvent m_RenderPassEvent;
 
         private ScreenTransitionRendererFeaturePass m_Pass;
@@ -22,6 +23,7 @@ namespace Game
             {
                 renderPassEvent = m_RenderPassEvent
             };
+            m_BlitBackPass.SetShader(m_BlitBackShader);
         }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)

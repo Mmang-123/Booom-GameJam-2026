@@ -51,9 +51,13 @@ namespace Mmang.PixelartRender
         private class PassData
         {
             public TextureHandle Source;
+            public Material Material;
         }
 
         private string m_TextureName;
+        private Shader m_Shader;
+        private Material m_Material;
+
         
         private string GetPassTag() => m_TextureName + "BlitBack";
 
@@ -62,8 +66,16 @@ namespace Mmang.PixelartRender
             m_TextureName = tempTextureName;
         }
 
+        public void SetShader(Shader shader)
+        {
+            m_Shader = shader;
+        }
+
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
+            if (m_Shader != null && m_Material == null)
+                m_Material = new(m_Shader);
+
             var tempTextureData = frameData.GetOrCreate<TempTextureData>();
             var resourceData = frameData.Get<UniversalResourceData>();
 
@@ -75,10 +87,12 @@ namespace Mmang.PixelartRender
             using (var builder = renderGraph.AddRasterRenderPass<PassData>(GetPassTag(), out var passData))
             {
                 passData.Source = textureHandle;
+                passData.Material = m_Material;
 
                 //
                 builder.UseTexture(textureHandle, AccessFlags.Read);
                 builder.SetRenderAttachment(resourceData.activeColorTexture, 0, AccessFlags.Write);
+                builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture);
 
                 builder.SetRenderFunc((PassData data, RasterGraphContext rgContext) =>
                 {
@@ -89,7 +103,10 @@ namespace Mmang.PixelartRender
 
         private static void ExecutePass(RasterCommandBuffer cmd, PassData passData)
         {
-            Blitter.BlitTexture(cmd, passData.Source, new Vector4(1, 1, 0, 0), 0, false);
+            if (passData.Material != null)
+                Blitter.BlitTexture(cmd, passData.Source, new Vector4(1, 1, 0, 0), passData.Material, 0);
+            else
+                Blitter.BlitTexture(cmd, passData.Source, new Vector4(1, 1, 0, 0), 0, false);
         }
     }
 }

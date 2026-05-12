@@ -103,4 +103,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.ScreenTransitionRendererFeature
   m_Active: 1
   m_Shader: {fileID: 4800000, guid: adbab78093285f844a617f740b319424, type: 3}
+  m_BlitBackShader: {fileID: 4800000, guid: 52c54b53c600a3648ae1b43dee4ce1b4, type: 3}
   m_RenderPassEvent: 600
