@@ -102,7 +102,7 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
             float ddaLastT = 0.0;
 
             [loop]
-            for (int j = 0; j < 64; j++)
+            for (int j = 0; j < 128; j++)
             {
                 float t;
                 if (abs(tMax.x - tMax.y) <= cornerEps)

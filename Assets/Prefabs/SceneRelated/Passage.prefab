@@ -1271,7 +1271,7 @@ PrefabInstance:
     - target: {fileID: 305842284793955504, guid: 04bbfbd0b3651c64aba414db79b3e5ed, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -288247347, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
+      objectReference: {fileID: -118321635, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
     - target: {fileID: 1780274042247588126, guid: 04bbfbd0b3651c64aba414db79b3e5ed, type: 3}
       propertyPath: m_Name
       value: Corals (2)
@@ -2495,7 +2495,7 @@ PrefabInstance:
     - target: {fileID: 8344340175939204246, guid: 187b5d9051a9193418881161c2b658cc, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 9070611, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
+      objectReference: {fileID: 122005794, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -1528,6 +1528,8 @@ MonoBehaviour:
   m_OutlineSpriteRenderer: {fileID: 1306783936012283503}
   m_SolidSpriteRenderer: {fileID: 5816139669354365666}
   m_SDFSprite: {fileID: 21300000, guid: af5036ed3960d964ab83325f738a8d54, type: 3}
+  m_ShowOutline: 1
+  m_GenerateCollider: 1
   m_SDFOutlineMaterial: {fileID: 2100000, guid: d95fbf1b26fc25c4e80677ca58195970, type: 2}
   m_SDFSolidMaterial: {fileID: 2100000, guid: 479ad81162a9e8e4eb6a556acf7d1b97, type: 2}
   m_UID: 67028e4b0f1f2484b8062fc2d9089168
