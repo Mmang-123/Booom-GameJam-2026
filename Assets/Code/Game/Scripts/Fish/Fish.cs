@@ -485,6 +485,11 @@ namespace Game
             if (target != null)
             {
                 PlayerController.Instance.ControlFish(target);
+                if (target.InfectedLevel <= EInfectedLevel.Mid)
+                {
+                    target.AddInfectedLevel();
+                    target.GetBehaviour<FB_GenericAnimator>().TriggerSwallowAnimation(true);
+                }
             }
         }
 
