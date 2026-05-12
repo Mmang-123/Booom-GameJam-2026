@@ -7,7 +7,9 @@ namespace Game
     public class Repeller : MonoBehaviour
     {
         [SerializeField] private CircleCollider2D m_CircleRange;
-        
+        [SerializeField] private bool m_SetDirection = false;
+        [SerializeField] private Vector2 m_Direction;
+
         private void FixedUpdate()
         {
             Repel();
