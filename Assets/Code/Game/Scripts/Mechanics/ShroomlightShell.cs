@@ -33,6 +33,13 @@ namespace Game
         private void Start()
         {
             m_IndicatorRenderer.color = m_Active ? Color.green : Color.red;
+            if (m_Particle != null)
+            {
+                if (m_Active)
+                    m_Particle.Play();
+                else
+                    m_Particle.Stop();
+            }
         }
 
         private void FixedUpdate()

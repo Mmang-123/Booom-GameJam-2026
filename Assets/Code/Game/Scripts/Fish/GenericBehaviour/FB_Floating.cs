@@ -19,8 +19,8 @@ namespace Game
         private float m_Timer;
         private bool m_AnimPlayed = false;
 
-        public bool CanFloating => m_SwimBehaviour == null || (m_SwimBehaviour.Tracing == false && m_SwimBehaviour.CurrentSpeed <= 0.1f);
-
+        public bool CanFloating => m_SwimBehaviour == null
+        || (m_SwimBehaviour.Tracing == false && m_SwimBehaviour.CurrentSpeed <= 0.1f);
         private void Start()
         {
             m_SwimBehaviour = Fish.GetBehaviour<FB_Swim>();
