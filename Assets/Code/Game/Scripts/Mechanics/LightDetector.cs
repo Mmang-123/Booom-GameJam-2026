@@ -15,6 +15,7 @@ namespace Game
     {
         [SerializeField] private SpriteRenderer m_EmissionLight;
         [SerializeField] private bool m_InitTurnOn = false;
+        [SerializeField] private bool m_DontSave = false;
 
         [Header("音效")]
         [SerializeField] private AudioClipRef m_ActivateClip;
@@ -25,6 +26,7 @@ namespace Game
 
         public bool Active => m_Active;
         public bool PowerOn => Active;
+        public bool PowerValid => m_Valid;
         public event System.Action<IPowerSource, bool> OnPowerChanged;
 
         public Color ActiveColor = Color.green;
@@ -32,6 +34,7 @@ namespace Game
 
         // Runtime
         private bool m_Inited = false;
+        private bool m_Valid;
         private float m_ActiveTimer;
         private bool m_Active;
 
@@ -47,7 +50,7 @@ namespace Game
             m_Inited = true;
 
             // 加载
-            if (!GameManager.Instance.TryLoadSavedData(this))
+            if (m_DontSave || !GameManager.Instance.TryLoadSavedData(this))
             {
                 // 加载失败按原值
                 SetActive(m_InitTurnOn);
@@ -61,9 +64,14 @@ namespace Game
         {
             if (LightingTextureManager.Instance.InValidChunk(transform.position))
             {
+                m_Valid = true;
                 bool lightExist = CheckLightStrength();
                 m_ActiveTimer = Mathf.Clamp(m_ActiveTimer + Time.fixedDeltaTime * (lightExist ? 1 : -1), 0f, MaxActiveTime);
                 SetActive(m_ActiveTimer >= ActiveTime);
+            }
+            else
+            {
+                m_Valid = false;
             }
         }
 
@@ -96,7 +104,8 @@ namespace Game
 
         [SerializeField, HideInInspector] private string m_GUID = System.Guid.NewGuid().ToString();
         public string GUID => m_GUID;
-
+        public bool DontSave => m_DontSave;
+        
         public virtual string SaveJson()
         {
             var saveData = new LightDetectorSaveData()

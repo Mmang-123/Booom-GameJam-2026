@@ -615,6 +615,7 @@ namespace Game
 
         [SerializeField, HideInInspector] private string m_GUID = System.Guid.NewGuid().ToString();
         public string GUID => m_GUID;
+        
 
         public virtual string SaveJson()
         {

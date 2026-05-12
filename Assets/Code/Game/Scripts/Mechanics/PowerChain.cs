@@ -44,6 +44,7 @@ namespace Game
             public float OffTimer;
         }
 
+        [System.Serializable]
         public class EnergyPulse : IReference
         {
             public float HeadIndex; // 脉冲头部的位置 (0 ~ MaxPowerPointCount)
@@ -65,6 +66,8 @@ namespace Game
         [SerializeField] private int m_ChargeSlot = 0;
         [SerializeField] private float m_ConductionTime = 1f;
         [SerializeField] private float m_MaintainTime = 1f;
+        [SerializeField] private bool m_FreezeWhenInvalid = false;
+        [SerializeField] private List<EnergyPulse> m_InitPulse = new();
 
         [Header("Sprites")]
         [SerializeField] private SpriteRenderer m_PointPrefab_Big;
@@ -99,7 +102,7 @@ namespace Game
         #region IPowerSource
         public bool PowerOn { get; private set; }
         public event System.Action<IPowerSource, bool> OnPowerChanged;
-
+        public bool PowerValid => !m_FreezeWhenInvalid || PowerSourceHandler.IsValid();
         #endregion
 
         // Runtime
@@ -111,8 +114,6 @@ namespace Game
         private float m_PointConductionTime;
         private float m_PointMaintainTime;
         */
-        private int m_ActivePointCount;
-
         public int MaxPowerPointCount => m_Points.Count;
 
 
@@ -130,23 +131,8 @@ namespace Game
                 return;
             m_Inited = true;
 
-            /*
-            m_PointDataList = new(m_Points.Count);
-            for (int i = MaxPowerPointCount - 1; i >= 0; i--)
-            {
-                var newData = new PointData();
-                m_PointDataList.Add(newData);
-            }
-            */
-
             m_Pulses = new List<EnergyPulse>();
             m_PointStates = new bool[MaxPowerPointCount];
-
-            //
-            /*
-            m_PointConductionTime = m_ConductionTime / MaxPowerPointCount;
-            m_PointMaintainTime = m_MaintainTime / MaxPowerPointCount;
-            */
 
             //
             if (m_PowerSource.Value != null)
@@ -154,13 +140,27 @@ namespace Game
             if (m_ChargeObject.Value != null)
                 m_ChargeObject.Value.PowerSourceHandler.AddPowerSource(this, m_ChargeSlot);
 
+            bool chargedAll = false;
             if (m_PowerSource.Value != null)
             {
                 m_PowerSource.Value.InitPowerSource();
                 if (m_PowerSource.Value.PowerOn)
                 {
                     ChargeAllPoint();
+                    chargedAll = true;
                     m_ChargeObject.Value?.SetChargeComplete(true);   
+                }
+            }
+
+            if (!chargedAll)
+            {
+                foreach (var initPulse in m_InitPulse)
+                {
+                    var newPulse = ReferencePool.Acquire<EnergyPulse>();
+                    newPulse.HeadIndex = initPulse.HeadIndex;
+                    newPulse.TailIndex = initPulse.TailIndex;
+                    newPulse.IsReceivingPower = false;
+                    m_Pulses.Add(newPulse);
                 }
             }
         }
@@ -168,6 +168,8 @@ namespace Game
         private void FixedUpdate()
         {
             if (MaxPowerPointCount == 0) return;
+            if (!PowerSourceHandler.IsValid())
+                return;
 
             float dt = Time.fixedDeltaTime;
             
@@ -195,7 +197,10 @@ namespace Game
                 // 如果断电了，让最后一个接收能量的脉冲段断开连接（尾部开始收缩移动）
                 if (m_Pulses.Count > 0 && m_Pulses[^1].IsReceivingPower)
                 {
-                    m_Pulses[^1].IsReceivingPower = false;
+                    var pulse = m_Pulses[^1];
+                    pulse.IsReceivingPower = false;
+                    float length = Mathf.Floor(pulse.HeadIndex - pulse.TailIndex);
+                    pulse.TailIndex = pulse.HeadIndex - length;
                 }
             }
 
@@ -253,8 +258,6 @@ namespace Game
                 if (shouldBeActive) 
                     currentActiveCount++;
             }
-
-            m_ActivePointCount = currentActiveCount;
 
             // 4. 更新对下游物体的供电状态 (如果链条最后一个点是激活的，就传导能量)
             SetPowerOn(m_PointStates[MaxPowerPointCount - 1]);
@@ -341,7 +344,6 @@ namespace Game
                 m_PointStates[i] = true;
                 SetPointSprite(i, true);
             }
-            m_ActivePointCount = MaxPowerPointCount;
             SetPowerOn(true);
 
             /*

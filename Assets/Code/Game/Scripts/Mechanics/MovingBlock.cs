@@ -82,6 +82,9 @@ namespace Game
             }
 #endif
 
+            if (!PowerSourceHandler.IsValid())
+                return;
+
             if (!m_Active && IsPowered)
             {
                 SetActive(true);

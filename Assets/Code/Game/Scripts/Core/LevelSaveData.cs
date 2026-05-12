@@ -6,6 +6,7 @@ namespace Game
     public interface ILevelSavable
     {
         public string GUID { get; }
+        public bool DontSave { get; }
         public string SaveJson();
         public void LoadJson(string json);
 #if UNITY_EDITOR
@@ -19,7 +20,7 @@ namespace Game
 
         public void Save(ILevelSavable savable)
         {
-            if (savable == null)
+            if (savable == null || savable.DontSave)
                 return;
 
             if (!m_Map.ContainsKey(savable.GUID))

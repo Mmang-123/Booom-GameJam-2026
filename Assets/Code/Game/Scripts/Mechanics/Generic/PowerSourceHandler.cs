@@ -14,6 +14,16 @@ namespace Game
             return m_ActivePowerCount >= requirePowerSourceCount;
         }
 
+        public bool IsValid()
+        {
+            foreach (var source in m_PowerSlotMap.Keys)
+            {
+                if (!source.PowerValid)
+                    return false;
+            }
+            return true;
+        }
+
         public bool IsPowered(List<int> targetSlots)
         {
             foreach (var slot in targetSlots)

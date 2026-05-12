@@ -62,6 +62,9 @@ namespace Game
             }
 #endif
 
+            if (!PowerSourceHandler.IsValid())
+                return;
+
             if (m_Active && m_CurrentDoorLength > 0f)
             {
                 m_CurrentDoorLength -= Time.deltaTime * 6f;
