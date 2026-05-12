@@ -135,3 +135,19 @@ float4 UnlitEmissionFrag(Varyings input) : SV_Target
 
     return outputColor;
 }
+
+float4 TransitionFrag(Varyings input) : SV_Target
+{
+#ifdef TEXTURE_BASED
+    float4 outputColor = tex2D(_MainTex, input.uv) * input.color;
+#else
+    float4 outputColor = input.color;
+#endif
+
+    clip(outputColor.a - 0.05);
+
+    float2 screenUV = input.positionCS.xy / _ScreenParams.xy;
+
+    outputColor.rgb = lerp(SampleBackground(screenUV), outputColor.rgb, outputColor.a);
+    return float4(outputColor.rgb, 1);
+}
