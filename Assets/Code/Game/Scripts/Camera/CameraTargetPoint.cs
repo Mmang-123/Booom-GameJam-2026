@@ -31,7 +31,6 @@ namespace Game
         {
             if (CameraController.InstanceValid)
             {
-                Debug.Log(gameObject + "Disable");
                 var manager = CameraController.Instance;
                 manager.RemoveFollowPoint(transform);   
             }
