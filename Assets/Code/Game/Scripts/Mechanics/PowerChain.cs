@@ -163,7 +163,7 @@ namespace Game
         private void FixedUpdate()
         {
             if (MaxPowerPointCount == 0) return;
-            if (!PowerSourceHandler.IsValid())
+            if (!PowerValid)
                 return;
 
             float dt = Time.fixedDeltaTime;
