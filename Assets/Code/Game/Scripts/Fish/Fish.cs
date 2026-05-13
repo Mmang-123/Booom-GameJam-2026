@@ -121,6 +121,8 @@ namespace Game
         private float m_RiseUpSpeed;
         private Vector2 m_TotalMotion;
 
+        private float m_DieTimer;
+
         public Color BodyColor => m_InfectedLevel >= EInfectedLevel.High ? m_InfectedBodyColor : m_DefaultBodyColor;
 
         private void Start()
@@ -214,6 +216,13 @@ namespace Game
                             light.LightIntensity -= Time.deltaTime * 5f;
                         }
                     }   
+                }
+
+                m_DieTimer += Time.fixedDeltaTime;
+                if (m_DieTimer >= 0.6f)
+                {
+                    Destroy(gameObject);
+                    //gameObject.SetActive(false);
                 }
                 
                 return;

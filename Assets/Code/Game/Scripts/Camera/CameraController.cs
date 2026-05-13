@@ -195,6 +195,7 @@ namespace Game
 
         public void SetMainTarget(Transform transform)
         {
+            Debug.Log("Set Main Target: " + transform);
             m_MainTarget = transform;
             if (transform != null)
                 AddFollowPoint(transform, 1f);
