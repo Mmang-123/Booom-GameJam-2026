@@ -14,6 +14,9 @@ namespace Sloane
         [SerializeField] private bool m_LockDirection = false;
         [SerializeField] private Vector2 m_LockedDirection = Vector2.right;
         [SerializeField, HideInInspector] private bool m_WasLocked = false;
+        [SerializeField] private bool m_LockSeed = false;
+        [SerializeField] private int m_LockedSeed = 0;
+        [SerializeField, HideInInspector] private bool m_WasSeedLocked = false;
 
 #if UNITY_EDITOR
         private Vector3 m_LastPosition;
@@ -25,6 +28,9 @@ namespace Sloane
             if (m_LockDirection && !m_WasLocked) 
                 m_LockedDirection = GetDirectionToNearestTerrain();
             m_WasLocked = m_LockDirection;
+            if (m_LockSeed && !m_WasSeedLocked)
+                m_LockedSeed = GetPositionSeed();
+            m_WasSeedLocked = m_LockSeed;
             Apply();
         }
 
@@ -47,7 +53,7 @@ namespace Sloane
             if (sr == null) return;
 
             Vector2 dir = m_LockDirection ? m_LockedDirection : GetDirectionToNearestTerrain();
-            int seed = GetPositionSeed();
+            int seed = m_LockSeed ? m_LockedSeed : GetPositionSeed();
             Sprite sprite = m_Pool.GetSprite(dir, seed);
             if (sprite != null && sprite != sr.sprite)
             {
