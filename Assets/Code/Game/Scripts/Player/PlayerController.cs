@@ -109,7 +109,7 @@ namespace Game
                 else
                 {
                     healthBar.SetColor(m_CurrentFish.BodyColor);
-                    healthBar.SetSegmentCount(Mathf.RoundToInt(m_CurrentFish.MaxSaturation / 100));
+                    healthBar.SetSegmentCount(Mathf.RoundToInt(m_CurrentFish.MaxSaturation / 60));
                     healthBar.gameObject.SetActive(true);
                 }
                 //
