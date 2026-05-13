@@ -11,9 +11,12 @@ namespace Game
         
         // Runtime
         private float m_Timer;
+        protected bool m_StopCheck = false;
 
         private void FixedUpdate()
         {
+            if (m_StopCheck)
+                return;
             if (m_Timer < m_DelayCheckTime)
             {
                 m_Timer += Time.fixedDeltaTime;

@@ -340,6 +340,7 @@ namespace Game
                 return;
 
             Fish.Die(EDieType.Hunger);
+            MiddleButtonTips.Triggered = true;
         }
 
         public void Transfer(Vector2 newPosition)
