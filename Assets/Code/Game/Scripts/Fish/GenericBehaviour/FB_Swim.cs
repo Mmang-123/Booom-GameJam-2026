@@ -55,6 +55,9 @@ namespace Game
         public bool GolemActive { get; set; }
         public bool IsDisable { get; set; }
 
+        private float m_OverrideTargetDirectionTimer = 0f;
+        private Vector2 m_OverrideTargetDirection;
+
         //
         public float AdditionalSpeed { get; set; } = 0f;
         public float AdditionalRotateSpeed { get; set; } = 0f;
@@ -65,6 +68,12 @@ namespace Game
         private List<AdditionalVelocity> m_AddtionalVelocities = new();
 
         public bool CanAvoidance { get => m_CanAvoidance; set => m_CanAvoidance = value; }
+
+        protected override void OnInit()
+        {
+            base.OnInit();
+            TargetDirection = Fish.ForwardDirection;
+        }
 
         private void Update()
         {
@@ -86,8 +95,13 @@ namespace Game
                 }
             }
 
-            if (!IsDisable && !GolemActive)
+            if (!IsDisable && !GolemActive && TargetDirection != Vector2.zero)
             {
+                if (m_OverrideTargetDirectionTimer > 0f)
+                {
+                    TargetDirection = m_OverrideTargetDirection;
+                    m_OverrideTargetDirectionTimer = Mathf.Max(0f, m_OverrideTargetDirectionTimer - Time.deltaTime);
+                }
                 RotateToTarget();
             }
         }
@@ -124,6 +138,8 @@ namespace Game
                 CurrentState = Tracing ? State.Trace : State.Normal;
         }
 
+        #region 旋转
+
         private bool RequireFastRotate(float currentAngle)
         {
             return currentAngle >= 60f;
@@ -138,6 +154,14 @@ namespace Game
             Quaternion targetRotation = Fish.GetRotation(TargetDirection);
             Fish.SetRotation(Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotateSpeed));
         }
+
+        public void OverrideTargetDirection(Vector2 direction, float time)
+        {
+            m_OverrideTargetDirectionTimer = time;
+            m_OverrideTargetDirection = direction;
+        }
+
+        #endregion
 
         #region Update
 

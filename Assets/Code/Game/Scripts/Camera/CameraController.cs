@@ -47,6 +47,8 @@ namespace Game
 
         public Transform MainTarget => m_MainTarget;
 
+        private float m_DisableTimer = 0f;
+
         private bool m_FixedUpdateThisFrame = false;
         private Vector2 m_Offset;
         private float m_FDT;
@@ -62,6 +64,12 @@ namespace Game
 
         private void Update()
         {
+            if (m_DisableTimer > 0f)
+            {
+                m_DisableTimer -= Time.deltaTime;
+                return;
+            }
+
             if (m_FixedUpdateThisFrame && m_Active)
             {
                 ComputeTargetPoint();
@@ -134,6 +142,11 @@ namespace Game
             TargetPoint = position;
             m_FollowDamper = new(m_FollowSetting, position);
             transform.position = new(position.x, position.y, transform.position.z);
+        }
+
+        public void DisableFollow(float time)
+        {
+            m_DisableTimer = time;
         }
 
         #region 追踪计算

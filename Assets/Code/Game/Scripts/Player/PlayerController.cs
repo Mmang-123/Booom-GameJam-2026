@@ -46,6 +46,9 @@ namespace Game
 
         public void ControlFish(Fish fish)
         {
+            if (fish == m_CurrentFish)
+                return;
+
             m_FishConfig = PlayerConfig.GetConfig(fish.FishTypeTag);
 
             fish.SetController(this);
@@ -67,6 +70,7 @@ namespace Game
         {
             if (fish == Fish)
                 SetFish(null);
+            m_RestartTimer = 0f;
         }
 
         private void SetFish(Fish fish)

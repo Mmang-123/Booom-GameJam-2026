@@ -49,6 +49,11 @@ namespace Game
         protected override void OnAwake()
         {
             base.OnAwake();
+
+            if (Application.isPlaying && m_LevelRoot != null)
+            {
+                OnLoadLevelCompleted(m_LevelRoot, true);
+            }
         }
 
         private void Update()
@@ -167,11 +172,20 @@ namespace Game
                         Destroy(fish.gameObject);
                     }
 
-                    CameraController.Instance.Teleport(m_LevelRoot.InitFish.transform.position);
-                    PlayerController.Instance.ControlFish(m_LevelRoot.InitFish);
+                    Vector2 initCameraPos = m_LevelRoot.InitCameraPoint == null ? m_LevelRoot.InitFish.transform.position : m_LevelRoot.InitCameraPoint.position;
+                    CameraController.Instance.Teleport(initCameraPos);
+                    CameraController.Instance.DisableFollow(1.2f);
+                    player.ControlFish(m_LevelRoot.InitFish);
+                    player.DisableControl(1f);
+                    var initVelocity = AdditionalVelocity.Create(Vector2.up * m_LevelRoot.InitSpeed, 6f);
+                    var swimBehaviour = player.Fish.GetBehaviour<FB_Swim>();
+                    swimBehaviour.AddAdditionalVelocity(initVelocity);
+                    swimBehaviour.OverrideTargetDirection(Vector2.up, 1f);
+                    player.Fish.SetRotation(Quaternion.identity);
                 }
 
-                m_ScreenFadeState = EScreenFadeState.FadeOut;
+                if (m_ScreenFadeState == EScreenFadeState.FadeIn)
+                    m_ScreenFadeState = EScreenFadeState.FadeOut;
             }
         }
 

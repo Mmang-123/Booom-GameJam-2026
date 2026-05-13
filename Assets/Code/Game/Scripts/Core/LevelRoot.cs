@@ -1,5 +1,4 @@
-﻿
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace Game
@@ -9,8 +8,13 @@ namespace Game
     {
         [SerializeField] private string m_LevelName;
         [SerializeField] private Fish m_InitFish;
+        [SerializeField] private Transform m_InitCameraPoint;
+        [SerializeField] private float m_InitSpeed = 9f;
+
         public string LevelName => m_LevelName;
         public Fish InitFish => m_InitFish;
+        public Transform InitCameraPoint => m_InitCameraPoint;
+        public float InitSpeed => m_InitSpeed;
 
 #if UNITY_EDITOR
 
