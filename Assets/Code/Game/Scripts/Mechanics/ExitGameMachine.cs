@@ -2,18 +2,25 @@
 
 namespace Game
 {
-    public class ExitGameMachine : MonoBehaviour, IChargable
+    public class ExitGameMachine : GameOption
     {
-        #region IChargable
-        public PowerSourceHandler PowerSourceHandler { get; } = new();
-        public bool IsPowered => PowerSourceHandler.IsPowered();
+        private bool m_Active;
+        private float m_Timer;
 
-        #endregion
-
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             if (IsPowered)
-                ExitGame();
+                m_Active = true;
+            
+            if (m_Active)
+            {
+                m_Timer += Time.deltaTime;
+                if (m_Timer >= 0.5f)
+                {
+                    ExitGame();
+                }
+            }
         }
 
         private void ExitGame()
@@ -23,11 +30,6 @@ namespace Game
 #else
             Application.Quit();
 #endif
-        }
-
-        public void SetChargeComplete(bool init)
-        {
-            
         }
     }
 }

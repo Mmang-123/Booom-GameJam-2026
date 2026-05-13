@@ -2,23 +2,13 @@
 
 namespace Game
 {
-    public class StartGameMachine : MonoBehaviour, IChargable
+    public class StartGameMachine : GameOption
     {
-        #region IChargable
-        public PowerSourceHandler PowerSourceHandler { get; } = new();
-        public bool IsPowered => PowerSourceHandler.IsPowered();
-
-        public void SetChargeComplete(bool init)
-        {
-            
-        }
-
-        #endregion
-
         private int m_StartState = 0;
 
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             if (m_StartState == 0 && IsPowered)
                 StartGame();
             else if (m_StartState == 1 && GameManager.Instance.ScreenFadeT >= 0.5f)
