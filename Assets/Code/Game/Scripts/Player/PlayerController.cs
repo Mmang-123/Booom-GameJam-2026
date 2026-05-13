@@ -41,12 +41,13 @@ namespace Game
             GameObject pointGO = new("Player Direction Point");
             m_PlayerDirectionPoint = pointGO.transform;
             
-            ControlFish(m_CurrentFish);
+            ControlFish(m_CurrentFish, true);
         }
 
-        public void ControlFish(Fish fish)
+        public void ControlFish(Fish fish) => ControlFish(fish, false);
+        public void ControlFish(Fish fish, bool force)
         {
-            if (fish == m_CurrentFish)
+            if ((!force && fish == m_CurrentFish) || fish == null)
                 return;
 
             m_FishConfig = PlayerConfig.GetConfig(fish.FishTypeTag);
