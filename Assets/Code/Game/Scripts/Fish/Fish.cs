@@ -219,7 +219,7 @@ namespace Game
                 }
 
                 m_DieTimer += Time.fixedDeltaTime;
-                if (m_DieTimer >= 0.6f)
+                if (m_DieTimer >= 2.4f)
                 {
                     Destroy(gameObject);
                     //gameObject.SetActive(false);
