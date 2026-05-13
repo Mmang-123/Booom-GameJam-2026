@@ -109,11 +109,6 @@ namespace Game
         private bool m_Inited = false;
         private List<EnergyPulse> m_Pulses; // 当前链条上移动的所有脉冲段
         private bool[] m_PointStates;       // 记录每个点的当前激活状态，避免重复赋值
-        /*
-        private List<PointData> m_PointDataList;
-        private float m_PointConductionTime;
-        private float m_PointMaintainTime;
-        */
         public int MaxPowerPointCount => m_Points.Count;
 
 
@@ -261,70 +256,6 @@ namespace Game
 
             // 4. 更新对下游物体的供电状态 (如果链条最后一个点是激活的，就传导能量)
             SetPowerOn(m_PointStates[MaxPowerPointCount - 1]);
-
-            /*
-            HashSet<int> toTurnOff = HashSetPool<int>.Get();
-            HashSet<int> toTurnOn = HashSetPool<int>.Get();
-            HashSet<int> changed = HashSetPool<int>.Get();
-            
-            float dt = Time.fixedDeltaTime;
-
-            if (IsPowered && MaxPowerPointCount > 0)
-            {
-                toTurnOn.Add(0);
-                changed.Add(0);
-            }
-
-            int curCount = 0;
-            for (int i = 0; i < MaxPowerPointCount; i++)
-            {
-                if (curCount >= m_ActivePointCount)
-                    break;
-                    
-                var data = m_PointDataList[i];
-                if (!data.Active)
-                    continue;
-                
-                curCount++;
-
-                data.OffTimer += dt;
-                data.ConductionTimer += dt;
-
-                if (data.ConductionTimer >= m_PointConductionTime && i < MaxPowerPointCount - 1)
-                {
-                    toTurnOn.Add(i + 1);
-                    changed.Add(i + 1);
-                    data.ConductionTimer = 0f;
-                }
-                if (data.OffTimer >= m_PointMaintainTime)
-                {
-                    toTurnOff.Add(i);
-                    changed.Add(i);
-                }
-            }
-
-            foreach (var index in changed)
-            {
-                if (toTurnOn.Contains(index))
-                {
-                    SetPointActive(index, true);
-                    continue;
-                }
-                if (toTurnOff.Contains(index))
-                {
-                    SetPointActive(index, false);
-                }
-            }
-
-            if (MaxPowerPointCount > 0)
-            {
-                SetPowerOn(m_PointDataList[MaxPowerPointCount - 1].Active);
-            }
-
-            HashSetPool<int>.Release(toTurnOff);
-            HashSetPool<int>.Release(toTurnOn);
-            HashSetPool<int>.Release(changed);
-            */
         }
 
         public void SetChargeComplete(bool init) => ChargeAllPoint();
@@ -345,41 +276,6 @@ namespace Game
                 SetPointSprite(i, true);
             }
             SetPowerOn(true);
-
-            /*
-            for (int i = 0; i < MaxPowerPointCount; i++)
-            {
-                SetPointActive(i, true);
-            }
-            SetPowerOn(true);
-            */
-        }
-
-        private void SetPointActive(int index, bool active)
-        {
-            /*
-            var data = m_PointDataList[index];
-
-            if (data.Active != active)
-            {
-                if (active)
-                    m_ActivePointCount++;
-                else
-                    m_ActivePointCount--;
-            }
-
-            data.Active = active;
-            if (active)
-            {
-                data.OffTimer = 0f;
-            }
-            else
-            {
-                data.ConductionTimer = 0f;
-            }
-            */
-
-            SetPointSprite(index, active);
         }
 
         private void SetPointSprite(int index, bool active)

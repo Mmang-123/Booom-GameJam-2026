@@ -17,7 +17,7 @@ namespace Game
         [SerializeField] private CircularProgressBar m_CircularProgressBar;
         [SerializeField] private CircleRange m_CircleRange;
 
-        public Fish Fish { get; private set; }
+        public Fish Fish => m_CurrentFish;
 
         public bool Active { get; private set; } = true;
         public float DisableTimer { get; set; }
@@ -72,7 +72,6 @@ namespace Game
         private void SetFish(Fish fish)
         {
             Debug.Log("Control: " + fish);
-            Fish = fish;
             var cameraController = CameraController.Instance;
             if (m_CurrentFish != null)
             {
@@ -98,9 +97,16 @@ namespace Game
 
                 //
                 var healthBar = CameraController.Instance.HealthBar;
-                healthBar.SetColor(m_CurrentFish.BodyColor);
-                healthBar.SetSegmentCount(Mathf.RoundToInt(m_CurrentFish.MaxSaturation / 100));
-
+                if (Fish.FishTypeTag.Equals(FishUtils.JellyGleamTag))
+                {
+                    healthBar.gameObject.SetActive(false);
+                }
+                else
+                {
+                    healthBar.SetColor(m_CurrentFish.BodyColor);
+                    healthBar.SetSegmentCount(Mathf.RoundToInt(m_CurrentFish.MaxSaturation / 100));
+                    healthBar.gameObject.SetActive(true);
+                }
                 //
                 m_CurrentFish.Init();
                 m_CurrentFish.GetBehaviour<FB_Swim>().RotateToTargetPoint = Active;

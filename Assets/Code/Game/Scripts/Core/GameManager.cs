@@ -8,9 +8,11 @@ namespace Game
     public struct LoadLevelParams
     {
         public string LevelName;
-        public LoadLevelParams(string levelName)
+        public bool InitLoad;
+        public LoadLevelParams(string levelName, bool initLoad = false)
         {
             LevelName = levelName;
+            InitLoad = initLoad;
         }
     }
 
@@ -35,7 +37,6 @@ namespace Game
         //
         private bool m_Loading = false;
         private bool m_Restarting = false;
-        private bool m_CantRestart = false;
         private bool m_RestartLoading = false;
 
         public bool Restarting => m_Restarting;
@@ -65,7 +66,7 @@ namespace Game
 
         public void Restart(bool requireFadeIn = true)
         {
-            if (m_Restarting || m_CantRestart)
+            if (m_Restarting)
                 return;
             Debug.Log("Restart!");
             m_Restarting = true;
@@ -84,7 +85,7 @@ namespace Game
         private void StartRestartLoad()
         {
             m_RestartLoading = true;
-            var loadLevelParams = new LoadLevelParams(LevelConfig.GetInitLevelName());
+            var loadLevelParams = new LoadLevelParams(LevelConfig.GetInitLevelName(), initLoad: true);
             UnloadCurrentLevel(immediate: true);
             LoadLevel(loadLevelParams);
         }
@@ -95,17 +96,6 @@ namespace Game
             m_Restarting = false;
             m_RestartLoading = false;
             m_ScreenFadeState = EScreenFadeState.FadeOut;
-
-            if (m_LevelRoot.InitFish != null)
-            {
-                CameraController.Instance.Teleport(m_LevelRoot.InitFish.transform.position);
-                PlayerController.Instance.ControlFish(m_LevelRoot.InitFish);
-                //m_LevelRoot.InitFish.SetController(PlayerController.Instance);
-            }
-            else
-            {
-                m_CantRestart = true;
-            }
         }
 
         public void LoadLevel(LoadLevelParams loadLevelParams, System.Action completedCallback = null)
@@ -122,7 +112,7 @@ namespace Game
             var operation = InstantiateAsync<LevelRoot>(levelData);
             operation.completed += (op) =>
             {
-                OnLoadLevelCompleted(operation.Result[0]);
+                OnLoadLevelCompleted(operation.Result[0], loadLevelParams.InitLoad);
                 completedCallback?.Invoke();
             };
         }
@@ -151,7 +141,7 @@ namespace Game
             m_LevelRoot = null;
         }
 
-        private void OnLoadLevelCompleted(LevelRoot levelRoot)
+        private void OnLoadLevelCompleted(LevelRoot levelRoot, bool initLoad)
         {
             Debug.Log("Load Complete: " + levelRoot);
             m_Loading = false;
@@ -163,6 +153,25 @@ namespace Game
             if (m_RestartLoading)
             {
                 RestartLoadComplete();
+            }
+
+            if (initLoad)
+            {
+                if (m_LevelRoot.InitFish != null)
+                {
+                    var player = PlayerController.Instance;
+                    if (player.Fish != null)
+                    {
+                        var fish = player.Fish;
+                        player.LoseControl(fish);
+                        Destroy(fish.gameObject);
+                    }
+
+                    CameraController.Instance.Teleport(m_LevelRoot.InitFish.transform.position);
+                    PlayerController.Instance.ControlFish(m_LevelRoot.InitFish);
+                }
+
+                m_ScreenFadeState = EScreenFadeState.FadeOut;
             }
         }
 
@@ -191,6 +200,7 @@ namespace Game
         private EScreenFadeState m_ScreenFadeState;
         private ESettlementState m_SettlementState;
         [SerializeField, Range(0, 1)] private float m_CurrentScreenFadeT;
+        public EScreenFadeState ScreenFadeState { get => m_ScreenFadeState; set => m_ScreenFadeState = value; }
         public float ScreenFadeT => m_CurrentScreenFadeT;
 
         private float m_SettleWaitTimer;
@@ -216,42 +226,43 @@ namespace Game
 
         private void SettleUpdate(float dt)
         {
-            if (m_SettlementState == ESettlementState.Wait)
+            switch (m_SettlementState)
             {
-                m_SettleWaitTimer += dt;
-                if (m_SettleWaitTimer >= 5f)
-                {
-                    m_SettlementState = ESettlementState.WaitFadeIn;
-                    m_ScreenFadeState = EScreenFadeState.FadeIn;
-                }
-            }
-            else if (m_SettlementState == ESettlementState.WaitFadeIn)
-            {
-                if (m_CurrentScreenFadeT >= 0.5f)
-                {
-                    m_SettleWaitTimer = 0f;
-                    m_SettlementState = ESettlementState.ShowPoints;
-                    CameraController.Instance.SettlementUI.Show(InfectionSourceCount);
-                }   
-            }
-            else if (m_SettlementState == ESettlementState.ShowPoints)
-            {
-                m_SettleWaitTimer += dt;
-                if (m_SettleWaitTimer >= 5f)
-                {
-                    m_SettlementState = ESettlementState.HidePoints;
-                    CameraController.Instance.SettlementUI.Hide();
-                    m_SettleWaitTimer = 0f;
-                }
-            }
-            else if (m_SettlementState == ESettlementState.HidePoints)
-            {
-                m_SettleWaitTimer += dt;
-                if (m_SettleWaitTimer >= 1.5f)
-                {
-                    m_SettlementState = ESettlementState.None;
-                    Restart(false);
-                }
+                case ESettlementState.Wait:
+                    m_SettleWaitTimer += dt;
+                    if (m_SettleWaitTimer >= 5f)
+                    {
+                        m_SettlementState = ESettlementState.WaitFadeIn;
+                        m_ScreenFadeState = EScreenFadeState.FadeIn;
+                    }
+                    break;
+
+                case ESettlementState.WaitFadeIn:
+                    if (m_CurrentScreenFadeT >= 0.5f)
+                    {
+                        m_SettleWaitTimer = 0f;
+                        m_SettlementState = ESettlementState.ShowPoints;
+                        CameraController.Instance.SettlementUI.Show(InfectionSourceCount);
+                    }
+                    break;
+
+                case ESettlementState.ShowPoints:
+                    if (m_CurrentScreenFadeT >= 0.5f)
+                    {
+                        m_SettleWaitTimer = 0f;
+                        m_SettlementState = ESettlementState.ShowPoints;
+                        CameraController.Instance.SettlementUI.Show(InfectionSourceCount);
+                    }
+                    break;
+
+                case ESettlementState.HidePoints:
+                    m_SettleWaitTimer += dt;
+                    if (m_SettleWaitTimer >= 1.5f)
+                    {
+                        m_SettlementState = ESettlementState.None;
+                        Restart(false);
+                    }
+                    break;
             }
         }
 

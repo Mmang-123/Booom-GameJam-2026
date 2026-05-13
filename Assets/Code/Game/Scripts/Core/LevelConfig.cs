@@ -9,6 +9,7 @@ namespace Game
     public class LevelConfig : ScriptableObject
     {
         [SerializeField] private string m_InitLevelName;
+        [SerializeField] private string m_TitleLevelName;
         [SerializeField] private List<LevelRoot> m_LevelRootList = new();
         [SerializeField] private List<Passage> m_PassageList = new();
 
@@ -52,6 +53,12 @@ namespace Game
         {
             var instance = GlobalConfigAssets.GetConfigInstance<LevelConfig>();
             return instance.m_InitLevelName;
+        }
+
+        public static string GetTitleLevelName()
+        {
+            var instance = GlobalConfigAssets.GetConfigInstance<LevelConfig>();
+            return instance.m_TitleLevelName;
         }
 
         public static Passage GetPassage(string passageName)
