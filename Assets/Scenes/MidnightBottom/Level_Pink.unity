@@ -163,7 +163,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &594576319
+--- !u!84 &522397041
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -513,6 +513,10 @@ PrefabInstance:
     - target: {fileID: 380267550734101134, guid: a88e89740685125488e8955584f2d274, type: 3}
       propertyPath: m_Name
       value: Level_0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7253880965616742776, guid: a88e89740685125488e8955584f2d274, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
