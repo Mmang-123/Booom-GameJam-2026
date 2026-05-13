@@ -37,12 +37,25 @@ namespace Game
         //
         private bool m_Loading = false;
         private bool m_Restarting = false;
+        private string m_RestartLoadLevelName;
         private bool m_RestartLoading = false;
+        private string m_LoadingSceneName;
 
         public bool Restarting => m_Restarting;
-        public bool CanRestart => !Restarting && m_SettlementState == ESettlementState.None;
+        public bool CanRestart => !Restarting && m_SettlementState == ESettlementState.None && !InOrLoadingTitle;
         public bool CanLoad => !m_Loading && !m_Restarting;
+        public bool Loading => m_Loading || m_Restarting;
         public bool CantSave { get; private set; }
+
+        public bool InOrLoadingTitle
+        {
+            get
+            {
+                var titleSceneName = LevelConfig.GetTitleLevelName();
+                return (m_LevelRoot != null && m_LevelRoot.LevelName == titleSceneName)
+                || (m_Loading && m_LoadingSceneName == titleSceneName);
+            }
+        }
 
         public int InfectionSourceCount { get; set; } = 2;
 
@@ -62,19 +75,24 @@ namespace Game
             SettleUpdate(Time.deltaTime);
             if (m_Restarting)
             {
-                if (m_CurrentScreenFadeT >= 0.5f && !m_RestartLoading && !m_Loading)
+                if (m_SettlementState >= ESettlementState.Wait)
+                {
+                    m_Restarting = false;
+                }
+                else if (m_CurrentScreenFadeT >= 0.5f && !m_RestartLoading && !m_Loading)
                 {
                     StartRestartLoad();
                 }
             }
         }
 
-        public void Restart(bool requireFadeIn = true)
+        public void Restart(string loadLevelName, bool requireFadeIn = true)
         {
             if (m_Restarting)
                 return;
             Debug.Log("Restart!");
             m_Restarting = true;
+            m_RestartLoadLevelName = loadLevelName;
             CantSave = true;
             if (requireFadeIn)
             {
@@ -90,7 +108,7 @@ namespace Game
         private void StartRestartLoad()
         {
             m_RestartLoading = true;
-            var loadLevelParams = new LoadLevelParams(LevelConfig.GetInitLevelName(), initLoad: true);
+            var loadLevelParams = new LoadLevelParams(m_RestartLoadLevelName, initLoad: true);
             UnloadCurrentLevel(immediate: true);
             LoadLevel(loadLevelParams);
         }
@@ -105,6 +123,9 @@ namespace Game
 
         public void LoadLevel(LoadLevelParams loadLevelParams, System.Action completedCallback = null)
         {
+            if (m_Loading)
+                return;
+
             var levelData = LevelConfig.GetLevel(loadLevelParams.LevelName);
             if (levelData == null)
             {
@@ -114,6 +135,7 @@ namespace Game
 
             UnloadCurrentLevel();
             m_Loading = true;
+            m_LoadingSceneName = levelData.LevelName;
             var operation = InstantiateAsync<LevelRoot>(levelData);
             operation.completed += (op) =>
             {
@@ -274,7 +296,7 @@ namespace Game
                     if (m_SettleWaitTimer >= 1.5f)
                     {
                         m_SettlementState = ESettlementState.None;
-                        Restart(false);
+                        Restart(LevelConfig.GetTitleLevelName(), false);
                     }
                     break;
             }

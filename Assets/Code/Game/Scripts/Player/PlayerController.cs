@@ -134,7 +134,7 @@ namespace Game
                 m_RestartTimer += Time.deltaTime;
                 if (m_RestartTimer > 1.0f)
                 {
-                    GameManager.Instance.Restart();
+                    GameManager.Instance.Restart(LevelConfig.GetInitLevelName());
                     m_RestartTimer = 0f;
                 }
             }
