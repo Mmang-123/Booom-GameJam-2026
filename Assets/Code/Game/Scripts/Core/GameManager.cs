@@ -57,7 +57,7 @@ namespace Game
             }
         }
 
-        public int InfectionSourceCount { get; set; } = 2;
+        public int InfectionSourceCount { get; set; } = 1;
 
         protected override void OnAwake()
         {
@@ -285,11 +285,12 @@ namespace Game
                     break;
 
                 case ESettlementState.ShowPoints:
-                    if (m_CurrentScreenFadeT >= 0.5f)
+                    m_SettleWaitTimer += dt;
+                    if (m_SettleWaitTimer >= 5f)
                     {
+                        m_SettlementState = ESettlementState.HidePoints;
+                        CameraController.Instance.SettlementUI.Hide();
                         m_SettleWaitTimer = 0f;
-                        m_SettlementState = ESettlementState.ShowPoints;
-                        CameraController.Instance.SettlementUI.Show(InfectionSourceCount);
                     }
                     break;
 

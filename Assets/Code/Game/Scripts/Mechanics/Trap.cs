@@ -16,6 +16,8 @@ namespace Game
         [SerializeField] private Transform m_RightCage;
         [SerializeField] private List<ParticleSystem> m_HitParticles = new();
         [SerializeField] private List<ParticleSystem> m_MoveParticles = new();
+        [SerializeField] private List<InterfaceObject<IMLight>> m_Lights = new();
+        [SerializeField] private float m_TargetLightIntensity = 0.8f;
 
         // Runtime
         private bool m_Active;
@@ -82,6 +84,11 @@ namespace Game
             Vector2 leftPos = (Vector2)m_TrapPoint.position + offset;
             Vector2 rightPos = (Vector2)m_TrapPoint.position - offset;
             
+            foreach (var lightObj in m_Lights)
+            {
+                lightObj.Value.LightIntensity = m_TargetLightIntensity * t;
+            }
+
             m_LeftCage.position = leftPos;
             m_RightCage.position = rightPos;
         }

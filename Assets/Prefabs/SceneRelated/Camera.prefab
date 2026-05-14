@@ -378,6 +378,7 @@ GameObject:
   - component: {fileID: 5623136734401914095}
   - component: {fileID: 4599461004872733748}
   - component: {fileID: 4366134280422644255}
+  - component: {fileID: 395244870848845486}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -542,6 +543,18 @@ MonoBehaviour:
   m_CameraViewSize: {x: 30, y: 16.875}
   m_HealthBar: {fileID: 3616796273517392069}
   m_SettlementUI: {fileID: 5632934468575981022}
+--- !u!114 &395244870848845486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5625299763618099865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b70429d33bc0cb043a318171c808558e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.EditorObstacleCameraTarget
 --- !u!1 &5871530576880214300
 GameObject:
   m_ObjectHideFlags: 0
