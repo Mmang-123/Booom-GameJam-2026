@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DG.Tweening;
 using Mmang.PixelartRender;
 using Mmang.ProceduralAnimation;
 using Mmang.Util;
@@ -26,6 +27,7 @@ namespace Game
         }
     }
 
+    [RequireComponent(typeof(PixelartCamera))]
     public class CameraController : SingletonMono<CameraController>
     {
         [Header("跟随设置")]
@@ -38,6 +40,7 @@ namespace Game
         [SerializeField] private UI_Settlement m_SettlementUI;
 
         // Runtime
+        private PixelartCamera m_PixelartCamera;
         private Transform m_MainTarget;
         private List<CameraTarget> m_Targets = new();
         private Dictionary<Transform, CameraTarget> m_TargetMap = new();
@@ -56,8 +59,11 @@ namespace Game
         public HealthBar HealthBar => m_HealthBar;
         public UI_Settlement SettlementUI => m_SettlementUI;
 
+        
+
         protected override void OnAwake()
         {
+            m_PixelartCamera = GetComponent<PixelartCamera>();
             TargetPoint = transform.position;
             m_FollowDamper = new(m_FollowSetting, TargetPoint);
         }
@@ -75,30 +81,16 @@ namespace Game
                 ComputeTargetPoint();
                 FollowTargetPoint(m_FDT);
             }
-            //ComputeTargetPoint();
-            //FollowTargetPoint(Time.deltaTime);
         }
 
         private void FixedUpdate()
         {
             m_FixedUpdateThisFrame = true;
             m_FDT += Time.fixedDeltaTime;
-            //ComputeTargetPoint();
-            //FollowTargetPoint(Time.fixedDeltaTime);
         }
 
         private void LateUpdate()
         {
-            /*
-            if (m_FixedUpdateThisFrame)
-            {
-                if (m_Offset != Vector2.zero)
-                {
-                    m_FollowDamper.Offset(m_Offset);
-                    m_Offset = Vector2.zero;   
-                }
-            }
-            */
             m_FixedUpdateThisFrame = false;
             m_FDT = 0f;
             ObstacleMaskManager.Instance.UpdatePosition(transform.position);
@@ -247,5 +239,24 @@ namespace Game
 
         #endregion
         
+
+        #region 镜头缩放
+
+        public void Scale(float targetScale, float duration1, float duration2)
+        {
+            DOTween.To
+            (
+                () => m_PixelartCamera.CameraScale,
+                value => m_PixelartCamera.SetCameraScale(value),
+                targetScale, duration1
+            ).OnComplete(() => DOTween.To
+            (
+                () => m_PixelartCamera.CameraScale,
+                value => m_PixelartCamera.SetCameraScale(value),
+                1f, duration2
+            ));
+        }
+
+        #endregion
     }
 }

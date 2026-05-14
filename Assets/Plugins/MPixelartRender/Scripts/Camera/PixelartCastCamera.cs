@@ -29,7 +29,11 @@ namespace Mmang.PixelartRender
 
         public void RefreshCamera()
         {
-            CameraUtil.CopyCameraProperties(m_ParentCamera.Camera, m_Camera);
+            m_Camera.orthographic = true;
+            m_Camera.orthographicSize = m_ParentCamera.MaxOrthographSize;
+            m_Camera.nearClipPlane = m_ParentCamera.Camera.nearClipPlane;
+            m_Camera.farClipPlane = m_ParentCamera.Camera.farClipPlane;
+            m_Camera.backgroundColor = m_ParentCamera.Camera.backgroundColor;
         }
     }
 

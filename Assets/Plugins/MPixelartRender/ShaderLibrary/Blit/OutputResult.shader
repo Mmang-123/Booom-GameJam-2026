@@ -41,7 +41,7 @@
                 scale.x = aspectRatioScreen / aspectRatioTex;
                 scale.y = 1.0;
             
-                uv = (uv - 0.5) * scale + 0.5;
+                uv = (uv - 0.5) * _CameraScale * scale + 0.5;
                 
                 if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
                     return half4(0, 0, 0, 1); // Render black if outside bounds

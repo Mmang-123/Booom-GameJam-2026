@@ -260,16 +260,6 @@ namespace Game
                     + ((Vector2)worldPos - m_CurrentFish.Position).normalized * t;
 
 
-                // 如果是水母, Idle时自动回正
-                /*
-                if (m_CurrentFish.FishTypeTag.Equals(GameplayTag.CreateByName("FishType.JellyGleam")))
-                {
-                    if (!swimBehaviour.Tracing && swimBehaviour.CurrentSpeed <= 0.1f)
-                    {
-                        swimBehaviour.TargetPoint = m_CurrentFish.Position + Vector2.up;
-                    }
-                }
-                */
             }
         }
 

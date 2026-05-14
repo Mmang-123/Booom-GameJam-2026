@@ -46,7 +46,10 @@ namespace Mmang.PixelartRender
 
         #region 运行时属性
 
-        public float CameraScale { get; private set; } = 1f;
+        [SerializeField] private float m_OrthographicSize = 10f;
+        [SerializeField, Range(0f, 1f)] private float m_CameraScale = 1;
+        public float MaxOrthographSize => m_OrthographicSize;
+        public float CameraScale => m_CameraScale;
 
         #endregion
 
@@ -146,6 +149,20 @@ namespace Mmang.PixelartRender
 
             CastCamera.Init(this);
             CastCamera.Camera.targetTexture = ResultBuffer;
+        }
+
+        private void Update()
+        {
+            if (!Application.isPlaying && Camera != null)
+            {
+                Camera.orthographicSize = m_OrthographicSize * m_CameraScale;
+            }
+        }
+
+        public void SetCameraScale(float scale)
+        {
+            m_CameraScale = Mathf.Clamp01(scale);
+            Camera.orthographicSize = m_OrthographicSize * m_CameraScale;
         }
     }
 
