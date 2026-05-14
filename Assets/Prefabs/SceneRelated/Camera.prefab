@@ -520,6 +520,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mmang.PixelartRender.PixelartCamera
   m_CameraData:
     SourceResolution: {x: 480, y: 270}
+  m_OrthographicSize: 8.4375
+  m_CameraScale: 1
 --- !u!114 &4366134280422644255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -621,7 +623,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 8.4375
+  orthographic size: 10
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2

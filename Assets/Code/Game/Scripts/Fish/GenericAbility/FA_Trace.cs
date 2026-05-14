@@ -19,7 +19,7 @@ namespace Game
         // Runtime
         protected FB_Swim SwimBehaviour { get; set; }
         protected FB_Eat EatBehaviour { get; set; }
-        protected Fish TargetFish { get; set; }
+        public Fish TargetFish { get; protected set; }
 
         private bool m_Inited = false;
 

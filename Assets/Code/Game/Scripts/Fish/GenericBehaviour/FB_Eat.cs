@@ -161,6 +161,16 @@ namespace Game
             var swimBehaviour = Fish.GetBehaviour<FB_Swim>();
             swimBehaviour.AdditionalSpeed += m_EatDashAdditionalSpeed;
             swimBehaviour.AdditionalRotateSpeed += m_EatDashAdditionalRotateSpeed;
+
+            // 镜头缩放
+            if (Fish.IsPlayer
+            || (Fish.FishController is FishAIComponent {} fishAI
+            && fishAI.TryGetAbility<FA_Trace>(out var trace)
+            && trace.TargetFish != null && trace.TargetFish.IsPlayer))
+            {
+                CameraController.Instance.Scale(0.95f, 0.15f, 0.6f);
+            }
+            
         }
 
         private void Eat()

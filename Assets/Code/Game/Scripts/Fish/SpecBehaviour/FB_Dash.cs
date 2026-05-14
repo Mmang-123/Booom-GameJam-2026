@@ -114,7 +114,7 @@ namespace Game
                 {
                     DashState = 1;
                     Timer = 0f;
-                    CameraController.Instance.Scale(0.97f, 0.15f, 0.6f);
+                    //CameraController.Instance.Scale(0.97f, 0.15f, 0.6f);
                 }
 
                 return;
