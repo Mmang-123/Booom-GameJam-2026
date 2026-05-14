@@ -23,12 +23,17 @@ namespace Game
         public float DisableTimer { get; set; }
 
         private float MinMBPressedTime => 0.25f;
+        private float MinLBPressedTime => 0.4f;
 
         // Runtime
         private Transform m_PlayerDirectionPoint; // 根据朝向实时更新的点
         private bool m_MouseRBPressedLastFrame = false;
         private bool m_MBPressed = false;
         private float m_MBPressedTimer = 0f;
+
+        private Vector2 m_LastLBPosition;
+        private float m_LBTimer;
+        private bool m_LBPressed;
 
 
         private ControlFishConfig m_FishConfig;
@@ -220,13 +225,32 @@ namespace Game
 
             if (m_CurrentFish != null)
             {
+                bool leftPressed = mouse.leftButton.isPressed;
                 var swimBehaviour = m_CurrentFish.GetBehaviour<FB_Swim>();
-                if (!m_CurrentFish.FishTypeTag.Equals(GameplayTag.CreateByName("FishType.JellyGleam"))
-                || mouse.leftButton.isPressed || swimBehaviour.CurrentSpeed > 0.1f)
+
+                if (!m_LBPressed && leftPressed)
                 {
-                    swimBehaviour.TargetPoint = worldPos;
+                    m_LBPressed = true;
+                    m_LBTimer = 0f;
                 }
-                swimBehaviour.Tracing = mouse.leftButton.isPressed;
+                else
+                {
+                    m_LBTimer += Time.deltaTime;
+                    if (!leftPressed && m_LBTimer > MinLBPressedTime)
+                    {
+                        m_LBPressed = false;
+                    }
+                }
+
+
+                if (!m_CurrentFish.FishTypeTag.Equals(GameplayTag.CreateByName("FishType.JellyGleam"))
+                || m_LBPressed || swimBehaviour.CurrentSpeed > 0.1f)
+                {
+                    Vector2 targetPoint = (!m_LBPressed || leftPressed) ? worldPos : m_LastLBPosition;
+                    m_LastLBPosition = targetPoint;
+                    swimBehaviour.TargetPoint = targetPoint;
+                }
+                swimBehaviour.Tracing = m_LBPressed;
 
                 // 相机偏移
                 float distance = Vector2.Distance(worldPos, m_CurrentFish.Position);
