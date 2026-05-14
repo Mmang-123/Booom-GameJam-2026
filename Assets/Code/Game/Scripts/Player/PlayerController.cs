@@ -190,7 +190,7 @@ namespace Game
             
             if (m_FishConfig != null && m_FishConfig.CanEatTags.Count > 0)
             {
-                HuntUpdate();
+                HuntUpdate(Time.fixedDeltaTime);
             }
         }
 
@@ -369,11 +369,28 @@ namespace Game
 
         #region 捕食
 
-        private void HuntUpdate()
+        private Fish m_LastTarget;
+        private float m_KeepTargetTimer;
+        private float KeepTargetTime => 0.2f;
+
+        private void HuntUpdate(float dt)
         {
-            var target = FindTargetInRange(out float distance);
+            if (m_LastTarget != null)
+            {
+                m_KeepTargetTimer += dt;
+                if (m_KeepTargetTimer > KeepTargetTime)
+                    m_LastTarget = null;
+            }
+
+            if (m_LastTarget == null)
+            {
+                var target = FindTargetInRange(out float distance);
+                m_LastTarget = target;
+                m_KeepTargetTimer = 0f;
+            }
+
             var eatBehaviour = Fish.GetBehaviour<FB_Eat>();
-            eatBehaviour.Target = target;
+            eatBehaviour.Target = m_LastTarget;
             eatBehaviour.ContinuousCheck = true;
         }
 
