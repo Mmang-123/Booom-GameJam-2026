@@ -32,18 +32,20 @@ namespace Game
                 float xDis = Mathf.Abs(transform.position.x - trans.position.x);
                 float yDis = Mathf.Abs(transform.position.y - trans.position.y);
                 
+                
                 float xLerpT, yLerpT;
                 if (m_WorldMixRangeX.x == m_WorldMixRangeX.y)
                     xLerpT = xDis <= m_WorldMixRangeX.x ? 0f : 1f;
                 else
-                    xLerpT = Mathf.Max(0f, xDis - m_WorldMixRangeX.x * 0.5f) / ((m_WorldMixRangeX.y - m_WorldMixRangeX.x) * 0.5f);
+                    xLerpT = Mathf.Clamp01(Mathf.Max(0f, xDis - m_WorldMixRangeX.x * 0.5f) / ((m_WorldMixRangeX.y - m_WorldMixRangeX.x) * 0.5f));
                 
                 if (m_WorldMixRangeY.x == m_WorldMixRangeY.y)
                     yLerpT = yDis <= m_WorldMixRangeY.x ? 0f : 1f;
                 else
-                    yLerpT = Mathf.Max(0f, yDis - m_WorldMixRangeY.x * 0.5f) / ((m_WorldMixRangeY.y - m_WorldMixRangeY.x) * 0.5f);
+                    yLerpT = Mathf.Clamp01(Mathf.Max(0f, yDis - m_WorldMixRangeY.x * 0.5f) / ((m_WorldMixRangeY.y - m_WorldMixRangeY.x) * 0.5f));
                 float t = Mathf.Max(xLerpT, yLerpT);
 
+                //Debug.Log($"Dis: {yDis}  Letp: {yLerpT}  T: {t}");
                 weight = 1.0f - t;
             }
 
