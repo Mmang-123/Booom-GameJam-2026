@@ -130,7 +130,7 @@ Material:
     - _LightenBlend: 0.16
     - _Metallic: 0
     - _NoiseStrength: 0.0625
-    - _ObstacleMaskValue: 3.81
+    - _ObstacleMaskValue: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueOffset: 0
@@ -149,7 +149,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 0.65882355, g: 0.65882355, b: 0.65882355, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Emission: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 0, a: 0}
