@@ -400,6 +400,12 @@ namespace Game
             if (m_Dead)
                 return;
 
+            // 这里还能判定为玩家，说明不是被吃的
+            if (IsPlayer)
+            {
+                CameraController.Instance.Scale(0.85f, 0.2f, 0.6f);
+            }
+
             bool explode = false;
             float explodeRadius = 0f;
             // 扩散

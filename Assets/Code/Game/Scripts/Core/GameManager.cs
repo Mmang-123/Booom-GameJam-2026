@@ -119,6 +119,8 @@ namespace Game
             m_Restarting = false;
             m_RestartLoading = false;
             m_ScreenFadeState = EScreenFadeState.FadeOut;
+
+            CameraController.Instance.Scale(0.75f, 0f, 1.5f);
         }
 
         public void LoadLevel(LoadLevelParams loadLevelParams, System.Action completedCallback = null)

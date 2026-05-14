@@ -44,6 +44,22 @@ float3 SampleLight(float2 screenUV)
     return SRGBToLinear(SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV).rgb);
 }
 
+float3 SampleLight(float2 screenUV, float scale)
+{
+    float2 positionWS = _ObstacleParams.yz * 16.0;
+    float4 posCS = TransformWorldToHClip(float3(positionWS, 0.0));
+    float4 scrPos = ComputeScreenPos(posCS);
+    float2 originUV = scrPos.xy / scrPos.w;
+
+    originUV = (originUV - 0.5) * scale + 0.5;
+
+    float2 chunkSize = _ObstacleChunkParams.xy * _ChunkRange.xy / _Resolution.zw;
+    float2 sampleUV = (screenUV - originUV) / chunkSize;
+
+    //return float3(sampleUV, 0);
+    return SRGBToLinear(SAMPLE_TEXTURE2D(_MLightingTexture, sampler_MLightingTexture, sampleUV).rgb);
+}
+
 void ComputePointLight(int lightIndex, float2 positionWS, out half3 outColor)
 {
     outColor = 0.0;

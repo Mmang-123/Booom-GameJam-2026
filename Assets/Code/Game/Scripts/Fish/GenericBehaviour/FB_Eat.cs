@@ -279,6 +279,12 @@ namespace Game
             {
                 animatorBehaviour.TriggerSwallowAnimation(infected);
             }
+
+            // 镜头缩放
+            if (infected)
+            {
+                CameraController.Instance.Scale(0.82f, 0.2f, 0.6f);
+            }
             
             if (toEat.Count == 0)
             {

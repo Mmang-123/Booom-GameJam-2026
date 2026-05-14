@@ -4,6 +4,7 @@
 #include "SpriteShading.hlsl"
 
 float4 _DarkSightParams;
+float _CameraScale;
 
 Varyings UnlitVert(Attributes v)
 {
@@ -88,9 +89,12 @@ float4 UnlitFrag(Varyings input) : SV_Target
     float4 positionCS = TransformWorldToHClip(float4(positionWS, 0, 1));
     float4 screenPos = ComputeScreenPos(positionCS);
     float2 screenUV = screenPos.xy / screenPos.w;
+    screenUV = (screenUV - 0.5) * _CameraScale + 0.5;
+
+    //return float4(screenUV, 0, 1);
 
     float3 lightColor = ComputeLighting(positionWS);
-    float3 sampledLight = SampleLight(screenUV);
+    float3 sampledLight = SampleLight(screenUV, _CameraScale);
 
     // Dark Sight
     float2 scaledUV = screenUV;
@@ -147,6 +151,7 @@ float4 TransitionFrag(Varyings input) : SV_Target
     clip(outputColor.a - 0.05);
 
     float2 screenUV = input.positionCS.xy / _ScreenParams.xy;
+    screenUV = (screenUV - 0.5) * _CameraScale + 0.5;
 
     outputColor.rgb = lerp(SampleBackground(screenUV), outputColor.rgb, outputColor.a);
     return float4(outputColor.rgb, 1);
