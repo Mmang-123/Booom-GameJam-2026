@@ -533,6 +533,9 @@ MonoBehaviour:
   m_EyeFadeDuration: 1.5
   m_CheckPoints:
   - {fileID: 8466924730141673177}
+  m_Colliders:
+  - {fileID: 5644291535869684108}
+  - {fileID: 6717867092460838953}
 --- !u!114 &3847771821859563341
 MonoBehaviour:
   m_ObjectHideFlags: 0

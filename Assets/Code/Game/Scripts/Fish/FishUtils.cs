@@ -8,6 +8,10 @@ namespace Game
     public static class FishUtils
     {
         public static readonly LayerMask FishLayer = LayerMask.GetMask("Fish");
+        public static readonly LayerMask DefaultLayer = LayerMask.GetMask("Default");
+        public static readonly int IntFishLayer = 7;
+        public static readonly int IntDefaultLayer = 0;
+
         public static readonly LayerMask WithoutFishLayer = ~FishLayer;
         private static Collider2D[] s_ColliderCache = new Collider2D[64];
 

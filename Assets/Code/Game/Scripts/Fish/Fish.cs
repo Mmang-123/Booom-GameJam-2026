@@ -603,11 +603,16 @@ namespace Game
 
         #region 挤压死亡
 
+        public bool DisableDieCollision { get; set; } = false;
+
         private void CheckDieCollision(float dt)
         {
-            if (m_DieCollider == null)
+            if (m_DieCollider == null || DisableDieCollision)
+            {
+                m_DieCollisionTimer = -1f;
                 return;
-            
+            }
+      
             Vector2 center = Position + m_DieCollider.offset;
             float radius = m_DieCollider.radius;
 

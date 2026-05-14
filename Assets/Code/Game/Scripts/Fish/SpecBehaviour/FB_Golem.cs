@@ -15,6 +15,7 @@ namespace Game
         [SerializeField] private SpriteRenderer m_EyeRenderer;
         [SerializeField] private float m_EyeFadeDuration = 1.5f;
         [SerializeField] private List<Transform> m_CheckPoints = new();
+        [SerializeField] private List<Collider2D> m_Colliders = new();
 
         // Runtime
         private bool m_Active;
@@ -99,7 +100,14 @@ namespace Game
             m_Active = active;
             if (m_Active)
                 m_ActiveTimer = MaxActiveTime;
+
+            foreach (var collider in m_Colliders)
+            {
+                collider.gameObject.layer = active ? FishUtils.IntDefaultLayer : FishUtils.IntFishLayer;
+            }
             
+            Fish.DisableDieCollision = active;
+
             foreach (var behaviour in m_GolemBehaviours)
             {
                 behaviour.SetGolemActive(active);
