@@ -9,6 +9,7 @@ namespace Game
         [SerializeField] private List<SpriteRenderer> m_Renderers = new();
         [SerializeField] private Sprite m_ActiveSprite;
         [SerializeField] private Sprite m_InactiveSprite;
+        [SerializeField] private GameObject m_ThanksDisplay;
 
         private void Awake()
         {
@@ -16,11 +17,17 @@ namespace Game
             if (progress <= 0)
             {
                 gameObject.SetActive(false);
+                m_ThanksDisplay.SetActive(false);
             }
             else
             {
                 gameObject.SetActive(true);
                 SetCount(progress);
+
+                if (progress >= m_Renderers.Count)
+                {
+                    m_ThanksDisplay.SetActive(true);
+                }
             }
         }
 

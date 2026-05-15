@@ -271,6 +271,7 @@ namespace Game
         {
             m_SettlementState = ESettlementState.Wait;
             m_SettleWaitTimer = 0f;
+            SaveProgress(Mathf.Max(GetCurrentProgress(), InfectionSourceCount));
         }
 
         private void SettleUpdate(float dt)
@@ -353,6 +354,8 @@ namespace Game
 
         public int GetCurrentProgress()
         {
+            if (!PlayerPrefs.HasKey("Progress"))
+                return 0;
             return PlayerPrefs.GetInt("Progress");
         }
 
