@@ -8,7 +8,9 @@ namespace Game
     {
         [SerializeField] private float m_BounceForce = 5f;
 
+        // Runtime
         private float m_CD = 0f;
+        public event System.Action<Collision2D> OnCollision;
 
         private void Update()
         {
@@ -39,6 +41,8 @@ namespace Game
             swimBehaviour.AddAdditionalVelocity(velocity);
 
             m_CD = 0.1f;
+
+            OnCollision?.Invoke(collision);
         }
     }
 }

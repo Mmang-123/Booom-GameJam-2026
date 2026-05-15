@@ -16,11 +16,14 @@ namespace Game
         [SerializeField] private float m_LosePatienceSpeed = 30f;
         [SerializeField] private float m_RegainPatienceSpeed = 20f;
         [SerializeField] private float m_LosePatienceOnCatchFailed = 30f;
+        [SerializeField] private float m_LosePatienceOnCollision = 15f;
         [SerializeField] private float m_ChangeTargetPatienceTheshold = 50f;
         [SerializeField] private float m_SearchNewTargetIntervalTime = 0.2f;
 
         // Runtime
         [System.NonSerialized] private List<Vector2> m_TurningPoints = new();
+        private Fish m_LastTarget;
+        private float m_IgnoreLastTargetCD;
         private bool m_HasPreTracingPoint;
         private Vector2 m_PreTracingPoint;
 
@@ -30,6 +33,8 @@ namespace Game
         private RaycastHit2D Raycast(Vector2 start, Vector2 end)
             => FishUtils.RaycastObstacle(start, end);
 
+        
+
         protected override bool FindTarget(out Fish outTarget)
             => FindTarget(out outTarget, false);
         protected bool FindTarget(out Fish outTarget, bool ignoreCurrentTarget)
@@ -37,12 +42,17 @@ namespace Game
             List<Fish> fishList = ListPool<Fish>.Get();
             FishUtils.GetFishInCircle(Fish.Position, m_SearchingRayLength, fishList, ignoreFish: Fish, clearResultList: true);
 
+            // 这里用了fixedDeltaTime!! 注意不要再变动更新时机
+            if (m_IgnoreLastTargetCD > 0f)
+                m_IgnoreLastTargetCD -= Time.fixedDeltaTime;
+
             outTarget = null;
             int currentPriority = 0;
 
             foreach (var fish in fishList)
             {
                 if ((!ignoreCurrentTarget || (ignoreCurrentTarget && fish != TargetFish))
+                && (m_IgnoreLastTargetCD <= 0f || fish != m_LastTarget)
                 && TargetPriorityMap.ContainsKey(fish.FishTypeTag)
                 && !Raycast(Fish.Position, fish.Position))
                 {
@@ -112,6 +122,10 @@ namespace Game
             {
                 eatBehaviour.OnCatchFailed += OnCatchFailed;
             }
+            if (Fish.TryGetBehaviour<FB_Avoidance>(out var avoidanceBehaviour))
+            {
+                avoidanceBehaviour.OnCollision += OnCollision;
+            }
         }
 
         public override void OnEnd(EEndAbilityType endType)
@@ -122,14 +136,33 @@ namespace Game
             {
                 eatBehaviour.OnCatchFailed -= OnCatchFailed;
             }
+            if (Fish != null && Fish.TryGetBehaviour<FB_Avoidance>(out var avoidanceBehaviour))
+            {
+                avoidanceBehaviour.OnCollision -= OnCollision;
+            }
+
+            if (TargetFish != null)
+            {
+                m_LastTarget = TargetFish;
+                m_IgnoreLastTargetCD = 2f;
+                TargetFish = null;
+            }
         }
 
         private void OnCatchFailed()
         {
             if (TargetFish != null)
             {
-                Debug.Log("Catch Failed");
                 m_CurrentPatience = Mathf.Max(1f, m_CurrentPatience - m_LosePatienceOnCatchFailed);
+            }
+        }
+
+        private void OnCollision(Collision2D collision)
+        {
+            if (TargetFish != null)
+            {
+                m_CurrentPatience = Mathf.Max(0f, m_CurrentPatience - m_LosePatienceOnCollision);
+                // Debug.Log("Collision  " + m_CurrentPatience);
             }
         }
 
@@ -171,6 +204,13 @@ namespace Game
                         return;
                     }
                 }
+            }
+
+            if (m_CurrentPatience <= 0f)
+            {
+                // TargetFish = null;
+                FishAI.PendingEndAbility(this, EEndAbilityType.End);
+                return;
             }
 
             // 如果可以直接追踪到目标，放弃所有拐点
@@ -219,15 +259,11 @@ namespace Game
 
                 // 失去耐心
                 m_CurrentPatience -= dt * m_LosePatienceSpeed;
-                if (m_CurrentPatience <= 0f)
-                {
-                    TargetFish = null;
-                    FishAI.PendingEndAbility(this, EEndAbilityType.End);
-                    return;
-                }
+                
             }
 
             // Debug
+            /*
             {
                 Vector2 point = Fish.Position;
                 foreach (var nextPoint in m_TurningPoints)
@@ -238,6 +274,7 @@ namespace Game
 
                 Debug.DrawLine(point, m_PreTracingPoint, Color.blue);
             }
+            */
         }
 
         private void UpdateTurningPoint()

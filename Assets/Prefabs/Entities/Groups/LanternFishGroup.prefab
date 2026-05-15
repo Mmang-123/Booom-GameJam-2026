@@ -302,6 +302,7 @@ MonoBehaviour:
   m_LosePatienceSpeed: 16
   m_RegainPatienceSpeed: 30
   m_LosePatienceOnCatchFailed: 100
+  m_LosePatienceOnCollision: 35
   m_ChangeTargetPatienceTheshold: 420
   m_SearchNewTargetIntervalTime: 0.2
   m_CurrentPatience: 0
