@@ -17,6 +17,11 @@ namespace Game
         [SerializeField] private float m_RegainPatienceSpeed = 20f;
         [SerializeField] private float m_LosePatienceOnCatchFailed = 30f;
         [SerializeField] private float m_LosePatienceOnCollision = 15f;
+        [SerializeField] private float m_StuckSpeed = 1.5f;
+        [SerializeField] private float m_StuckTimeThreshold = 1.5f;
+        [SerializeField] private float m_LosePatienceOnStuck = 40f;
+
+
         [SerializeField] private float m_ChangeTargetPatienceTheshold = 50f;
         [SerializeField] private float m_SearchNewTargetIntervalTime = 0.2f;
 
@@ -26,6 +31,8 @@ namespace Game
         private float m_IgnoreLastTargetCD;
         private bool m_HasPreTracingPoint;
         private Vector2 m_PreTracingPoint;
+        private Vector2 m_StuckTestPoint;
+        private float m_StuckTestTimer;
 
         [SerializeField] private float m_CurrentPatience;
         private float m_SearchNewTargetTimer;
@@ -282,6 +289,24 @@ namespace Game
                 // 失去耐心
                 m_CurrentPatience -= dt * m_LosePatienceSpeed;
                 
+            }
+
+
+            {
+                Vector2 newPoint = Fish.Position;
+                float speed = Vector2.Distance(newPoint, m_StuckTestPoint) / dt;
+                if (speed < m_StuckSpeed)
+                {
+                    m_StuckTestTimer += dt;
+                    if (m_StuckTestTimer > m_StuckTimeThreshold)
+                    {
+                        m_CurrentPatience -= dt * m_LosePatienceOnStuck;
+                    }
+                    else
+                    {
+                        m_StuckTestTimer = 0f;
+                    }
+                }    
             }
 
             // Debug
