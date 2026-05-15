@@ -146,6 +146,7 @@ Assets/Code/Game/Scripts/Mechanics/
   BackToTitleTrigger.cs
   MiddleButtonTips.cs
   PlayerTrigger.cs
+  TitanFight.cs
 Assets/Code/Game/Scripts/Particle/
  ParticleComponent.cs
  ParticleConfig.cs
