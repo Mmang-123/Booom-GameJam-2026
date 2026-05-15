@@ -68028,7 +68028,7 @@ PrefabInstance:
     - target: {fileID: 4487845170401607191, guid: e5e4c6f161b4ec34fb406ff579ef9e1c, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -1398118909, guid: 11349ccdcd429c341a69c6c32e0d4788, type: 3}
+      objectReference: {fileID: -19884597, guid: 11349ccdcd429c341a69c6c32e0d4788, type: 3}
     - target: {fileID: 6282112644857734136, guid: e5e4c6f161b4ec34fb406ff579ef9e1c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.09
@@ -83342,7 +83342,7 @@ PrefabInstance:
     - target: {fileID: 4487845170401607191, guid: e5e4c6f161b4ec34fb406ff579ef9e1c, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -1398118909, guid: 11349ccdcd429c341a69c6c32e0d4788, type: 3}
+      objectReference: {fileID: -19884597, guid: 11349ccdcd429c341a69c6c32e0d4788, type: 3}
     - target: {fileID: 6282112644857734136, guid: e5e4c6f161b4ec34fb406ff579ef9e1c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.09
@@ -90967,7 +90967,7 @@ PrefabInstance:
     - target: {fileID: 4487845170401607191, guid: e5e4c6f161b4ec34fb406ff579ef9e1c, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -19884597, guid: 11349ccdcd429c341a69c6c32e0d4788, type: 3}
+      objectReference: {fileID: 586854207, guid: 11349ccdcd429c341a69c6c32e0d4788, type: 3}
     - target: {fileID: 6282112644857734136, guid: e5e4c6f161b4ec34fb406ff579ef9e1c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.06
@@ -116265,7 +116265,7 @@ PrefabInstance:
     - target: {fileID: 4487845170401607191, guid: e5e4c6f161b4ec34fb406ff579ef9e1c, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -685326951, guid: 11349ccdcd429c341a69c6c32e0d4788, type: 3}
+      objectReference: {fileID: 586854207, guid: 11349ccdcd429c341a69c6c32e0d4788, type: 3}
     - target: {fileID: 6282112644857734136, guid: e5e4c6f161b4ec34fb406ff579ef9e1c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.37

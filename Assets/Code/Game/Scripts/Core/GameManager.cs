@@ -240,7 +240,6 @@ namespace Game
         private EScreenFadeState m_ScreenFadeState;
         private ESettlementState m_SettlementState;
         [SerializeField, Range(0, 1)] private float m_CurrentScreenFadeT;
-        public EScreenFadeState ScreenFadeState { get => m_ScreenFadeState; set => m_ScreenFadeState = value; }
         public float ScreenFadeT => m_CurrentScreenFadeT;
 
         private float m_SettleWaitTimer;
@@ -270,8 +269,9 @@ namespace Game
             {
                 case ESettlementState.Wait:
                     m_SettleWaitTimer += dt;
-                    if (m_SettleWaitTimer >= 5f)
+                    if (m_SettleWaitTimer >= 3f)
                     {
+                        m_CurrentScreenFadeT = 0f;
                         m_SettlementState = ESettlementState.WaitFadeIn;
                         m_ScreenFadeState = EScreenFadeState.FadeIn;
                     }
