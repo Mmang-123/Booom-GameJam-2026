@@ -31,7 +31,7 @@ namespace Sloane
             if (m_LockSeed && !m_WasSeedLocked)
                 m_LockedSeed = GetPositionSeed();
             m_WasSeedLocked = m_LockSeed;
-            Apply();
+            // Apply();
         }
 
         private void Update()

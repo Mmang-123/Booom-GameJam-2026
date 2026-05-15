@@ -154,7 +154,7 @@ PrefabInstance:
     - target: {fileID: 2720549795667564537, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 122005794, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
+      objectReference: {fileID: 324662967, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
     - target: {fileID: 4631615858282565070, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -539,7 +539,7 @@ PrefabInstance:
     - target: {fileID: 1431261522353342340, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 324662967, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
+      objectReference: {fileID: 122005794, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
     - target: {fileID: 1747876122492313756, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
       propertyPath: m_PassageName
       value: PinkToBlue
@@ -559,7 +559,7 @@ PrefabInstance:
     - target: {fileID: 2720549795667564537, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 212903998, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
+      objectReference: {fileID: 860231001, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
     - target: {fileID: 4631615858282565070, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -982,7 +982,7 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &1846848158
+--- !u!84 &1964651974
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1142,7 +1142,7 @@ PrefabInstance:
     - target: {fileID: 1431261522353342340, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -386713202, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
+      objectReference: {fileID: -779715855, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
     - target: {fileID: 1747876122492313756, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
       propertyPath: m_PassageName
       value: '[1]-[2]'
