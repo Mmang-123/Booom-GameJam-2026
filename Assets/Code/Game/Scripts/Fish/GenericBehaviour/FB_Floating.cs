@@ -10,6 +10,7 @@ namespace Game
         [SerializeField] private float m_FallTime = 0.8f;
         [SerializeField] private float m_RiseTime = 0.2f;
         [SerializeField] private float m_FallDistance = 1.5f;
+        [SerializeField] private float m_OffsetTime = 0f;
 
         [SerializeField] private bool m_PlayAnim = true;
         [SerializeField] private string m_AnimName = "IdleJump";
@@ -24,6 +25,7 @@ namespace Game
         private void Start()
         {
             m_SwimBehaviour = Fish.GetBehaviour<FB_Swim>();
+            m_Timer += m_OffsetTime;
         }
 
         private void Update()
