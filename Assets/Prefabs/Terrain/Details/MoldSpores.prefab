@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5051335598530866487}
   - component: {fileID: 605680697583978130}
   m_Layer: 0
-  m_Name: MoidSpores
+  m_Name: MoldSpores
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
