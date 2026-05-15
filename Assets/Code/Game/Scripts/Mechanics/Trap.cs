@@ -18,6 +18,7 @@ namespace Game
         [SerializeField] private List<ParticleSystem> m_MoveParticles = new();
         [SerializeField] private List<InterfaceObject<IMLight>> m_Lights = new();
         [SerializeField] private float m_TargetLightIntensity = 0.8f;
+        [SerializeField] private LabScreen m_Screen;
 
         // Runtime
         private bool m_Active;
@@ -130,7 +131,7 @@ namespace Game
             var fish = player.Fish;
             if (fish != null && fish.IsLiving)
             {
-                GameManager.Instance.Settle();
+                GameManager.Instance.Settle(m_Screen);
             }
         }
     }

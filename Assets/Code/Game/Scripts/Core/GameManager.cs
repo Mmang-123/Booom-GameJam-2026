@@ -240,13 +240,14 @@ namespace Game
         #region 转换过场和结算
 
         public enum EScreenFadeState { None, FadeIn, FadeOut }
-        public enum ESettlementState { None, Wait, WaitFadeIn, ShowPoints, HidePoints }
+        public enum ESettlementState { None, Wait, WaitFadeIn, ShowPoints, HidePoints, End }
         private EScreenFadeState m_ScreenFadeState;
         private ESettlementState m_SettlementState;
         [SerializeField, Range(0, 1)] private float m_CurrentScreenFadeT;
         public float ScreenFadeT => m_CurrentScreenFadeT;
 
         private float m_SettleWaitTimer;
+        private LabScreen m_LabScreen;
 
         private void ScreenFadeUpdate(float dt)
         {
@@ -267,8 +268,9 @@ namespace Game
             //Shader.SetGlobalFloat("_SceneTransition", m_CurrentScreenFadeT);
         }
 
-        public void Settle()
+        public void Settle(LabScreen labScreen)
         {
+            m_LabScreen = labScreen;
             m_SettlementState = ESettlementState.Wait;
             m_SettleWaitTimer = 0f;
             SaveProgress(Mathf.Max(GetCurrentProgress(), InfectionSourceCount));
@@ -282,9 +284,18 @@ namespace Game
                     m_SettleWaitTimer += dt;
                     if (m_SettleWaitTimer >= 3f)
                     {
-                        m_CurrentScreenFadeT = 0f;
-                        m_SettlementState = ESettlementState.WaitFadeIn;
-                        m_ScreenFadeState = EScreenFadeState.FadeIn;
+                        if (InfectionSourceCount >= 5)
+                        {
+                            m_SettleWaitTimer = 0f;
+                            m_SettlementState = ESettlementState.End;
+                            m_LabScreen.SwitchToText();
+                        }
+                        else
+                        {
+                            m_CurrentScreenFadeT = 0f;
+                            m_SettlementState = ESettlementState.WaitFadeIn;
+                            m_ScreenFadeState = EScreenFadeState.FadeIn;   
+                        }
                     }
                     break;
 
@@ -313,6 +324,18 @@ namespace Game
                     {
                         m_SettlementState = ESettlementState.None;
                         Restart(LevelConfig.GetTitleLevelName(), false);
+                    }
+                    break;
+
+                case ESettlementState.End:
+                    m_SettleWaitTimer += dt;
+                    if (m_SettleWaitTimer >= 4.5f)
+                    {
+#if UNITY_EDITOR
+                        UnityEditor.EditorApplication.isPlaying = false;
+#else
+                        Application.Quit();
+#endif
                     }
                     break;
             }
