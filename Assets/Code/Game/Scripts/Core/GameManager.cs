@@ -43,6 +43,7 @@ namespace Game
 
         public bool Restarting => m_Restarting;
         public bool CanRestart => !Restarting && m_SettlementState == ESettlementState.None && !InOrLoadingTitle;
+        public bool CanRespawn => !Restarting && m_SettlementState == ESettlementState.None && !(m_Loading && m_LoadingSceneName == LevelConfig.GetTitleLevelName());
         public bool CanLoad => !m_Loading && !m_Restarting;
         public bool Loading => m_Loading || m_Restarting;
         public bool CantSave { get; private set; }
@@ -56,6 +57,8 @@ namespace Game
                 || (m_Loading && m_LoadingSceneName == titleSceneName);
             }
         }
+
+        public bool InTitle => m_LevelRoot != null && m_LevelRoot.LevelName == LevelConfig.GetTitleLevelName();
 
         public int InfectionSourceCount { get; set; } = 1;
 
@@ -208,6 +211,7 @@ namespace Game
                     swimBehaviour.AddAdditionalVelocity(initVelocity);
                     swimBehaviour.OverrideTargetDirection(Vector2.up, 1f);
                     player.Fish.SetRotation(Quaternion.identity);
+                    player.Fish.GetBehaviour<FB_GenericAnimator>().TriggerCustomAnimation("IdleJump");
                 }
 
                 if (m_ScreenFadeState == EScreenFadeState.FadeIn)
@@ -253,6 +257,11 @@ namespace Game
             else if (m_ScreenFadeState == EScreenFadeState.FadeOut && m_CurrentScreenFadeT < 1.0f)
             {
                 m_CurrentScreenFadeT = Mathf.Clamp(m_CurrentScreenFadeT + dt * 0.5f, 0.5f, 1f);
+            }
+            else
+            {
+                m_ScreenFadeState = EScreenFadeState.None;
+                m_CurrentScreenFadeT = 0f;
             }
             //Shader.SetGlobalFloat("_SceneTransition", m_CurrentScreenFadeT);
         }

@@ -243,7 +243,7 @@ namespace Game
                     Fish.AddSaturation(fish.EatenRegainSaturation);
                 }
 
-                if (fish.IsPlayer)
+                if (fish.IsPlayer && !GameManager.Instance.InTitle)
                 {
                     infected = true;
                     Fish.AddInfectedLevel();

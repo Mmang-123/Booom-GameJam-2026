@@ -141,12 +141,13 @@ namespace Game
         private void Update()
         {
             if ((Fish == null)
-            && GameManager.Instance.CanRestart)
+            && GameManager.Instance.CanRespawn)
             {
                 m_RestartTimer += Time.deltaTime;
                 if (m_RestartTimer > 1.0f)
                 {
-                    GameManager.Instance.Restart(LevelConfig.GetInitLevelName());
+                    var levelName = GameManager.Instance.InTitle ? LevelConfig.GetTitleLevelName() : LevelConfig.GetInitLevelName();
+                    GameManager.Instance.Restart(levelName);
                     m_RestartTimer = 0f;
                 }
             }

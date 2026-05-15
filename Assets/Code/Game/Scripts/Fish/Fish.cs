@@ -129,7 +129,8 @@ namespace Game
 
         private void Start()
         {
-            GameManager.Instance.TryLoadSavedData(this);
+            if (!DontSave)
+                GameManager.Instance.TryLoadSavedData(this);
 
             if (gameObject.activeSelf)
                 Init();
