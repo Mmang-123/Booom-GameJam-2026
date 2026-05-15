@@ -30,10 +30,16 @@ namespace Game
         [SerializeField] private float m_CurrentPatience;
         private float m_SearchNewTargetTimer;
 
+        private FA_TraceBack TraceBackAbility { get; set; }
+
         private RaycastHit2D Raycast(Vector2 start, Vector2 end)
             => FishUtils.RaycastObstacle(start, end);
 
-        
+        protected override void OnInit()
+        {
+            base.OnInit();
+            TraceBackAbility = FishAI.GetAbility<FA_TraceBack>();
+        }
 
         protected override bool FindTarget(out Fish outTarget)
             => FindTarget(out outTarget, false);
@@ -126,6 +132,11 @@ namespace Game
             {
                 avoidanceBehaviour.OnCollision += OnCollision;
             }
+
+            if (TraceBackAbility != null && TargetFish.IsPlayer)
+            {
+                TraceBackAbility.UpdateTracePath(Fish.Position, true);
+            }
         }
 
         public override void OnEnd(EEndAbilityType endType)
@@ -191,6 +202,12 @@ namespace Game
                 return;
             }
 
+            // 更新回溯路径
+            if (TraceBackAbility != null && TargetFish.IsPlayer)
+            {
+                TraceBackAbility.UpdateTracePath(Fish.Position, false);   
+            }
+
             if (m_CurrentPatience <= m_ChangeTargetPatienceTheshold)
             {
                 m_SearchNewTargetTimer += dt;
@@ -217,7 +234,7 @@ namespace Game
             if (Vector2.Distance(Fish.Position, TargetFish.Position) <= m_TracingRayLength
             && !Raycast(Fish.Position, TargetFish.Position))
             {
-                m_TurningPoints.Clear();
+                RemoveAllTurningPoints();
                 m_PreTracingPoint = TargetFish.Position;
                 m_HasPreTracingPoint = true;
 
@@ -240,7 +257,7 @@ namespace Game
                         var nextPoint = m_TurningPoints[1];
                         if (!Raycast(Fish.Position, nextPoint))
                         {
-                            m_TurningPoints.RemoveAt(0);
+                            RemoveFirstTurningPoint();
                         }
                     }
 
@@ -248,7 +265,7 @@ namespace Game
                     if (Vector2.Distance(Fish.Position, SwimBehaviour.TargetPoint) <= 1f)
                     {
                         // Debug.Log("到达拐点 " + m_TurningPoints[0]);
-                        m_TurningPoints.RemoveAt(0);
+                        RemoveFirstTurningPoint();
                     }
                 }
                 else
@@ -275,6 +292,16 @@ namespace Game
                 Debug.DrawLine(point, m_PreTracingPoint, Color.blue);
             }
             */
+        }
+
+        private void RemoveFirstTurningPoint()
+        {
+            m_TurningPoints.RemoveAt(0);
+        }
+
+        private void RemoveAllTurningPoints()
+        {
+            m_TurningPoints.Clear();
         }
 
         private void UpdateTurningPoint()
