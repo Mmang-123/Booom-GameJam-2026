@@ -14875,7 +14875,7 @@ PrefabInstance:
     - target: {fileID: 305842284793955504, guid: 04bbfbd0b3651c64aba414db79b3e5ed, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1039070565, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
+      objectReference: {fileID: -118321635, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
     - target: {fileID: 1780274042247588126, guid: 04bbfbd0b3651c64aba414db79b3e5ed, type: 3}
       propertyPath: m_Name
       value: Corals (2)
@@ -15255,7 +15255,7 @@ PrefabInstance:
     - target: {fileID: 305842284793955504, guid: 04bbfbd0b3651c64aba414db79b3e5ed, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 500992782, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
+      objectReference: {fileID: -288247347, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
     - target: {fileID: 1780274042247588126, guid: 04bbfbd0b3651c64aba414db79b3e5ed, type: 3}
       propertyPath: m_Name
       value: Corals (3)
@@ -15324,7 +15324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 461179731151060010, guid: 9f1d33be27aa53844b8298189e634e8b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 44.03978
+      value: 26.539778
       objectReference: {fileID: 0}
     - target: {fileID: 461179731151060010, guid: 9f1d33be27aa53844b8298189e634e8b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -15510,7 +15510,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 461179731151060010, guid: 9f1d33be27aa53844b8298189e634e8b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 46.17155
+      value: 28.671549
       objectReference: {fileID: 0}
     - target: {fileID: 461179731151060010, guid: 9f1d33be27aa53844b8298189e634e8b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -16994,7 +16994,7 @@ PrefabInstance:
     - target: {fileID: 305842284793955504, guid: 04bbfbd0b3651c64aba414db79b3e5ed, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -1590337083, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
+      objectReference: {fileID: -1169188549, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
     - target: {fileID: 1780274042247588126, guid: 04bbfbd0b3651c64aba414db79b3e5ed, type: 3}
       propertyPath: m_Name
       value: Corals (1)
@@ -17557,7 +17557,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 461179731151060010, guid: 9f1d33be27aa53844b8298189e634e8b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 44.4
+      value: 26.9
       objectReference: {fileID: 0}
     - target: {fileID: 461179731151060010, guid: 9f1d33be27aa53844b8298189e634e8b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17966,7 +17966,7 @@ PrefabInstance:
     - target: {fileID: 305842284793955504, guid: 04bbfbd0b3651c64aba414db79b3e5ed, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -1017236103, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
+      objectReference: {fileID: -29763772, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
     - target: {fileID: 1780274042247588126, guid: 04bbfbd0b3651c64aba414db79b3e5ed, type: 3}
       propertyPath: m_Name
       value: Corals (4)
