@@ -258,11 +258,12 @@ namespace Game
             {
                 m_CurrentScreenFadeT = Mathf.Clamp(m_CurrentScreenFadeT + dt * 0.5f, 0.5f, 1f);
             }
-            else
+            else if (m_ScreenFadeState == EScreenFadeState.FadeOut && m_CurrentScreenFadeT >= 1f)
             {
                 m_ScreenFadeState = EScreenFadeState.None;
                 m_CurrentScreenFadeT = 0f;
             }
+            
             //Shader.SetGlobalFloat("_SceneTransition", m_CurrentScreenFadeT);
         }
 
