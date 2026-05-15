@@ -32,6 +32,7 @@ namespace Game
     public class Fish : MonoBehaviour, ILevelSavable
     {
         [SerializeField] private GameplayTag m_FishTypeTag;
+        [SerializeField] private bool m_IsInfectionSource;
 
         [Header("精灵图设置")]
         [SerializeField] private EDirection m_EDirection;
@@ -89,6 +90,7 @@ namespace Game
         public bool IsPlayer => FishController is PlayerController;
 
         public GameplayTag FishTypeTag => m_FishTypeTag;
+        public bool IsInfectionSource => m_IsInfectionSource;
 
         private List<FishBehaviour> m_Behaviours;
         private Dictionary<System.Type, FishBehaviour> m_BehaviourMap = new();

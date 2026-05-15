@@ -70,6 +70,12 @@ namespace Game
                 eatBehaviour.UseOverrideEatDistance = true;
                 eatBehaviour.OverrideEatDistance = m_FishConfig.EatDistance;
             }
+
+            if (fish.IsInfectionSource)
+            {
+                GameManager.Instance.InfectionSourceCount++;
+                Debug.Log("当前收集感染源数量: " + GameManager.Instance.InfectionSourceCount);
+            }
         }
 
         public void LoseControl(Fish fish)

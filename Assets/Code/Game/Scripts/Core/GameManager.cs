@@ -179,6 +179,8 @@ namespace Game
 
             LightingTextureManager.Instance.Clear();
 
+            InfectionSourceCount = 0;
+
             if (m_RestartLoading)
             {
                 RestartLoadComplete();

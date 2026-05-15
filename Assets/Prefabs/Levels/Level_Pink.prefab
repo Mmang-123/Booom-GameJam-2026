@@ -208225,6 +208225,10 @@ PrefabInstance:
       propertyPath: m_GUID
       value: d7896804-51da-46be-8603-33d9cb6574d9
       objectReference: {fileID: 0}
+    - target: {fileID: 2797730967065995784, guid: a7f4295396ae9534ebd7dcc9f610ac23, type: 3}
+      propertyPath: m_IsInfectionSource
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4800681294185171314, guid: a7f4295396ae9534ebd7dcc9f610ac23, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
