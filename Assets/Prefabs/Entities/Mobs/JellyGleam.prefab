@@ -219,6 +219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Fish
   m_FishTypeTag:
     m_Guid: dd157287-33e2-4403-ba4c-cbe22f78f346
+  m_IsInfectionSource: 0
   m_EDirection: 0
   m_AutoFlip: 0
   m_FlipRoot: {fileID: 5428743268945966197}
@@ -262,12 +263,16 @@ MonoBehaviour:
   m_Acceleration: 6
   m_FastAcceleration: 8
   m_StopDistance: 0.5
-  m_CanAvoidance: 0
+  m_CanAvoidance: 1
   m_RayDistance: 0.5
   m_RayAngle: 30
   m_ObstacleLayer:
     serializedVersion: 2
     m_Bits: 0
+  m_CanPushTags:
+    m_Tags: []
+  m_PushRadiusRange: {x: 0.5, y: 1}
+  m_PushForce: 1
 --- !u!114 &677004143986177848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,6 +420,7 @@ MonoBehaviour:
   m_FallTime: 1.4
   m_RiseTime: 0.6
   m_FallDistance: 0.8
+  m_OffsetTime: 0
   m_PlayAnim: 1
   m_AnimName: IdleJump
 --- !u!1 &8168804304066762633

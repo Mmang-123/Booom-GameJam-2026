@@ -471,7 +471,7 @@ MonoBehaviour:
   m_Acceleration: 8
   m_FastAcceleration: 16
   m_StopDistance: 0.8
-  m_CanAvoidance: 0
+  m_CanAvoidance: 1
   m_RayDistance: 2
   m_RayAngle: 30
   m_ObstacleLayer:
