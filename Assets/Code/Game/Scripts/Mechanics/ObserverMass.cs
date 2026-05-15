@@ -19,7 +19,10 @@ namespace Game
 
         private void FixedUpdate()
         {
-            SetActive(CheckLightStrength());
+            if (LightingTextureManager.Instance.InValidChunk(transform.position))
+            {
+                SetActive(CheckLightStrength());
+            }
         }
 
         private void SetActive(bool active)
