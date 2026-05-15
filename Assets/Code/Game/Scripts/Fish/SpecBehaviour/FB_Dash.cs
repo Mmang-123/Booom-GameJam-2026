@@ -23,6 +23,7 @@ namespace Game
         public float CD { get; private set; }
         public float Timer { get; private set; }
         public int DashState { get; private set; }
+        public bool IsAfterimageSpawning => m_AfterimageSpawnTimer > 0f;
 
         private Vector2 m_TargetDirection;
 
