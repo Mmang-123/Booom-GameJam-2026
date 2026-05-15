@@ -181,6 +181,11 @@ namespace Game
         {
             m_TurningPoints.Clear();
 
+            if (TargetFish.IsPlayer && TraceBackAbility != null)
+            {
+                TraceBackAbility.UpdateTracePath(Fish.Position, true);
+            }
+
             TargetFish = fish;
 
             m_HasPreTracingPoint = true;
