@@ -64,7 +64,9 @@ Assets/Code/Game/Scripts/Core/
  LevelConfig.cs
  LevelRoot.cs
  LevelSaveData.cs
- Settlement/UI_Settlement.cs
+ Settlement/
+  ProgressDisplay.cs
+  UI_Settlement.cs
  Test_GameManager.cs
 Assets/Code/Game/Scripts/Fish/
  Fish.cs

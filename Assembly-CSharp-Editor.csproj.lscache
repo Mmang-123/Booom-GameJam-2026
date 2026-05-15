@@ -51,6 +51,7 @@ TemporaryDependencyNodeTargetIdentifier=netstandard2.1
 
 [sourceFiles]
 Assets/Code/Game/Editor/Core/
+ GameManagerEditor.cs
  LevelRootEditor.cs
  TransformMirrorTools.cs
 Assets/Code/Game/Editor/Mechanics/
