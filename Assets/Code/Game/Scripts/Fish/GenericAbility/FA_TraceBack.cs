@@ -42,7 +42,14 @@ namespace Game
                 return;
             }
 
-            
+            if (TraceBackPoints.Count > 1)
+            {
+                if (!FishUtils.RaycastObstacle(Fish.Position, TraceBackPoints[^2]))
+                {
+                    TraceBackPoints.RemoveAt(TraceBackPoints.Count - 1);
+                }
+            }
+
             Vector2 targetPoint = TraceBackPoints[^1];
             m_SwimBehaviour.TargetPoint = targetPoint;
 
