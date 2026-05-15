@@ -341,5 +341,25 @@ namespace Game
         }
 
         #endregion
+
+
+        #region 进度保存
+
+        public void SaveProgress(int progress)
+        {
+            PlayerPrefs.SetInt("Progress", progress);
+        }
+
+        public int GetCurrentProgress()
+        {
+            return PlayerPrefs.GetInt("Progress");
+        }
+
+        public void ResetProgress()
+        {
+            PlayerPrefs.SetInt("Progress", 0);
+        }
+
+        #endregion
     }
 }

@@ -88,7 +88,7 @@ namespace Game
             if (RotateToTargetPoint || Tracing)
             {
                 Vector2 targetDirection = (TargetPoint - (Vector2)transform.position).normalized;
-                if (m_CanAvoidance && TryAvoidance(targetDirection, out var avoidanceVector))
+                if (CanAvoidance && TryAvoidance(targetDirection, out var avoidanceVector))
                 {
                     //var q = Quaternion.Lerp(Quaternion.LookRotation(targetDirection), Quaternion.LookRotation(avoidanceVector), 0.5f);
                     //Vector2 vec = (q * Vector3.forward).GetXY().normalized;

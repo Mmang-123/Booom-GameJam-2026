@@ -55,10 +55,12 @@ namespace Game
             {
                 m_Fish.Init();
                 m_Fish.SetController(this);
+                /*
                 if (m_Fish.TryGetBehaviour<FB_Swim>(out var behaviour))
                 {
                     behaviour.CanAvoidance = true;
-                }   
+                }
+                */  
             }
         }
 
