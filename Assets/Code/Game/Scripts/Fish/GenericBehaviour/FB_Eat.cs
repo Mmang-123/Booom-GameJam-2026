@@ -210,8 +210,10 @@ namespace Game
             
             foreach (var fish in fishInRange)
             {
+                bool isAfterimageSpawning = fish.TryGetBehaviour<FB_Dash>(out var dashBehaviour) && dashBehaviour.IsAfterimageSpawning;
                 if (!m_CanEatTags.Contains(fish.FishTypeTag)
-                || !fish.IsLiving || fish.Eaten)
+                || !fish.IsLiving || fish.Eaten
+                || isAfterimageSpawning)
                 {
                     continue;
                 }
