@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mmang.Game;
 using Mmang.Util;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -43,6 +44,11 @@ namespace Game
         [SerializeField] private float m_RayAngle = 30f;      // 左右射线的角度
         //[SerializeField] private float avoidanceForce = 3f; // 避障时的排斥力倍数
         [SerializeField] private LayerMask m_ObstacleLayer;   // 障碍物图层
+
+        [Header("推挤")]
+        [SerializeField] private GameplayTagContainer m_CanPushTags = new();
+        [SerializeField] private Vector2 m_PushRadiusRange = new(0.5f, 1f);
+        [SerializeField] private float m_PushForce = 1f;
 
 
         // Runtime
@@ -125,6 +131,7 @@ namespace Game
 
             //
             HandleAdditionalVelocity(Time.fixedDeltaTime);
+            HandlePushUpdate(Time.fixedDeltaTime);
         }
 
         private void UpdateState()
@@ -377,6 +384,45 @@ namespace Game
             }
             m_AddtionalVelocities.Clear();
         }
+
+        #endregion
+
+
+        #region Push
+
+        private float m_PushCD;
+
+        public void HandlePushUpdate(float dt)
+        {
+            if (m_CanPushTags.Count == 0)
+                return;
+
+            List<Fish> fishList = ListPool<Fish>.Get();
+            FishUtils.GetFishInCircle(Fish.Position, m_PushRadiusRange.y, fishList, ignoreFish: Fish, clearResultList: true);
+
+            foreach (var fish in fishList)
+            {
+                if (!m_CanPushTags.Contains(fish.FishTypeTag))
+                {
+                    continue;
+                }
+
+                Vector2 direction = (fish.Position - Fish.Position).normalized;
+                if (direction == Vector2.zero)
+                {
+                    direction = Random.onUnitCircle;
+                }
+                float distance = Vector2.Distance(fish.Position, Fish.Position);
+                float force = Mathf.Lerp(0f, m_PushForce, 1f - Mathf.Clamp01(Mathf.Max(0f, distance - m_PushRadiusRange.x) / (m_PushRadiusRange.y - m_PushRadiusRange.x)));
+                if (force > 0f)
+                {
+                    fish.Move(force * dt * direction);
+                }
+            }
+
+            ListPool<Fish>.Release(fishList);
+        }
+
 
         #endregion
 

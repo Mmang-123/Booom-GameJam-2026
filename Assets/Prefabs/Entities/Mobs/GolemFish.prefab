@@ -428,6 +428,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Fish
   m_FishTypeTag:
     m_Guid: 51809826-1abd-450a-bffd-b8617fb2da14
+  m_IsInfectionSource: 0
   m_EDirection: 2
   m_AutoFlip: 1
   m_FlipRoot: {fileID: 392481932822435387}
@@ -476,6 +477,11 @@ MonoBehaviour:
   m_ObstacleLayer:
     serializedVersion: 2
     m_Bits: 0
+  m_CanPushTags:
+    m_Tags:
+    - m_Guid: 51809826-1abd-450a-bffd-b8617fb2da14
+  m_PushRadiusRange: {x: 1.5, y: 2.5}
+  m_PushForce: 2.5
 --- !u!114 &2039827837968094968
 MonoBehaviour:
   m_ObjectHideFlags: 0
