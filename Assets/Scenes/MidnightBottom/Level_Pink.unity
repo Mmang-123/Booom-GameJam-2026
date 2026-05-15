@@ -200,43 +200,6 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
---- !u!84 &732157844
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 480
-  m_Height: 270
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1001 &995547480
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -455,6 +418,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885f50e996422f84084ceac55c99a6e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.LevelRoot
+--- !u!84 &2105273390
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 480
+  m_Height: 270
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1001 &1797000898354655159
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -506,6 +506,34 @@ PrefabInstance:
     - target: {fileID: 380267550734101134, guid: a88e89740685125488e8955584f2d274, type: 3}
       propertyPath: m_Name
       value: Level_0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2840105195603721086, guid: a88e89740685125488e8955584f2d274, type: 3}
+      propertyPath: m_SortingLayer
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3134258338499182428, guid: a88e89740685125488e8955584f2d274, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4204029837708652015, guid: a88e89740685125488e8955584f2d274, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1169188549, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
+    - target: {fileID: 5570355146071869979, guid: a88e89740685125488e8955584f2d274, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1485612815, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
+    - target: {fileID: 6044850638909913990, guid: a88e89740685125488e8955584f2d274, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6044850638909913990, guid: a88e89740685125488e8955584f2d274, type: 3}
+      propertyPath: m_SortingLayer
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9117008982141041996, guid: a88e89740685125488e8955584f2d274, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
