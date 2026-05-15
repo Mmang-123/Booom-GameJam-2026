@@ -646,7 +646,7 @@ MonoBehaviour:
   m_InitSaturation: 180
   m_MaxSaturation: 180
   m_EatenRegainSaturation: 60
-  m_EatenParticle: {fileID: 0}
+  m_EatenParticle: {fileID: 953416650970146418, guid: 172564a4c83de894d8f2711225b54322, type: 3}
   m_DefaultEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
   m_InfectedEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
   m_GUID: 53aaaede-e107-4d2a-8a84-e7e3f92b4ab7
