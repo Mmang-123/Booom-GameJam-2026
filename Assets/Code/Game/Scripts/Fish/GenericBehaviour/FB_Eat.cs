@@ -163,10 +163,10 @@ namespace Game
             swimBehaviour.AdditionalRotateSpeed += m_EatDashAdditionalRotateSpeed;
 
             // 镜头缩放
-            if (Fish.IsPlayer
-            || (Fish.FishController is FishAIComponent {} fishAI
+            if (!Fish.IsPlayer
+            && Fish.FishController is FishAIComponent {} fishAI
             && fishAI.TryGetAbility<FA_Trace>(out var trace)
-            && trace.TargetFish != null && trace.TargetFish.IsPlayer))
+            && trace.TargetFish != null && trace.TargetFish.IsPlayer)
             {
                 CameraController.Instance.Scale(0.95f, 0.15f, 0.6f);
             }
@@ -289,6 +289,13 @@ namespace Game
             if (toEat.Count == 0)
             {
                 OnCatchFailed?.Invoke();
+            }
+            else
+            {
+                if (Fish.IsPlayer)
+                {
+                    CameraController.Instance.Scale(0.95f, 0.15f, 0.6f);
+                }
             }
 
             ListPool<Fish>.Release(toEat);
