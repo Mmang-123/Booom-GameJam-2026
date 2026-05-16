@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mmang.Game;
 using Mmang.Util;
 using UnityEngine;
 
@@ -61,6 +62,7 @@ namespace Game
         public bool InTitle => m_LevelRoot != null && m_LevelRoot.LevelName == LevelConfig.GetTitleLevelName();
 
         public int InfectionSourceCount { get; set; } = 1;
+        public HashSet<string> InfectionSourceTags { get; } = new();
 
         protected override void OnAwake()
         {
