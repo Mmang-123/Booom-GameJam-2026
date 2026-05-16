@@ -843,6 +843,43 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aae1b510ade38e94aa1c5964735cb189, type: 3}
+--- !u!84 &571848947
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 480
+  m_Height: 270
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1001 &859826688
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1073,43 +1110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885f50e996422f84084ceac55c99a6e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.LevelRoot
---- !u!84 &1519664157
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 480
-  m_Height: 270
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!1001 &1588586219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1279,26 +1279,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2352634579592674587, guid: cb7f27fbc1a06474a83e47a21ba7c4af, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -1485612815, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
     - target: {fileID: 3443654242985119617, guid: cb7f27fbc1a06474a83e47a21ba7c4af, type: 3}
       propertyPath: m_Name
       value: Level_Red
       objectReference: {fileID: 0}
-    - target: {fileID: 5139022255452150535, guid: cb7f27fbc1a06474a83e47a21ba7c4af, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -1017236103, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
-    - target: {fileID: 6048827104782960941, guid: cb7f27fbc1a06474a83e47a21ba7c4af, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 212903998, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
-    - target: {fileID: 8067635697516984179, guid: cb7f27fbc1a06474a83e47a21ba7c4af, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -779715855, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
     - target: {fileID: 9116726782082260862, guid: cb7f27fbc1a06474a83e47a21ba7c4af, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
