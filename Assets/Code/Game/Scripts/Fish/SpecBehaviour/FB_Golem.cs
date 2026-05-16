@@ -24,7 +24,7 @@ namespace Game
         private float m_EyeActiveTimer = 0f;
 
         private float ActiveTime => 0.05f;
-        private float MaxActiveTime => 2.0f;
+        private float MaxActiveTime => 2.8f;
 
         public bool Active => m_Active;
 
