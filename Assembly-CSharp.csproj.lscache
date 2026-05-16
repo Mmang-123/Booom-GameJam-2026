@@ -133,6 +133,7 @@ Assets/Code/Game/Scripts/Mechanics/
   IPowerSource.cs
  JellyNest.cs
  LabScreen.cs
+ LabScreenPoint.cs
  LightDetector.cs
  LoopZone.cs
  LostArea.cs
