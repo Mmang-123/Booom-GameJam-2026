@@ -525,7 +525,7 @@ namespace Game
             }
         }
 
-        private Fish GetNearestInfectTarget(float radius)
+        public Fish GetNearestInfectTarget(float radius)
         {
             List<Fish> fishList = ListPool<Fish>.Get();
             FishUtils.GetFishInCircle(transform.position, radius, fishList, ignoreFish: this);

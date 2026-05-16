@@ -34,16 +34,8 @@ namespace Game
             transform.localScale = new(radius, radius, 1);
         }
 
-        public void FadeIn(Fish fish, ControlFishConfig config)
+        public void FadeIn()
         {
-            if (fish == null || config == null)
-                return;
-            if (fish.InfectedLevel < EInfectedLevel.High
-            || fish.FishTypeTag.Equals(FishUtils.JellyGleamTag))
-                return;
-
-            SetRadius(config.InfectRadius);
-
             m_Active = true;
         }
 

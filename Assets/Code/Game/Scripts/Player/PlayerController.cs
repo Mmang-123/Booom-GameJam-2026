@@ -286,6 +286,7 @@ namespace Game
                     m_MBPressed = false;
                     m_MBPressedTimer = 0f;
                     UpdateSuicide();
+                    m_CircleRange.FadeOut();
                 }
 
                 return;
@@ -341,6 +342,7 @@ namespace Game
         private void InitSuicide()
         {
             m_CircularProgressBar.transform.position = m_CurrentFish.Position;
+            m_CircleRange.transform.position = m_CurrentFish.Position;
             m_CircularProgressBar.SetT(0f);
             m_CircularProgressBar.SetFish(m_CurrentFish, m_FishConfig);
             m_CircularProgressBar.AnimateIn();
@@ -351,9 +353,31 @@ namespace Game
         private void UpdateSuicide()
         {
             m_CircularProgressBar.transform.position = m_CurrentFish.Position;
-            m_CircleRange.transform.position = m_CurrentFish.Position;
+            
             float t = Mathf.Clamp01(m_MBPressedTimer / m_SuicideTime);
             m_CircularProgressBar.SetT(t);
+
+            if (t > 0f && Fish != null && Fish.InfectedLevel >= EInfectedLevel.High && m_FishConfig.InfectRadius > 0f)
+            {
+                m_CircleRange.SetRadius(2.5f);
+                m_CircleRange.FadeIn();
+
+                var target = Fish.GetNearestInfectTarget(m_FishConfig.InfectRadius);
+                Vector2 targetPosition;
+                if (target != null)
+                {
+                    targetPosition = target.Position;
+                }
+                else
+                {
+                    targetPosition = Fish.Position;
+                }
+                m_CircleRange.transform.position = Vector2.Lerp(m_CircleRange.transform.position, targetPosition, Time.deltaTime * 15f);
+            }
+            else
+            {
+                m_CircleRange.FadeOut();
+            }
         }
 
         private void CommitSuicide()
@@ -361,6 +385,7 @@ namespace Game
             m_MBPressedTimer = 0f;
             m_MBPressed = false;
             m_CircularProgressBar.AnimateOut();
+            m_CircleRange.FadeOut();
             if (Fish == null)
                 return;
 
