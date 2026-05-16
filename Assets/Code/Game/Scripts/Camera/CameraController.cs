@@ -56,6 +56,7 @@ namespace Game
         private Vector2 m_Offset;
         private float m_FDT;
 
+        public PixelartCamera PixelartCamera => m_PixelartCamera;
         public HealthBar HealthBar => m_HealthBar;
         public UI_Settlement SettlementUI => m_SettlementUI;
 
