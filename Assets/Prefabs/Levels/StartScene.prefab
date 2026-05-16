@@ -513,8 +513,8 @@ MonoBehaviour:
   - {fileID: 7341765336067729180}
   - {fileID: 1950007503757209459}
   - {fileID: 4204145825829790770}
-  m_ActiveSprite: {fileID: -320358638, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
-  m_InactiveSprite: {fileID: -737230656, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
+  m_ActiveSprite: {fileID: -827623280, guid: 2b7c1d9980fbbdf44a329f3b2a0a5d45, type: 3}
+  m_InactiveSprite: {fileID: -2096458614, guid: 2b7c1d9980fbbdf44a329f3b2a0a5d45, type: 3}
   m_ThanksDisplay: {fileID: 6125437405741344369}
 --- !u!1 &545482225080029448
 GameObject:
@@ -1197,7 +1197,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -737230656, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
+  m_Sprite: {fileID: -2096458614, guid: 2b7c1d9980fbbdf44a329f3b2a0a5d45, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3287,7 +3287,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -737230656, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
+  m_Sprite: {fileID: -2096458614, guid: 2b7c1d9980fbbdf44a329f3b2a0a5d45, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -3378,7 +3378,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -737230656, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
+  m_Sprite: {fileID: -2096458614, guid: 2b7c1d9980fbbdf44a329f3b2a0a5d45, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -4512,7 +4512,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -737230656, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
+  m_Sprite: {fileID: -2096458614, guid: 2b7c1d9980fbbdf44a329f3b2a0a5d45, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -6632,7 +6632,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -737230656, guid: 763e7be8e707ec24fa9be3d68e3bb48d, type: 3}
+  m_Sprite: {fileID: -2096458614, guid: 2b7c1d9980fbbdf44a329f3b2a0a5d45, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
