@@ -241645,6 +241645,10 @@ PrefabInstance:
       propertyPath: m_IsInfectionSource
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2797730967065995784, guid: a7f4295396ae9534ebd7dcc9f610ac23, type: 3}
+      propertyPath: m_InfectionSourceTag
+      value: Init
+      objectReference: {fileID: 0}
     - target: {fileID: 4800681294185171314, guid: a7f4295396ae9534ebd7dcc9f610ac23, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -303534,6 +303538,10 @@ PrefabInstance:
     - target: {fileID: 2989157321802834902, guid: 9f02a62c07b5a38498529c3c85eef19b, type: 3}
       propertyPath: m_IsInfectionSource
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2989157321802834902, guid: 9f02a62c07b5a38498529c3c85eef19b, type: 3}
+      propertyPath: m_InfectionSourceTag
+      value: Jelly
       objectReference: {fileID: 0}
     - target: {fileID: 5441975687919562164, guid: 9f02a62c07b5a38498529c3c85eef19b, type: 3}
       propertyPath: m_WaitTimeRange.x
