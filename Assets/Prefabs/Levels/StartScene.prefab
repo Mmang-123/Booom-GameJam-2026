@@ -8920,12 +8920,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3146912487733900823, guid: 5eaa232d96b655947a54ed50b31dd3d1, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5724689150013533227}
-    - targetCorrespondingSourceObject: {fileID: 3146912487733900823, guid: 5eaa232d96b655947a54ed50b31dd3d1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4133095658534311662}
-    - targetCorrespondingSourceObject: {fileID: 3146912487733900823, guid: 5eaa232d96b655947a54ed50b31dd3d1, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 3168897648170035583}
     - targetCorrespondingSourceObject: {fileID: 3146912487733900823, guid: 5eaa232d96b655947a54ed50b31dd3d1, type: 3}
       insertIndex: -1
@@ -8933,69 +8927,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3146912487733900823, guid: 5eaa232d96b655947a54ed50b31dd3d1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6850784270299439219}
-    - targetCorrespondingSourceObject: {fileID: 3146912487733900823, guid: 5eaa232d96b655947a54ed50b31dd3d1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7491260951914161819}
   m_SourcePrefab: {fileID: 100100000, guid: 5eaa232d96b655947a54ed50b31dd3d1, type: 3}
 --- !u!1 &3077235175808579786 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3146912487733900823, guid: 5eaa232d96b655947a54ed50b31dd3d1, type: 3}
   m_PrefabInstance: {fileID: 78985799927238365}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5724689150013533227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3077235175808579786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91abe63ad75226842abac0cfd5e9f87b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Fish
-  m_FishTypeTag:
-    m_Guid: 51809826-1abd-450a-bffd-b8617fb2da14
-  m_IsInfectionSource: 0
-  m_InfectionSourceTag: 
-  m_CantBeTraced: 0
-  m_EDirection: 0
-  m_AutoFlip: 1
-  m_FlipRoot: {fileID: 6563352379910520368}
-  m_DieCollider: {fileID: 0}
-  m_DieCollisionTime: 0.1
-  m_DieCollisionMaxSpeed: 1
-  m_DieCollisionParticle: {fileID: 0}
-  m_InfectedLevel: 0
-  m_SporeRenderer1: {fileID: 0}
-  m_SporeRenderer2: {fileID: 0}
-  m_BodyRenderer: {fileID: 0}
-  m_Light: []
-  m_DefaultBodyColor: {r: 0, g: 0, b: 0, a: 0}
-  m_InfectedBodyColor: {r: 0, g: 0, b: 0, a: 0}
-  m_SetLightColor: 0
-  m_DefaultLightColor: {r: 0, g: 0, b: 0, a: 0}
-  m_InfectedLightColor: {r: 0, g: 0, b: 0, a: 0}
-  m_InitSaturation: 100
-  m_MaxSaturation: 100
-  m_EatenRegainSaturation: 100
-  m_EatenParticle: {fileID: 0}
-  m_DefaultEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
-  m_InfectedEatenParticleColor: {r: 0, g: 0, b: 0, a: 0}
-  m_GUID: e33f7ff2-ea15-410d-aee0-18f49fc20621
---- !u!114 &4133095658534311662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3077235175808579786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa5dfc5bab6359a4cab48535637660c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Avoidance
-  m_BounceForce: 1.5
 --- !u!61 &3168897648170035583
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9100,9 +9037,9 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_Mass: 10
+  m_LinearDamping: 5
+  m_AngularDamping: 5
   m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: 53313838ec149054db95b629d80fc470, type: 2}
   m_IncludeLayers:
@@ -9114,35 +9051,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 4
---- !u!114 &7491260951914161819
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3077235175808579786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 790c478d073579945bf59ef756c541bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.FB_Swim
-  m_RotateSpeed: 1
-  m_FastRotateSpeed: 1
-  m_MoveSpeed: 1
-  m_Acceleration: 5
-  m_FastAcceleration: 1
-  m_StopDistance: 1
-  m_CanAvoidance: 0
-  m_RayDistance: 2
-  m_RayAngle: 30
-  m_ObstacleLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  m_CanPushTags:
-    m_Tags: []
-  m_PushRadiusRange: {x: 0.5, y: 1}
-  m_PushForce: 1
+  m_Constraints: 0
 --- !u!4 &9112768449460510181 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9182720571577570104, guid: 5eaa232d96b655947a54ed50b31dd3d1, type: 3}
