@@ -25,7 +25,7 @@ namespace Game
                     point.color = pointColor;
                 }
             }, 0f, 1f)
-            .OnComplete(() => DOTween.To(() => m_Text.color.a, val => m_Text.color = new Color(1, 1, 1, val), 0f, 1f));
+            .OnComplete(() => DOTween.To(() => m_Text.color.a, val => m_Text.color = new Color(1, 1, 1, val), 1f, 0.5f));
         }
     }
 }

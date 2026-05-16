@@ -124,6 +124,8 @@ namespace Game
             m_Restarting = false;
             m_RestartLoading = false;
             m_ScreenFadeState = EScreenFadeState.FadeOut;
+            InfectionSourceCount = 0;
+            InfectionSourceTags.Clear();
 
             CameraController.Instance.Scale(0.75f, 0f, 1.5f);
         }
@@ -183,9 +185,6 @@ namespace Game
             m_CurrentSavables.Clear();
 
             LightingTextureManager.Instance.Clear();
-
-            InfectionSourceCount = 0;
-            InfectionSourceTags.Clear();
 
             if (m_RestartLoading)
             {
