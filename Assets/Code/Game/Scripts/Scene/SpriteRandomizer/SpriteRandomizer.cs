@@ -2,6 +2,7 @@ using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.SceneManagement;
 #endif
 
 namespace Sloane
@@ -47,6 +48,7 @@ namespace Sloane
         [ContextMenu("Apply Sprite")]
         public void Apply()
         {
+            if (PrefabStageUtility.GetCurrentPrefabStage() != null) return;
             if (m_Pool == null) return;
 
             var sr = GetComponent<SpriteRenderer>();
