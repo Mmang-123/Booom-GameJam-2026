@@ -76,6 +76,9 @@ namespace Game
         [SerializeField] private Sprite m_BigPoint_Sprite_Off;
         [SerializeField] private Sprite m_SmallPoint_Sprite_On;
         [SerializeField] private Sprite m_SmallPoint_Sprite_Off;
+        [SerializeField] private AudioClipRef m_PointActivateClip;
+        [SerializeField] private AudioClipRef m_PointDeactivateClip;
+        [SerializeField] private int m_AudioInterval = 2;
 
         [Header("传导设置")]
         [SerializeField] private bool m_DynamicSpeed = false;
@@ -109,6 +112,7 @@ namespace Game
         private bool m_Inited = false;
         private List<EnergyPulse> m_Pulses; // 当前链条上移动的所有脉冲段
         private bool[] m_PointStates;       // 记录每个点的当前激活状态，避免重复赋值
+        private int m_BigPointChangeCount = 0; // 大点状态变化计数，用于控制音效频率
         public int MaxPowerPointCount => m_Points.Count;
 
 
@@ -248,6 +252,12 @@ namespace Game
                 {
                     m_PointStates[i] = shouldBeActive;
                     SetPointSprite(i, shouldBeActive);
+                    // Renderer2 == null 说明是大点（ChainPoint.Renderer1=big, Renderer2=small）
+
+                    var pos = m_Points[i].Renderer1 != null ? m_Points[i].Renderer1.transform.position : transform.position;
+                    if (m_AudioInterval <= 1 || m_BigPointChangeCount % m_AudioInterval == 0)
+                        AudioManager.PlayAtPosition(shouldBeActive ? m_PointActivateClip : m_PointDeactivateClip, pos);
+                    m_BigPointChangeCount++;
                 }
 
                 if (shouldBeActive) 

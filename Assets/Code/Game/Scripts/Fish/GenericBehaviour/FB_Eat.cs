@@ -29,6 +29,8 @@ namespace Game
         [SerializeField] private float m_MaxEatRangeOffsetRequireSpeed = 4f;
 
         [SerializeField] private GameplayTagContainer m_CanEatTags = new();
+        [SerializeField] private AudioClipRef m_EatSuccessClip;
+        [SerializeField] private AudioClipRef m_EatMissClip;
 
         // Runtime
         public Fish Target { get; set; }
@@ -291,9 +293,11 @@ namespace Game
             if (toEat.Count == 0)
             {
                 OnCatchFailed?.Invoke();
+                AudioManager.PlayAtPosition(m_EatMissClip, Fish.Position);
             }
             else
             {
+                AudioManager.PlayAtPosition(m_EatSuccessClip, Fish.Position);
                 if (Fish.IsPlayer)
                 {
                     CameraController.Instance.Scale(0.95f, 0.15f, 0.6f);

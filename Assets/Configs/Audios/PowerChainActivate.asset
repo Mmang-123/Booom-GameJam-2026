@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b640a27fa013ef4458f5a1c440e112a6, type: 3}
+  m_Name: PowerChainActivate
+  m_EditorClassIdentifier: Assembly-CSharp::Game.AudioClipSet
+  m_PlayMode: 1
+  m_Clips: []
+  m_TheHarmony:
+  - {fileID: 8300000, guid: 63761fcb07a3bfa419294f3bc4b43961, type: 3}
+  - {fileID: 8300000, guid: 7ac92ce0d1c580a4f85ddaa07a1a0058, type: 3}
+  - {fileID: 8300000, guid: 63761fcb07a3bfa419294f3bc4b43961, type: 3}
+  - {fileID: 8300000, guid: 7ac92ce0d1c580a4f85ddaa07a1a0058, type: 3}
+  - {fileID: 8300000, guid: 63761fcb07a3bfa419294f3bc4b43961, type: 3}
+  - {fileID: 8300000, guid: 76005a641069c2849bd2f8b1c9e45a90, type: 3}
+  - {fileID: 8300000, guid: 63761fcb07a3bfa419294f3bc4b43961, type: 3}
+  - {fileID: 8300000, guid: 76005a641069c2849bd2f8b1c9e45a90, type: 3}
+  - {fileID: 8300000, guid: 63761fcb07a3bfa419294f3bc4b43961, type: 3}
+  - {fileID: 8300000, guid: 7ac92ce0d1c580a4f85ddaa07a1a0058, type: 3}
+  - {fileID: 8300000, guid: 63761fcb07a3bfa419294f3bc4b43961, type: 3}
+  - {fileID: 8300000, guid: 7ac92ce0d1c580a4f85ddaa07a1a0058, type: 3}
+  - {fileID: 8300000, guid: 63761fcb07a3bfa419294f3bc4b43961, type: 3}
+  - {fileID: 8300000, guid: 76005a641069c2849bd2f8b1c9e45a90, type: 3}
+  - {fileID: 8300000, guid: 63761fcb07a3bfa419294f3bc4b43961, type: 3}
+  - {fileID: 8300000, guid: 76005a641069c2849bd2f8b1c9e45a90, type: 3}

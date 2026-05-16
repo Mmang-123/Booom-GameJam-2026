@@ -473,6 +473,14 @@ MonoBehaviour:
   m_ChainRenderer: {fileID: 1857488053332976869}
   m_ChainEndRenderer: {fileID: 214024216419404645}
   m_Emission: {fileID: 6365684979359784002}
+  m_MoveClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: c6cba8af0fe37454fac15355ef722e9a, type: 2}
+  m_HitClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: 9db9e6c67f721754eb098a49a0b03a90, type: 2}
 --- !u!1 &9168646231195081022
 GameObject:
   m_ObjectHideFlags: 0

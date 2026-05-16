@@ -429,6 +429,8 @@ MonoBehaviour:
   m_FishTypeTag:
     m_Guid: 51809826-1abd-450a-bffd-b8617fb2da14
   m_IsInfectionSource: 0
+  m_InfectionSourceTag: 
+  m_CantBeTraced: 0
   m_EDirection: 2
   m_AutoFlip: 1
   m_FlipRoot: {fileID: 392481932822435387}
@@ -607,6 +609,14 @@ MonoBehaviour:
     m_Tags:
     - m_Guid: 832afeb0-35ee-4ecb-a3f0-9571693e253b
     - m_Guid: f4f9d2fc-de97-4d70-8292-e5cdc4e5cddc
+  m_EatSuccessClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: 4dad8abe26fabcc45b9d3e85c77679d1, type: 2}
+  m_EatMissClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: e0fb22609f2cffb4bafa88b79de383be, type: 2}
 --- !u!1 &6262011534964240369
 GameObject:
   m_ObjectHideFlags: 0

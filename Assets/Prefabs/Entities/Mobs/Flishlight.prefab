@@ -624,6 +624,8 @@ MonoBehaviour:
   m_FishTypeTag:
     m_Guid: f4f9d2fc-de97-4d70-8292-e5cdc4e5cddc
   m_IsInfectionSource: 0
+  m_InfectionSourceTag: 
+  m_CantBeTraced: 0
   m_EDirection: 2
   m_AutoFlip: 1
   m_FlipRoot: {fileID: 3476970104418147691}
@@ -721,6 +723,14 @@ MonoBehaviour:
   m_CanEatTags:
     m_Tags:
     - m_Guid: dd157287-33e2-4403-ba4c-cbe22f78f346
+  m_EatSuccessClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: 4dad8abe26fabcc45b9d3e85c77679d1, type: 2}
+  m_EatMissClip:
+    m_Source: 1
+    m_Clip: {fileID: 0}
+    m_Set: {fileID: 11400000, guid: e0fb22609f2cffb4bafa88b79de383be, type: 2}
 --- !u!50 &5242647877523389363
 Rigidbody2D:
   serializedVersion: 5

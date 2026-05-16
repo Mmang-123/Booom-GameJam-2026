@@ -17,6 +17,8 @@ namespace Game
         [SerializeField] private SpriteRenderer m_ChainRenderer;
         [SerializeField] private SpriteRenderer m_ChainEndRenderer;
         [SerializeField] private SpriteRenderer m_Emission;
+        [SerializeField] private AudioClipRef m_MoveClip;
+        [SerializeField] private AudioClipRef m_HitClip;
 
         public float StartDistance => 0.5f + 0.0625f + m_BoxSize.x / 2f;
         public float EndDistance => StartDistance + m_ChainLength - m_BoxSize.x - 0.125f;
@@ -30,6 +32,8 @@ namespace Game
         // Runtime
         private float m_T;
         private bool m_Active;
+        private bool m_IsMoving;
+        private bool m_HitPlayed;
 
 
 #if UNITY_EDITOR
@@ -82,8 +86,13 @@ namespace Game
             }
 #endif
 
+            bool wasMoving = m_IsMoving;
+            m_IsMoving = false;
+
             if (!PowerSourceHandler.IsValid())
+            {
                 return;
+            }
 
             if (!m_Active && IsPowered)
             {
@@ -104,9 +113,11 @@ namespace Game
                         m_T = nextT;
                         MoveBox(m_T);
                     }
-                    else if (!IsPowered)
+                    else
                     {
-                        SetActive(false);
+                        PlayHitSound();
+                        if (!IsPowered)
+                            SetActive(false);
                     }
                 }
                 else if (!IsPowered)
@@ -125,10 +136,21 @@ namespace Game
                     m_T = nextT;
                     MoveBox(m_T);
                 }
-                else if (IsPowered)
+                else
                 {
-                    SetActive(true);
+                    PlayHitSound();
+                    if (IsPowered)
+                        SetActive(true);
                 }
+            }
+
+            // 移动音效：开始移动时按速度设置 pitch 播放一次
+            if (!wasMoving && m_IsMoving)
+            {
+                m_HitPlayed = false;
+                float moveTime = m_Active ? m_MoveTime : m_MoveBackTime;
+                float pitch = 1f / Mathf.Max(moveTime, 0.05f);
+                AudioManager.PlayAtPosition(m_MoveClip, transform.position, pitch: pitch);
             }
         }
 
@@ -139,6 +161,13 @@ namespace Game
             {
                 m_Emission.color = active ? Color.green : Color.red;
             }
+        }
+
+        private void PlayHitSound()
+        {
+            if (m_HitPlayed) return;
+            m_HitPlayed = true;
+            AudioManager.PlayAtPosition(m_HitClip, transform.position);
         }
 
         /// <summary>
@@ -196,6 +225,7 @@ namespace Game
 
         private void MoveBox(float t)
         {
+            m_IsMoving = true;
             t = Mathf.SmoothStep(0f, 1f, t);
             float distance = Mathf.Lerp(StartDistance, EndDistance, m_Reverse ? (1 - t) : t);
             m_Box.transform.localPosition = new(distance, 0f);
