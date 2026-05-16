@@ -126,6 +126,67 @@ Transform:
   - {fileID: 5579197353863265876}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1921839703739599391
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1540589190995779785}
+  - component: {fileID: 3857590410274990678}
+  m_Layer: 0
+  m_Name: FA_Flee
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1540589190995779785
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921839703739599391}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 9.52749, y: 0.29972, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5848822547936245864}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3857590410274990678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921839703739599391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9332385d013e21946a6e5b526190e369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.FA_Flee
+  m_Tags:
+    m_Tags: []
+  m_SingletonTag:
+    m_Guid: 0143efe5-7db0-4920-8d62-82cec5e1310e
+  m_CancelTags:
+    m_Tags: []
+  m_Priority: 20
+  m_FleeFromTags:
+    m_Tags:
+    - m_Guid: 51809826-1abd-450a-bffd-b8617fb2da14
+  m_StartRadius: 0
+  m_EndRadius: 8
+  m_RandomRange: {x: -30, y: 30}
+  m_ChangeDirectionDistance: 4
+  m_RandomChangeDirectionTime: {x: 1, y: 4}
+  m_ChangeDirectionCD: 1.5
+  m_LoseTargetTime: 2
 --- !u!1 &3629739093053337559
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,6 +303,7 @@ Transform:
   - {fileID: 7260906328846162268}
   - {fileID: 7967738315011518099}
   - {fileID: 6388343480524677884}
+  - {fileID: 1540589190995779785}
   m_Father: {fileID: 4534964514414552326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6014890210729782727
@@ -261,6 +323,7 @@ MonoBehaviour:
   - {fileID: 3992596083591685982}
   - {fileID: 2590296347177651830}
   - {fileID: 6166856396587021217}
+  - {fileID: 3857590410274990678}
   m_OwnedTags:
     m_Tags: []
 --- !u!1 &5597560546759470541
@@ -325,6 +388,9 @@ MonoBehaviour:
   m_RegainPatienceSpeed: 30
   m_LosePatienceOnCatchFailed: 100
   m_LosePatienceOnCollision: 15
+  m_StuckSpeed: 1.5
+  m_StuckTimeThreshold: 1.5
+  m_LosePatienceOnStuck: 40
   m_ChangeTargetPatienceTheshold: 420
   m_SearchNewTargetIntervalTime: 0.2
   m_CurrentPatience: 0
