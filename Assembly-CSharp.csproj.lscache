@@ -64,6 +64,7 @@ Assets/Code/Game/Scripts/Core/
  LevelConfig.cs
  LevelRoot.cs
  LevelSaveData.cs
+ MouseController.cs
  Settlement/
   ProgressDisplay.cs
   UI_Settlement.cs
