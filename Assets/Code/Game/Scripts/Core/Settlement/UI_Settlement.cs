@@ -34,6 +34,7 @@ namespace Game
             m_TargetPointCount = count;
             m_CurrentPointIndex = 0;
             m_A = 0f;
+            m_FadeOut = false;
         }
 
         public void Hide()
