@@ -83,9 +83,9 @@ namespace Game
             if (Fish.IsPlayer)
             {
                 var darkSightManager = DarkSightManager.Instance;
-                darkSightManager.SetOverrideByLight(false);
+                darkSightManager.SetOverrideByLight(true);
                 darkSightManager.SetCenterPosition(Fish.Position);
-                if (darkSightManager.Radius <= 24f)
+                if (darkSightManager.Radius <= 28f)
                 {
                     darkSightManager.SetRadius(darkSightManager.Radius + Time.fixedDeltaTime * 64f);
                 }
