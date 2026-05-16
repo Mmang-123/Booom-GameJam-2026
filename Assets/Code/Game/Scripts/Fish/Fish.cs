@@ -413,6 +413,16 @@ namespace Game
                 CameraController.Instance.Scale(0.85f, 0.2f, 0.6f);
             }
 
+            if (IsInfectionSource)
+            {
+                if (!GameManager.Instance.InfectionSourceTags.Contains(InfectionSourceTag))
+                {
+                    GameManager.Instance.InfectionSourceCount++;
+                    GameManager.Instance.InfectionSourceTags.Add(InfectionSourceTag);
+                }
+                Debug.Log("当前收集感染源数量: " + GameManager.Instance.InfectionSourceCount);
+            }
+
             bool explode = false;
             float explodeRadius = 0f;
             // 扩散

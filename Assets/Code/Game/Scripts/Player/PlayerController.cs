@@ -73,8 +73,11 @@ namespace Game
 
             if (fish.IsInfectionSource)
             {
-                GameManager.Instance.InfectionSourceCount++;
-                GameManager.Instance.InfectionSourceTags.Add(fish.InfectionSourceTag);
+                if (!GameManager.Instance.InfectionSourceTags.Contains(fish.InfectionSourceTag))
+                {
+                    GameManager.Instance.InfectionSourceCount++;
+                    GameManager.Instance.InfectionSourceTags.Add(fish.InfectionSourceTag);
+                }
                 Debug.Log("当前收集感染源数量: " + GameManager.Instance.InfectionSourceCount);
             }
         }
