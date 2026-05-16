@@ -51370,7 +51370,7 @@ MonoBehaviour:
   m_MixRangeType: 1
   m_MixRange: {x: 0.5, y: 0.95}
   m_WorldMixRangeX: {x: 20, y: 36}
-  m_WorldMixRangeY: {x: 12, y: 14}
+  m_WorldMixRangeY: {x: 16, y: 16.5}
   m_Weight: 8
 --- !u!1 &2770836757517542421
 GameObject:
