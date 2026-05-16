@@ -60,7 +60,7 @@ namespace Mmang.PixelartRender
             Bounds cameraBounds = new()
             {
                 center = centerPosition,
-                extents = maskManager.TileSize * 1.5f * Vector3.one
+                extents = maskManager.TileSize * 0.5f * new Vector3(maskManager.ChunkRange.x, maskManager.ChunkRange.y, 10f)
             };
 
             foreach (var light in m_Lights)
