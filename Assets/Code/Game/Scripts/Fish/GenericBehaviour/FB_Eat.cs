@@ -12,7 +12,7 @@ namespace Game
         {
             Shut, Open, Eat, Wait
         }
-        
+
         [SerializeField] private float m_OpenDistance = 3f;
         [SerializeField] private float m_ShutDistance = 4f;
 
@@ -105,7 +105,7 @@ namespace Game
         {
             if (Target != null)
             {
-                EatTimer += Time.deltaTime; 
+                EatTimer += Time.deltaTime;
                 if ((ContinuousCheck && EatTimer >= 0.08f)
                 || EatTimer >= 0.12f)
                 {
@@ -121,7 +121,7 @@ namespace Game
 
                     ListPool<Fish>.Release(fishInRange);
                 }
-  
+
                 if (EatTimer >= 0.28f)
                 {
                     Eat();
@@ -164,13 +164,13 @@ namespace Game
 
             // 镜头缩放
             if (!Fish.IsPlayer
-            && Fish.FishController is FishAIComponent {} fishAI
+            && Fish.FishController is FishAIComponent { } fishAI
             && fishAI.TryGetAbility<FA_Trace>(out var trace)
             && trace.TargetFish != null && trace.TargetFish.IsPlayer)
             {
                 CameraController.Instance.Scale(0.95f, 0.15f, 0.6f);
             }
-            
+
         }
 
         private void Eat()
@@ -207,7 +207,7 @@ namespace Game
         {
             List<Fish> toEat = ListPool<Fish>.Get();
             float reduceSaturation = m_ReduceSaturationPerBite;
-            
+
             foreach (var fish in fishInRange)
             {
                 bool isAfterimageSpawning = fish.TryGetBehaviour<FB_Dash>(out var dashBehaviour) && dashBehaviour.IsAfterimageSpawning;
@@ -287,7 +287,7 @@ namespace Game
             {
                 CameraController.Instance.Scale(0.82f, 0.2f, 0.6f);
             }
-            
+
             if (toEat.Count == 0)
             {
                 OnCatchFailed?.Invoke();
@@ -301,8 +301,8 @@ namespace Game
             }
 
             ListPool<Fish>.Release(toEat);
-            
-            
+
+
             //
             EatEnd();
         }
@@ -350,15 +350,21 @@ namespace Game
                         if (predator == null || !predator.gameObject.activeSelf)
                         {
                             seq?.Kill();
-                            fish.transform.localScale = Vector3.one;
-                            fish.Die(EDieType.Eaten);
+                            if (fish != null)
+                            {
+                                fish.transform.localScale = Vector3.one;
+                                fish.Die(EDieType.Eaten);
+                            }
                             return;
                         }
 
                         progress = p;
                         if (collider == null) return;
                         Vector3 target = collider.transform.position + (Vector3)collider.offset;
-                        fish.transform.position = Vector3.LerpUnclamped(startPos, target, p);
+                        if (fish != null)
+                        {
+                            fish.transform.position = Vector3.LerpUnclamped(startPos, target, p);
+                        }
                     },
                     1f,
                     m_EatAnimationDuration
@@ -372,8 +378,11 @@ namespace Game
 
             seq.OnComplete(() =>
             {
-                fish.transform.localScale = Vector3.one;
-                fish.Die(EDieType.Eaten);
+                if (fish != null)
+                {
+                    fish.transform.localScale = Vector3.one;
+                    fish.Die(EDieType.Eaten);
+                }
             });
         }
 

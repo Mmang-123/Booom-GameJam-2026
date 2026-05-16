@@ -34,7 +34,7 @@ namespace Game
                     if (fleeAbility != null)
                     {
                         if (m_SetDirection)
-                            fleeAbility.FleeFromPoint(transform.position, m_Direction);
+                            fleeAbility.FleeFromPoint(transform.position, transform.TransformDirection(m_Direction));
                         else
                             fleeAbility.FleeFromPoint(transform.position);
                     }
