@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Terrain
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 0
+    platformSettings:
+    - serializedVersion: 4
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 4
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_IgnorePlatformSupport: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 0d7c65e16f1b5964cb6d0663ff32ffe0, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys:
+    - 92ae4441598e51d4196cff5b1de4d03a: 21300000
+    - fc03fc91b93e3a8448fe9ca36a8d3055: 21300000
+    - 2941d7d1ee150e341a4f273340501a11: 21300000
+    - 14a0a194775b2fb4a8b481d41093033f: 21300000
+    - b29586053305ab047980769cef2c4804: 21300000
+    - 4b4d8c26ecc53df4fbb0ac41f8e6a5e6: 21300000
+    - 27748f260df031c4f90d318ab770a8aa: 21300000
+    - 990fe838a457b87439873fd2a4705677: 21300000
+    - 9c438f29d1e073e46bb457a481d5df46: 21300000
+    - e4d38b49e4cd7d24cb97a328dc321f6d: 21300000
+    - 633fdc9aa091b1d4896f51a9047e68ee: 21300000
+    - af5036ed3960d964ab83325f738a8d54: 21300000
+    - bf94e2fd0428224459466924ffe69c71: 21300000
+    - 9dbb625e725d8b34aae703de4e31007e: 21300000
+    - 3990c08ed5ba2f24baaf1e9833cbe2f8: 21300000
+    - e7ca79ae6afb6f24abc0bab86cd3a9da: 21300000
+    - 82d8913f6c7a67544b92fcec55c7f97c: 21300000
+    - 4afe36ef1341d8b4cb5c0504599469ab: 21300000
+    - 17e6aaeff9b1bdc4f9ce7fbb4a238adc: 21300000
+    - 49a51def84bec614b95e76be65f534e2: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 92ae4441598e51d4196cff5b1de4d03a, type: 3}
+  - {fileID: 21300000, guid: fc03fc91b93e3a8448fe9ca36a8d3055, type: 3}
+  - {fileID: 21300000, guid: 2941d7d1ee150e341a4f273340501a11, type: 3}
+  - {fileID: 21300000, guid: 14a0a194775b2fb4a8b481d41093033f, type: 3}
+  - {fileID: 21300000, guid: b29586053305ab047980769cef2c4804, type: 3}
+  - {fileID: 21300000, guid: 4b4d8c26ecc53df4fbb0ac41f8e6a5e6, type: 3}
+  - {fileID: 21300000, guid: 27748f260df031c4f90d318ab770a8aa, type: 3}
+  - {fileID: 21300000, guid: 990fe838a457b87439873fd2a4705677, type: 3}
+  - {fileID: 21300000, guid: 9c438f29d1e073e46bb457a481d5df46, type: 3}
+  - {fileID: 21300000, guid: e4d38b49e4cd7d24cb97a328dc321f6d, type: 3}
+  - {fileID: 21300000, guid: 633fdc9aa091b1d4896f51a9047e68ee, type: 3}
+  - {fileID: 21300000, guid: af5036ed3960d964ab83325f738a8d54, type: 3}
+  - {fileID: 21300000, guid: bf94e2fd0428224459466924ffe69c71, type: 3}
+  - {fileID: 21300000, guid: 9dbb625e725d8b34aae703de4e31007e, type: 3}
+  - {fileID: 21300000, guid: 3990c08ed5ba2f24baaf1e9833cbe2f8, type: 3}
+  - {fileID: 21300000, guid: e7ca79ae6afb6f24abc0bab86cd3a9da, type: 3}
+  - {fileID: 21300000, guid: 82d8913f6c7a67544b92fcec55c7f97c, type: 3}
+  - {fileID: 21300000, guid: 4afe36ef1341d8b4cb5c0504599469ab, type: 3}
+  - {fileID: 21300000, guid: 17e6aaeff9b1bdc4f9ce7fbb4a238adc, type: 3}
+  - {fileID: 21300000, guid: 49a51def84bec614b95e76be65f534e2, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - SDF_8f555534b197cc34bbcdd27cc816e412
+  - SDF_ebf37112727943e41863518bea2e5413
+  - SDF_81f9b16855ec5bd41a14461c8d41a80d
+  - SDF_742c91c796b29a74e8b78294ea1177a1
+  - SDF_35671944c60f46a4ead03e77db85de14
+  - SDF_6827016b6a2e69a4393ec76503e6e488
+  - SDF_aae6b6be593f7354ca3a1669bdfecbb8
+  - SDF_cd4e49d06ff375e45a076c44f486ef64
+  - SDF_85824a7332a5c574fa4a2da33a698a76
+  - SDF_03ff42006b336234dbf811b26e5d1deb
+  - SDF_b98d11084d7022e499d4a5668a53a25e
+  - SDF_67028e4b0f1f2484b8062fc2d9089168
+  - SDF_520d94700bc14754bb83f9a97a39e9db
+  - SDF_e2fc4b800f90bf6409829560b4939421
+  - SDF_75680ef5d77f34a4d8702dede112fc65
+  - SDF_e18ea126b5c375d4094999972a7847e0
+  - SDF_77e00413220d71a4cbff609cee4af526
+  - SDF_92c0381c664d9db448841ebfe9ff1a3a
+  - SDF_42ff3ab31190db344b08dd4a8e4037a7
+  - SDF_de056aaf6c8eda84499e8d7cad30d114
+  m_RenderDataMap: {}
+  m_Tag: Terrain
+  m_IsVariant: 0
