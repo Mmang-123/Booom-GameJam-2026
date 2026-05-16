@@ -137,6 +137,25 @@ float4 UnlitEmissionFrag(Varyings input) : SV_Target
 
     clip(outputColor.a - 0.05);
 
+    const float UNIT_SIZE = 1.0 / 16.0;
+    float2 positionOSSnapped = floor(input.positionOS / UNIT_SIZE) * UNIT_SIZE;
+    float2 positionWS = TransformObjectToWorld(float4(positionOSSnapped, 0, 1));
+    positionWS = (floor(positionWS / UNIT_SIZE) + 0.5) * UNIT_SIZE;
+
+    float4 positionCS = TransformWorldToHClip(float4(positionWS, 0, 1));
+    float4 screenPos = ComputeScreenPos(positionCS);
+    float2 screenUV = screenPos.xy / screenPos.w;
+    screenUV = (screenUV - 0.5) * _CameraScale + 0.5;
+
+    float3 lightColor = ComputeLighting(positionWS);
+    float3 sampledLight = SampleLight(screenUV, _CameraScale);
+
+    if (outputColor.r <= 0.001 && outputColor.g <= 0.001)
+    {
+        // Background
+        outputColor.rgb = LightenBlend(SampleBackground(screenUV), sampledLight);
+    }
+
     return outputColor;
 }
 
