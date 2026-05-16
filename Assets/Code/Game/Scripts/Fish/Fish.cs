@@ -33,6 +33,7 @@ namespace Game
     {
         [SerializeField] private GameplayTag m_FishTypeTag;
         [SerializeField] private bool m_IsInfectionSource;
+        [SerializeField] private bool m_CantBeTraced = false;
 
         [Header("精灵图设置")]
         [SerializeField] private EDirection m_EDirection;
@@ -91,6 +92,7 @@ namespace Game
 
         public GameplayTag FishTypeTag => m_FishTypeTag;
         public bool IsInfectionSource => m_IsInfectionSource;
+        public bool CantBeTraced => m_CantBeTraced;
 
         private List<FishBehaviour> m_Behaviours;
         private Dictionary<System.Type, FishBehaviour> m_BehaviourMap = new();

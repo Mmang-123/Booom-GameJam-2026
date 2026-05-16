@@ -144,7 +144,7 @@ namespace Game
             && GameManager.Instance.CanRespawn)
             {
                 m_RestartTimer += Time.deltaTime;
-                if (m_RestartTimer > 1.0f)
+                if (m_RestartTimer > 1.0f && !GameManager.Instance.Loading)
                 {
                     var levelName = GameManager.Instance.InTitle ? LevelConfig.GetTitleLevelName() : LevelConfig.GetInitLevelName();
                     GameManager.Instance.Restart(levelName);

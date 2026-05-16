@@ -65,6 +65,7 @@ namespace Game
             foreach (var fish in fishList)
             {
                 if ((!ignoreCurrentTarget || (ignoreCurrentTarget && fish != TargetFish))
+                && !fish.CantBeTraced
                 && (m_IgnoreLastTargetCD <= 0f || fish != m_LastTarget)
                 && TargetPriorityMap.ContainsKey(fish.FishTypeTag)
                 && !Raycast(Fish.Position, fish.Position))
