@@ -55,8 +55,19 @@ namespace Game
                     m_Renderer.enabled = false;
                     return;
                 }
+
+                var fish = PlayerController.Instance.Fish;
+                if (fish == null)
+                {
+                    m_MouseAnimator.SetBool("Enable", false);
+                    m_Renderer.enabled = false;
+                    return;
+                }
+
+                const float MAX_OFFSET = 3f;
+
                 m_Renderer.enabled = true;
-                transform.position = GameInputManager.VirtualMousePosition;
+                transform.position = fish.Position + MAX_OFFSET * direction;
                 m_MouseAnimator.SetBool("Pressed", true);
                 m_MouseAnimator.SetBool("Enable", true);
             }

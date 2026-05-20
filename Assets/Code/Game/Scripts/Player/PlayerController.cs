@@ -243,7 +243,7 @@ namespace Game
             }
             else
             {
-                const float MAX_OFFSET = 2f;
+                const float MAX_OFFSET = 3f;
                 Vector2 direction = GameInputManager.GetDirection();
                 if (Fish == null)
                     return;
