@@ -13,7 +13,7 @@ namespace Game
         private float m_Timer;
         protected bool m_StopCheck = false;
 
-        private void FixedUpdate()
+        protected virtual void FixedUpdate()
         {
             if (m_StopCheck)
                 return;

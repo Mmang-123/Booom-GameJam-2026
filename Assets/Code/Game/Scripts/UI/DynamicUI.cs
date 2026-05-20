@@ -3,15 +3,17 @@ using UnityEngine;
 
 namespace Game
 {
+    [RequireComponent(typeof(SpriteRenderer))]
     public class DynamicUI : MonoBehaviour
     {
-        [SerializeField] private SpriteRenderer m_Renderer;
+        private SpriteRenderer m_Renderer;
         [SerializeField] private Sprite m_MouseSprite;
         [SerializeField] private Sprite m_KeyboardSprite;
         [SerializeField] private Sprite m_GamepadSprite;
 
         private void Start()
         {
+            m_Renderer = GetComponent<SpriteRenderer>();
             OnDeviceChanged(GameInputManager.CurrentControlScheme);
         }
         
