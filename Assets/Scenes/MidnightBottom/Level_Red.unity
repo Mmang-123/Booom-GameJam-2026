@@ -156,6 +156,43 @@ RenderTexture:
   m_Dimension: 2
   m_VolumeDepth: 1
   m_ShadowSamplingMode: 2
+--- !u!84 &111094400
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 6
+  m_Width: 480
+  m_Height: 270
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthStencilFormat: 94
+  m_ColorFormat: 48
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_UseDynamicScaleExplicit: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_EnableRandomWrite: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 0
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
+  m_ShadowSamplingMode: 2
 --- !u!1001 &156444398
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -344,7 +381,7 @@ PrefabInstance:
     - target: {fileID: 920617288135284226, guid: 05e7626051068034cb79808330e36ccf, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 142407703, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
+      objectReference: {fileID: 122005794, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
     - target: {fileID: 975446967620100864, guid: 05e7626051068034cb79808330e36ccf, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -397,6 +434,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -2125535779, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
+    - target: {fileID: 1833930266147915476, guid: 05e7626051068034cb79808330e36ccf, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b29586053305ab047980769cef2c4804, type: 3}
     - target: {fileID: 2032114505291924205, guid: 05e7626051068034cb79808330e36ccf, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -540,7 +581,11 @@ PrefabInstance:
     - target: {fileID: 4858797555499414318, guid: 05e7626051068034cb79808330e36ccf, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: -118321635, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
+      objectReference: {fileID: 500992782, guid: b310e44f3aec7bd4eae442be6aba946a, type: 3}
+    - target: {fileID: 4921950087510083507, guid: 05e7626051068034cb79808330e36ccf, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 343861228, guid: 540d7fddec297fd48bb3e3f25fb06a57, type: 3}
     - target: {fileID: 4981941115435922760, guid: 05e7626051068034cb79808330e36ccf, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -1062,43 +1107,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6d0987ecdcd3144c92cf9b3806e42cf, type: 3}
---- !u!84 &1370513223
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 6
-  m_Width: 480
-  m_Height: 270
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthStencilFormat: 94
-  m_ColorFormat: 48
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_UseDynamicScaleExplicit: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_EnableRandomWrite: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 0
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
-  m_ShadowSamplingMode: 2
 --- !u!114 &1431279382 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5616217603655321375, guid: cb7f27fbc1a06474a83e47a21ba7c4af, type: 3}
