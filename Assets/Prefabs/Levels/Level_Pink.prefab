@@ -187288,8 +187288,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2284475900639160968, guid: 5197790f25c55394dbfc742dc05c112b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4530446896746055350}
   m_SourcePrefab: {fileID: 100100000, guid: 5197790f25c55394dbfc742dc05c112b, type: 3}
+--- !u!1 &1782744313586927618 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2284475900639160968, guid: 5197790f25c55394dbfc742dc05c112b, type: 3}
+  m_PrefabInstance: {fileID: 507079611616322186}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4530446896746055350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782744313586927618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02dcf36547e19384bb3a68d64134bbed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.LocalizationUI
+  m_ChineseSprite: {fileID: 1393865177, guid: 1c69280afe529cb4d8517e222bc2c273, type: 3}
+  m_EnglishSprite: {fileID: 1393865177, guid: 11ad78c343322fe4aab6fc621dd7043d, type: 3}
 --- !u!4 &3441442093265911718 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2939715181917969708, guid: 5197790f25c55394dbfc742dc05c112b, type: 3}
