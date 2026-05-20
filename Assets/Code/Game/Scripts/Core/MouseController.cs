@@ -19,7 +19,7 @@ namespace Game
             Cursor.visible = true;
         }
 
-        private void Update()
+        private void LateUpdate()
         {
             var cameraController = CameraController.Instance;
 
