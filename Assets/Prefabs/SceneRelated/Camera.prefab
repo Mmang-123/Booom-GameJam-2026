@@ -411,6 +411,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.MouseController
   m_MouseAnimator: {fileID: 5972480818333513722}
+  m_Renderer: {fileID: 1408896791492510206}
 --- !u!212 &1408896791492510206
 SpriteRenderer:
   serializedVersion: 2

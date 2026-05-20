@@ -73,7 +73,7 @@ namespace Game
             m_AfterimageTimer = 0f;
             m_AfterimageSpawnTimer = m_AfterimageSpawnDuration;
 
-            if (Mouse.current != null)
+            if (GameInputManager.CurrentControlScheme == GameInputManager.EControlMode.Mouse)
             {
                 Vector2 screenPos = Mouse.current.position.ReadValue();
                 Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
@@ -81,7 +81,11 @@ namespace Game
             }
             else
             {
-                m_TargetDirection = Fish.ForwardDirection;
+                Vector2 direction = GameInputManager.GetDirection();
+                if (direction != Vector2.zero)
+                    m_TargetDirection = direction;
+                else
+                    m_TargetDirection = Fish.ForwardDirection;
             }
 
             var swimBehaviour = Fish.GetBehaviour<FB_Swim>();

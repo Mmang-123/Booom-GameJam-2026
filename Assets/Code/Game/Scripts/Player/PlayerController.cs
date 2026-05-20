@@ -9,6 +9,8 @@ namespace Game
 {
     public class PlayerController : SingletonMono<PlayerController>, IFishController
     {
+        public enum EControlMode { Mouse, Gamepad }
+
         [SerializeField] private Fish m_CurrentFish;
         [SerializeField] private float m_LookAtOffset = 0.5f;
         [SerializeField] private float m_LookAtOffsetMouseRadius = 2f; // 根据鼠标到中心的距离/半径 作为偏移的强度
@@ -179,11 +181,11 @@ namespace Game
             }
 
             var mouse = Mouse.current;
-            if (mouse != null)
+            if (GameInputManager.CurrentControlScheme != GameInputManager.EControlMode.None)
             {
                 TraceMousePoint();
 
-                if (mouse.rightButton.isPressed && !m_MouseRBPressedLastFrame)
+                if (GameInputManager.GetSkillPressed() && !m_MouseRBPressedLastFrame)
                 {
                     UseSkill();
                 }
@@ -207,7 +209,7 @@ namespace Game
 
         private void LateUpdate()
         {
-            m_MouseRBPressedLastFrame = Mouse.current.rightButton.isPressed;
+            m_MouseRBPressedLastFrame = GameInputManager.GetSkillPressed();
         }
 
         public void SetControlActive(bool active)
@@ -230,13 +232,29 @@ namespace Game
 
         private void TraceMousePoint()
         {
-            var mouse = Mouse.current;
-            Vector2 screenPos = mouse.position.ReadValue();
-            Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
+            Vector3 worldPos;
+            bool movePressed = false;
+            if (GameInputManager.CurrentControlScheme == GameInputManager.EControlMode.Mouse)
+            {
+                var mouse = Mouse.current;
+                Vector2 screenPos = mouse.position.ReadValue();
+                worldPos = Camera.main.ScreenToWorldPoint(screenPos);   
+                movePressed = mouse.leftButton.isPressed;
+            }
+            else
+            {
+                const float MAX_OFFSET = 2f;
+                Vector2 direction = GameInputManager.GetDirection();
+                if (Fish == null)
+                    return;
+                worldPos = Fish.Position + MAX_OFFSET * direction;
+                GameInputManager.VirtualMousePosition = worldPos;
+                movePressed = direction != Vector2.zero;
+            }
 
             if (m_CurrentFish != null)
             {
-                bool leftPressed = mouse.leftButton.isPressed;
+                bool leftPressed = movePressed;
                 var swimBehaviour = m_CurrentFish.GetBehaviour<FB_Swim>();
 
                 if (!m_LBPressed && leftPressed)
@@ -276,8 +294,7 @@ namespace Game
 
         private void MBUpdate()
         {
-            var mouse = Mouse.current;
-
+            bool buttonPressed = GameInputManager.GetSuicidePressed();
             if (Fish == null || !Fish.IsLiving || !GameManager.Instance.CanRestart)
             {
                 if (m_MBPressed)
@@ -292,7 +309,7 @@ namespace Game
                 return;
             }
 
-            if (!m_MBPressed && m_MBPressedTimer <= 0f && mouse.middleButton.isPressed)
+            if (!m_MBPressed && m_MBPressedTimer <= 0f && buttonPressed)
             {
                 InitSuicide();
                 //m_CircleRange.FadeIn(Fish, m_FishConfig);
@@ -304,12 +321,12 @@ namespace Game
                 else
                     m_MBPressedTimer -= Time.deltaTime;
                 
-                if (m_MBPressedTimer > MinMBPressedTime && !mouse.middleButton.isPressed)
+                if (m_MBPressedTimer > MinMBPressedTime && !buttonPressed)
                 {
                     m_MBPressed = false;
                     //m_CircleRange.FadeOut();
                 }
-                else if (mouse.middleButton.isPressed)
+                else if (buttonPressed)
                 {
                     m_MBPressed = true;
                     //m_CircleRange.FadeIn(Fish, m_FishConfig);
