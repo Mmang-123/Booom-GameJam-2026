@@ -195535,8 +195535,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2545485141843715320, guid: 9a9a478e388848141849352b4df1c03a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2925902569803807949}
   m_SourcePrefab: {fileID: 100100000, guid: 9a9a478e388848141849352b4df1c03a, type: 3}
+--- !u!1 &3299232550779327533 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2545485141843715320, guid: 9a9a478e388848141849352b4df1c03a, type: 3}
+  m_PrefabInstance: {fileID: 1052254315759710421}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2925902569803807949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3299232550779327533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cb12bc8465ce6344b10677961bec817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.DynamicUI
+  m_MouseSprite: {fileID: 21300000, guid: f084769d460cd7743beef641fa24eb83, type: 3}
+  m_KeyboardSprite: {fileID: 21300000, guid: dc0629d7cdfaa7e4db9bf1f418c10246, type: 3}
+  m_GamepadSprite: {fileID: 21300000, guid: 16fbb40c43f88604a82a2b6c840824bf, type: 3}
 --- !u!4 &6382626245996061746 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199767255842329831, guid: 9a9a478e388848141849352b4df1c03a, type: 3}
@@ -215846,8 +215869,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2545485141843715320, guid: 9a9a478e388848141849352b4df1c03a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4841917071204312936}
   m_SourcePrefab: {fileID: 100100000, guid: 9a9a478e388848141849352b4df1c03a, type: 3}
+--- !u!1 &184023765031665519 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2545485141843715320, guid: 9a9a478e388848141849352b4df1c03a, type: 3}
+  m_PrefabInstance: {fileID: 2440574536975915927}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4841917071204312936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184023765031665519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cb12bc8465ce6344b10677961bec817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.DynamicUI
+  m_MouseSprite: {fileID: 21300000, guid: 60886dc0c1c9a2d4cb5615d996a98bae, type: 3}
+  m_KeyboardSprite: {fileID: 21300000, guid: a70cb5fc46083714e9e88dd9f32b1936, type: 3}
+  m_GamepadSprite: {fileID: 21300000, guid: feffecb6e9e81c74a8e3f4d1867456e0, type: 3}
 --- !u!4 &8635466351965933424 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6199767255842329831, guid: 9a9a478e388848141849352b4df1c03a, type: 3}
