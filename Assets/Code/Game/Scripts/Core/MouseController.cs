@@ -50,10 +50,21 @@ namespace Game
                 var direction = GameInputManager.GetDirection();
                 if (direction == Vector2.zero)
                 {
+                    Vector2 lookDirection = GameInputManager.GetLookDirection();
+                    if (lookDirection == Vector2.zero)
+                    {
+                        m_MouseAnimator.SetBool("Pressed", false);
+                        m_MouseAnimator.SetBool("Enable", false);
+                        m_Renderer.enabled = false;
+                        return;
+                    }
+                    
                     m_MouseAnimator.SetBool("Pressed", false);
-                    m_MouseAnimator.SetBool("Enable", false);
-                    m_Renderer.enabled = false;
-                    return;
+                    direction = lookDirection;
+                }
+                else
+                {
+                    m_MouseAnimator.SetBool("Pressed", true);
                 }
 
                 var fish = PlayerController.Instance.Fish;
@@ -68,7 +79,6 @@ namespace Game
 
                 m_Renderer.enabled = true;
                 transform.position = fish.Position + MAX_OFFSET * direction;
-                m_MouseAnimator.SetBool("Pressed", true);
                 m_MouseAnimator.SetBool("Enable", true);
             }
         }

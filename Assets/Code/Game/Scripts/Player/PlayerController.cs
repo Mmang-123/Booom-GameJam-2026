@@ -247,9 +247,14 @@ namespace Game
                 Vector2 direction = GameInputManager.GetDirection();
                 if (Fish == null)
                     return;
-                worldPos = Fish.Position + MAX_OFFSET * direction;
-                GameInputManager.VirtualMousePosition = worldPos;
                 movePressed = direction != Vector2.zero;
+                if (!movePressed)
+                {
+                    direction = GameInputManager.GetLookDirection();
+                    Debug.Log(direction);
+                }
+                
+                worldPos = Fish.Position + MAX_OFFSET * direction;
             }
 
             if (m_CurrentFish != null)

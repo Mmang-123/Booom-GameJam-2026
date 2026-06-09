@@ -12,8 +12,6 @@ namespace Game
         public static event System.Action<EControlMode> OnInputDeviceChanged;
         public static EControlMode CurrentControlScheme { get; private set; }
 
-        public static Vector2 VirtualMousePosition;
-
         private GameInput m_Input;
         public InputActionAsset inputActions;
         private InputUser m_User;
@@ -113,6 +111,11 @@ namespace Game
         public static Vector2 GetDirection()
         {
             return Instance.m_Input.Player.Move.ReadValue<Vector2>();
+        }
+
+        public static Vector2 GetLookDirection()
+        {
+            return Instance.m_Input.Player.Look.ReadValue<Vector2>();
         }
 
         public static bool GetSkillPressed()
