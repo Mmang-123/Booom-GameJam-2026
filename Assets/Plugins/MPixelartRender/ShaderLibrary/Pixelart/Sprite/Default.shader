@@ -11,6 +11,8 @@
 
         _StencilRef ("Stencil Reference", Int) = 0
 
+        [HideInInspector] _Velocity ("Velocity", Vector) = (0,0,0,0)
+
         // Legacy properties. They're here so that materials using this shader can gracefully fallback to the legacy sprite shader.
         [HideInInspector] _Color ("Tint", Color) = (1,1,1,1)
         [HideInInspector] PixelSnap ("Pixel snap", Float) = 0
@@ -83,6 +85,34 @@
             // Includes
             #include "PixelartInput.hlsl"
             #include "ObstaclePass.hlsl"
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "Velocity Output"
+
+            Tags
+            {
+                "LightMode" = "Velocity"
+            }
+
+            HLSLPROGRAM
+
+            // -------------------------------------
+            // Shader Stages
+            #pragma vertex UnlitVert
+            #pragma fragment VelocityFrag
+
+            //--------------------------------------
+            // GPU Instancing
+            #pragma multi_compile_instancing
+            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"
+
+            // -------------------------------------
+            // Includes
+            #include "VelocityInput.hlsl"
+            #include "VelocityPass.hlsl"
             ENDHLSL
         }
 

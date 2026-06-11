@@ -233,7 +233,7 @@ namespace Game
         private void TraceMousePoint()
         {
             Vector3 worldPos;
-            bool movePressed = false;
+            bool movePressed;
             if (GameInputManager.CurrentControlScheme == GameInputManager.EControlMode.Mouse)
             {
                 var mouse = Mouse.current;
@@ -251,7 +251,6 @@ namespace Game
                 if (!movePressed)
                 {
                     direction = GameInputManager.GetLookDirection();
-                    Debug.Log(direction);
                 }
                 
                 worldPos = Fish.Position + MAX_OFFSET * direction;

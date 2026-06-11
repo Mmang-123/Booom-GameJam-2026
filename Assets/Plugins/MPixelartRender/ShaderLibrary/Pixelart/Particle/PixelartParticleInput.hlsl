@@ -10,4 +10,5 @@ struct PixelartParticleInput
     float4 texcoord1 : TEXCOORD1;
     float4 normalOS : NORMAL;
     float4 tangentOS : TANGENT;
+    UNITY_VERTEX_INPUT_INSTANCE_ID
 };
