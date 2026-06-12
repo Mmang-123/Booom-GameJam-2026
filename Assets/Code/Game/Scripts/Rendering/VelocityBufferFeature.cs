@@ -66,6 +66,11 @@ namespace Game
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+                return;
+#endif
+
             if (m_Pass == null || m_ReprojectShader == null)
                 return;
 
