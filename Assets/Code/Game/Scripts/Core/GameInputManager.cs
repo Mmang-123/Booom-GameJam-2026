@@ -62,7 +62,7 @@ namespace Game
             {
                 CurrentControlScheme = mode;
                 OnInputDeviceChanged?.Invoke(mode);
-                Debug.Log(mode);
+                //Debug.Log(mode);
                 m_User.UnpairDevices();
                 InputUser.PerformPairingWithDevice(device, m_User);
             }

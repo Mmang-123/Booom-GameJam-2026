@@ -1,3 +1,4 @@
+using Mmang.PixelartRender;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -20,8 +21,11 @@ namespace Game
 
         private const int k_BufferWidth = 240;
         private const int k_BufferHeight = 135;
+        private const float k_UnitSize = 1 / 8.0f;
         private static readonly int s_ShaderID_CameraDelta = Shader.PropertyToID("_CameraDelta");
         private static readonly int s_ShaderID_CameraWorldSize = Shader.PropertyToID("_CameraWorldSize");
+        private static readonly int s_ShaderID_CameraPosition = Shader.PropertyToID("_CameraPosition");
+        private static readonly int s_ShaderID_DeltaTime = Shader.PropertyToID("_DeltaTime");
 
         public override void Create()
         {
@@ -62,20 +66,31 @@ namespace Game
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            if (m_Pass == null || m_ReprojectMaterial == null)
+            if (m_Pass == null || m_ReprojectShader == null)
                 return;
 
+            if (m_ReprojectMaterial == null)
+            {
+                m_ReprojectMaterial = new Material(m_ReprojectShader)
+                {
+                    name = "VelocityReproject_Material"
+                };
+            }
+
             var camera = renderingData.cameraData.camera;
+            var pixelartCamera = PixelartManager.Instance.GetPixelartCamera(camera, EPixelartCameraType.Cast);
+            if (pixelartCamera == null)
+                return;
 
             // -- 计算相机世界范围 --
-            float worldHeight = camera.orthographicSize * 2f;
+            float worldHeight = pixelartCamera.MaxOrthographSize * 2.0f * pixelartCamera.CameraScale;
             float worldWidth = worldHeight * camera.aspect;
             var cameraWorldSize = new Vector2(worldWidth, worldHeight);
 
             // -- 计算相机位移 --
             Vector3 currentPos = camera.transform.position;
-            currentPos.x = Mathf.Floor(currentPos.x * k_BufferWidth) / k_BufferWidth;
-            currentPos.y = Mathf.Floor(currentPos.y * k_BufferHeight) / k_BufferHeight;
+            currentPos.x = Mathf.Floor(currentPos.x / k_UnitSize) * k_UnitSize;
+            currentPos.y = Mathf.Floor(currentPos.y / k_UnitSize) * k_UnitSize;
             Vector2 cameraDelta = Vector2.zero;
             if (m_HasLastCameraPosition)
             {
@@ -86,11 +101,16 @@ namespace Game
             m_HasLastCameraPosition = true;
 
             // -- 传给 Pass --
-            m_Pass.SetCameraParams(cameraDelta, cameraWorldSize);
+            //m_Pass.SetCameraParams(cameraDelta, cameraWorldSize);
 
             // -- 设置 reproject material 参数 (blit 在 pass 内执行) --
             m_ReprojectMaterial.SetVector(s_ShaderID_CameraDelta, cameraDelta);
             m_ReprojectMaterial.SetVector(s_ShaderID_CameraWorldSize, cameraWorldSize);
+
+            // -- 设置全局参数，供其他 shader（如 SeagrassPass）采样 _VelocityBuffer 时使用 --
+            Shader.SetGlobalVector(s_ShaderID_CameraWorldSize, cameraWorldSize);
+            Shader.SetGlobalVector(s_ShaderID_CameraPosition, currentPos);
+            Shader.SetGlobalFloat(s_ShaderID_DeltaTime, Time.deltaTime);
 
             renderer.EnqueuePass(m_Pass);
 

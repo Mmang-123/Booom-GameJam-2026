@@ -22,11 +22,6 @@ namespace Game
         private static readonly int s_ShaderID_VelocityBuffer = Shader.PropertyToID("_VelocityBuffer");
         private static readonly Vector4 k_ScaleBias = new(1, 1, 0, 0);
 
-        private static readonly int s_ShaderID_CameraDelta = Shader.PropertyToID("_CameraDelta");
-        private static readonly int s_ShaderID_CameraWorldSize = Shader.PropertyToID("_CameraWorldSize");
-        private static readonly int s_ShaderID_DeltaTime = Shader.PropertyToID("_DeltaTime");
-        
-
         private readonly Material m_ReprojectMaterial;
         private RTHandle m_ReadRT;
         private RTHandle m_WriteRT;
@@ -43,13 +38,6 @@ namespace Game
         {
             m_ReadRT = readRT;
             m_WriteRT = writeRT;
-        }
-
-        public void SetCameraParams(Vector2 cameraDelta, Vector2 cameraWorldSize)
-        {
-            m_ReprojectMaterial.SetVector(s_ShaderID_CameraDelta, cameraDelta);
-            m_ReprojectMaterial.SetVector(s_ShaderID_CameraWorldSize, cameraWorldSize);
-            m_ReprojectMaterial.SetFloat(s_ShaderID_DeltaTime, Time.deltaTime);
         }
 
         // ---------------------------------------------------------------

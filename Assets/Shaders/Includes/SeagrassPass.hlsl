@@ -8,6 +8,12 @@
 TEXTURE2D(_VelocityBuffer);
 SAMPLER(sampler_VelocityBuffer);
 
+// 速度纹理采样参数（由 VelocityBufferFeature 每帧全局设置）
+float2 _CameraWorldSize;
+float2 _CameraPosition;
+float _DeltaTime;
+float _VelocityScale; // 材质上可调，默认 1
+
 // ========================
 // Pixelart Pass
 // ========================
@@ -19,27 +25,39 @@ Varyings PixelartVert(Attributes v)
     UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
     float3 originWS = TransformObjectToWorld(float3(0.0, 0.0, 0.0));
+
     float3 originVS = mul(PIXELART_CAMERA_MATRIX_V, float4(originWS, 1.0)).xyz;
     float3 originVSSnapped = float3(UNITSNAP(originVS.x, _UnitSize), UNITSNAP(originVS.y, _UnitSize), originVS.z);
     float3 originVSOffset = originVSSnapped - originVS;
 
-    o.positionWS = TransformObjectToWorld(v.positionOS.xyz);
+    // 偏移
+    float3 vPositionWS = TransformObjectToWorld(float3(0, v.positionOS.y, v.positionOS.z));
+    float4 vPositionCS = TransformWorldToHClip(float4(vPositionWS, 1.0));
+    float4 scrPos = ComputeScreenPos(vPositionCS);
+    float2 screenUV = scrPos.xy / scrPos.w;
+    float2 velocity = SAMPLE_TEXTURE2D_LOD(_VelocityBuffer, sampler_VelocityBuffer, screenUV, 0).xy;
+    velocity = velocity * 2.0 - 1.0;
+    float2 worldOffset = velocity;
+
+    o.positionWS = TransformObjectToWorld(v.positionOS.xyz) + float3(worldOffset, 0);
     float3 positionVS = mul(PIXELART_CAMERA_MATRIX_V, float4(o.positionWS, 1.0)).xyz + originVSOffset;
     o.positionCS = mul(GetViewToHClipMatrix(), float4(positionVS, 1.0));
 
-    o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 
+    o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+    o.uv = velocity;
+    
     return o;
 }
 
 float4 PixelartFrag(Varyings input) : SV_Target
 {
+    
     float2 screenUV = input.positionCS.xy / _ScreenParams.xy;
+    //return float4(abs(input.uv), 0, 1);
     // Debug
     float2 velocity = SAMPLE_TEXTURE2D(_VelocityBuffer, sampler_VelocityBuffer, screenUV).xy;
     return float4(abs((velocity * 2.0) - 1.0), 0, 1);
-
-
 
     float4 outputColor = tex2D(_MainTex, input.uv) * _Color;
     float4 emissionTex = tex2D(_EmissionMap, input.uv);
