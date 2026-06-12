@@ -41,7 +41,7 @@ Shader "Hidden/VelocityReproject"
                 float2 rawV = (tex * 2.0) - 1.0;
                 
                 float2 aV = abs(rawV);
-                aV = max(0.0, aV - _DeltaTime);
+                aV = max(0.0, aV - _DeltaTime * 1.5);
                 float2 newV = float2(sign(rawV.x) * aV.x, sign(rawV.y) * aV.y);
                 
                 return half4((newV + 1.0) / 2.0, 0, 1); 
