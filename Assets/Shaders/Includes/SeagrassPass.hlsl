@@ -8,11 +8,6 @@
 TEXTURE2D(_VelocityBuffer);
 SAMPLER(sampler_VelocityBuffer);
 
-// 速度纹理采样参数（由 VelocityBufferFeature 每帧全局设置）
-float2 _CameraWorldSize;
-float2 _CameraPosition;
-float _DeltaTime;
-float _VelocityScale; // 材质上可调，默认 1
 
 // ========================
 // Pixelart Pass
@@ -71,7 +66,8 @@ Varyings PixelartVert(Attributes v)
     o.positionCS = mul(GetViewToHClipMatrix(), float4(positionVS, 1.0));
 
 
-    o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+    o.uv = v.uv;
+    o.color.xy = _MainTex_ST.xy;
     
     return o;
 }
@@ -85,7 +81,20 @@ float4 PixelartFrag(Varyings input) : SV_Target
     //float2 velocity = abs((velocityTex.xy * 2.0) - 1.0) * sin(saturate(velocityTex.z) * 2 * 3.1415926);
     //return float4(velocity, 0, 1);
 
-    float4 outputColor = tex2D(_MainTex, input.uv) * _Color;
+    //
+    int cols = (int)input.color.x;
+    int rows = (int)input.color.y;
+    int frameCount = cols * rows;
+    int frameIndex = floor(_Time.y * 5) % frameCount;
+    //return float4((frameIndex * 1.0 / frameCount).xxx, 1);
+
+    float2 unitOffset = 1.0 / input.color.xy;
+    // 左上开始，向右，行从上往下
+    int col = frameIndex % cols;
+    int row = frameIndex / cols;
+    float2 texUV = input.uv * unitOffset + float2(col, rows - 1 - row) * unitOffset;
+
+    float4 outputColor = tex2D(_MainTex, texUV) * _Color;
     float4 emissionTex = tex2D(_EmissionMap, input.uv);
     float4 emission = lerp(_Emission, emissionTex, emissionTex.a);
     outputColor.a = saturate(outputColor.a + emission.a);
