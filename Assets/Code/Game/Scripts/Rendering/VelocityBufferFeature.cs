@@ -19,9 +19,9 @@ namespace Game
         private Vector3 m_LastCameraPosition;
         private bool m_HasLastCameraPosition;
 
-        private const int k_BufferWidth = 240;
-        private const int k_BufferHeight = 135;
-        private const float k_UnitSize = 1 / 8.0f;
+        private const int k_BufferWidth = 240 * 2;
+        private const int k_BufferHeight = 135 * 2;
+        private const float k_UnitSize = 1 / 8.0f / 2.0f;
         private static readonly int s_ShaderID_CameraDelta = Shader.PropertyToID("_CameraDelta");
         private static readonly int s_ShaderID_CameraWorldSize = Shader.PropertyToID("_CameraWorldSize");
         private static readonly int s_ShaderID_CameraPosition = Shader.PropertyToID("_CameraPosition");
@@ -94,8 +94,8 @@ namespace Game
 
             // -- 计算相机位移 --
             Vector3 currentPos = camera.transform.position;
-            currentPos.x = Mathf.Floor(currentPos.x / k_UnitSize) * k_UnitSize;
-            currentPos.y = Mathf.Floor(currentPos.y / k_UnitSize) * k_UnitSize;
+            currentPos.x = Mathf.Round(currentPos.x / k_UnitSize) * k_UnitSize;
+            currentPos.y = Mathf.Round(currentPos.y / k_UnitSize) * k_UnitSize;
             Vector2 cameraDelta = Vector2.zero;
             if (m_HasLastCameraPosition)
             {

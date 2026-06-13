@@ -47,5 +47,5 @@ half4 VelocityFrag(Varyings input) : SV_Target
 
     clip(color.a - 0.1);
 
-    return float4((velocity + 1.0) / 2.0, 0, 1);
+    return float4((velocity + 1.0) / 2.0, 1, 1);
 }

@@ -31,26 +31,38 @@ Varyings PixelartVert(Attributes v)
     float3 originVSOffset = originVSSnapped - originVS;
 
     // 偏移
+    
     //float3 vPositionWS = TransformObjectToWorld(float3(0, v.positionOS.y, v.positionOS.z));
-    float3 vPositionWS = originWS;
-    float3 vPositionWSTop = TransformObjectToWorld(float3(0.0, 1.0, 0.0));
+    float3 vPositionWS = originWS - originVSOffset;
+    float3 vPositionWSTop = TransformObjectToWorld(float3(0.0, 1.0, 0.0)) - originVSOffset;
     float4 vPositionCS = TransformWorldToHClip(float4(vPositionWS, 1.0));
     float4 vPositionCSTop = TransformWorldToHClip(float4(vPositionWSTop, 1.0));
     float4 scrPos = ComputeScreenPos(vPositionCS);
     float4 scrPosTop = ComputeScreenPos(vPositionCSTop);
 
-    float2 totalVelocity = 0;
-    for (int i = 0; i < 4; i++)
+    float3 totalVelocity = 0;
+    for (int i = 0; i < 3; i++)
     {
         float4 screenPos = lerp(scrPos, scrPosTop, 1.0 * i / 3);
         float2 screenUV = screenPos.xy / screenPos.w;
-        float2 velocity = SAMPLE_TEXTURE2D_LOD(_VelocityBuffer, sampler_VelocityBuffer, screenUV, 0).xy;
-        velocity = velocity * 2.0 - 1.0;
+        float3 velocityTex = SAMPLE_TEXTURE2D_LOD(_VelocityBuffer, sampler_LinearClamp, screenUV, 0).xyz;
+        //return float4(velocityTex.xyz, 1);
+        
+        if (velocityTex.z > totalVelocity.z)
+        {
+            float t = saturate(1.0 - velocityTex.z);
+            totalVelocity = float3((((velocityTex.xy * 2.0) - 1.0) * cos(t * 1.5 * PI)).xy, velocityTex.z);
+        }
 
-        totalVelocity += velocity;
+        //float2 velocity = ((velocityTex.xy * 2.0) - 1.0) * cos(saturate(1.0 - velocityTex.z) * 1.5 * PI);
+        
+        //float2 velocity = SAMPLE_TEXTURE2D_LOD(_VelocityBuffer, sampler_LinearClamp, screenUV, 0).xy;
+        //velocity = velocity * 2.0 - 1.0;
+
+        //totalVelocity += velocity;
     }
 
-    float2 worldOffset = totalVelocity * v.color.r * 0.5 + originWS;
+    float2 worldOffset = totalVelocity.xy * v.color.r * ((saturate(totalVelocity.z)) * 0.6 + 0.4) * 0.75 + originWS;
     float2 objectOffset = TransformWorldToObject(float4(worldOffset, 0.0, 0.0));
 
     //
@@ -60,7 +72,6 @@ Varyings PixelartVert(Attributes v)
 
 
     o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-    o.uv = v.color.rr;
     
     return o;
 }
@@ -68,10 +79,11 @@ Varyings PixelartVert(Attributes v)
 float4 PixelartFrag(Varyings input) : SV_Target
 {
     float2 screenUV = input.positionCS.xy / _ScreenParams.xy;
-    //return float4(input.uv.xxx, 1);
     // Debug
-    float2 velocity = SAMPLE_TEXTURE2D(_VelocityBuffer, sampler_VelocityBuffer, screenUV).xy;
-    return float4(abs((velocity * 2.0) - 1.0), 0, 1);
+    //float3 velocityTex = SAMPLE_TEXTURE2D(_VelocityBuffer, sampler_VelocityBuffer, screenUV).xyz;
+    //return float4(abs(cos(saturate(1.0 - velocityTex.z) * 1.5 * PI)).xxx, 1);
+    //float2 velocity = abs((velocityTex.xy * 2.0) - 1.0) * sin(saturate(velocityTex.z) * 2 * 3.1415926);
+    //return float4(velocity, 0, 1);
 
     float4 outputColor = tex2D(_MainTex, input.uv) * _Color;
     float4 emissionTex = tex2D(_EmissionMap, input.uv);
