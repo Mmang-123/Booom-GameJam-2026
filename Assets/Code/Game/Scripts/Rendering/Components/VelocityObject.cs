@@ -31,7 +31,7 @@ namespace Game
 
             Vector2 pos = transform.position;
             Vector2 offset = pos - LastFramePosition;
-            Velocity = offset / dt / 3.0f;
+            Velocity = offset / dt / 8.0f;
             LastFramePosition = pos;
 
             if (m_Renderer != null && m_MPB != null)

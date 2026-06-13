@@ -33,17 +33,17 @@ Varyings PixelartVert(Attributes v)
     // 偏移
     
     //float3 vPositionWS = TransformObjectToWorld(float3(0, v.positionOS.y, v.positionOS.z));
-    float3 vPositionWS = originWS - originVSOffset;
-    float3 vPositionWSTop = TransformObjectToWorld(float3(0.0, 1.0, 0.0)) - originVSOffset;
+    float3 vPositionWS = originWS + originVSOffset;
+    float3 vPositionWSTop = TransformObjectToWorld(float3(0.0, 1.0, 0.0)) + originVSOffset;
     float4 vPositionCS = TransformWorldToHClip(float4(vPositionWS, 1.0));
     float4 vPositionCSTop = TransformWorldToHClip(float4(vPositionWSTop, 1.0));
     float4 scrPos = ComputeScreenPos(vPositionCS);
     float4 scrPosTop = ComputeScreenPos(vPositionCSTop);
 
     float3 totalVelocity = 0;
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < 4; i++)
     {
-        float4 screenPos = lerp(scrPos, scrPosTop, 1.0 * i / 3);
+        float4 screenPos = lerp(scrPos, scrPosTop, 1.0 * i / 3.0);
         float2 screenUV = screenPos.xy / screenPos.w;
         float3 velocityTex = SAMPLE_TEXTURE2D_LOD(_VelocityBuffer, sampler_LinearClamp, screenUV, 0).xyz;
         //return float4(velocityTex.xyz, 1);
@@ -62,7 +62,7 @@ Varyings PixelartVert(Attributes v)
         //totalVelocity += velocity;
     }
 
-    float2 worldOffset = totalVelocity.xy * v.color.r * ((saturate(totalVelocity.z)) * 0.6 + 0.4) * 0.75 + originWS;
+    float2 worldOffset = totalVelocity.xy * v.color.r * ((saturate(totalVelocity.z)) * 0.6 + 0.4) * 0.5 + originWS;
     float2 objectOffset = TransformWorldToObject(float4(worldOffset, 0.0, 0.0));
 
     //
