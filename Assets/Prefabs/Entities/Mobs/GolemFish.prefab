@@ -629,6 +629,7 @@ GameObject:
   - component: {fileID: 7330031281075303804}
   - component: {fileID: 5644291535869684108}
   - component: {fileID: 6717867092460838953}
+  - component: {fileID: 3705277139631702267}
   m_Layer: 7
   m_Name: Main
   m_TagString: Untagged
@@ -787,6 +788,18 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0.23728085, y: 0.086283684}
   m_Radius: 0.6941385
+--- !u!114 &3705277139631702267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6262011534964240369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 253a7af106c02e348871caadc71b9301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.VelocityObject
 --- !u!1 &8765772309640939342
 GameObject:
   m_ObjectHideFlags: 0

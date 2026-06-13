@@ -38,6 +38,9 @@ namespace Game
             // 复用已有的子渲染器，按需增补
             for (int i = m_ChildRenderers.Count; i < sources.Length; i++)
             {
+                if (sources[i].gameObject.layer == 8) // Velocity
+                    continue;
+
                 var child = new GameObject("AfterimageRenderer");
                 child.transform.SetParent(transform, false);
                 m_ChildRenderers.Add(child.AddComponent<SpriteRenderer>());
