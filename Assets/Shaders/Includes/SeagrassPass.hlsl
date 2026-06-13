@@ -85,7 +85,7 @@ float4 PixelartFrag(Varyings input) : SV_Target
     int cols = (int)input.color.x;
     int rows = (int)input.color.y;
     int frameCount = cols * rows;
-    int frameIndex = floor(_Time.y * 5) % frameCount;
+    int frameIndex = floor(_Time.y * _AnimSpeed) % frameCount;
     //return float4((frameIndex * 1.0 / frameCount).xxx, 1);
 
     float2 unitOffset = 1.0 / input.color.xy;

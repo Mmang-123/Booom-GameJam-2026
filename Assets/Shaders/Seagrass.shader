@@ -8,6 +8,7 @@
         _LightenBlend ("Lighten Blend", Range(0, 1)) = 0.16
         _Emission ("Emission", Color) = (0,0,0,1)
         _EmissionMap ("Emission Map", 2D) = "black" {}
+        _AnimSpeed ("Animation Speed", Float) = 5
 
         _Color ("Tint", Color) = (1,1,1,1)
     }
