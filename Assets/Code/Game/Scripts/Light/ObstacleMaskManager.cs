@@ -175,7 +175,7 @@ namespace Mmang.PixelartRender
             m_SDFArray = new RenderTexture(arrayDescriptor)
             {
                 name = "_ObstacleSDF",
-                filterMode = FilterMode.Point,
+                filterMode = FilterMode.Bilinear,
                 wrapMode = TextureWrapMode.Clamp
             };
             m_SDFArray.Create();

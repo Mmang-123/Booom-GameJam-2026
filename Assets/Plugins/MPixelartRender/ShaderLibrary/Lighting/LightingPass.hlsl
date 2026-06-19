@@ -79,7 +79,7 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
 
         float sdf = GetObstacleSDF_RawCamera(UnscaleUV(current));
         float nextStep = UnpackSDFToRaw(sdf) * 0.9;
-        if (nextStep <= 4.0 * unitSize)
+        /* if (nextStep <= 4.0 * unitSize)
         {
             // 切换到DDA精确网格遍历
             float2 invAbsDir = 1.0 / max(abs(direction), 1e-6);
@@ -161,7 +161,7 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
             // 步数耗尽但未得出结论：推进current，继续SDF march
             current += direction * max(ddaLastT, unitSize);
             continue;
-        }
+        } */
 
         if (dist <= nextStep)
         {
