@@ -151,7 +151,7 @@ namespace Mmang.PixelartRender
             m_Lighting = new(lightingDescriptor)
             {
                 name = $"_LightingTexture",
-                filterMode = FilterMode.Point,
+                filterMode = FilterMode.Bilinear,
                 wrapMode = TextureWrapMode.Clamp
             };
             m_Lighting.Create();

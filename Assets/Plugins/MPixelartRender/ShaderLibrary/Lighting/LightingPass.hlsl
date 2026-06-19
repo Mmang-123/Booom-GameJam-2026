@@ -53,7 +53,7 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
 {
     float2 direction = normalize(lightUV - screenUV);
 
-    const int MAX_STEPS = 128;
+    const int MAX_STEPS = 160
     
     float2 current = screenUV;
     //float unitSize = 1.0 / _ObstacleChunkParams.z;
@@ -78,7 +78,7 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
         }
 
         float sdf = GetObstacleSDF_RawCamera(UnscaleUV(current));
-        float nextStep = UnpackSDFToRaw(sdf) * 0.9;
+        float nextStep = obstacleMask < 0.5 ? max(UnpackSDFToRaw(sdf) * 0.75, unitSize * 2.0) : UnpackSDFToRaw(sdf) * 0.9;
         /* if (nextStep <= 4.0 * unitSize)
         {
             // 切换到DDA精确网格遍历
