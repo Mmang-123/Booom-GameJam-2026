@@ -166,14 +166,27 @@ Varyings UnlitVert(Attributes v)
 
     o.positionCS = TransformObjectToHClip(v.positionOS);
     o.positionWS = TransformObjectToWorld(v.positionOS);
-    o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+    o.uv = v.uv;
+    o.color.xy = _MainTex_ST.xy;
     return o;
 }
 
 float4 UnlitFrag(Varyings input) : SV_Target
 {
-    float4 outputColor = tex2D(_MainTex, input.uv) * _Color;
-    float4 emission = tex2D(_EmissionMap, input.uv);
+    int cols = (int)input.color.x;
+    int rows = (int)input.color.y;
+    int frameCount = cols * rows;
+    int frameIndex = floor(_Time.y * _AnimSpeed) % frameCount;
+    //return float4((frameIndex * 1.0 / frameCount).xxx, 1);
+
+    float2 unitOffset = 1.0 / input.color.xy;
+    // 左上开始，向右，行从上往下
+    int col = frameIndex % cols;
+    int row = frameIndex / cols;
+    float2 texUV = input.uv * unitOffset + float2(col, rows - 1 - row) * unitOffset;
+
+    float4 outputColor = tex2D(_MainTex, texUV) * _Color;
+    float4 emission = tex2D(_EmissionMap, texUV);
 
     outputColor.rgb = lerp(outputColor.rgb, emission.rgb, emission.a);
 
