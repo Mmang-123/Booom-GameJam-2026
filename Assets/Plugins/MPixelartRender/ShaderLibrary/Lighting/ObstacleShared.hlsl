@@ -52,7 +52,7 @@ inline float2 GetChunkScreenUVSize()
 
 float SampleObstacleSDF(int index, float2 uv)
 {
-    return SAMPLE_TEXTURE2D_ARRAY(_ObstacleSDF, sampler_ObstacleSDF, uv, (float)index).r;
+    return SAMPLE_TEXTURE2D_ARRAY_LOD(_ObstacleSDF, sampler_ObstacleSDF, uv, (float)index, 0).r;
 }
 
 float GetObstacleSDF(float2 screenUV)
@@ -125,7 +125,7 @@ float GetObstacleMask_RawCamera(float2 uv)
     
     uv = (uv - 0.5) * _ChunkRange / (_ChunkRange + 1.0) + 0.5;
     
-    return SAMPLE_TEXTURE2D(_ObstacleMask, sampler_ObstacleMask, uv).r;
+    return SAMPLE_TEXTURE2D_LOD(_ObstacleMask, sampler_ObstacleMask, uv, 0).r;
 }
 
 

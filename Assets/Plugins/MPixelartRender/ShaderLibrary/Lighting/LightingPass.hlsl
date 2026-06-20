@@ -78,7 +78,7 @@ half GetShadow(float2 screenUV, float2 lightUV, float innerRadius, float maskThr
         }
 
         float sdf = GetObstacleSDF_RawCamera(UnscaleUV(current));
-        float nextStep = obstacleMask < 0.5 ? max(UnpackSDFToRaw(sdf) * 0.8, unitSize * 2.0) : UnpackSDFToRaw(sdf) * 0.8;
+        float nextStep = obstacleMask < 0.5 ? max(UnpackSDFToRaw(sdf) * 0.8, unitSize * 1.0) : UnpackSDFToRaw(sdf) * 0.8;
         /* if (nextStep <= 4.0 * unitSize)
         {
             // 切换到DDA精确网格遍历
